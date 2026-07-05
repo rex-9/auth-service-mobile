@@ -12,6 +12,7 @@ class ServerRoutes {
   static const String signIn = '/signin';
   static const String signInWithToken = '/signin/token';
   static const String signInWithGoogle = '/signin/google';
+  static const String signInGoogleComplete = '/signin/google/complete';
   static const String signOut = '/signout';
 
   // Registration Endpoint

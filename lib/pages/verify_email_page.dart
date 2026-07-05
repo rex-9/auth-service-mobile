@@ -1,85 +1,80 @@
 // lib/pages/verify_email_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 import '../controllers/auth_controller.dart';
 import '../widgets/custom_button.dart';
+import '../widgets/passcode_field.dart';
 
 class VerifyEmailPage extends GetView<AuthController> {
   const VerifyEmailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final pinController = PinInputController();
     final arguments = Get.arguments as Map<String, dynamic>;
 
     controller.email.value = arguments['email'];
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Verify Email')),
+      appBar: AppBar(title: Text('verify_email_title'.tr)),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Verify your email',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            Text(
+              'verify_email_heading'.tr,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Obx(
               () => Text(
-                'We sent a 6-digit code to ${controller.email.value}',
+                'verify_email_subtitle'.trParams({
+                  'email': controller.email.value,
+                }),
                 style: TextStyle(color: Colors.grey[600]),
               ),
             ),
             const SizedBox(height: 32),
 
-            MaterialPinField(
-              length: 6,
-              pinController: pinController,
+            PasscodeField(
+              pinController: controller.verifyPin,
               onCompleted: (pin) {
                 controller.verifyCode(pin);
               },
-              theme: MaterialPinTheme(
-                shape: MaterialPinShape.outlined,
-                cellSize: const Size(56, 64),
-                spacing: 12,
-                borderRadius: BorderRadius.circular(12),
-                borderWidth: 1.5,
-                focusedBorderWidth: 2.0,
-                borderColor: Colors.grey,
-                focusedBorderColor: Colors.blue,
-                errorColor: Colors.red,
-                textStyle: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
             ),
 
             const SizedBox(height: 32),
             Obx(
               () => CustomButton(
                 text: controller.isLoading.value
-                    ? 'Verifying...'
-                    : 'Verify Code',
+                    ? 'verifying'.tr
+                    : 'verify_code_button'.tr,
                 onPressed: () {
-                  if (pinController.text.length != 6) {
-                    pinController.triggerError();
-                    Get.snackbar('Error', 'Please enter 6-digit code');
+                  if (controller.verifyPin.text.length != 6) {
+                    controller.verifyPin.triggerError();
+                    Get.snackbar('error'.tr, 'enter_6_digit_code'.tr);
                     return;
                   }
-                  controller.verifyCode(pinController.text);
+                  controller.verifyCode(controller.verifyPin.text);
                 },
               ),
             ),
 
             const SizedBox(height: 16),
             Center(
-              child: TextButton(
-                onPressed: () => controller.sendConfirmationCode(),
-                child: const Text('Resend Code'),
+              child: Obx(
+                () => TextButton(
+                  onPressed: controller.resendSecondsLeft.value > 0
+                      ? null
+                      : () => controller.sendConfirmationCode(),
+                  child: Text(
+                    controller.resendSecondsLeft.value > 0
+                        ? 'resend_code_in'.trParams({
+                            'seconds': '${controller.resendSecondsLeft.value}',
+                          })
+                        : 'resend_code'.tr,
+                  ),
+                ),
               ),
             ),
           ],

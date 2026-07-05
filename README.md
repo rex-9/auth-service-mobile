@@ -16,7 +16,8 @@ A modern Flutter mobile application for Meritbox platform, featuring secure 6-di
 
 - **Modern UI/UX**
   - Material Design 3
-  - Light/Dark theme support
+  - Light/Dark theme support (auto / day / night toggle, persisted)
+  - Localization: English, Español, မြန်မာ (GetX translations, persisted)
   - Responsive design with ScreenUtil
   - Smooth animations and transitions
 
@@ -24,6 +25,9 @@ A modern Flutter mobile application for Meritbox platform, featuring secure 6-di
   - JWT token-based authentication
   - Secure local storage with GetStorage
   - 6-digit passcode validation
+  - Passcode attempt limiting with escalating cooldowns (30s/60s/120s), synced with server retry metadata and persisted per email
+  - One active session per platform (`X-Platform: mobile`); replaced sessions are signed out with a notice
+  - Forgot passcode reset-link email with resend countdown
 
 ## 🏗️ Project Structure
 
@@ -185,8 +189,15 @@ Make sure your backend has these endpoints configured:
 
 1. Tap "Continue with Google"
 2. Select Google account
-3. Auto-create account or sign in
-4. Redirect to Home
+3. Existing account → signed straight in
+4. New account → create + confirm a 6-digit passcode (challenge token) → account created
+5. Redirect to Home
+
+### Forgot Passcode Flow
+
+1. "Forgot your passcode?" on the sign-in passcode page
+2. Enter email → reset link sent (60s resend countdown)
+3. Reset passcode via the emailed link, then sign in again
 
 ## 🛠️ Built With
 

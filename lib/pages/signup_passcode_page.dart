@@ -1,135 +1,118 @@
-// lib/pages/register_passcode_page.dart
+// lib/pages/signup_passcode_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 import '../controllers/auth_controller.dart';
 import '../routes/app_routes.dart';
 import '../widgets/custom_button.dart';
+import '../widgets/passcode_field.dart';
 
+/// Create + confirm a 6-digit passcode. Used for both email sign up and
+/// finishing a new Google account (challenge token flow).
 class SignUpPasscodePage extends GetView<AuthController> {
   const SignUpPasscodePage({super.key});
 
+  void _onContinue() {
+    if (controller.passcode.value.length != 6) {
+      controller.signupPin.triggerError();
+      Get.snackbar('error'.tr, 'passcode_6_digits'.tr);
+      return;
+    }
+    if (controller.passcode.value != controller.confirmPasscode.value) {
+      controller.signupConfirmPin.triggerError();
+      Get.snackbar('error'.tr, 'passcodes_do_not_match'.tr);
+      return;
+    }
+
+    if (controller.isGooglePasscodeSetup) {
+      controller.completeGoogleSignIn();
+      return;
+    }
+
+    Get.toNamed(
+      AppRoutes.signupInfo,
+      arguments: {
+        'email': controller.email.value,
+        'passcode': controller.passcode.value,
+        'confirm_passcode': controller.confirmPasscode.value,
+      },
+    );
+  }
+
+  void _syncConfirmError() {
+    if (controller.passcode.value.length == 6 &&
+        controller.confirmPasscode.value.length == 6) {
+      if (controller.passcode.value != controller.confirmPasscode.value) {
+        controller.signupConfirmPin.triggerError();
+      } else {
+        controller.signupConfirmPin.clearError();
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final pinController = PinInputController();
-    final confirmPinController = PinInputController();
+    final isGoogle = controller.isGooglePasscodeSetup;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Create Account')),
+      appBar: AppBar(title: Text('signup_title'.tr)),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Create a passcode',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              Text(
+                isGoogle
+                    ? 'google_passcode_heading'.tr
+                    : 'create_passcode_heading'.tr,
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               const SizedBox(height: 8),
               Text(
-                'You\'ll use this 6-digit passcode to sign in',
+                isGoogle
+                    ? 'google_passcode_subtitle'.tr
+                    : 'create_passcode_subtitle'.tr,
                 style: TextStyle(color: Colors.grey[600]),
               ),
               const SizedBox(height: 32),
 
-              const Text(
-                'Passcode',
-                style: TextStyle(fontWeight: FontWeight.w500),
+              Text(
+                'passcode_label'.tr,
+                style: const TextStyle(fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 8),
-              MaterialPinField(
-                length: 6,
-                pinController: pinController,
+              PasscodeField(
+                pinController: controller.signupPin,
                 onChanged: (value) {
                   controller.passcode.value = value;
-                  if (value.length == 6 &&
-                      confirmPinController.text.isNotEmpty) {
-                    if (value != confirmPinController.text) {
-                      confirmPinController.triggerError();
-                    } else {
-                      confirmPinController.clearError();
-                    }
-                  }
+                  _syncConfirmError();
                 },
-                theme: MaterialPinTheme(
-                  shape: MaterialPinShape.outlined,
-                  cellSize: const Size(56, 64),
-                  spacing: 12,
-                  borderRadius: BorderRadius.circular(12),
-                  borderWidth: 1.5,
-                  focusedBorderWidth: 2.0,
-                  borderColor: Colors.grey,
-                  focusedBorderColor: Colors.blue,
-                  textStyle: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
               ),
 
               const SizedBox(height: 24),
-              const Text(
-                'Confirm Passcode',
-                style: TextStyle(fontWeight: FontWeight.w500),
+              Text(
+                'confirm_passcode_label'.tr,
+                style: const TextStyle(fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 8),
-              MaterialPinField(
-                length: 6,
-                pinController: confirmPinController,
+              PasscodeField(
+                pinController: controller.signupConfirmPin,
                 onChanged: (value) {
                   controller.confirmPasscode.value = value;
-                  if (pinController.text.length == 6 && value.length == 6) {
-                    if (pinController.text != value) {
-                      confirmPinController.triggerError();
-                    } else {
-                      confirmPinController.clearError();
-                    }
-                  }
+                  _syncConfirmError();
                 },
-                theme: MaterialPinTheme(
-                  shape: MaterialPinShape.outlined,
-                  cellSize: const Size(56, 64),
-                  spacing: 12,
-                  borderRadius: BorderRadius.circular(12),
-                  borderWidth: 1.5,
-                  focusedBorderWidth: 2.0,
-                  borderColor: Colors.grey,
-                  focusedBorderColor: Colors.blue,
-                  errorColor: Colors.red,
-                  textStyle: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
               ),
 
               const SizedBox(height: 32),
               Obx(
                 () => CustomButton(
                   text: controller.isLoading.value
-                      ? 'Sending code...'
-                      : 'Continue',
-                  onPressed: () {
-                    if (pinController.text.length != 6) {
-                      pinController.triggerError();
-                      Get.snackbar('Error', 'Please enter 6-digit passcode');
-                      return;
-                    }
-                    if (pinController.text != confirmPinController.text) {
-                      confirmPinController.triggerError();
-                      Get.snackbar('Error', 'Passcodes do not match');
-                      return;
-                    }
-                    Get.toNamed(
-                      AppRoutes.signupInfo,
-                      arguments: {
-                        'email': controller.email.value,
-                        'passcode': pinController.text,
-                        'confirm_passcode': confirmPinController.text,
-                      },
-                    );
-                  },
+                      ? (isGoogle ? 'signing_in'.tr : 'sending_code'.tr)
+                      : 'continue_button'.tr,
+                  onPressed: _onContinue,
                 ),
               ),
             ],

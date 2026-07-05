@@ -6,6 +6,9 @@ import 'package:get_storage/get_storage.dart';
 import 'package:meritbox_mobile/routes/app_routes.dart';
 import 'bindings/initial_binding.dart';
 import 'controllers/auth_controller.dart';
+import 'controllers/settings_controller.dart';
+import 'design/app_theme.dart';
+import 'locales/app_translations.dart';
 import 'pages/auth_page.dart';
 import 'pages/home_page.dart';
 import 'pages/splash_page.dart';
@@ -27,15 +30,20 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final settings = Get.find<SettingsController>();
+
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (context, child) => GetMaterialApp(
         title: 'Meritbox',
-        theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Poppins'),
+        theme: AppTheme.light(),
+        darkTheme: AppTheme.dark(),
+        themeMode: settings.themeMode,
+        translations: AppTranslations(),
+        locale: settings.locale,
+        fallbackLocale: const Locale('en', 'US'),
         debugShowCheckedModeBanner: false,
-        initialRoute: AppRoutes.auth,
         getPages: AppRoutes.pages,
-        initialBinding: InitialBinding(),
         home: Obx(() {
           final authController = Get.find<AuthController>();
 

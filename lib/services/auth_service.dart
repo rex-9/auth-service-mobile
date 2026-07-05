@@ -59,6 +59,21 @@ class AuthService extends GetxService {
     );
   }
 
+  // 4b. Complete Google sign in (new Google account sets a passcode)
+  Future<ApiResponse<Map<String, dynamic>>> googleSignInComplete(
+    String passcode,
+    String challengeToken,
+  ) async {
+    final response = await _api.post(ServerRoutes.signInGoogleComplete, {
+      'passcode': passcode,
+      'challenge_token': challengeToken,
+    });
+    return _api.parseResponse<Map<String, dynamic>>(
+      response,
+      (data) => data as Map<String, dynamic>,
+    );
+  }
+
   // 5. Sign up (register new user)
   Future<ApiResponse<Map<String, dynamic>>> signUp({
     required String username,
