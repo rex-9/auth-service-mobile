@@ -1,8 +1,6 @@
 // lib/design/widgets/custom_button.dart
 import 'package:flutter/material.dart';
-import '../design/app_colors.dart';
-import '../design/app_spacing.dart';
-import '../design/app_typography.dart';
+import 'package:meritbox_mobile/design/design.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
@@ -43,11 +41,7 @@ class CustomButton extends StatelessWidget {
               : Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(
-                      'assets/images/google_logo.png',
-                      height: 20,
-                      width: 20,
-                    ),
+                    Image.asset(AppMedia.googleLogo, height: 20, width: 20),
                     const SizedBox(width: AppSpacing.sm),
                     Text(
                       text,
