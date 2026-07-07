@@ -35,29 +35,41 @@ A modern Flutter mobile application for Meritbox platform, featuring secure 6-di
 lib/
 ├── bindings/           # Dependency injection
 │   └── initial_binding.dart
+├── config/             # Configurations
+│   └── app_config.dart
+├── constants/          # Constants
+│   └── app_constants.dart
+│   └── locale_constants.dart
 ├── controllers/        # Business logic
 │   └── auth_controller.dart
-├── core/              # Core utilities
-│   ├── constants/
-│   └── theme/
-├── models/            # Data models
+├── design/             # Core utilities
+│   ├── app_colors.dart/
+│   └── app_decoration.dart/
+│   └── app_icons.dart/
+│   └── app_media.dart/
+│   └── app_spacing.dart/
+│   └── app_theme.dart/
+│   └── app_typography.dart/
+├── locales/            # Localization
+│   └── app_translations.dart
+├── models/             # Data models
 │   ├── user_model.dart
 │   └── api_response.dart
-├── pages/             # UI screens
+├── pages/              # UI screens
 │   ├── auth_page.dart
 │   ├── signin_passcode_page.dart
 │   ├── signup_passcode_page.dart
 │   ├── signup_info_page.dart
 │   ├── verify_email_page.dart
 │   └── home_page.dart
-├── routes/            # Navigation
+├── routes/             # Navigation
 │   ├── app_routes.dart
 │   └── server_routes.dart
-├── services/          # API and business services
+├── services/           # API and business services
 │   ├── api_service.dart
 │   ├── auth_service.dart
 │   └── storage_service.dart
-└── widgets/           # Reusable components
+└── widgets/            # Reusable components
     ├── custom_button.dart
     └── custom_textfield.dart
 ```
