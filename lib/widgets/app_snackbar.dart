@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:meritbox_mobile/constants/constants.dart';
 
 import '../design/design.dart';
 
@@ -8,7 +9,7 @@ class AppSnackbar {
 
   static void error(String message) {
     _show(
-      title: 'error'.tr,
+      title: LocaleConstants.error.tr,
       message: message,
       background: AppColors.error.withValues(alpha: 0.12),
       foreground: AppColors.errorDark,
@@ -18,7 +19,7 @@ class AppSnackbar {
 
   static void success(String message) {
     _show(
-      title: 'success'.tr,
+      title: LocaleConstants.success.tr,
       message: message,
       background: AppColors.success.withValues(alpha: 0.12),
       foreground: AppColors.successDark,
@@ -28,7 +29,7 @@ class AppSnackbar {
 
   static void warning(String message) {
     _show(
-      title: 'warning'.tr,
+      title: LocaleConstants.warning.tr,
       message: message,
       background: AppColors.warning.withValues(alpha: 0.12),
       foreground: AppColors.warningDark,
@@ -38,7 +39,7 @@ class AppSnackbar {
 
   static void info(String message) {
     _show(
-      title: 'info'.tr,
+      title: LocaleConstants.info.tr,
       message: message,
       background: AppColors.primary.withValues(alpha: 0.12),
       foreground: AppColors.primaryDark,

@@ -1,6 +1,7 @@
 // lib/pages/signup_passcode_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/widgets/widgets.dart';
 import '../controllers/auth_controller.dart';
 import '../routes/app_routes.dart';
@@ -13,12 +14,12 @@ class SignUpPasscodePage extends GetView<AuthController> {
   void _onContinue() {
     if (controller.passcode.value.length != 6) {
       controller.signupPin.triggerError();
-      AppSnackbar.error('passcode_6_digits'.tr);
+      AppSnackbar.error(LocaleConstants.passcode6Digits.tr);
       return;
     }
     if (controller.passcode.value != controller.confirmPasscode.value) {
       controller.signupConfirmPin.triggerError();
-      AppSnackbar.error('passcodes_do_not_match'.tr);
+      AppSnackbar.error(LocaleConstants.passcodesDoNotMatch.tr);
       return;
     }
 
@@ -53,7 +54,7 @@ class SignUpPasscodePage extends GetView<AuthController> {
     final isGoogle = controller.isGooglePasscodeSetup;
 
     return Scaffold(
-      appBar: AppBar(title: Text('signup_title'.tr)),
+      appBar: AppBar(title: Text(LocaleConstants.signupTitle.tr)),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: SingleChildScrollView(
@@ -62,8 +63,8 @@ class SignUpPasscodePage extends GetView<AuthController> {
             children: [
               Text(
                 isGoogle
-                    ? 'google_passcode_heading'.tr
-                    : 'create_passcode_heading'.tr,
+                    ? LocaleConstants.googlePasscodeHeading.tr
+                    : LocaleConstants.createPasscodeHeading.tr,
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -72,14 +73,14 @@ class SignUpPasscodePage extends GetView<AuthController> {
               const SizedBox(height: 8),
               Text(
                 isGoogle
-                    ? 'google_passcode_subtitle'.tr
-                    : 'create_passcode_subtitle'.tr,
+                    ? LocaleConstants.googlePasscodeSubtitle.tr
+                    : LocaleConstants.createPasscodeSubtitle.tr,
                 style: TextStyle(color: Colors.grey[600]),
               ),
               const SizedBox(height: 32),
 
               Text(
-                'passcode_label'.tr,
+                LocaleConstants.passcodeLabel.tr,
                 style: const TextStyle(fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 8),
@@ -93,7 +94,7 @@ class SignUpPasscodePage extends GetView<AuthController> {
 
               const SizedBox(height: 24),
               Text(
-                'confirm_passcode_label'.tr,
+                LocaleConstants.confirmPasscodeLabel.tr,
                 style: const TextStyle(fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 8),
@@ -109,8 +110,10 @@ class SignUpPasscodePage extends GetView<AuthController> {
               Obx(
                 () => CustomButton(
                   text: controller.isLoading.value
-                      ? (isGoogle ? 'signing_in'.tr : 'sending_code'.tr)
-                      : 'continue_button'.tr,
+                      ? (isGoogle
+                            ? LocaleConstants.signingIn.tr
+                            : LocaleConstants.sendingCode.tr)
+                      : LocaleConstants.continueButton.tr,
                   onPressed: _onContinue,
                 ),
               ),

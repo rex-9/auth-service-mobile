@@ -1,6 +1,7 @@
 // lib/pages/auth_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/widgets/widgets.dart';
 import '../controllers/auth_controller.dart';
 import '../design/app_spacing.dart';
@@ -19,7 +20,7 @@ class AuthPage extends GetView<AuthController> {
     switch (peekedUserStatus) {
       case PeekedUserStatus.error:
         // Show error, stay on same page
-        AppSnackbar.error('connection_failed'.tr);
+        AppSnackbar.error(LocaleConstants.connectionFailed.tr);
         break;
 
       case PeekedUserStatus.exists:
@@ -58,13 +59,13 @@ class AuthPage extends GetView<AuthController> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'welcome_title'.tr,
+                      LocaleConstants.welcomeTitle.tr,
                       style: AppTypography.headline1,
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: AppSpacing.md),
                     Text(
-                      'welcome_subtitle'.tr,
+                      LocaleConstants.welcomeSubtitle.tr,
                       style: const TextStyle(color: Colors.grey),
                       textAlign: TextAlign.center,
                     ),
@@ -72,7 +73,7 @@ class AuthPage extends GetView<AuthController> {
 
                     Obx(
                       () => CustomButton(
-                        text: 'continue_with_google'.tr,
+                        text: LocaleConstants.continueWithGoogle.tr,
                         isLoading: controller.isLoading.value,
                         onPressed: () => controller.signInWithGoogle(),
                         isGoogle: true,
@@ -85,7 +86,7 @@ class AuthPage extends GetView<AuthController> {
                         const Expanded(child: Divider()),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Text('or'.tr),
+                          child: Text(LocaleConstants.or.tr),
                         ),
                         const Expanded(child: Divider()),
                       ],
@@ -94,9 +95,9 @@ class AuthPage extends GetView<AuthController> {
 
                     Obx(
                       () => CustomTextField(
-                        label: 'email_label'.tr,
-                        hint: 'email_hint'.tr,
-                        helper: 'email_helper'.tr,
+                        label: LocaleConstants.emailLabel.tr,
+                        hint: LocaleConstants.emailHint.tr,
+                        helper: LocaleConstants.emailHelper.tr,
                         error: controller.emailError.value,
                         keyboardType: TextInputType.emailAddress,
                         onChanged: (value) => controller.email.value = value,
@@ -107,8 +108,8 @@ class AuthPage extends GetView<AuthController> {
                     Obx(
                       () => CustomButton(
                         text: controller.isLoading.value
-                            ? 'checking'.tr
-                            : 'continue_button'.tr,
+                            ? LocaleConstants.checking.tr
+                            : LocaleConstants.continueButton.tr,
                         onPressed: _onContinue,
                       ),
                     ),

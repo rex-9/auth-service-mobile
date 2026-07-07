@@ -1,6 +1,7 @@
 // lib/pages/signup_info_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:meritbox_mobile/constants/constants.dart';
 import '../controllers/auth_controller.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_textfield.dart';
@@ -18,28 +19,28 @@ class SignUpInfoPage extends GetView<AuthController> {
         arguments['confirm_passcode'] ?? arguments['passcode'];
 
     return Scaffold(
-      appBar: AppBar(title: Text('signup_info_title'.tr)),
+      appBar: AppBar(title: Text(LocaleConstants.signupInfoTitle.tr)),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'signup_info_heading'.tr,
+              LocaleConstants.signupInfoHeading.tr,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 32),
 
             CustomTextField(
-              label: 'full_name_label'.tr,
-              hint: 'full_name_hint'.tr,
+              label: LocaleConstants.fullNameLabel.tr,
+              hint: LocaleConstants.fullNameHint.tr,
               onChanged: (value) => controller.fullName.value = value,
             ),
             const SizedBox(height: 16),
 
             CustomTextField(
-              label: 'username_label'.tr,
-              hint: 'username_hint'.tr,
+              label: LocaleConstants.usernameLabel.tr,
+              hint: LocaleConstants.usernameHint.tr,
               onChanged: (value) =>
                   controller.username.value = value.toLowerCase().trim(),
             ),
@@ -48,8 +49,8 @@ class SignUpInfoPage extends GetView<AuthController> {
             Obx(
               () => CustomButton(
                 text: controller.isLoading.value
-                    ? 'creating_account'.tr
-                    : 'create_account_button'.tr,
+                    ? LocaleConstants.creatingAccount.tr
+                    : LocaleConstants.createAccountButton.tr,
                 onPressed: () => controller.signUp(),
               ),
             ),

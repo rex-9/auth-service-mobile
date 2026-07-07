@@ -1,6 +1,7 @@
 // lib/pages/forgot_passcode_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:meritbox_mobile/constants/constants.dart';
 import '../controllers/auth_controller.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_textfield.dart';
@@ -12,27 +13,25 @@ class ForgotPasscodePage extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-    final emailController = TextEditingController(
-      text: controller.email.value,
-    );
+    final emailController = TextEditingController(text: controller.email.value);
 
     return Scaffold(
-      appBar: AppBar(title: Text('forgot_passcode_title'.tr)),
+      appBar: AppBar(title: Text(LocaleConstants.forgotPasscodeTitle.tr)),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'forgot_passcode_subtitle'.tr,
+              LocaleConstants.forgotPasscodeSubtitle.tr,
               style: TextStyle(color: Colors.grey[600]),
             ),
             const SizedBox(height: 32),
 
             Obx(
               () => CustomTextField(
-                label: 'email_label'.tr,
-                hint: 'email_hint'.tr,
+                label: LocaleConstants.emailLabel.tr,
+                hint: LocaleConstants.emailHint.tr,
                 error: controller.emailError.value,
                 textController: emailController,
                 keyboardType: TextInputType.emailAddress,
@@ -45,12 +44,12 @@ class ForgotPasscodePage extends GetView<AuthController> {
               final waiting = controller.resendSecondsLeft.value > 0;
               return CustomButton(
                 text: waiting
-                    ? 'resend_code_in'.trParams({
+                    ? LocaleConstants.resendCodeIn.trParams({
                         'seconds': '${controller.resendSecondsLeft.value}',
                       })
                     : controller.isLoading.value
-                    ? 'sending'.tr
-                    : 'send_reset_link'.tr,
+                    ? LocaleConstants.sending.tr
+                    : LocaleConstants.sendResetLink.tr,
                 onPressed: () {
                   if (waiting || controller.isLoading.value) return;
                   controller.forgotPassword();
@@ -62,7 +61,7 @@ class ForgotPasscodePage extends GetView<AuthController> {
             Center(
               child: TextButton(
                 onPressed: () => Get.back(),
-                child: Text('back_to_sign_in'.tr),
+                child: Text(LocaleConstants.backToSignIn.tr),
               ),
             ),
           ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/design/design.dart';
 
 import '../controllers/auth_controller.dart';
@@ -12,13 +13,13 @@ class HomePage extends GetView<AuthController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('home'.tr),
+        title: Text(LocaleConstants.home.tr),
         actions: [
           ...settingsActions(),
           IconButton(
             onPressed: () => controller.signout(),
             icon: const Icon(AppIcons.logout),
-            tooltip: 'sign_out_button'.tr,
+            tooltip: LocaleConstants.signOutButton.tr,
           ),
         ],
       ),
@@ -26,11 +27,11 @@ class HomePage extends GetView<AuthController> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('welcome_home'.tr),
+            Text(LocaleConstants.welcomeHome.tr),
             const SizedBox(height: 20),
             Obx(
               () => Text(
-                'Email: ${controller.currentUser.value?.email ?? 'loading'.tr}',
+                'Email: ${controller.currentUser.value?.email ?? LocaleConstants.loading.tr}',
               ),
             ),
           ],

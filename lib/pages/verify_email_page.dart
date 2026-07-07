@@ -1,6 +1,7 @@
 // lib/pages/verify_email_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/widgets/widgets.dart';
 import '../controllers/auth_controller.dart';
 
@@ -14,20 +15,20 @@ class VerifyEmailPage extends GetView<AuthController> {
     controller.email.value = arguments['email'];
 
     return Scaffold(
-      appBar: AppBar(title: Text('verify_email_title'.tr)),
+      appBar: AppBar(title: Text(LocaleConstants.verifyEmailTitle.tr)),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'verify_email_heading'.tr,
+              LocaleConstants.verifyEmailHeading.tr,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Obx(
               () => Text(
-                'verify_email_subtitle'.trParams({
+                LocaleConstants.verifyEmailSubtitle.trParams({
                   'email': controller.email.value,
                 }),
                 style: TextStyle(color: Colors.grey[600]),
@@ -46,12 +47,12 @@ class VerifyEmailPage extends GetView<AuthController> {
             Obx(
               () => CustomButton(
                 text: controller.isLoading.value
-                    ? 'verifying'.tr
-                    : 'verify_code_button'.tr,
+                    ? LocaleConstants.verifying.tr
+                    : LocaleConstants.verifyCodeButton.tr,
                 onPressed: () {
                   if (controller.verifyPin.text.length != 6) {
                     controller.verifyPin.triggerError();
-                    AppSnackbar.error('enter_6_digit_code'.tr);
+                    AppSnackbar.error(LocaleConstants.enter6DigitCode.tr);
                     return;
                   }
                   controller.verifyCode(controller.verifyPin.text);
@@ -68,10 +69,10 @@ class VerifyEmailPage extends GetView<AuthController> {
                       : () => controller.sendConfirmationCode(),
                   child: Text(
                     controller.resendSecondsLeft.value > 0
-                        ? 'resend_code_in'.trParams({
+                        ? LocaleConstants.resendCodeIn.trParams({
                             'seconds': '${controller.resendSecondsLeft.value}',
                           })
-                        : 'resend_code'.tr,
+                        : LocaleConstants.resendCode.tr,
                   ),
                 ),
               ),

@@ -1,6 +1,7 @@
 // lib/pages/signin_passcode_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:meritbox_mobile/constants/constants.dart';
 import '../controllers/auth_controller.dart';
 import '../design/app_colors.dart';
 import '../routes/app_routes.dart';
@@ -13,20 +14,22 @@ class SignInPasscodePage extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('signin_title'.tr)),
+      appBar: AppBar(title: Text(LocaleConstants.signinTitle.tr)),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'signin_heading'.tr,
+              LocaleConstants.signinHeading.tr,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Obx(
               () => Text(
-                'signin_subtitle'.trParams({'email': controller.email.value}),
+                LocaleConstants.signinSubtitle.trParams({
+                  'email': controller.email.value,
+                }),
                 style: TextStyle(color: Colors.grey[600]),
               ),
             ),
@@ -50,7 +53,7 @@ class SignInPasscodePage extends GetView<AuthController> {
                 return Padding(
                   padding: const EdgeInsets.only(top: 16),
                   child: Text(
-                    'cooldown_message'.trParams({
+                    LocaleConstants.cooldownMessage.trParams({
                       'seconds': '${controller.cooldownSecondsLeft.value}',
                     }),
                     style: const TextStyle(color: AppColors.error),
@@ -62,7 +65,7 @@ class SignInPasscodePage extends GetView<AuthController> {
                 return Padding(
                   padding: const EdgeInsets.only(top: 16),
                   child: Text(
-                    'attempts_remaining'.trParams({
+                    LocaleConstants.attemptsRemaining.trParams({
                       'left': '${controller.attemptsLeft.value}',
                       'total': '${AuthController.maxAttempts}',
                     }),
@@ -77,12 +80,12 @@ class SignInPasscodePage extends GetView<AuthController> {
             Obx(
               () => CustomButton(
                 text: controller.cooldownSecondsLeft.value > 0
-                    ? 'try_again_in'.trParams({
+                    ? LocaleConstants.tryAgainIn.trParams({
                         'seconds': '${controller.cooldownSecondsLeft.value}',
                       })
                     : controller.isLoading.value
-                    ? 'signing_in'.tr
-                    : 'signin_title'.tr,
+                    ? LocaleConstants.signingIn.tr
+                    : LocaleConstants.signinTitle.tr,
                 onPressed: () => controller.signIn(),
               ),
             ),
@@ -95,13 +98,13 @@ class SignInPasscodePage extends GetView<AuthController> {
                   controller.signinPin.clear();
                   Get.back();
                 },
-                child: Text('use_different_email'.tr),
+                child: Text(LocaleConstants.useDifferentEmail.tr),
               ),
             ),
             Center(
               child: TextButton(
                 onPressed: () => Get.toNamed(AppRoutes.forgotPasscode),
-                child: Text('forgot_passcode_link'.tr),
+                child: Text(LocaleConstants.forgotPasscodeLink.tr),
               ),
             ),
           ],
