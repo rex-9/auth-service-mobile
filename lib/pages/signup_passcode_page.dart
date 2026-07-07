@@ -1,10 +1,9 @@
 // lib/pages/signup_passcode_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:meritbox_mobile/widgets/widgets.dart';
 import '../controllers/auth_controller.dart';
 import '../routes/app_routes.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/passcode_field.dart';
 
 /// Create + confirm a 6-digit passcode. Used for both email sign up and
 /// finishing a new Google account (challenge token flow).
@@ -14,12 +13,12 @@ class SignUpPasscodePage extends GetView<AuthController> {
   void _onContinue() {
     if (controller.passcode.value.length != 6) {
       controller.signupPin.triggerError();
-      Get.snackbar('error'.tr, 'passcode_6_digits'.tr);
+      AppSnackbar.error('passcode_6_digits'.tr);
       return;
     }
     if (controller.passcode.value != controller.confirmPasscode.value) {
       controller.signupConfirmPin.triggerError();
-      Get.snackbar('error'.tr, 'passcodes_do_not_match'.tr);
+      AppSnackbar.error('passcodes_do_not_match'.tr);
       return;
     }
 

@@ -1,9 +1,8 @@
 // lib/pages/verify_email_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:meritbox_mobile/widgets/widgets.dart';
 import '../controllers/auth_controller.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/passcode_field.dart';
 
 class VerifyEmailPage extends GetView<AuthController> {
   const VerifyEmailPage({super.key});
@@ -52,7 +51,7 @@ class VerifyEmailPage extends GetView<AuthController> {
                 onPressed: () {
                   if (controller.verifyPin.text.length != 6) {
                     controller.verifyPin.triggerError();
-                    Get.snackbar('error'.tr, 'enter_6_digit_code'.tr);
+                    AppSnackbar.error('enter_6_digit_code'.tr);
                     return;
                   }
                   controller.verifyCode(controller.verifyPin.text);

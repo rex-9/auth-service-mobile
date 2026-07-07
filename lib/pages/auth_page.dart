@@ -1,14 +1,12 @@
 // lib/pages/auth_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:meritbox_mobile/widgets/widgets.dart';
 import '../controllers/auth_controller.dart';
 import '../design/app_spacing.dart';
 import '../design/app_typography.dart';
 import '../models/models.dart';
 import '../routes/app_routes.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/custom_textfield.dart';
-import '../widgets/settings_actions.dart';
 
 class AuthPage extends GetView<AuthController> {
   const AuthPage({super.key});
@@ -21,7 +19,7 @@ class AuthPage extends GetView<AuthController> {
     switch (peekedUserStatus) {
       case PeekedUserStatus.error:
         // Show error, stay on same page
-        Get.snackbar('error'.tr, 'connection_failed'.tr);
+        AppSnackbar.error('connection_failed'.tr);
         break;
 
       case PeekedUserStatus.exists:

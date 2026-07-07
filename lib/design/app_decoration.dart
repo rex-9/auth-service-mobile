@@ -1,4 +1,4 @@
-// lib/core/theme/app_decoration.dart
+// lib/design/app_decoration.dart
 import 'package:flutter/material.dart';
 
 import 'app_colors.dart';

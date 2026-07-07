@@ -1,4 +1,5 @@
-// lib/core/theme/app_spacing.dart
+// lib/design/app_spacing.dart
+
 class AppSpacing {
   // Base unit: 4px
   static const double xs = 4.0; // 4px

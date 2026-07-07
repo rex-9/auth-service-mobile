@@ -36,8 +36,7 @@ class AppTranslations extends Translations {
       'use_different_email': 'Use different email',
       'forgot_passcode_link': 'Forgot your passcode?',
       'passcode_6_digits': 'Please enter 6-digit passcode',
-      'attempts_remaining':
-          'Attempts remaining before cooldown: @left/@total',
+      'attempts_remaining': 'Attempts remaining before cooldown: @left/@total',
       'cooldown_message':
           'Too many incorrect passcode attempts. Please wait @seconds seconds.',
       'try_again_in': 'Try again in @seconds⁠s',
@@ -45,8 +44,7 @@ class AppTranslations extends Translations {
       // Sign up passcode
       'signup_title': 'Create Account',
       'create_passcode_heading': 'Create a passcode',
-      'create_passcode_subtitle':
-          "You'll use this 6-digit passcode to sign in",
+      'create_passcode_subtitle': "You'll use this 6-digit passcode to sign in",
       'google_passcode_heading': 'One last step',
       'google_passcode_subtitle':
           'Create and confirm a passcode to finish Google sign up',
@@ -102,6 +100,8 @@ class AppTranslations extends Translations {
       // Generic
       'error': 'Error',
       'success': 'Success',
+      'warning': 'Warning',
+      'info': 'Info',
       'sign_in_failed': 'Sign in failed. Please try again.',
       'verification_failed': 'Verification failed',
       'registration_failed': 'Registration failed',
@@ -183,6 +183,8 @@ class AppTranslations extends Translations {
           'Tu sesión fue reemplazada por un inicio de sesión más reciente en esta plataforma.',
       'error': 'Error',
       'success': 'Éxito',
+      'warning': 'Advertencia',
+      'info': 'Información',
       'sign_in_failed': 'Falló el inicio de sesión. Inténtalo de nuevo.',
       'verification_failed': 'La verificación falló',
       'registration_failed': 'El registro falló',
@@ -265,6 +267,8 @@ class AppTranslations extends Translations {
           'ဤစက်ပေါ်တွင် နောက်ဆုံးလော့ဂ်အင်ဝင်မှုကြောင့် သင့် session အသစ်ဖြင့် အစားထိုးခံရပါသည်။',
       'error': 'အမှား',
       'success': 'အောင်မြင်သည်',
+      'warning': 'သတိပေးချက်',
+      'info': 'သတင်းအချက်အလက်',
       'sign_in_failed': 'လော့ဂ်အင် မအောင်မြင်ပါ။ ထပ်စမ်းကြည့်ပါ။',
       'verification_failed': 'အတည်ပြုမှု မအောင်မြင်ပါ',
       'registration_failed': 'အကောင့်ဖွင့်ခြင်း မအောင်မြင်ပါ',

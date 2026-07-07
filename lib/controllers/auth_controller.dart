@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meritbox_mobile/config/config.dart';
+import 'package:meritbox_mobile/widgets/widgets.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import '../routes/app_routes.dart';
 import '../services/auth_service.dart';
@@ -248,7 +249,7 @@ class AuthController extends GetxController {
     if (isLoading.value || cooldownSecondsLeft.value > 0) return;
     if (passcode.value.length != 6) {
       signinPin.triggerError();
-      Get.snackbar('error'.tr, 'passcode_6_digits'.tr);
+      AppSnackbar.error('passcode_6_digits'.tr);
       return;
     }
 
@@ -264,16 +265,16 @@ class AuthController extends GetxController {
       } else if (response.success) {
         // Signed in with an unconfirmed email: the server just sent a
         // fresh confirmation code, so continue to email verification.
-        Get.snackbar('success'.tr, response.message);
+        AppSnackbar.success(response.message);
         _startResendCountdown(30);
         AppRoutes.toVerifyEmail(arguments: {'email': email.value});
       } else {
         signinPin.triggerError();
         _applySignInFailure(response.data);
-        Get.snackbar('error'.tr, response.message);
+        AppSnackbar.error(response.message);
       }
     } catch (e) {
-      Get.snackbar('error'.tr, 'sign_in_failed'.tr);
+      AppSnackbar.error('sign_in_failed'.tr);
     } finally {
       isLoading.value = false;
     }
@@ -292,10 +293,10 @@ class AuthController extends GetxController {
           AppRoutes.toVerifyEmail(arguments: {'email': email.value});
         }
       } else {
-        Get.snackbar('error'.tr, response.message);
+        AppSnackbar.error(response.message);
       }
     } catch (e) {
-      Get.snackbar('error'.tr, 'send_code_failed'.tr);
+      AppSnackbar.error('send_code_failed'.tr);
     } finally {
       isLoading.value = false;
     }
@@ -314,10 +315,10 @@ class AuthController extends GetxController {
         AppRoutes.toHome();
       } else {
         verifyPin.triggerError();
-        Get.snackbar('error'.tr, response.message);
+        AppSnackbar.error(response.message);
       }
     } catch (e) {
-      Get.snackbar('error'.tr, 'verification_failed'.tr);
+      AppSnackbar.error('verification_failed'.tr);
     } finally {
       isLoading.value = false;
     }
@@ -326,15 +327,15 @@ class AuthController extends GetxController {
   // Register new user with full details
   Future<void> signUp() async {
     if (fullName.value.trim().length < 2) {
-      Get.snackbar('error'.tr, 'enter_full_name'.tr);
+      AppSnackbar.error('enter_full_name'.tr);
       return;
     }
     if (username.value.length < 3) {
-      Get.snackbar('error'.tr, 'username_min_length'.tr);
+      AppSnackbar.error('username_min_length'.tr);
       return;
     }
     if (!RegExp(r'^[a-z0-9_]+$').hasMatch(username.value)) {
-      Get.snackbar('error'.tr, 'username_charset'.tr);
+      AppSnackbar.error('username_charset'.tr);
       return;
     }
 
@@ -353,10 +354,10 @@ class AuthController extends GetxController {
         _startResendCountdown(30);
         AppRoutes.toVerifyEmail(arguments: {'email': email.value});
       } else {
-        Get.snackbar('error'.tr, response.message);
+        AppSnackbar.error(response.message);
       }
     } catch (e) {
-      Get.snackbar('error'.tr, 'registration_failed'.tr);
+      AppSnackbar.error('registration_failed'.tr);
     } finally {
       isLoading.value = false;
     }
@@ -398,10 +399,10 @@ class AuthController extends GetxController {
         _storeSession(response.data!);
         AppRoutes.toHome();
       } else {
-        Get.snackbar('error'.tr, response.message);
+        AppSnackbar.error(response.message);
       }
     } catch (e) {
-      Get.snackbar('error'.tr, 'sign_in_google_failure'.tr);
+      AppSnackbar.error('sign_in_google_failure'.tr);
     } finally {
       isLoading.value = false;
     }
@@ -411,12 +412,12 @@ class AuthController extends GetxController {
   Future<void> completeGoogleSignIn() async {
     if (passcode.value.length != 6) {
       signupPin.triggerError();
-      Get.snackbar('error'.tr, 'passcode_6_digits'.tr);
+      AppSnackbar.error('passcode_6_digits'.tr);
       return;
     }
     if (passcode.value != confirmPasscode.value) {
       signupConfirmPin.triggerError();
-      Get.snackbar('error'.tr, 'passcodes_do_not_match'.tr);
+      AppSnackbar.error('passcodes_do_not_match'.tr);
       return;
     }
 
@@ -434,12 +435,11 @@ class AuthController extends GetxController {
         AppRoutes.toHome();
       } else if (response.statusCode == 429) {
         final wait = (response.data?['retry_after'] as num?)?.toInt() ?? 30;
-        Get.snackbar(
-          'error'.tr,
+        AppSnackbar.error(
           'google_too_many_attempts'.trParams({'seconds': '$wait'}),
         );
       } else {
-        Get.snackbar('error'.tr, response.message);
+        AppSnackbar.error(response.message);
         if (response.statusCode == 401) {
           // Challenge expired: restart the Google flow.
           googleChallengeToken.value = '';
@@ -447,7 +447,7 @@ class AuthController extends GetxController {
         }
       }
     } catch (e) {
-      Get.snackbar('error'.tr, 'sign_in_google_failure'.tr);
+      AppSnackbar.error('sign_in_google_failure'.tr);
     } finally {
       isLoading.value = false;
     }
@@ -475,12 +475,12 @@ class AuthController extends GetxController {
       final response = await _auth.forgotPassword(email.value);
       if (response.success) {
         _startResendCountdown(60);
-        Get.snackbar('success'.tr, response.message);
+        AppSnackbar.success(response.message);
       } else {
-        Get.snackbar('error'.tr, response.message);
+        AppSnackbar.error(response.message);
       }
     } catch (e) {
-      Get.snackbar('error'.tr, 'reset_failed'.tr);
+      AppSnackbar.error('reset_failed'.tr);
     } finally {
       isLoading.value = false;
     }
@@ -493,7 +493,7 @@ class AuthController extends GetxController {
     _clearLocalSession();
     AppRoutes.toAuth();
     if (replaced) {
-      Get.snackbar('error'.tr, 'session_replaced'.tr);
+      AppSnackbar.error('session_replaced'.tr);
     }
   }
 
