@@ -1,0 +1,22 @@
+{
+  "configurations": [
+    {
+      "name": "Dev",
+      "request": "launch",
+      "type": "dart",
+      "args": ["--dart-define-from-file=.env.dev"]
+    },
+    {
+      "name": "UAT",
+      "request": "launch",
+      "type": "dart",
+      "args": ["--dart-define-from-file=.env.uat"]
+    },
+    {
+      "name": "Prod",
+      "request": "launch",
+      "type": "dart",
+      "args": ["--dart-define-from-file=.env.prod"]
+    }
+  ]
+}

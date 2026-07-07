@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:meritbox_mobile/config/config.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import '../routes/app_routes.dart';
 import '../services/auth_service.dart';
@@ -153,8 +154,7 @@ class AuthController extends GetxController {
 
     if (waitSeconds > 0) {
       attemptsLeft.value = 0;
-      final until =
-          DateTime.now().millisecondsSinceEpoch + waitSeconds * 1000;
+      final until = DateTime.now().millisecondsSinceEpoch + waitSeconds * 1000;
       _startCooldownUntil(until);
       _persistRetryState(cooldownUntilMs: until);
     } else {
@@ -165,8 +165,8 @@ class AuthController extends GetxController {
   void _startCooldownUntil(int untilMs) {
     _cooldownTimer?.cancel();
     void tick() {
-      final left =
-          ((untilMs - DateTime.now().millisecondsSinceEpoch) / 1000).ceil();
+      final left = ((untilMs - DateTime.now().millisecondsSinceEpoch) / 1000)
+          .ceil();
       if (left <= 0) {
         cooldownSecondsLeft.value = 0;
         _cooldownTimer?.cancel();
@@ -370,7 +370,7 @@ class AuthController extends GetxController {
     try {
       final signIn = GoogleSignIn.instance;
       if (!_googleInitialized) {
-        await signIn.initialize();
+        await signIn.initialize(serverClientId: AppConfig.googleServerClientId);
         _googleInitialized = true;
       }
 

@@ -24,4 +24,8 @@ class AppConstants {
   static const String storageKeyToken = 'auth_token';
   static const String storageKeyUserEmail = 'user_email';
   static const String storageKeyUserData = 'user_data';
+
+  // Config Keys
+  static const String googleServerClientId = "GOOGLE_SERVER_CLIENT_ID";
+  static const String apiBaseUrl = "API_BASE_URL";
 }
