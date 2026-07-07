@@ -12,7 +12,7 @@ class AppSnackbar {
       message: message,
       background: AppColors.error.withValues(alpha: 0.12),
       foreground: AppColors.errorDark,
-      icon: Icons.error_outline_rounded,
+      icon: AppIcons.error,
     );
   }
 
@@ -22,7 +22,7 @@ class AppSnackbar {
       message: message,
       background: AppColors.success.withValues(alpha: 0.12),
       foreground: AppColors.successDark,
-      icon: Icons.check_circle_outline_rounded,
+      icon: AppIcons.check,
     );
   }
 
@@ -32,7 +32,7 @@ class AppSnackbar {
       message: message,
       background: AppColors.warning.withValues(alpha: 0.12),
       foreground: AppColors.warningDark,
-      icon: Icons.warning_amber_rounded,
+      icon: AppIcons.warning,
     );
   }
 
@@ -42,7 +42,7 @@ class AppSnackbar {
       message: message,
       background: AppColors.primary.withValues(alpha: 0.12),
       foreground: AppColors.primaryDark,
-      icon: Icons.info_outline_rounded,
+      icon: AppIcons.info,
     );
   }
 

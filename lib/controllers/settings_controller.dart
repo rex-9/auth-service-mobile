@@ -1,6 +1,7 @@
 // lib/controllers/settings_controller.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:meritbox_mobile/design/design.dart';
 import '../services/storage_service.dart';
 
 /// Theme + locale settings, persisted with GetStorage.
@@ -23,9 +24,9 @@ class SettingsController extends GetxController {
   }
 
   IconData get themeIcon => switch (themeName.value) {
-    'day' => Icons.light_mode_outlined,
-    'night' => Icons.dark_mode_outlined,
-    _ => Icons.brightness_auto_outlined,
+    'day' => AppIcons.lightMode,
+    'night' => AppIcons.darkMode,
+    _ => AppIcons.brightness,
   };
 
   @override
