@@ -3,15 +3,17 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:meritbox_mobile/services/auth_service/auth_service_impl.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import '../routes/app_routes.dart';
-import '../services/auth_service.dart';
+import '../services/auth_service/auth_service.dart';
 import '../services/storage_service.dart';
 import '../models/user_model.dart';
 
 class AuthController extends GetxController {
-  final AuthService _auth = Get.find();
+  final AuthService _auth = Get.find<AuthServiceImpl>();
   final StorageService _storage = Get.find();
+
 
   static const int maxAttempts = 3;
   static const List<int> cooldownSecondsByLevel = [30, 60, 120];

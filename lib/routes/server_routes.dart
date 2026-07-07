@@ -26,16 +26,22 @@ class ServerRoutes {
   static const String forgotPassword = '/password/forgot';
   static const String resetPassword = '/password/reset';
 
-  // Full URL getters (optional)
-  static String get fullPeekUser => '$baseUrl$peekUser';
-  static String get fullCurrentUser => '$baseUrl$currentUser';
-  static String get fullSignIn => '$baseUrl$signIn';
-  static String get fullSignInWithToken => '$baseUrl$signInWithToken';
-  static String get fullSignInWithGoogle => '$baseUrl$signInWithGoogle';
-  static String get fullSignOut => '$baseUrl$signOut';
-  static String get fullSignUp => '$baseUrl$signUp';
-  static String get fullSendConfirmationCode => '$baseUrl$sendConfirmationCode';
-  static String get fullConfirmCode => '$baseUrl$confirmCode';
-  static String get fullForgotPassword => '$baseUrl$forgotPassword';
-  static String get fullResetPassword => '$baseUrl$resetPassword';
+
+}
+
+
+
+class ApiConstant{
+
+    static final auth = _Auth();
+
+}
+
+
+class _Auth {
+
+  String get base => '/auth';
+
+  String get login => '$base/login';
+
 }
