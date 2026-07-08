@@ -56,6 +56,10 @@ class AppSnackbar {
   }) {
     Get.closeAllSnackbars();
 
+    // Get the current context for theme-aware styles
+    final context = Get.context;
+    if (context == null) return;
+
     Get.snackbar(
       title,
       message,
@@ -70,11 +74,11 @@ class AppSnackbar {
       borderWidth: 1,
       titleText: Text(
         title,
-        style: Design.theme.styles.labelLarge.copyWith(color: foreground),
+        style: Design.typography.labelLarge.copyWith(color: foreground),
       ),
       messageText: Text(
         message,
-        style: Design.theme.styles.bodyMedium.copyWith(color: foreground),
+        style: Design.typography.bodyMedium.copyWith(color: foreground),
       ),
     );
   }

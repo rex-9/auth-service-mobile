@@ -20,17 +20,17 @@ class AppLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (type) {
       case LoadingType.circular:
-        return _buildCircular();
+        return _buildCircular(context);
       case LoadingType.dots:
-        return _buildDots();
+        return _buildDots(context);
       case LoadingType.pulse:
-        return _buildPulse();
+        return _buildPulse(context);
       case LoadingType.page:
         return _buildPageLoader();
     }
   }
 
-  Widget _buildCircular() {
+  Widget _buildCircular(BuildContext context) {
     return SizedBox(
       height: size.value,
       width: size.value,
@@ -41,14 +41,18 @@ class AppLoading extends StatelessWidget {
     );
   }
 
-  Widget _buildDots() {
+  Widget _buildDots(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
-      children: [_buildDot(0), _buildDot(1), _buildDot(2)],
+      children: [
+        _buildDot(0, context),
+        _buildDot(1, context),
+        _buildDot(2, context),
+      ],
     );
   }
 
-  Widget _buildDot(int index) {
+  Widget _buildDot(int index, BuildContext context) {
     final delay = Duration(milliseconds: index * 150);
     final size = this.size.value * 0.3;
 
@@ -76,7 +80,7 @@ class AppLoading extends StatelessWidget {
     );
   }
 
-  Widget _buildPulse() {
+  Widget _buildPulse(BuildContext context) {
     return TweenAnimationBuilder<double>(
       duration: Design.timers.medium,
       tween: Tween(begin: 0.6, end: 1.0),
@@ -121,7 +125,7 @@ class AppLoading extends StatelessWidget {
       children: [
         AppLoading(size: LoadingSize.large, type: LoadingType.pulse),
         SizedBox(height: Design.spacing.xl),
-        Text('Loading...', style: Design.theme.styles.bodyMedium),
+        Text('Loading...', style: Design.typography.bodyMedium),
       ],
     );
   }
@@ -205,7 +209,7 @@ class AppLoadingOverlay extends StatelessWidget {
               SizedBox(height: Design.spacing.lg),
               Text(
                 message!,
-                style: Design.theme.styles.bodyMedium,
+                style: Design.typography.bodyMedium,
                 textAlign: TextAlign.center,
               ),
             ],

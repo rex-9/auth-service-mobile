@@ -17,10 +17,7 @@ import 'pages/splash_page.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize GetStorage
   await GetStorage.init();
-
-  // Initialize all dependencies at once
   InitialBinding().dependencies();
 
   runApp(const MyApp());
@@ -31,35 +28,33 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final settings = Get.find<SettingsController>();
+    return GetBuilder<SettingsController>(
+      builder: (settings) => ScreenUtilInit(
+        designSize: const Size(375, 812),
+        builder: (context, child) => GetMaterialApp(
+          title: Constants.app.name,
+          theme: Design.theme.light,
+          darkTheme: Design.theme.dark,
+          themeMode: settings.themeMode,
+          translations: AppTranslations(),
+          locale: settings.locale,
+          fallbackLocale: const Locale('en', 'US'),
+          debugShowCheckedModeBanner: false,
+          getPages: AppRoutes.pages,
+          home: Obx(() {
+            final authController = Get.find<AuthController>();
 
-    return ScreenUtilInit(
-      designSize: const Size(375, 812),
-      builder: (context, child) => GetMaterialApp(
-        title: Constants.app.name,
-        theme: Design.theme.light,
-        darkTheme: Design.theme.dark,
-        themeMode: settings.themeMode,
-        translations: AppTranslations(),
-        locale: settings.locale,
-        fallbackLocale: const Locale('en', 'US'),
-        debugShowCheckedModeBanner: false,
-        getPages: AppRoutes.pages,
-        home: Obx(() {
-          final authController = Get.find<AuthController>();
+            if (authController.isCheckingAuth.value) {
+              return const SplashPage();
+            }
 
-          // Show splash while checking auth status
-          if (authController.isCheckingAuth.value) {
-            return const SplashPage();
-          }
+            if (authController.isLoggedIn.value) {
+              return const HomePage();
+            }
 
-          // Redirect based on auth status
-          if (authController.isLoggedIn.value) {
-            return const HomePage();
-          }
-
-          return AuthPage();
-        }),
+            return const AuthPage();
+          }),
+        ),
       ),
     );
   }

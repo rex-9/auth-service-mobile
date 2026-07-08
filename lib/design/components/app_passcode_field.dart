@@ -42,7 +42,7 @@ class AppPasscodeField extends StatelessWidget {
             focusedBorderColor: Design.theme.colors.primary,
             errorColor: Design.theme.colors.error,
             fillColor: Design.theme.colors.surface,
-            textStyle: Design.theme.styles.headline3.copyWith(
+            textStyle: Design.typography.headline3.copyWith(
               fontWeight: FontWeight.bold,
             ),
             entryAnimation: MaterialPinAnimation.scale,
@@ -55,7 +55,7 @@ class AppPasscodeField extends StatelessWidget {
           SizedBox(height: Design.spacing.xs),
           Text(
             error!,
-            style: Design.theme.styles.caption.copyWith(
+            style: Design.typography.caption.copyWith(
               color: Design.theme.colors.error,
             ),
           ),

@@ -12,9 +12,6 @@ class AppTheme {
 
   // ===== THEME-AWARE COLORS =====
   AppThemeColors get colors => const AppThemeColors();
-
-  // ===== THEME-AWARE TEXT STYLES =====
-  AppThemeStyles get styles => const AppThemeStyles();
 }
 
 // lib/design/elements/app_theme.dart
@@ -31,45 +28,6 @@ class AppThemeColors {
   Color get textSecondary => Get.theme.colorScheme.onSurfaceVariant;
   Color get textTertiary =>
       Get.theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6);
-}
-
-class AppThemeStyles {
-  const AppThemeStyles();
-
-  AppThemeColors get _colors => const AppThemeColors();
-
-  // Headlines
-  TextStyle get headline1 =>
-      Design.typography.headline1.copyWith(color: _colors.textPrimary);
-  TextStyle get headline2 =>
-      Design.typography.headline2.copyWith(color: _colors.textPrimary);
-  TextStyle get headline3 =>
-      Design.typography.headline3.copyWith(color: _colors.textPrimary);
-  TextStyle get headline4 =>
-      Design.typography.headline4.copyWith(color: _colors.textPrimary);
-
-  // Body
-  TextStyle get bodyLarge =>
-      Design.typography.bodyLarge.copyWith(color: _colors.textPrimary);
-  TextStyle get bodyMedium =>
-      Design.typography.bodyMedium.copyWith(color: _colors.textSecondary);
-  TextStyle get bodySmall =>
-      Design.typography.bodySmall.copyWith(color: _colors.textTertiary);
-
-  // Labels
-  TextStyle get labelLarge =>
-      Design.typography.labelLarge.copyWith(color: _colors.textPrimary);
-  TextStyle get labelMedium =>
-      Design.typography.labelMedium.copyWith(color: _colors.textSecondary);
-
-  // Others
-  TextStyle get button =>
-      Design.typography.button.copyWith(color: _colors.textPrimary);
-  TextStyle get caption =>
-      Design.typography.caption.copyWith(color: _colors.textSecondary);
-  TextStyle get helper =>
-      Design.typography.helper.copyWith(color: _colors.textTertiary);
-  TextStyle get link => Design.typography.link;
 }
 
 // ===== THEME BUILDERS =====

@@ -48,6 +48,7 @@ class SettingsController extends GetxController {
     isDarkMode.value = !isDarkMode.value;
     _storage.setThemeName(isDarkMode.value ? 'dark' : 'light');
     Get.changeThemeMode(themeMode);
+    update(); // This triggers GetBuilder rebuilds
   }
 
   void setDarkMode(bool isDark) {

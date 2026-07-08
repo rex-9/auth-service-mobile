@@ -5,6 +5,7 @@ import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/controllers/controllers.dart';
 import 'package:meritbox_mobile/design/components/components.dart';
 import 'package:meritbox_mobile/design/design.dart';
+import 'package:meritbox_mobile/design/extensions/theme_extensions.dart';
 import 'package:meritbox_mobile/widgets/widgets.dart';
 import 'package:meritbox_mobile/models/models.dart';
 import 'package:meritbox_mobile/routes/app_routes.dart';
@@ -19,12 +20,10 @@ class AuthPage extends GetView<AuthController> {
 
     switch (peekedUserStatus) {
       case PeekedUserStatus.error:
-        // Show error, stay on same page
         AppSnackbar.error(Constants.locale.connectionFailed.tr);
         break;
 
       case PeekedUserStatus.exists:
-        // User exists -> go to sign in with passcode
         controller.passcode.value = '';
         controller.signinPin.clear();
         controller.loadRetryState();
@@ -32,7 +31,6 @@ class AuthPage extends GetView<AuthController> {
         break;
 
       case PeekedUserStatus.notExists:
-        // New user -> go to create passcode
         controller.passcode.value = '';
         controller.confirmPasscode.value = '';
         controller.signupPin.clear();
@@ -45,6 +43,7 @@ class AuthPage extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: context.colors.background,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(Design.spacing.screenPadding),
@@ -61,7 +60,7 @@ class AuthPage extends GetView<AuthController> {
                     // Welcome Title
                     Text(
                       Constants.locale.welcomeTitle.tr,
-                      style: Design.theme.styles.headline1,
+                      style: Design.typography.headline1,
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: Design.spacing.md),
@@ -69,7 +68,7 @@ class AuthPage extends GetView<AuthController> {
                     // Welcome Subtitle
                     Text(
                       Constants.locale.welcomeSubtitle.tr,
-                      style: Design.theme.styles.bodyMedium,
+                      style: Design.typography.bodyMedium,
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: Design.spacing.xxxl),
@@ -98,7 +97,7 @@ class AuthPage extends GetView<AuthController> {
                           ),
                           child: Text(
                             Constants.locale.or.tr,
-                            style: Design.theme.styles.bodyMedium,
+                            style: Design.typography.bodyMedium,
                           ),
                         ),
                         Expanded(

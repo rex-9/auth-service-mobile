@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/design/design.dart';
+import 'package:meritbox_mobile/design/extensions/theme_extensions.dart';
 
 import '../controllers/auth_controller.dart';
 import '../widgets/settings_actions.dart';
@@ -13,7 +14,7 @@ class HomePage extends GetView<AuthController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(Constants.locale.home.tr),
+        title: Text(Constants.locale.home.tr, style: context.styles.headline3),
         actions: [
           ...settingsActions(),
           IconButton(

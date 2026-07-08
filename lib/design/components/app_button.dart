@@ -23,21 +23,21 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final button = _buildButton();
+    final button = _buildButton(context);
 
     return isExpanded
         ? SizedBox(width: double.infinity, child: button)
         : button;
   }
 
-  Widget _buildButton() {
+  Widget _buildButton(BuildContext context) {
     final child = isLoading
         ? SizedBox(
             height: Design.spacing.iconMedium,
             width: Design.spacing.iconMedium,
             child: AppLoading(strokeWidth: 2, color: _getLoaderColor()),
           )
-        : _buildContent();
+        : _buildContent(context);
 
     switch (type) {
       case ButtonType.primary:
@@ -73,7 +73,7 @@ class AppButton extends StatelessWidget {
     }
   }
 
-  Widget _buildContent() {
+  Widget _buildContent(BuildContext context) {
     if (type == ButtonType.google) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -84,12 +84,7 @@ class AppButton extends StatelessWidget {
             width: Design.spacing.iconMedium,
           ),
           SizedBox(width: Design.spacing.sm),
-          Text(
-            text,
-            style: Design.theme.styles.bodyMedium.copyWith(
-              color: Design.theme.colors.textPrimary,
-            ),
-          ),
+          Text(text, style: Design.typography.bodyMedium),
         ],
       );
     }
@@ -101,12 +96,12 @@ class AppButton extends StatelessWidget {
         children: [
           icon!,
           SizedBox(width: Design.spacing.sm),
-          Text(text, style: Design.theme.styles.button),
+          Text(text, style: Design.typography.button),
         ],
       );
     }
 
-    return Text(text, style: Design.theme.styles.button);
+    return Text(text, style: Design.typography.button);
   }
 
   Color _getLoaderColor() {
@@ -116,7 +111,7 @@ class AppButton extends StatelessWidget {
       case ButtonType.secondary:
       case ButtonType.text:
       case ButtonType.google:
-        return Design.theme.colors.primary;
+        return Design.colors.primary; // Fixed: was Colors.red
     }
   }
 }

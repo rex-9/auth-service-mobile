@@ -6,8 +6,13 @@ import '../design.dart';
 class AppDialog {
   AppDialog._();
 
-  static Future<void> error({required String title, required String message}) {
+  static Future<void> error({
+    required BuildContext context,
+    required String title,
+    required String message,
+  }) {
     return _show(
+      context: context,
       title: title,
       message: message,
       background: Design.colors.error.withValues(alpha: 0.12),
@@ -17,10 +22,12 @@ class AppDialog {
   }
 
   static Future<void> success({
+    required BuildContext context,
     required String title,
     required String message,
   }) {
     return _show(
+      context: context,
       title: title,
       message: message,
       background: Design.colors.success.withValues(alpha: 0.12),
@@ -30,10 +37,12 @@ class AppDialog {
   }
 
   static Future<void> warning({
+    required BuildContext context,
     required String title,
     required String message,
   }) {
     return _show(
+      context: context,
       title: title,
       message: message,
       background: Design.colors.warning.withValues(alpha: 0.12),
@@ -42,8 +51,13 @@ class AppDialog {
     );
   }
 
-  static Future<void> info({required String title, required String message}) {
+  static Future<void> info({
+    required BuildContext context,
+    required String title,
+    required String message,
+  }) {
     return _show(
+      context: context,
       title: title,
       message: message,
       background: Design.colors.primary.withValues(alpha: 0.12),
@@ -53,6 +67,7 @@ class AppDialog {
   }
 
   static Future<void> _show({
+    required BuildContext context,
     required String title,
     required String message,
     required Color background,
@@ -73,23 +88,21 @@ class AppDialog {
             Expanded(
               child: Text(
                 title,
-                style: Design.theme.styles.headline4.copyWith(
-                  color: foreground,
-                ),
+                style: Design.typography.headline4.copyWith(color: foreground),
               ),
             ),
           ],
         ),
         content: Text(
           message,
-          style: Design.theme.styles.bodyMedium.copyWith(color: foreground),
+          style: Design.typography.bodyMedium.copyWith(color: foreground),
         ),
         actions: [
           TextButton(
             onPressed: Get.back,
             child: Text(
               'OK',
-              style: Design.theme.styles.labelLarge.copyWith(color: foreground),
+              style: Design.typography.labelLarge.copyWith(color: foreground),
             ),
           ),
         ],

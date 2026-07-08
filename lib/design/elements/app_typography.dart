@@ -5,15 +5,14 @@ import 'package:meritbox_mobile/design/design.dart';
 class AppTypography {
   const AppTypography();
 
-  // Font Family
   String get fontFamily => 'Poppins';
 
-  // Headlines
   TextStyle get headline1 => TextStyle(
     fontSize: 32,
     fontWeight: FontWeight.w700,
     height: 1.2,
     letterSpacing: -0.5,
+    color: Design.theme.colors.textPrimary,
   );
 
   TextStyle get headline2 => TextStyle(
@@ -21,71 +20,92 @@ class AppTypography {
     fontWeight: FontWeight.w700,
     height: 1.2,
     letterSpacing: -0.5,
+    color: Design.theme.colors.textPrimary,
   );
 
-  TextStyle get headline3 =>
-      TextStyle(fontSize: 24, fontWeight: FontWeight.w600, height: 1.3);
+  TextStyle get headline3 => TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+    height: 1.3,
+    color: Design.theme.colors.textPrimary,
+  );
 
-  TextStyle get headline4 =>
-      TextStyle(fontSize: 20, fontWeight: FontWeight.w600, height: 1.3);
+  TextStyle get headline4 => TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    height: 1.3,
+    color: Design.theme.colors.textPrimary,
+  );
 
-  // Body Text
-  TextStyle get bodyLarge =>
-      TextStyle(fontSize: 16, fontWeight: FontWeight.w400, height: 1.5);
+  TextStyle get bodyLarge => TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    height: 1.5,
+    color: Design.theme.colors.textPrimary,
+  );
 
-  TextStyle get bodyMedium =>
-      TextStyle(fontSize: 14, fontWeight: FontWeight.w400, height: 1.5);
+  TextStyle get bodyMedium => TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    height: 1.5,
+    color: Design.theme.colors.textSecondary,
+  );
 
-  TextStyle get bodySmall =>
-      TextStyle(fontSize: 12, fontWeight: FontWeight.w400, height: 1.5);
+  TextStyle get bodySmall => TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+    height: 1.5,
+    color: Design.theme.colors.textTertiary,
+  );
 
-  // Labels
-  TextStyle get labelLarge =>
-      TextStyle(fontSize: 14, fontWeight: FontWeight.w600, height: 1.4);
+  TextStyle get labelLarge => TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w600,
+    height: 1.4,
+    color: Design.theme.colors.textPrimary,
+  );
 
-  TextStyle get labelMedium =>
-      TextStyle(fontSize: 12, fontWeight: FontWeight.w600, height: 1.4);
+  TextStyle get labelMedium => TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+    height: 1.4,
+    color: Design.theme.colors.textSecondary,
+  );
 
-  TextStyle get labelSmall =>
-      TextStyle(fontSize: 10, fontWeight: FontWeight.w600, height: 1.4);
+  TextStyle get labelSmall => TextStyle(
+    fontSize: 10,
+    fontWeight: FontWeight.w600,
+    height: 1.4,
+    color: Design.theme.colors.textTertiary,
+  );
 
-  // Button Text
   TextStyle get button => TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.w600,
     height: 1.2,
     letterSpacing: 0.5,
+    color: Design.theme.colors.textPrimary,
   );
 
-  TextStyle get buttonSmall => TextStyle(
-    fontSize: 14,
-    fontWeight: FontWeight.w600,
-    height: 1.2,
-    letterSpacing: 0.3,
-  );
-
-  // Caption
   TextStyle get caption => TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.w400,
     height: 1.4,
-    color: Design.colors.textSecondary,
+    color: Design.theme.colors.textSecondary,
   );
 
-  // Helper Text
   TextStyle get helper => TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.w400,
     height: 1.3,
-    color: Design.colors.textTertiary,
+    color: Design.theme.colors.textTertiary,
   );
 
-  // Link
   TextStyle get link => TextStyle(
     fontSize: 14,
     fontWeight: FontWeight.w500,
     height: 1.4,
-    color: Design.colors.primary,
     decoration: TextDecoration.underline,
+    color: Design.colors.primary,
   );
 }
