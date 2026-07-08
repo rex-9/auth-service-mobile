@@ -10,9 +10,9 @@ class AppDialog {
     return _show(
       title: title,
       message: message,
-      background: AppColors.error.withValues(alpha: 0.12),
-      foreground: AppColors.errorDark,
-      icon: AppIcons.error,
+      background: Design.colors.error.withValues(alpha: 0.12),
+      foreground: Design.colors.errorDark,
+      icon: Design.icons.error,
     );
   }
 
@@ -23,9 +23,9 @@ class AppDialog {
     return _show(
       title: title,
       message: message,
-      background: AppColors.success.withValues(alpha: 0.12),
-      foreground: AppColors.successDark,
-      icon: AppIcons.check,
+      background: Design.colors.success.withValues(alpha: 0.12),
+      foreground: Design.colors.successDark,
+      icon: Design.icons.check,
     );
   }
 
@@ -36,9 +36,9 @@ class AppDialog {
     return _show(
       title: title,
       message: message,
-      background: AppColors.warning.withValues(alpha: 0.12),
-      foreground: AppColors.warningDark,
-      icon: AppIcons.warning,
+      background: Design.colors.warning.withValues(alpha: 0.12),
+      foreground: Design.colors.warningDark,
+      icon: Design.icons.warning,
     );
   }
 
@@ -46,9 +46,9 @@ class AppDialog {
     return _show(
       title: title,
       message: message,
-      background: AppColors.primary.withValues(alpha: 0.12),
-      foreground: AppColors.primaryDark,
-      icon: AppIcons.info,
+      background: Design.colors.primary.withValues(alpha: 0.12),
+      foreground: Design.colors.primaryDark,
+      icon: Design.icons.info,
     );
   }
 
@@ -63,31 +63,31 @@ class AppDialog {
       AlertDialog(
         backgroundColor: background,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(AppSpacing.radiusLarge),
+          borderRadius: BorderRadius.circular(Design.spacing.radiusLarge),
           side: BorderSide(color: foreground.withValues(alpha: 0.25)),
         ),
         title: Row(
           children: [
             Icon(icon, color: foreground),
-            const SizedBox(width: AppSpacing.md),
+            SizedBox(width: Design.spacing.md),
             Expanded(
               child: Text(
                 title,
-                style: AppTypography.headline4.copyWith(color: foreground),
+                style: Design.typography.headline4.copyWith(color: foreground),
               ),
             ),
           ],
         ),
         content: Text(
           message,
-          style: AppTypography.bodyMedium.copyWith(color: foreground),
+          style: Design.typography.bodyMedium.copyWith(color: foreground),
         ),
         actions: [
           TextButton(
             onPressed: Get.back,
             child: Text(
               'OK',
-              style: AppTypography.labelLarge.copyWith(color: foreground),
+              style: Design.typography.labelLarge.copyWith(color: foreground),
             ),
           ),
         ],

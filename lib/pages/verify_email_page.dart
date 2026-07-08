@@ -15,20 +15,20 @@ class VerifyEmailPage extends GetView<AuthController> {
     controller.email.value = arguments['email'];
 
     return Scaffold(
-      appBar: AppBar(title: Text(LocaleConstants.verifyEmailTitle.tr)),
+      appBar: AppBar(title: Text(Constants.locale.verifyEmailTitle.tr)),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              LocaleConstants.verifyEmailHeading.tr,
+              Constants.locale.verifyEmailHeading.tr,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8),
             Obx(
               () => Text(
-                LocaleConstants.verifyEmailSubtitle.trParams({
+                Constants.locale.verifyEmailSubtitle.trParams({
                   'email': controller.email.value,
                 }),
                 style: TextStyle(color: Colors.grey[600]),
@@ -47,12 +47,12 @@ class VerifyEmailPage extends GetView<AuthController> {
             Obx(
               () => CustomButton(
                 text: controller.isLoading.value
-                    ? LocaleConstants.verifying.tr
-                    : LocaleConstants.verifyCodeButton.tr,
+                    ? Constants.locale.verifying.tr
+                    : Constants.locale.verifyCodeButton.tr,
                 onPressed: () {
                   if (controller.verifyPin.text.length != 6) {
                     controller.verifyPin.triggerError();
-                    AppSnackbar.error(LocaleConstants.enter6DigitCode.tr);
+                    AppSnackbar.error(Constants.locale.enter6DigitCode.tr);
                     return;
                   }
                   controller.verifyCode(controller.verifyPin.text);
@@ -69,10 +69,10 @@ class VerifyEmailPage extends GetView<AuthController> {
                       : () => controller.sendConfirmationCode(),
                   child: Text(
                     controller.resendSecondsLeft.value > 0
-                        ? LocaleConstants.resendCodeIn.trParams({
+                        ? Constants.locale.resendCodeIn.trParams({
                             'seconds': '${controller.resendSecondsLeft.value}',
                           })
-                        : LocaleConstants.resendCode.tr,
+                        : Constants.locale.resendCode.tr,
                   ),
                 ),
               ),

@@ -19,28 +19,28 @@ class SignUpInfoPage extends GetView<AuthController> {
         arguments['confirm_passcode'] ?? arguments['passcode'];
 
     return Scaffold(
-      appBar: AppBar(title: Text(LocaleConstants.signupInfoTitle.tr)),
+      appBar: AppBar(title: Text(Constants.locale.signupInfoTitle.tr)),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              LocaleConstants.signupInfoHeading.tr,
+              Constants.locale.signupInfoHeading.tr,
               style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 32),
 
             CustomTextField(
-              label: LocaleConstants.fullNameLabel.tr,
-              hint: LocaleConstants.fullNameHint.tr,
+              label: Constants.locale.fullNameLabel.tr,
+              hint: Constants.locale.fullNameHint.tr,
               onChanged: (value) => controller.fullName.value = value,
             ),
             const SizedBox(height: 16),
 
             CustomTextField(
-              label: LocaleConstants.usernameLabel.tr,
-              hint: LocaleConstants.usernameHint.tr,
+              label: Constants.locale.usernameLabel.tr,
+              hint: Constants.locale.usernameHint.tr,
               onChanged: (value) =>
                   controller.username.value = value.toLowerCase().trim(),
             ),
@@ -49,8 +49,8 @@ class SignUpInfoPage extends GetView<AuthController> {
             Obx(
               () => CustomButton(
                 text: controller.isLoading.value
-                    ? LocaleConstants.creatingAccount.tr
-                    : LocaleConstants.createAccountButton.tr,
+                    ? Constants.locale.creatingAccount.tr
+                    : Constants.locale.createAccountButton.tr,
                 onPressed: () => controller.signUp(),
               ),
             ),

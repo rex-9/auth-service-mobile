@@ -9,41 +9,41 @@ class AppSnackbar {
 
   static void error(String message) {
     _show(
-      title: LocaleConstants.error.tr,
+      title: Constants.locale.error.tr,
       message: message,
-      background: AppColors.error.withValues(alpha: 0.12),
-      foreground: AppColors.errorDark,
-      icon: AppIcons.error,
+      background: Design.colors.error.withValues(alpha: 0.12),
+      foreground: Design.colors.errorDark,
+      icon: Design.icons.error,
     );
   }
 
   static void success(String message) {
     _show(
-      title: LocaleConstants.success.tr,
+      title: Constants.locale.success.tr,
       message: message,
-      background: AppColors.success.withValues(alpha: 0.12),
-      foreground: AppColors.successDark,
-      icon: AppIcons.check,
+      background: Design.colors.success.withValues(alpha: 0.12),
+      foreground: Design.colors.successDark,
+      icon: Design.icons.check,
     );
   }
 
   static void warning(String message) {
     _show(
-      title: LocaleConstants.warning.tr,
+      title: Constants.locale.warning.tr,
       message: message,
-      background: AppColors.warning.withValues(alpha: 0.12),
-      foreground: AppColors.warningDark,
-      icon: AppIcons.warning,
+      background: Design.colors.warning.withValues(alpha: 0.12),
+      foreground: Design.colors.warningDark,
+      icon: Design.icons.warning,
     );
   }
 
   static void info(String message) {
     _show(
-      title: LocaleConstants.info.tr,
+      title: Constants.locale.info.tr,
       message: message,
-      background: AppColors.primary.withValues(alpha: 0.12),
-      foreground: AppColors.primaryDark,
-      icon: AppIcons.info,
+      background: Design.colors.primary.withValues(alpha: 0.12),
+      foreground: Design.colors.primaryDark,
+      icon: Design.icons.info,
     );
   }
 
@@ -62,19 +62,19 @@ class AppSnackbar {
       snackPosition: SnackPosition.BOTTOM,
       backgroundColor: background,
       colorText: foreground,
-      margin: const EdgeInsets.all(AppSpacing.lg),
-      borderRadius: AppSpacing.radiusMedium,
+      margin: EdgeInsets.all(Design.spacing.lg),
+      borderRadius: Design.spacing.radiusMedium,
       duration: const Duration(seconds: 3),
       icon: Icon(icon, color: foreground),
       borderColor: foreground.withValues(alpha: 0.25),
       borderWidth: 1,
       titleText: Text(
         title,
-        style: AppTypography.labelLarge.copyWith(color: foreground),
+        style: Design.typography.labelLarge.copyWith(color: foreground),
       ),
       messageText: Text(
         message,
-        style: AppTypography.bodyMedium.copyWith(color: foreground),
+        style: Design.typography.bodyMedium.copyWith(color: foreground),
       ),
     );
   }

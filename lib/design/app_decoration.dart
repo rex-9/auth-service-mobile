@@ -1,11 +1,10 @@
 // lib/design/app_decoration.dart
 import 'package:flutter/material.dart';
-
-import 'app_colors.dart';
-import 'app_spacing.dart';
-import 'app_typography.dart';
+import 'package:meritbox_mobile/design/design.dart';
 
 class AppDecoration {
+  const AppDecoration();
+
   // Input Decoration
   static InputDecoration inputDecoration({
     String? label,
@@ -23,102 +22,104 @@ class AppDecoration {
       filled: true,
       fillColor: Colors.white,
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
-        borderSide: const BorderSide(color: AppColors.border),
+        borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+        borderSide: BorderSide(color: Design.colors.border),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
-        borderSide: const BorderSide(color: AppColors.border),
+        borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+        borderSide: BorderSide(color: Design.colors.border),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
-        borderSide: const BorderSide(color: AppColors.primary, width: 2),
+        borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+        borderSide: BorderSide(color: Design.colors.primary, width: 2),
       ),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
-        borderSide: const BorderSide(color: AppColors.error),
+        borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+        borderSide: BorderSide(color: Design.colors.error),
       ),
       focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
-        borderSide: const BorderSide(color: AppColors.error, width: 2),
+        borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+        borderSide: BorderSide(color: Design.colors.error, width: 2),
       ),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.inputHorizontal,
-        vertical: AppSpacing.inputVertical,
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: Design.spacing.inputHorizontal,
+        vertical: Design.spacing.inputVertical,
       ),
-      labelStyle: AppTypography.labelMedium,
-      hintStyle: AppTypography.helper,
-      errorStyle: AppTypography.caption.copyWith(color: AppColors.error),
+      labelStyle: Design.typography.labelMedium,
+      hintStyle: Design.typography.helper,
+      errorStyle: Design.typography.caption.copyWith(
+        color: Design.colors.error,
+      ),
     );
   }
 
   // Button Decoration
-  static ButtonStyle primaryButtonStyle = ElevatedButton.styleFrom(
-    backgroundColor: AppColors.primary,
+  ButtonStyle get primaryButtonStyle => ElevatedButton.styleFrom(
+    backgroundColor: Design.colors.primary,
     foregroundColor: Colors.white,
-    minimumSize: const Size(double.infinity, AppSpacing.buttonHeight),
-    padding: const EdgeInsets.symmetric(
-      horizontal: AppSpacing.buttonHorizontal,
-      vertical: AppSpacing.buttonVertical,
+    minimumSize: Size(double.infinity, Design.spacing.buttonHeight),
+    padding: EdgeInsets.symmetric(
+      horizontal: Design.spacing.buttonHorizontal,
+      vertical: Design.spacing.buttonVertical,
     ),
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
+      borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
     ),
-    textStyle: AppTypography.button,
+    textStyle: Design.typography.button,
     elevation: 0,
     shadowColor: Colors.transparent,
   );
 
-  static ButtonStyle secondaryButtonStyle = OutlinedButton.styleFrom(
-    foregroundColor: AppColors.primary,
-    minimumSize: const Size(double.infinity, AppSpacing.buttonHeight),
-    padding: const EdgeInsets.symmetric(
-      horizontal: AppSpacing.buttonHorizontal,
-      vertical: AppSpacing.buttonVertical,
+  ButtonStyle get secondaryButtonStyle => OutlinedButton.styleFrom(
+    foregroundColor: Design.colors.primary,
+    minimumSize: Size(double.infinity, Design.spacing.buttonHeight),
+    padding: EdgeInsets.symmetric(
+      horizontal: Design.spacing.buttonHorizontal,
+      vertical: Design.spacing.buttonVertical,
     ),
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
+      borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
     ),
-    side: const BorderSide(color: AppColors.primary),
-    textStyle: AppTypography.button,
+    side: BorderSide(color: Design.colors.primary),
+    textStyle: Design.typography.button,
   );
 
-  static ButtonStyle textButtonStyle = TextButton.styleFrom(
-    foregroundColor: AppColors.primary,
-    padding: const EdgeInsets.symmetric(
-      horizontal: AppSpacing.sm,
-      vertical: AppSpacing.sm,
+  ButtonStyle get textButtonStyle => TextButton.styleFrom(
+    foregroundColor: Design.colors.primary,
+    padding: EdgeInsets.symmetric(
+      horizontal: Design.spacing.sm,
+      vertical: Design.spacing.sm,
     ),
-    textStyle: AppTypography.labelLarge,
+    textStyle: Design.typography.labelLarge,
   );
 
-  static ButtonStyle googleButtonStyle = ElevatedButton.styleFrom(
+  ButtonStyle get googleButtonStyle => ElevatedButton.styleFrom(
     backgroundColor: Colors.white,
-    foregroundColor: AppColors.textPrimary,
-    minimumSize: const Size(double.infinity, AppSpacing.buttonHeight),
-    padding: const EdgeInsets.symmetric(
-      horizontal: AppSpacing.buttonHorizontal,
-      vertical: AppSpacing.buttonVertical,
+    foregroundColor: Design.colors.textPrimary,
+    minimumSize: Size(double.infinity, Design.spacing.buttonHeight),
+    padding: EdgeInsets.symmetric(
+      horizontal: Design.spacing.buttonHorizontal,
+      vertical: Design.spacing.buttonVertical,
     ),
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
+      borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
     ),
-    side: const BorderSide(color: AppColors.border),
-    textStyle: AppTypography.button,
+    side: BorderSide(color: Design.colors.border),
+    textStyle: Design.typography.button,
     elevation: 0,
   );
 
   // Card Decoration
-  static BoxDecoration cardDecoration = BoxDecoration(
+  BoxDecoration get cardDecoration => BoxDecoration(
     color: Colors.white,
-    borderRadius: BorderRadius.circular(AppSpacing.radiusLarge),
-    boxShadow: AppColors.shadow,
+    borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+    boxShadow: Design.colors.shadow,
   );
 
   // Container Decoration
-  static BoxDecoration containerDecoration = BoxDecoration(
+  BoxDecoration get containerDecoration => BoxDecoration(
     color: Colors.white,
-    borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
-    border: Border.all(color: AppColors.border),
+    borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+    border: Border.all(color: Design.colors.border),
   );
 }

@@ -15,6 +15,7 @@ import '../models/user_model.dart';
 class AuthController extends GetxController {
   final AuthService _auth = Get.find();
   final StorageService _storage = Get.find();
+  final AppConfig _config = AppConfig();
 
   static const int maxAttempts = 3;
   static const List<int> cooldownSecondsByLevel = [30, 60, 120];
@@ -206,7 +207,7 @@ class AuthController extends GetxController {
   bool validateEmail() {
     final emailRegex = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');
     if (!emailRegex.hasMatch(email.value.trim())) {
-      emailError.value = LocaleConstants.invalidEmail.tr;
+      emailError.value = Constants.locale.invalidEmail.tr;
       return false;
     }
     emailError.value = null;
@@ -250,7 +251,7 @@ class AuthController extends GetxController {
     if (isLoading.value || cooldownSecondsLeft.value > 0) return;
     if (passcode.value.length != 6) {
       signinPin.triggerError();
-      AppSnackbar.error(LocaleConstants.passcode6Digits.tr);
+      AppSnackbar.error(Constants.locale.passcode6Digits.tr);
       return;
     }
 
@@ -275,7 +276,7 @@ class AuthController extends GetxController {
         AppSnackbar.error(response.message);
       }
     } catch (e) {
-      AppSnackbar.error(LocaleConstants.signInFailed.tr);
+      AppSnackbar.error(Constants.locale.signInFailed.tr);
     } finally {
       isLoading.value = false;
     }
@@ -297,7 +298,7 @@ class AuthController extends GetxController {
         AppSnackbar.error(response.message);
       }
     } catch (e) {
-      AppSnackbar.error(LocaleConstants.sendCodeFailed.tr);
+      AppSnackbar.error(Constants.locale.sendCodeFailed.tr);
     } finally {
       isLoading.value = false;
     }
@@ -319,7 +320,7 @@ class AuthController extends GetxController {
         AppSnackbar.error(response.message);
       }
     } catch (e) {
-      AppSnackbar.error(LocaleConstants.verificationFailed.tr);
+      AppSnackbar.error(Constants.locale.verificationFailed.tr);
     } finally {
       isLoading.value = false;
     }
@@ -328,15 +329,15 @@ class AuthController extends GetxController {
   // Register new user with full details
   Future<void> signUp() async {
     if (fullName.value.trim().length < 2) {
-      AppSnackbar.error(LocaleConstants.enterFullName.tr);
+      AppSnackbar.error(Constants.locale.enterFullName.tr);
       return;
     }
     if (username.value.length < 3) {
-      AppSnackbar.error(LocaleConstants.usernameMinLength.tr);
+      AppSnackbar.error(Constants.locale.usernameMinLength.tr);
       return;
     }
     if (!RegExp(r'^[a-z0-9_]+$').hasMatch(username.value)) {
-      AppSnackbar.error(LocaleConstants.usernameCharset.tr);
+      AppSnackbar.error(Constants.locale.usernameCharset.tr);
       return;
     }
 
@@ -358,7 +359,7 @@ class AuthController extends GetxController {
         AppSnackbar.error(response.message);
       }
     } catch (e) {
-      AppSnackbar.error(LocaleConstants.registrationFailed.tr);
+      AppSnackbar.error(Constants.locale.registrationFailed.tr);
     } finally {
       isLoading.value = false;
     }
@@ -372,7 +373,7 @@ class AuthController extends GetxController {
     try {
       final signIn = GoogleSignIn.instance;
       if (!_googleInitialized) {
-        await signIn.initialize(serverClientId: AppConfig.googleServerClientId);
+        await signIn.initialize(serverClientId: _config.googleServerClientId);
         _googleInitialized = true;
       }
 
@@ -403,7 +404,7 @@ class AuthController extends GetxController {
         AppSnackbar.error(response.message);
       }
     } catch (e) {
-      AppSnackbar.error(LocaleConstants.signInGoogleFailure.tr);
+      AppSnackbar.error(Constants.locale.signInGoogleFailure.tr);
     } finally {
       isLoading.value = false;
     }
@@ -413,12 +414,12 @@ class AuthController extends GetxController {
   Future<void> completeGoogleSignIn() async {
     if (passcode.value.length != 6) {
       signupPin.triggerError();
-      AppSnackbar.error(LocaleConstants.passcode6Digits.tr);
+      AppSnackbar.error(Constants.locale.passcode6Digits.tr);
       return;
     }
     if (passcode.value != confirmPasscode.value) {
       signupConfirmPin.triggerError();
-      AppSnackbar.error(LocaleConstants.passcodesDoNotMatch.tr);
+      AppSnackbar.error(Constants.locale.passcodesDoNotMatch.tr);
       return;
     }
 
@@ -437,7 +438,7 @@ class AuthController extends GetxController {
       } else if (response.statusCode == 429) {
         final wait = (response.data?['retry_after'] as num?)?.toInt() ?? 30;
         AppSnackbar.error(
-          LocaleConstants.googleTooManyAttempts.trParams({'seconds': '$wait'}),
+          Constants.locale.googleTooManyAttempts.trParams({'seconds': '$wait'}),
         );
       } else {
         AppSnackbar.error(response.message);
@@ -448,7 +449,7 @@ class AuthController extends GetxController {
         }
       }
     } catch (e) {
-      AppSnackbar.error(LocaleConstants.signInGoogleFailure.tr);
+      AppSnackbar.error(Constants.locale.signInGoogleFailure.tr);
     } finally {
       isLoading.value = false;
     }
@@ -481,7 +482,7 @@ class AuthController extends GetxController {
         AppSnackbar.error(response.message);
       }
     } catch (e) {
-      AppSnackbar.error(LocaleConstants.resetFailed.tr);
+      AppSnackbar.error(Constants.locale.resetFailed.tr);
     } finally {
       isLoading.value = false;
     }
@@ -494,7 +495,7 @@ class AuthController extends GetxController {
     _clearLocalSession();
     AppRoutes.toAuth();
     if (replaced) {
-      AppSnackbar.error(LocaleConstants.sessionReplaced.tr);
+      AppSnackbar.error(Constants.locale.sessionReplaced.tr);
     }
   }
 

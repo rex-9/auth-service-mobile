@@ -13,10 +13,10 @@ class SplashPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('✨ Meritbox ✨', style: AppTypography.headline1),
-            const SizedBox(height: AppSpacing.md),
-            const Text('Loading...', style: AppTypography.bodyMedium),
-            const SizedBox(height: AppSpacing.lg),
+            Text('✨ Meritbox ✨', style: Design.typography.headline1),
+            SizedBox(height: Design.spacing.md),
+            Text('Loading...', style: Design.typography.bodyMedium),
+            SizedBox(height: Design.spacing.lg),
             const LoadingIndicator(),
           ],
         ),

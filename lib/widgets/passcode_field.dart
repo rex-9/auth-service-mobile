@@ -1,7 +1,7 @@
 // lib/widgets/passcode_field.dart
 import 'package:flutter/material.dart';
+import 'package:meritbox_mobile/design/design.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import '../design/app_colors.dart';
 
 /// Shared 6-digit passcode field so every page uses the same pin styling
 /// (theme-aware, replaces the per-page MaterialPinTheme copies).
@@ -36,13 +36,15 @@ class PasscodeField extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
         borderWidth: 1.5,
         focusedBorderWidth: 2.0,
-        borderColor: isDark ? AppColors.borderDark : AppColors.border,
-        focusedBorderColor: AppColors.primary,
-        errorColor: AppColors.error,
+        borderColor: isDark ? Design.colors.borderDark : Design.colors.border,
+        focusedBorderColor: Design.colors.primary,
+        errorColor: Design.colors.error,
         textStyle: TextStyle(
           fontSize: 24,
           fontWeight: FontWeight.bold,
-          color: isDark ? AppColors.textPrimaryDark : AppColors.textPrimary,
+          color: isDark
+              ? Design.colors.textPrimaryDark
+              : Design.colors.textPrimary,
         ),
       ),
     );

@@ -23,13 +23,13 @@ class CustomButton extends StatelessWidget {
     if (isGoogle) {
       return SizedBox(
         width: double.infinity,
-        height: AppSpacing.buttonHeight,
+        height: Design.spacing.buttonHeight,
         child: OutlinedButton(
           onPressed: isLoading ? null : onPressed,
           style: OutlinedButton.styleFrom(
-            side: const BorderSide(color: AppColors.border),
+            side: BorderSide(color: Design.colors.border),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
+              borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
             ),
           ),
           child: isLoading
@@ -41,12 +41,12 @@ class CustomButton extends StatelessWidget {
               : Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image.asset(AppMedia.googleLogo, height: 20, width: 20),
-                    const SizedBox(width: AppSpacing.sm),
+                    Image.asset(Design.media.googleLogo, height: 20, width: 20),
+                    SizedBox(width: Design.spacing.sm),
                     Text(
                       text,
-                      style: AppTypography.button.copyWith(
-                        color: AppColors.textPrimary,
+                      style: Design.typography.button.copyWith(
+                        color: Design.colors.textPrimary,
                       ),
                     ),
                   ],
@@ -58,13 +58,13 @@ class CustomButton extends StatelessWidget {
     if (isOutlined) {
       return SizedBox(
         width: double.infinity,
-        height: AppSpacing.buttonHeight,
+        height: Design.spacing.buttonHeight,
         child: OutlinedButton(
           onPressed: isLoading ? null : onPressed,
           style: OutlinedButton.styleFrom(
-            side: const BorderSide(color: AppColors.primary),
+            side: BorderSide(color: Design.colors.primary),
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
+              borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
             ),
           ),
           child: isLoading
@@ -73,21 +73,21 @@ class CustomButton extends StatelessWidget {
                   width: 20,
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
-              : Text(text, style: AppTypography.button),
+              : Text(text, style: Design.typography.button),
         ),
       );
     }
 
     return SizedBox(
       width: double.infinity,
-      height: AppSpacing.buttonHeight,
+      height: Design.spacing.buttonHeight,
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
+          backgroundColor: Design.colors.primary,
           foregroundColor: Colors.white,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(AppSpacing.radiusMedium),
+            borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
           ),
         ),
         child: isLoading
@@ -99,7 +99,7 @@ class CustomButton extends StatelessWidget {
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 ),
               )
-            : Text(text, style: AppTypography.button),
+            : Text(text, style: Design.typography.button),
       ),
     );
   }

@@ -1,14 +1,14 @@
 // lib/design/widgets/loading_indicator.dart
 import 'package:flutter/material.dart';
-import '../design/app_colors.dart';
+import 'package:meritbox_mobile/design/design.dart';
 
 class LoadingIndicator extends StatelessWidget {
   const LoadingIndicator({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator(color: AppColors.primary),
+    return Center(
+      child: CircularProgressIndicator(color: Design.colors.primary),
     );
   }
 }

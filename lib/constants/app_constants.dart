@@ -1,31 +1,25 @@
 // lib/constants/app_constants.dart
 class AppConstants {
+  const AppConstants();
+
   // App Info
-  static const String appName = 'Meritbox';
-  static const String appVersion = '1.0.0';
+  String get appName => 'Meritbox';
+  String get appVersion => '1.0.0';
 
   // Validation Rules
-  static const int minPasscodeLength = 6;
-  static const int maxPasscodeLength = 6;
-  static const int minUsernameLength = 3;
-  static const int maxUsernameLength = 20;
-  static const int minNameLength = 2;
-  static const int maxNameLength = 50;
-
-  // Timeouts
-  static const int apiTimeoutSeconds = 30;
-  static const int verificationCodeExpirySeconds = 600; // 10 minutes
-
-  // Animations
-  static const Duration animationDuration = Duration(milliseconds: 300);
-  static const Duration shortAnimationDuration = Duration(milliseconds: 150);
+  int get minPasscodeLength => 6;
+  int get maxPasscodeLength => 6;
+  int get minUsernameLength => 3;
+  int get maxUsernameLength => 20;
+  int get minNameLength => 2;
+  int get maxNameLength => 50;
 
   // Storage Keys
-  static const String storageKeyToken = 'auth_token';
-  static const String storageKeyUserEmail = 'user_email';
-  static const String storageKeyUserData = 'user_data';
+  String get storageKeyToken => 'auth_token';
+  String get storageKeyUserEmail => 'user_email';
+  String get storageKeyUserData => 'user_data';
 
   // Config Keys
-  static const String googleServerClientId = "GOOGLE_SERVER_CLIENT_ID";
-  static const String apiBaseUrl = "API_BASE_URL";
+  String get googleServerClientIdKey => "GOOGLE_SERVER_CLIENT_ID";
+  String get apiBaseUrlKey => "API_BASE_URL";
 }

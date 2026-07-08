@@ -2,10 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
+import 'package:meritbox_mobile/design/design.dart';
 import 'package:meritbox_mobile/widgets/widgets.dart';
 import '../controllers/auth_controller.dart';
-import '../design/app_spacing.dart';
-import '../design/app_typography.dart';
 import '../models/models.dart';
 import '../routes/app_routes.dart';
 
@@ -20,7 +19,7 @@ class AuthPage extends GetView<AuthController> {
     switch (peekedUserStatus) {
       case PeekedUserStatus.error:
         // Show error, stay on same page
-        AppSnackbar.error(LocaleConstants.connectionFailed.tr);
+        AppSnackbar.error(Constants.locale.connectionFailed.tr);
         break;
 
       case PeekedUserStatus.exists:
@@ -59,13 +58,13 @@ class AuthPage extends GetView<AuthController> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      LocaleConstants.welcomeTitle.tr,
-                      style: AppTypography.headline1,
+                      Constants.locale.welcomeTitle.tr,
+                      style: Design.typography.headline1,
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: AppSpacing.md),
+                    SizedBox(height: Design.spacing.md),
                     Text(
-                      LocaleConstants.welcomeSubtitle.tr,
+                      Constants.locale.welcomeSubtitle.tr,
                       style: const TextStyle(color: Colors.grey),
                       textAlign: TextAlign.center,
                     ),
@@ -73,7 +72,7 @@ class AuthPage extends GetView<AuthController> {
 
                     Obx(
                       () => CustomButton(
-                        text: LocaleConstants.continueWithGoogle.tr,
+                        text: Constants.locale.continueWithGoogle.tr,
                         isLoading: controller.isLoading.value,
                         onPressed: () => controller.signInWithGoogle(),
                         isGoogle: true,
@@ -86,7 +85,7 @@ class AuthPage extends GetView<AuthController> {
                         const Expanded(child: Divider()),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Text(LocaleConstants.or.tr),
+                          child: Text(Constants.locale.or.tr),
                         ),
                         const Expanded(child: Divider()),
                       ],
@@ -95,9 +94,9 @@ class AuthPage extends GetView<AuthController> {
 
                     Obx(
                       () => CustomTextField(
-                        label: LocaleConstants.emailLabel.tr,
-                        hint: LocaleConstants.emailHint.tr,
-                        helper: LocaleConstants.emailHelper.tr,
+                        label: Constants.locale.emailLabel.tr,
+                        hint: Constants.locale.emailHint.tr,
+                        helper: Constants.locale.emailHelper.tr,
                         error: controller.emailError.value,
                         keyboardType: TextInputType.emailAddress,
                         onChanged: (value) => controller.email.value = value,
@@ -108,8 +107,8 @@ class AuthPage extends GetView<AuthController> {
                     Obx(
                       () => CustomButton(
                         text: controller.isLoading.value
-                            ? LocaleConstants.checking.tr
-                            : LocaleConstants.continueButton.tr,
+                            ? Constants.locale.checking.tr
+                            : Constants.locale.continueButton.tr,
                         onPressed: _onContinue,
                       ),
                     ),

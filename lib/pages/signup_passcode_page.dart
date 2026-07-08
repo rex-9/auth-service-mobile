@@ -14,12 +14,12 @@ class SignUpPasscodePage extends GetView<AuthController> {
   void _onContinue() {
     if (controller.passcode.value.length != 6) {
       controller.signupPin.triggerError();
-      AppSnackbar.error(LocaleConstants.passcode6Digits.tr);
+      AppSnackbar.error(Constants.locale.passcode6Digits.tr);
       return;
     }
     if (controller.passcode.value != controller.confirmPasscode.value) {
       controller.signupConfirmPin.triggerError();
-      AppSnackbar.error(LocaleConstants.passcodesDoNotMatch.tr);
+      AppSnackbar.error(Constants.locale.passcodesDoNotMatch.tr);
       return;
     }
 
@@ -54,7 +54,7 @@ class SignUpPasscodePage extends GetView<AuthController> {
     final isGoogle = controller.isGooglePasscodeSetup;
 
     return Scaffold(
-      appBar: AppBar(title: Text(LocaleConstants.signupTitle.tr)),
+      appBar: AppBar(title: Text(Constants.locale.signupTitle.tr)),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: SingleChildScrollView(
@@ -63,8 +63,8 @@ class SignUpPasscodePage extends GetView<AuthController> {
             children: [
               Text(
                 isGoogle
-                    ? LocaleConstants.googlePasscodeHeading.tr
-                    : LocaleConstants.createPasscodeHeading.tr,
+                    ? Constants.locale.googlePasscodeHeading.tr
+                    : Constants.locale.createPasscodeHeading.tr,
                 style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -73,14 +73,14 @@ class SignUpPasscodePage extends GetView<AuthController> {
               const SizedBox(height: 8),
               Text(
                 isGoogle
-                    ? LocaleConstants.googlePasscodeSubtitle.tr
-                    : LocaleConstants.createPasscodeSubtitle.tr,
+                    ? Constants.locale.googlePasscodeSubtitle.tr
+                    : Constants.locale.createPasscodeSubtitle.tr,
                 style: TextStyle(color: Colors.grey[600]),
               ),
               const SizedBox(height: 32),
 
               Text(
-                LocaleConstants.passcodeLabel.tr,
+                Constants.locale.passcodeLabel.tr,
                 style: const TextStyle(fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 8),
@@ -94,7 +94,7 @@ class SignUpPasscodePage extends GetView<AuthController> {
 
               const SizedBox(height: 24),
               Text(
-                LocaleConstants.confirmPasscodeLabel.tr,
+                Constants.locale.confirmPasscodeLabel.tr,
                 style: const TextStyle(fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 8),
@@ -111,9 +111,9 @@ class SignUpPasscodePage extends GetView<AuthController> {
                 () => CustomButton(
                   text: controller.isLoading.value
                       ? (isGoogle
-                            ? LocaleConstants.signingIn.tr
-                            : LocaleConstants.sendingCode.tr)
-                      : LocaleConstants.continueButton.tr,
+                            ? Constants.locale.signingIn.tr
+                            : Constants.locale.sendingCode.tr)
+                      : Constants.locale.continueButton.tr,
                   onPressed: _onContinue,
                 ),
               ),

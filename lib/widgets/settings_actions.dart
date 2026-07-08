@@ -28,7 +28,7 @@ class LanguageSwitcherButton extends GetView<SettingsController> {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<String>(
-      icon: const Icon(AppIcons.language),
+      icon: Icon(Design.icons.language),
       onSelected: controller.changeLocale,
       itemBuilder: (context) => AppTranslations.supportedLocales.entries
           .map(
@@ -38,7 +38,7 @@ class LanguageSwitcherButton extends GetView<SettingsController> {
                 () => Row(
                   children: [
                     if (controller.localeCode.value == entry.key)
-                      const Icon(AppIcons.check, size: 16)
+                      Icon(Design.icons.check, size: 16)
                     else
                       const SizedBox(width: 16),
                     const SizedBox(width: 8),

@@ -16,22 +16,22 @@ class ForgotPasscodePage extends GetView<AuthController> {
     final emailController = TextEditingController(text: controller.email.value);
 
     return Scaffold(
-      appBar: AppBar(title: Text(LocaleConstants.forgotPasscodeTitle.tr)),
+      appBar: AppBar(title: Text(Constants.locale.forgotPasscodeTitle.tr)),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              LocaleConstants.forgotPasscodeSubtitle.tr,
+              Constants.locale.forgotPasscodeSubtitle.tr,
               style: TextStyle(color: Colors.grey[600]),
             ),
             const SizedBox(height: 32),
 
             Obx(
               () => CustomTextField(
-                label: LocaleConstants.emailLabel.tr,
-                hint: LocaleConstants.emailHint.tr,
+                label: Constants.locale.emailLabel.tr,
+                hint: Constants.locale.emailHint.tr,
                 error: controller.emailError.value,
                 textController: emailController,
                 keyboardType: TextInputType.emailAddress,
@@ -44,12 +44,12 @@ class ForgotPasscodePage extends GetView<AuthController> {
               final waiting = controller.resendSecondsLeft.value > 0;
               return CustomButton(
                 text: waiting
-                    ? LocaleConstants.resendCodeIn.trParams({
+                    ? Constants.locale.resendCodeIn.trParams({
                         'seconds': '${controller.resendSecondsLeft.value}',
                       })
                     : controller.isLoading.value
-                    ? LocaleConstants.sending.tr
-                    : LocaleConstants.sendResetLink.tr,
+                    ? Constants.locale.sending.tr
+                    : Constants.locale.sendResetLink.tr,
                 onPressed: () {
                   if (waiting || controller.isLoading.value) return;
                   controller.forgotPassword();
@@ -61,7 +61,7 @@ class ForgotPasscodePage extends GetView<AuthController> {
             Center(
               child: TextButton(
                 onPressed: () => Get.back(),
-                child: Text(LocaleConstants.backToSignIn.tr),
+                child: Text(Constants.locale.backToSignIn.tr),
               ),
             ),
           ],

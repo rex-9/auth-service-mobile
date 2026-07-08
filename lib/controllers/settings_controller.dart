@@ -24,9 +24,9 @@ class SettingsController extends GetxController {
   }
 
   IconData get themeIcon => switch (themeName.value) {
-    'day' => AppIcons.lightMode,
-    'night' => AppIcons.darkMode,
-    _ => AppIcons.brightness,
+    'day' => Design.icons.lightMode,
+    'night' => Design.icons.darkMode,
+    _ => Design.icons.brightness,
   };
 
   @override

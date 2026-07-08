@@ -13,13 +13,13 @@ class HomePage extends GetView<AuthController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(LocaleConstants.home.tr),
+        title: Text(Constants.locale.home.tr),
         actions: [
           ...settingsActions(),
           IconButton(
             onPressed: () => controller.signout(),
-            icon: const Icon(AppIcons.logout),
-            tooltip: LocaleConstants.signOutButton.tr,
+            icon: Icon(Design.icons.logout),
+            tooltip: Constants.locale.signOutButton.tr,
           ),
         ],
       ),
@@ -27,11 +27,11 @@ class HomePage extends GetView<AuthController> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(LocaleConstants.welcomeHome.tr),
+            Text(Constants.locale.welcomeHome.tr),
             const SizedBox(height: 20),
             Obx(
               () => Text(
-                'Email: ${controller.currentUser.value?.email ?? LocaleConstants.loading.tr}',
+                'Email: ${controller.currentUser.value?.email ?? Constants.locale.loading.tr}',
               ),
             ),
           ],
