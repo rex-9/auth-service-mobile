@@ -36,7 +36,7 @@ class AppLoading extends StatelessWidget {
       width: size.value,
       child: CircularProgressIndicator(
         strokeWidth: strokeWidth ?? _getStrokeWidth(),
-        color: color ?? Design.colors.primary,
+        color: color ?? Design.theme.colors.primary,
       ),
     );
   }
@@ -66,7 +66,7 @@ class AppLoading extends StatelessWidget {
             height: size * value,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: (color ?? Design.colors.primary).withValues(
+              color: (color ?? Design.theme.colors.primary).withValues(
                 alpha: 0.6 + 0.4 * value,
               ),
             ),
@@ -87,10 +87,12 @@ class AppLoading extends StatelessWidget {
           width: size.value,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: (color ?? Design.colors.primary).withValues(alpha: 0.1),
+            color: (color ?? Design.theme.colors.primary).withValues(
+              alpha: 0.1,
+            ),
             boxShadow: [
               BoxShadow(
-                color: (color ?? Design.colors.primary).withValues(
+                color: (color ?? Design.theme.colors.primary).withValues(
                   alpha: 0.3 * value,
                 ),
                 blurRadius: 20 * value,
@@ -104,7 +106,7 @@ class AppLoading extends StatelessWidget {
               width: size.value * 0.5,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: color ?? Design.colors.primary,
+                color: color ?? Design.theme.colors.primary,
               ),
             ),
           ),
@@ -119,12 +121,7 @@ class AppLoading extends StatelessWidget {
       children: [
         AppLoading(size: LoadingSize.large, type: LoadingType.pulse),
         SizedBox(height: Design.spacing.xl),
-        Text(
-          'Loading...',
-          style: Design.typography.bodyMedium.copyWith(
-            color: Design.colors.textSecondary,
-          ),
-        ),
+        Text('Loading...', style: Design.theme.styles.bodyMedium),
       ],
     );
   }
@@ -196,9 +193,7 @@ class AppLoadingOverlay extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(Design.spacing.xl),
         decoration: BoxDecoration(
-          color: Theme.of(context).brightness == Brightness.dark
-              ? Design.colors.surfaceDark
-              : Design.colors.surface,
+          color: Design.theme.colors.surface,
           borderRadius: BorderRadius.circular(Design.spacing.radiusLarge),
           boxShadow: Design.colors.shadows.lg,
         ),
@@ -210,7 +205,7 @@ class AppLoadingOverlay extends StatelessWidget {
               SizedBox(height: Design.spacing.lg),
               Text(
                 message!,
-                style: Design.typography.bodyMedium,
+                style: Design.theme.styles.bodyMedium,
                 textAlign: TextAlign.center,
               ),
             ],

@@ -1,7 +1,7 @@
+// lib/design/components/app_snackbar.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
-
 import '../design.dart';
 
 class AppSnackbar {
@@ -70,11 +70,11 @@ class AppSnackbar {
       borderWidth: 1,
       titleText: Text(
         title,
-        style: Design.typography.labelLarge.copyWith(color: foreground),
+        style: Design.theme.styles.labelLarge.copyWith(color: foreground),
       ),
       messageText: Text(
         message,
-        style: Design.typography.bodyMedium.copyWith(color: foreground),
+        style: Design.theme.styles.bodyMedium.copyWith(color: foreground),
       ),
     );
   }

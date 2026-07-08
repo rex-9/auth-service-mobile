@@ -22,31 +22,45 @@ class AppPasscodeField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = Theme.of(context).brightness == Brightness.dark;
-
-    return MaterialPinField(
-      length: 6,
-      pinController: pinController,
-      enabled: enabled,
-      onChanged: onChanged,
-      onCompleted: onCompleted,
-      theme: MaterialPinTheme(
-        shape: MaterialPinShape.outlined,
-        cellSize: const Size(48, 56),
-        spacing: 10,
-        borderRadius: BorderRadius.circular(12),
-        borderWidth: 1.5,
-        focusedBorderWidth: 2.0,
-        borderColor: isDark ? Design.colors.borderDark : Design.colors.border,
-        focusedBorderColor: Design.colors.primary,
-        errorColor: Design.colors.error,
-        textStyle: Design.typography.headline3.copyWith(
-          fontWeight: FontWeight.bold,
-          color: isDark
-              ? Design.colors.textPrimaryDark
-              : Design.colors.textPrimary,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        MaterialPinField(
+          length: 6,
+          pinController: pinController,
+          enabled: enabled,
+          onChanged: onChanged,
+          onCompleted: onCompleted,
+          theme: MaterialPinTheme(
+            shape: MaterialPinShape.outlined,
+            cellSize: const Size(48, 56),
+            spacing: Design.spacing.sm,
+            borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+            borderWidth: 1.5,
+            focusedBorderWidth: 2.0,
+            borderColor: Design.theme.colors.border,
+            focusedBorderColor: Design.theme.colors.primary,
+            errorColor: Design.theme.colors.error,
+            fillColor: Design.theme.colors.surface,
+            textStyle: Design.theme.styles.headline3.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+            entryAnimation: MaterialPinAnimation.scale,
+            animationDuration: Design.timers.short,
+            errorAnimationDuration: Design.timers.medium,
+            enableErrorShake: true,
+          ),
         ),
-      ),
+        if (error != null) ...[
+          SizedBox(height: Design.spacing.xs),
+          Text(
+            error!,
+            style: Design.theme.styles.caption.copyWith(
+              color: Design.theme.colors.error,
+            ),
+          ),
+        ],
+      ],
     );
   }
 }

@@ -1,6 +1,6 @@
+// lib/design/components/app_dialog.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../design.dart';
 
 class AppDialog {
@@ -73,21 +73,23 @@ class AppDialog {
             Expanded(
               child: Text(
                 title,
-                style: Design.typography.headline4.copyWith(color: foreground),
+                style: Design.theme.styles.headline4.copyWith(
+                  color: foreground,
+                ),
               ),
             ),
           ],
         ),
         content: Text(
           message,
-          style: Design.typography.bodyMedium.copyWith(color: foreground),
+          style: Design.theme.styles.bodyMedium.copyWith(color: foreground),
         ),
         actions: [
           TextButton(
             onPressed: Get.back,
             child: Text(
               'OK',
-              style: Design.typography.labelLarge.copyWith(color: foreground),
+              style: Design.theme.styles.labelLarge.copyWith(color: foreground),
             ),
           ),
         ],

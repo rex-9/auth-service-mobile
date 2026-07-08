@@ -10,9 +10,7 @@ import 'package:meritbox_mobile/models/models.dart';
 import 'package:meritbox_mobile/routes/app_routes.dart';
 
 class AuthPage extends GetView<AuthController> {
-  AuthPage({super.key});
-
-  final SettingsController _settings = Get.find();
+  const AuthPage({super.key});
 
   Future<void> _onContinue() async {
     if (!controller.validateEmail()) return;
@@ -63,20 +61,16 @@ class AuthPage extends GetView<AuthController> {
                     // Welcome Title
                     Text(
                       Constants.locale.welcomeTitle.tr,
-                      style: Design.typography.headline1,
+                      style: Design.theme.styles.headline1,
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: Design.spacing.md),
 
                     // Welcome Subtitle
-                    Obx(
-                      () => Text(
-                        Constants.locale.welcomeSubtitle.tr,
-                        style: Design.typography.bodyMedium.copyWith(
-                          color: _settings.textSecondaryColor,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
+                    Text(
+                      Constants.locale.welcomeSubtitle.tr,
+                      style: Design.theme.styles.bodyMedium,
+                      textAlign: TextAlign.center,
                     ),
                     SizedBox(height: Design.spacing.xxxl),
 
@@ -93,28 +87,24 @@ class AuthPage extends GetView<AuthController> {
                     SizedBox(height: Design.spacing.xl),
 
                     // OR Divider
-                    Obx(
-                      () => Row(
-                        children: [
-                          Expanded(
-                            child: Divider(color: _settings.dividerColor),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Divider(color: Design.theme.colors.divider),
+                        ),
+                        Padding(
+                          padding: Design.spacing.paddingSymmetric(
+                            h: Design.spacing.lg,
                           ),
-                          Padding(
-                            padding: Design.spacing.paddingSymmetric(
-                              h: Design.spacing.lg,
-                            ),
-                            child: Text(
-                              Constants.locale.or.tr,
-                              style: Design.typography.bodyMedium.copyWith(
-                                color: _settings.textSecondaryColor,
-                              ),
-                            ),
+                          child: Text(
+                            Constants.locale.or.tr,
+                            style: Design.theme.styles.bodyMedium,
                           ),
-                          Expanded(
-                            child: Divider(color: _settings.dividerColor),
-                          ),
-                        ],
-                      ),
+                        ),
+                        Expanded(
+                          child: Divider(color: Design.theme.colors.divider),
+                        ),
+                      ],
                     ),
                     SizedBox(height: Design.spacing.xl),
 

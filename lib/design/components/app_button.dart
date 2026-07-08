@@ -86,8 +86,8 @@ class AppButton extends StatelessWidget {
           SizedBox(width: Design.spacing.sm),
           Text(
             text,
-            style: Design.typography.button.copyWith(
-              color: Design.colors.textPrimary,
+            style: Design.theme.styles.bodyMedium.copyWith(
+              color: Design.theme.colors.textPrimary,
             ),
           ),
         ],
@@ -101,12 +101,12 @@ class AppButton extends StatelessWidget {
         children: [
           icon!,
           SizedBox(width: Design.spacing.sm),
-          Text(text),
+          Text(text, style: Design.theme.styles.button),
         ],
       );
     }
 
-    return Text(text);
+    return Text(text, style: Design.theme.styles.button);
   }
 
   Color _getLoaderColor() {
@@ -116,7 +116,7 @@ class AppButton extends StatelessWidget {
       case ButtonType.secondary:
       case ButtonType.text:
       case ButtonType.google:
-        return Design.colors.primary;
+        return Design.theme.colors.primary;
     }
   }
 }
