@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/design/components/components.dart';
 import 'package:meritbox_mobile/design/design.dart';
+import 'package:meritbox_mobile/design/extensions/theme_extensions.dart';
 import '../controllers/auth_controller.dart';
 import '../routes/app_routes.dart';
 
@@ -13,26 +14,35 @@ class SignInPasscodePage extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(Constants.locale.signinTitle.tr)),
+      backgroundColor: context.colors.background,
+      appBar: AppBar(
+        backgroundColor: context.colors.surface,
+        foregroundColor: context.colors.textPrimary,
+        elevation: 0,
+        title: Text(
+          Constants.locale.signinTitle.tr,
+          style: context.styles.headline4,
+        ),
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: EdgeInsets.all(Design.spacing.screenPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               Constants.locale.signinHeading.tr,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: context.styles.headline3,
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: Design.spacing.sm),
             Obx(
               () => Text(
                 Constants.locale.signinSubtitle.trParams({
                   'email': controller.email.value,
                 }),
-                style: TextStyle(color: Colors.grey[600]),
+                style: context.styles.bodyMedium,
               ),
             ),
-            const SizedBox(height: 32),
+            SizedBox(height: Design.spacing.xxxl),
 
             Obx(
               () => AppPasscodeField(
@@ -50,32 +60,34 @@ class SignInPasscodePage extends GetView<AuthController> {
             Obx(() {
               if (controller.cooldownSecondsLeft.value > 0) {
                 return Padding(
-                  padding: const EdgeInsets.only(top: 16),
+                  padding: EdgeInsets.only(top: Design.spacing.lg),
                   child: Text(
                     Constants.locale.cooldownMessage.trParams({
                       'seconds': '${controller.cooldownSecondsLeft.value}',
                     }),
-                    style: TextStyle(color: Design.colors.error),
+                    style: context.styles.caption.copyWith(
+                      color: context.colors.error,
+                    ),
                   ),
                 );
               }
               if (controller.hasFailureHistory.value &&
                   controller.attemptsLeft.value < AuthController.maxAttempts) {
                 return Padding(
-                  padding: const EdgeInsets.only(top: 16),
+                  padding: EdgeInsets.only(top: Design.spacing.lg),
                   child: Text(
                     Constants.locale.attemptsRemaining.trParams({
                       'left': '${controller.attemptsLeft.value}',
                       'total': '${AuthController.maxAttempts}',
                     }),
-                    style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                    style: context.styles.caption,
                   ),
                 );
               }
               return const SizedBox.shrink();
             }),
 
-            const SizedBox(height: 32),
+            SizedBox(height: Design.spacing.xxxl),
             Obx(
               () => AppButton(
                 text: controller.cooldownSecondsLeft.value > 0
@@ -89,7 +101,7 @@ class SignInPasscodePage extends GetView<AuthController> {
               ),
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: Design.spacing.lg),
             Center(
               child: TextButton(
                 onPressed: () {
@@ -97,13 +109,19 @@ class SignInPasscodePage extends GetView<AuthController> {
                   controller.signinPin.clear();
                   Get.back();
                 },
-                child: Text(Constants.locale.useDifferentEmail.tr),
+                child: Text(
+                  Constants.locale.useDifferentEmail.tr,
+                  style: context.styles.labelLarge,
+                ),
               ),
             ),
             Center(
               child: TextButton(
                 onPressed: () => Get.toNamed(AppRoutes.forgotPasscode),
-                child: Text(Constants.locale.forgotPasscodeLink.tr),
+                child: Text(
+                  Constants.locale.forgotPasscodeLink.tr,
+                  style: context.styles.labelLarge,
+                ),
               ),
             ),
           ],

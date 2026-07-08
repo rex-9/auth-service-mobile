@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/design/components/components.dart';
+import 'package:meritbox_mobile/design/design.dart';
+import 'package:meritbox_mobile/design/extensions/theme_extensions.dart';
 import '../controllers/auth_controller.dart';
 
 class VerifyEmailPage extends GetView<AuthController> {
@@ -15,26 +17,35 @@ class VerifyEmailPage extends GetView<AuthController> {
     controller.email.value = arguments['email'];
 
     return Scaffold(
-      appBar: AppBar(title: Text(Constants.locale.verifyEmailTitle.tr)),
+      backgroundColor: context.colors.background,
+      appBar: AppBar(
+        backgroundColor: context.colors.surface,
+        foregroundColor: context.colors.textPrimary,
+        elevation: 0,
+        title: Text(
+          Constants.locale.verifyEmailTitle.tr,
+          style: context.styles.headline4,
+        ),
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: EdgeInsets.all(Design.spacing.screenPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               Constants.locale.verifyEmailHeading.tr,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: context.styles.headline3,
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: Design.spacing.sm),
             Obx(
               () => Text(
                 Constants.locale.verifyEmailSubtitle.trParams({
                   'email': controller.email.value,
                 }),
-                style: TextStyle(color: Colors.grey[600]),
+                style: context.styles.bodyMedium,
               ),
             ),
-            const SizedBox(height: 32),
+            SizedBox(height: Design.spacing.xxxl),
 
             AppPasscodeField(
               pinController: controller.verifyPin,
@@ -43,7 +54,7 @@ class VerifyEmailPage extends GetView<AuthController> {
               },
             ),
 
-            const SizedBox(height: 32),
+            SizedBox(height: Design.spacing.xxxl),
             Obx(
               () => AppButton(
                 text: controller.isLoading.value
@@ -60,7 +71,7 @@ class VerifyEmailPage extends GetView<AuthController> {
               ),
             ),
 
-            const SizedBox(height: 16),
+            SizedBox(height: Design.spacing.lg),
             Center(
               child: Obx(
                 () => TextButton(
@@ -73,6 +84,11 @@ class VerifyEmailPage extends GetView<AuthController> {
                             'seconds': '${controller.resendSecondsLeft.value}',
                           })
                         : Constants.locale.resendCode.tr,
+                    style: context.styles.labelLarge.copyWith(
+                      color: controller.resendSecondsLeft.value > 0
+                          ? context.colors.textTertiary
+                          : context.colors.primary,
+                    ),
                   ),
                 ),
               ),

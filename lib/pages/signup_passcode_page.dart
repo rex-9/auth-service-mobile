@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/design/components/components.dart';
+import 'package:meritbox_mobile/design/design.dart';
+import 'package:meritbox_mobile/design/extensions/theme_extensions.dart';
 import '../controllers/auth_controller.dart';
 import '../routes/app_routes.dart';
 
@@ -54,9 +56,18 @@ class SignUpPasscodePage extends GetView<AuthController> {
     final isGoogle = controller.isGooglePasscodeSetup;
 
     return Scaffold(
-      appBar: AppBar(title: Text(Constants.locale.signupTitle.tr)),
+      backgroundColor: context.colors.background,
+      appBar: AppBar(
+        backgroundColor: context.colors.surface,
+        foregroundColor: context.colors.textPrimary,
+        elevation: 0,
+        title: Text(
+          Constants.locale.signupTitle.tr,
+          style: context.styles.headline4,
+        ),
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: EdgeInsets.all(Design.spacing.screenPadding),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,25 +76,22 @@ class SignUpPasscodePage extends GetView<AuthController> {
                 isGoogle
                     ? Constants.locale.googlePasscodeHeading.tr
                     : Constants.locale.createPasscodeHeading.tr,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: context.styles.headline3,
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: Design.spacing.sm),
               Text(
                 isGoogle
                     ? Constants.locale.googlePasscodeSubtitle.tr
                     : Constants.locale.createPasscodeSubtitle.tr,
-                style: TextStyle(color: Colors.grey[600]),
+                style: context.styles.bodyMedium,
               ),
-              const SizedBox(height: 32),
+              SizedBox(height: Design.spacing.xxxl),
 
               Text(
                 Constants.locale.passcodeLabel.tr,
-                style: const TextStyle(fontWeight: FontWeight.w500),
+                style: context.styles.labelMedium,
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: Design.spacing.sm),
               AppPasscodeField(
                 pinController: controller.signupPin,
                 onChanged: (value) {
@@ -92,12 +100,12 @@ class SignUpPasscodePage extends GetView<AuthController> {
                 },
               ),
 
-              const SizedBox(height: 24),
+              SizedBox(height: Design.spacing.xxl),
               Text(
                 Constants.locale.confirmPasscodeLabel.tr,
-                style: const TextStyle(fontWeight: FontWeight.w500),
+                style: context.styles.labelMedium,
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: Design.spacing.sm),
               AppPasscodeField(
                 pinController: controller.signupConfirmPin,
                 onChanged: (value) {
@@ -106,7 +114,7 @@ class SignUpPasscodePage extends GetView<AuthController> {
                 },
               ),
 
-              const SizedBox(height: 32),
+              SizedBox(height: Design.spacing.xxxl),
               Obx(
                 () => AppButton(
                   text: controller.isLoading.value

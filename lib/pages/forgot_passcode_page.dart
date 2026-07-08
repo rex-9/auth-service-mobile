@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/design/components/components.dart';
+import 'package:meritbox_mobile/design/design.dart';
+import 'package:meritbox_mobile/design/extensions/theme_extensions.dart';
 import '../controllers/auth_controller.dart';
 
 /// Email a passcode reset link (mirrors the web ForgotPasswordDialog,
@@ -15,17 +17,21 @@ class ForgotPasscodePage extends GetView<AuthController> {
     final emailController = TextEditingController(text: controller.email.value);
 
     return Scaffold(
-      appBar: AppBar(title: Text(Constants.locale.forgotPasscodeTitle.tr)),
+      appBar: AppBar(
+        title: Text(Constants.locale.forgotPasscodeTitle.tr),
+        backgroundColor: context.colors.surface,
+        foregroundColor: context.colors.textPrimary,
+      ),
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: EdgeInsets.all(Design.spacing.screenPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               Constants.locale.forgotPasscodeSubtitle.tr,
-              style: TextStyle(color: Colors.grey[600]),
+              style: context.styles.bodyMedium,
             ),
-            const SizedBox(height: 32),
+            SizedBox(height: Design.spacing.xxxl),
 
             Obx(
               () => AppInputField(
@@ -38,7 +44,7 @@ class ForgotPasscodePage extends GetView<AuthController> {
               ),
             ),
 
-            const SizedBox(height: 32),
+            SizedBox(height: Design.spacing.xxxl),
             Obx(() {
               final waiting = controller.resendSecondsLeft.value > 0;
               return AppButton(
@@ -56,11 +62,14 @@ class ForgotPasscodePage extends GetView<AuthController> {
               );
             }),
 
-            const SizedBox(height: 16),
+            SizedBox(height: Design.spacing.lg),
             Center(
               child: TextButton(
                 onPressed: () => Get.back(),
-                child: Text(Constants.locale.backToSignIn.tr),
+                child: Text(
+                  Constants.locale.backToSignIn.tr,
+                  style: context.styles.labelLarge,
+                ),
               ),
             ),
           ],
