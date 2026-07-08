@@ -1,12 +1,9 @@
 // lib/widgets/settings_actions.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:meritbox_mobile/controllers/settings_controller.dart';
 import 'package:meritbox_mobile/design/design.dart';
-import '../controllers/settings_controller.dart';
-import '../locales/app_translations.dart';
 
-/// Theme toggle + language switcher (mirrors the web NavBar ThemeToggle
-/// and LanguageSwitcher). Use in any AppBar `actions`.
 class ThemeToggleButton extends GetView<SettingsController> {
   const ThemeToggleButton({super.key});
 
@@ -15,8 +12,8 @@ class ThemeToggleButton extends GetView<SettingsController> {
     return Obx(
       () => IconButton(
         icon: Icon(controller.themeIcon),
-        tooltip: controller.themeName.value,
-        onPressed: controller.cycleTheme,
+        tooltip: controller.themeLabel,
+        onPressed: controller.toggleTheme,
       ),
     );
   }
@@ -30,18 +27,18 @@ class LanguageSwitcherButton extends GetView<SettingsController> {
     return PopupMenuButton<String>(
       icon: Icon(Design.icons.language),
       onSelected: controller.changeLocale,
-      itemBuilder: (context) => AppTranslations.supportedLocales.entries
+      itemBuilder: (context) => controller.supportedLocales
           .map(
             (entry) => PopupMenuItem<String>(
               value: entry.key,
               child: Obx(
                 () => Row(
                   children: [
-                    if (controller.localeCode.value == entry.key)
-                      Icon(Design.icons.check, size: 16)
+                    if (controller.isLocale(entry.key))
+                      Icon(Design.icons.check, size: Design.spacing.iconSmall)
                     else
-                      const SizedBox(width: 16),
-                    const SizedBox(width: 8),
+                      SizedBox(width: Design.spacing.iconSmall),
+                    SizedBox(width: Design.spacing.sm),
                     Text(entry.value),
                   ],
                 ),
@@ -53,7 +50,6 @@ class LanguageSwitcherButton extends GetView<SettingsController> {
   }
 }
 
-/// Convenience list for `AppBar(actions: settingsActions())`.
 List<Widget> settingsActions() => const [
   ThemeToggleButton(),
   LanguageSwitcherButton(),

@@ -1,9 +1,10 @@
-// lib/design/app_colors.dart
+// lib/design/elements/app_colors.dart
 import 'package:flutter/material.dart';
 
 class AppColors {
   const AppColors();
 
+  // ===== BASE COLORS =====
   // Primary Colors
   Color get primary => Color(0xFF6366F1); // Indigo 500
   Color get primaryLight => Color(0xFF818CF8); // Indigo 400
@@ -47,27 +48,42 @@ class AppColors {
   Color get borderDark => Color(0xFF374151);
   Color get dividerDark => Color(0xFF1F2937);
 
+  // ===== GRADIENT COLORS =====
+  GradientColors get gradient => GradientColors();
+
+  // ===== SHADOWS =====
+  Shadows get shadows => Shadows();
+}
+
+class GradientColors {
+  const GradientColors();
+  final AppColors _colors = const AppColors();
+
   // Gradient Colors
-  LinearGradient get primaryGradient => LinearGradient(
+  LinearGradient get primary => LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [primary, secondary],
+    colors: [_colors.primary, _colors.secondary],
   );
 
-  LinearGradient get successGradient => LinearGradient(
+  LinearGradient get success => LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [success, successLight],
+    colors: [_colors.success, _colors.successLight],
   );
 
-  LinearGradient get errorGradient => LinearGradient(
+  LinearGradient get error => LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [error, errorLight],
+    colors: [_colors.error, _colors.errorLight],
   );
+}
+
+class Shadows {
+  const Shadows();
 
   // Shadow
-  List<BoxShadow> get shadow => [
+  List<BoxShadow> get sm => [
     BoxShadow(
       color: Colors.black.withValues(alpha: 0.05),
       blurRadius: 10,
@@ -75,7 +91,7 @@ class AppColors {
     ),
   ];
 
-  List<BoxShadow> get shadowMedium => [
+  List<BoxShadow> get md => [
     BoxShadow(
       color: Colors.black.withValues(alpha: 0.08),
       blurRadius: 20,
@@ -83,7 +99,7 @@ class AppColors {
     ),
   ];
 
-  List<BoxShadow> get shadowLarge => [
+  List<BoxShadow> get lg => [
     BoxShadow(
       color: Colors.black.withValues(alpha: 0.12),
       blurRadius: 30,

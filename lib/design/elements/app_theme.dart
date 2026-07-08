@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:meritbox_mobile/design/design.dart';
 
 class AppTheme {
-  static ThemeData light() {
+  const AppTheme();
+
+  ThemeData get light {
     return ThemeData(
       // Color Scheme
       brightness: Brightness.light,
@@ -150,7 +152,7 @@ class AppTheme {
     );
   }
 
-  static ThemeData dark() {
+  ThemeData get dark {
     return ThemeData(
       brightness: Brightness.dark,
       primaryColor: Design.colors.primary,

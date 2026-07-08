@@ -2,14 +2,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
+import 'package:meritbox_mobile/controllers/controllers.dart';
+import 'package:meritbox_mobile/design/components/components.dart';
 import 'package:meritbox_mobile/design/design.dart';
 import 'package:meritbox_mobile/widgets/widgets.dart';
-import '../controllers/auth_controller.dart';
-import '../models/models.dart';
-import '../routes/app_routes.dart';
+import 'package:meritbox_mobile/models/models.dart';
+import 'package:meritbox_mobile/routes/app_routes.dart';
 
 class AuthPage extends GetView<AuthController> {
-  const AuthPage({super.key});
+  AuthPage({super.key});
+
+  final SettingsController _settings = Get.find();
 
   Future<void> _onContinue() async {
     if (!controller.validateEmail()) return;
@@ -46,7 +49,7 @@ class AuthPage extends GetView<AuthController> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: EdgeInsets.all(Design.spacing.screenPadding),
           child: Column(
             children: [
               Row(
@@ -57,43 +60,67 @@ class AuthPage extends GetView<AuthController> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    // Welcome Title
                     Text(
                       Constants.locale.welcomeTitle.tr,
                       style: Design.typography.headline1,
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: Design.spacing.md),
-                    Text(
-                      Constants.locale.welcomeSubtitle.tr,
-                      style: const TextStyle(color: Colors.grey),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 40),
 
+                    // Welcome Subtitle
                     Obx(
-                      () => CustomButton(
+                      () => Text(
+                        Constants.locale.welcomeSubtitle.tr,
+                        style: Design.typography.bodyMedium.copyWith(
+                          color: _settings.textSecondaryColor,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    SizedBox(height: Design.spacing.xxxl),
+
+                    // Google Button
+                    Obx(
+                      () => AppButton(
                         text: Constants.locale.continueWithGoogle.tr,
-                        isLoading: controller.isLoading.value,
                         onPressed: () => controller.signInWithGoogle(),
-                        isGoogle: true,
+                        isLoading: controller.isLoading.value,
+                        type: ButtonType.google,
                       ),
                     ),
 
-                    const SizedBox(height: 20),
-                    Row(
-                      children: [
-                        const Expanded(child: Divider()),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Text(Constants.locale.or.tr),
-                        ),
-                        const Expanded(child: Divider()),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: Design.spacing.xl),
 
+                    // OR Divider
                     Obx(
-                      () => CustomTextField(
+                      () => Row(
+                        children: [
+                          Expanded(
+                            child: Divider(color: _settings.dividerColor),
+                          ),
+                          Padding(
+                            padding: Design.spacing.paddingSymmetric(
+                              h: Design.spacing.lg,
+                            ),
+                            child: Text(
+                              Constants.locale.or.tr,
+                              style: Design.typography.bodyMedium.copyWith(
+                                color: _settings.textSecondaryColor,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Divider(color: _settings.dividerColor),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: Design.spacing.xl),
+
+                    // Email Field
+                    Obx(
+                      () => AppInputField(
                         label: Constants.locale.emailLabel.tr,
                         hint: Constants.locale.emailHint.tr,
                         helper: Constants.locale.emailHelper.tr,
@@ -102,14 +129,17 @@ class AuthPage extends GetView<AuthController> {
                         onChanged: (value) => controller.email.value = value,
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: Design.spacing.xl),
 
+                    // Continue Button
                     Obx(
-                      () => CustomButton(
+                      () => AppButton(
                         text: controller.isLoading.value
                             ? Constants.locale.checking.tr
                             : Constants.locale.continueButton.tr,
                         onPressed: _onContinue,
+                        isLoading: controller.isLoading.value,
+                        type: ButtonType.primary,
                       ),
                     ),
                   ],

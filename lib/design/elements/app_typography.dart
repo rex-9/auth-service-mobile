@@ -1,4 +1,4 @@
-// lib/design/app_typography.dart
+// lib/design/elements/app_typography.dart
 import 'package:flutter/material.dart';
 import 'package:meritbox_mobile/design/design.dart';
 

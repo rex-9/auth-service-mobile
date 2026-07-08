@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
-import 'package:meritbox_mobile/widgets/widgets.dart';
+import 'package:meritbox_mobile/design/components/components.dart';
 import '../controllers/auth_controller.dart';
 
 class VerifyEmailPage extends GetView<AuthController> {
@@ -36,7 +36,7 @@ class VerifyEmailPage extends GetView<AuthController> {
             ),
             const SizedBox(height: 32),
 
-            PasscodeField(
+            AppPasscodeField(
               pinController: controller.verifyPin,
               onCompleted: (pin) {
                 controller.verifyCode(pin);
@@ -45,7 +45,7 @@ class VerifyEmailPage extends GetView<AuthController> {
 
             const SizedBox(height: 32),
             Obx(
-              () => CustomButton(
+              () => AppButton(
                 text: controller.isLoading.value
                     ? Constants.locale.verifying.tr
                     : Constants.locale.verifyCodeButton.tr,

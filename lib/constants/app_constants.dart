@@ -3,8 +3,8 @@ class AppConstants {
   const AppConstants();
 
   // App Info
-  String get appName => 'Meritbox';
-  String get appVersion => '1.0.0';
+  String get name => 'Meritbox';
+  String get version => '1.0.0';
 
   // Validation Rules
   int get minPasscodeLength => 6;

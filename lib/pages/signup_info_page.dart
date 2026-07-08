@@ -2,9 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
+import 'package:meritbox_mobile/design/components/components.dart';
 import '../controllers/auth_controller.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/custom_textfield.dart';
 
 class SignUpInfoPage extends GetView<AuthController> {
   const SignUpInfoPage({super.key});
@@ -31,14 +30,14 @@ class SignUpInfoPage extends GetView<AuthController> {
             ),
             const SizedBox(height: 32),
 
-            CustomTextField(
+            AppInputField(
               label: Constants.locale.fullNameLabel.tr,
               hint: Constants.locale.fullNameHint.tr,
               onChanged: (value) => controller.fullName.value = value,
             ),
             const SizedBox(height: 16),
 
-            CustomTextField(
+            AppInputField(
               label: Constants.locale.usernameLabel.tr,
               hint: Constants.locale.usernameHint.tr,
               onChanged: (value) =>
@@ -47,7 +46,7 @@ class SignUpInfoPage extends GetView<AuthController> {
 
             const SizedBox(height: 32),
             Obx(
-              () => CustomButton(
+              () => AppButton(
                 text: controller.isLoading.value
                     ? Constants.locale.creatingAccount.tr
                     : Constants.locale.createAccountButton.tr,

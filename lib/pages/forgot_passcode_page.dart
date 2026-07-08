@@ -2,9 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
+import 'package:meritbox_mobile/design/components/components.dart';
 import '../controllers/auth_controller.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/custom_textfield.dart';
 
 /// Email a passcode reset link (mirrors the web ForgotPasswordDialog,
 /// with the same 60s resend countdown).
@@ -29,11 +28,11 @@ class ForgotPasscodePage extends GetView<AuthController> {
             const SizedBox(height: 32),
 
             Obx(
-              () => CustomTextField(
+              () => AppInputField(
                 label: Constants.locale.emailLabel.tr,
                 hint: Constants.locale.emailHint.tr,
                 error: controller.emailError.value,
-                textController: emailController,
+                controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 onChanged: (value) => controller.email.value = value,
               ),
@@ -42,7 +41,7 @@ class ForgotPasscodePage extends GetView<AuthController> {
             const SizedBox(height: 32),
             Obx(() {
               final waiting = controller.resendSecondsLeft.value > 0;
-              return CustomButton(
+              return AppButton(
                 text: waiting
                     ? Constants.locale.resendCodeIn.trParams({
                         'seconds': '${controller.resendSecondsLeft.value}',

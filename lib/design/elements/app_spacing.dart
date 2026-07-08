@@ -1,4 +1,6 @@
-// lib/design/app_spacing.dart
+// lib/design/elements/app_spacing.dart
+
+import 'package:flutter/material.dart';
 
 class AppSpacing {
   const AppSpacing();
@@ -41,4 +43,24 @@ class AppSpacing {
   double get iconMedium => 20.0;
   double get iconLarge => 24.0;
   double get iconXLarge => 32.0;
+
+  // ===== EDGE INSETS HELPERS =====
+
+  /// Creates EdgeInsets with same value on all sides
+  EdgeInsets padding(double value) => EdgeInsets.all(value);
+
+  /// Creates EdgeInsets with horizontal and/or vertical values
+  EdgeInsets paddingSymmetric({double h = 0, double v = 0}) =>
+      EdgeInsets.symmetric(horizontal: h, vertical: v);
+
+  /// Creates EdgeInsets with individual side values
+  EdgeInsets paddingOnly({
+    double l = 0,
+    double t = 0,
+    double r = 0,
+    double b = 0,
+  }) => EdgeInsets.only(left: l, top: t, right: r, bottom: b);
+
+  /// Creates EdgeInsets.zero
+  EdgeInsets get zero => EdgeInsets.zero;
 }

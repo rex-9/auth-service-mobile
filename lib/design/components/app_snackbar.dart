@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 
-import '../design/design.dart';
+import '../design.dart';
 
 class AppSnackbar {
   AppSnackbar._();
@@ -64,7 +64,7 @@ class AppSnackbar {
       colorText: foreground,
       margin: EdgeInsets.all(Design.spacing.lg),
       borderRadius: Design.spacing.radiusMedium,
-      duration: const Duration(seconds: 3),
+      duration: Design.timers.snackbar,
       icon: Icon(icon, color: foreground),
       borderColor: foreground.withValues(alpha: 0.25),
       borderWidth: 1,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../design/design.dart';
+import '../design.dart';
 
 class AppDialog {
   AppDialog._();

@@ -1,5 +1,6 @@
 // lib/services/api_service.dart
 import 'package:get/get.dart';
+import 'package:meritbox_mobile/design/design.dart';
 import '../controllers/auth_controller.dart';
 import '../routes/server_routes.dart';
 import '../models/api_response.dart';
@@ -11,7 +12,7 @@ class ApiService extends GetConnect {
   void onInit() {
     super.onInit();
     httpClient.baseUrl = ServerRoutes.baseUrl;
-    httpClient.timeout = const Duration(seconds: 30);
+    httpClient.timeout = Design.timers.apiTimeout;
     httpClient.defaultContentType = 'application/json';
 
     // Add auth token + platform interceptor. X-Platform lets the backend
@@ -39,9 +40,7 @@ class ApiService extends GetConnect {
         );
         if (authController.isLoggedIn.value &&
             (isSessionReplaced || isSessionValidation)) {
-          authController.handleSessionExpired(
-            replaced: isSessionReplaced,
-          );
+          authController.handleSessionExpired(replaced: isSessionReplaced);
         }
       }
       return response;
@@ -76,9 +75,8 @@ class ApiService extends GetConnect {
             response.body?['status']?['error'] ??
             response.statusText ??
             'Unknown error',
-        statusCode: response.body?['status']?['code'] ??
-            response.statusCode ??
-            500,
+        statusCode:
+            response.body?['status']?['code'] ?? response.statusCode ?? 500,
         data: errorData,
       );
     }

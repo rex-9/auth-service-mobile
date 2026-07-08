@@ -1,4 +1,4 @@
-// lib/design/app_decoration.dart
+// lib/design/elements/app_decoration.dart
 import 'package:flutter/material.dart';
 
 class AppIcons {
@@ -14,4 +14,5 @@ class AppIcons {
   IconData get logout => Icons.logout_rounded;
   IconData get check => Icons.check_circle_outline_rounded;
   IconData get language => Icons.language_rounded;
+  IconData get lock => Icons.lock_rounded;
 }

@@ -1,4 +1,4 @@
-// lib/design/app_media.dart
+// lib/design/elements/app_media.dart
 
 class AppMedia {
   const AppMedia();

@@ -1,4 +1,4 @@
-// lib/design/app_timers.dart
+// lib/design/elements/app_timers.dart
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -23,14 +23,14 @@ class AppTimers {
   /// Extra long animations (800ms)
   Duration get extraLong => const Duration(milliseconds: 800);
 
-  /// Snackbar duration (3 seconds)
-  Duration get snackbar => const Duration(seconds: 3);
-
   /// Debounce duration (500ms)
   Duration get debounce => const Duration(milliseconds: 500);
 
   /// Throttle duration (300ms)
   Duration get throttle => const Duration(milliseconds: 300);
+
+  /// Snackbar duration (3 seconds)
+  Duration get snackbar => const Duration(seconds: 3);
 
   /// Resend code cooldown (60 seconds)
   Duration get resendCooldown => const Duration(seconds: 60);

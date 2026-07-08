@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
-import 'package:meritbox_mobile/widgets/widgets.dart';
+import 'package:meritbox_mobile/design/components/components.dart';
 import '../controllers/auth_controller.dart';
 import '../routes/app_routes.dart';
 
@@ -84,7 +84,7 @@ class SignUpPasscodePage extends GetView<AuthController> {
                 style: const TextStyle(fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 8),
-              PasscodeField(
+              AppPasscodeField(
                 pinController: controller.signupPin,
                 onChanged: (value) {
                   controller.passcode.value = value;
@@ -98,7 +98,7 @@ class SignUpPasscodePage extends GetView<AuthController> {
                 style: const TextStyle(fontWeight: FontWeight.w500),
               ),
               const SizedBox(height: 8),
-              PasscodeField(
+              AppPasscodeField(
                 pinController: controller.signupConfirmPin,
                 onChanged: (value) {
                   controller.confirmPasscode.value = value;
@@ -108,7 +108,7 @@ class SignUpPasscodePage extends GetView<AuthController> {
 
               const SizedBox(height: 32),
               Obx(
-                () => CustomButton(
+                () => AppButton(
                   text: controller.isLoading.value
                       ? (isGoogle
                             ? Constants.locale.signingIn.tr

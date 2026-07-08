@@ -34,7 +34,7 @@ class AppRoutes {
 
   static final pages = [
     GetPage(name: splash, page: () => const SplashPage()),
-    GetPage(name: auth, page: () => const AuthPage()),
+    GetPage(name: auth, page: () => AuthPage()),
     GetPage(name: signinPasscode, page: () => const SignInPasscodePage()),
     GetPage(name: signupPasscode, page: () => const SignUpPasscodePage()),
     GetPage(name: signupInfo, page: () => const SignUpInfoPage()),

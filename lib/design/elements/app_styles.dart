@@ -1,15 +1,16 @@
-// lib/design/app_decoration.dart
+// lib/design/elements/app_styles.dart
 import 'package:flutter/material.dart';
 import 'package:meritbox_mobile/design/design.dart';
 
-class AppDecoration {
-  const AppDecoration();
+class AppStyles {
+  const AppStyles();
 
-  // Input Decoration
-  static InputDecoration inputDecoration({
+  // ===== INPUT STYLES =====
+  InputDecoration input({
     String? label,
     String? hint,
     String? error,
+    String? helper,
     Widget? prefixIcon,
     Widget? suffixIcon,
   }) {
@@ -17,10 +18,11 @@ class AppDecoration {
       labelText: label,
       hintText: hint,
       errorText: error,
+      helperText: helper,
       prefixIcon: prefixIcon,
       suffixIcon: suffixIcon,
       filled: true,
-      fillColor: Colors.white,
+      fillColor: Design.colors.surface,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
         borderSide: BorderSide(color: Design.colors.border),
@@ -42,8 +44,8 @@ class AppDecoration {
         borderSide: BorderSide(color: Design.colors.error, width: 2),
       ),
       contentPadding: EdgeInsets.symmetric(
-        horizontal: Design.spacing.inputHorizontal,
-        vertical: Design.spacing.inputVertical,
+        horizontal: Design.spacing.lg,
+        vertical: Design.spacing.md + 2,
       ),
       labelStyle: Design.typography.labelMedium,
       hintStyle: Design.typography.helper,
@@ -53,14 +55,14 @@ class AppDecoration {
     );
   }
 
-  // Button Decoration
-  ButtonStyle get primaryButtonStyle => ElevatedButton.styleFrom(
+  // ===== BUTTON STYLES =====
+  ButtonStyle get buttonPrimary => ElevatedButton.styleFrom(
     backgroundColor: Design.colors.primary,
     foregroundColor: Colors.white,
     minimumSize: Size(double.infinity, Design.spacing.buttonHeight),
     padding: EdgeInsets.symmetric(
-      horizontal: Design.spacing.buttonHorizontal,
-      vertical: Design.spacing.buttonVertical,
+      horizontal: Design.spacing.xl,
+      vertical: Design.spacing.md,
     ),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
@@ -70,12 +72,12 @@ class AppDecoration {
     shadowColor: Colors.transparent,
   );
 
-  ButtonStyle get secondaryButtonStyle => OutlinedButton.styleFrom(
+  ButtonStyle get buttonSecondary => OutlinedButton.styleFrom(
     foregroundColor: Design.colors.primary,
     minimumSize: Size(double.infinity, Design.spacing.buttonHeight),
     padding: EdgeInsets.symmetric(
-      horizontal: Design.spacing.buttonHorizontal,
-      vertical: Design.spacing.buttonVertical,
+      horizontal: Design.spacing.xl,
+      vertical: Design.spacing.md,
     ),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
@@ -84,7 +86,7 @@ class AppDecoration {
     textStyle: Design.typography.button,
   );
 
-  ButtonStyle get textButtonStyle => TextButton.styleFrom(
+  ButtonStyle get buttonText => TextButton.styleFrom(
     foregroundColor: Design.colors.primary,
     padding: EdgeInsets.symmetric(
       horizontal: Design.spacing.sm,
@@ -93,13 +95,13 @@ class AppDecoration {
     textStyle: Design.typography.labelLarge,
   );
 
-  ButtonStyle get googleButtonStyle => ElevatedButton.styleFrom(
+  ButtonStyle get buttonGoogle => ElevatedButton.styleFrom(
     backgroundColor: Colors.white,
     foregroundColor: Design.colors.textPrimary,
     minimumSize: Size(double.infinity, Design.spacing.buttonHeight),
     padding: EdgeInsets.symmetric(
-      horizontal: Design.spacing.buttonHorizontal,
-      vertical: Design.spacing.buttonVertical,
+      horizontal: Design.spacing.xl,
+      vertical: Design.spacing.md,
     ),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
@@ -109,17 +111,55 @@ class AppDecoration {
     elevation: 0,
   );
 
-  // Card Decoration
-  BoxDecoration get cardDecoration => BoxDecoration(
-    color: Colors.white,
-    borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
-    boxShadow: Design.colors.shadow,
+  // ===== CARD STYLES =====
+  BoxDecoration get card => BoxDecoration(
+    color: Design.colors.surface,
+    borderRadius: BorderRadius.circular(Design.spacing.radiusLarge),
+    boxShadow: Design.colors.shadows.sm,
   );
 
-  // Container Decoration
-  BoxDecoration get containerDecoration => BoxDecoration(
-    color: Colors.white,
+  BoxDecoration get cardElevated => BoxDecoration(
+    color: Design.colors.surface,
+    borderRadius: BorderRadius.circular(Design.spacing.radiusLarge),
+    boxShadow: Design.colors.shadows.md,
+  );
+
+  // ===== CONTAINER STYLES =====
+  BoxDecoration get container => BoxDecoration(
+    color: Design.colors.surface,
     borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
     border: Border.all(color: Design.colors.border),
+  );
+
+  BoxDecoration get containerBordered => BoxDecoration(
+    color: Design.colors.surface,
+    borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+    border: Border.all(color: Design.colors.primary, width: 2),
+  );
+
+  // ===== DIALOG STYLES =====
+  BoxDecoration get dialog => BoxDecoration(
+    color: Design.colors.surface,
+    borderRadius: BorderRadius.circular(Design.spacing.radiusXLarge),
+    boxShadow: Design.colors.shadows.lg,
+  );
+
+  // ===== CHIP STYLES =====
+  BoxDecoration get chip => BoxDecoration(
+    color: Design.colors.primary.withValues(alpha: 0.1),
+    borderRadius: BorderRadius.circular(Design.spacing.radiusXLarge),
+    border: Border.all(color: Design.colors.primary.withValues(alpha: 0.2)),
+  );
+
+  BoxDecoration get chipSuccess => BoxDecoration(
+    color: Design.colors.success.withValues(alpha: 0.1),
+    borderRadius: BorderRadius.circular(Design.spacing.radiusXLarge),
+    border: Border.all(color: Design.colors.success.withValues(alpha: 0.2)),
+  );
+
+  BoxDecoration get chipError => BoxDecoration(
+    color: Design.colors.error.withValues(alpha: 0.1),
+    borderRadius: BorderRadius.circular(Design.spacing.radiusXLarge),
+    border: Border.all(color: Design.colors.error.withValues(alpha: 0.2)),
   );
 }

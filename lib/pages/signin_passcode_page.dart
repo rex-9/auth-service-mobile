@@ -2,11 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
+import 'package:meritbox_mobile/design/components/components.dart';
 import 'package:meritbox_mobile/design/design.dart';
 import '../controllers/auth_controller.dart';
 import '../routes/app_routes.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/passcode_field.dart';
 
 class SignInPasscodePage extends GetView<AuthController> {
   const SignInPasscodePage({super.key});
@@ -36,7 +35,7 @@ class SignInPasscodePage extends GetView<AuthController> {
             const SizedBox(height: 32),
 
             Obx(
-              () => PasscodeField(
+              () => AppPasscodeField(
                 pinController: controller.signinPin,
                 enabled: controller.cooldownSecondsLeft.value == 0,
                 onChanged: (value) => controller.passcode.value = value,
@@ -78,7 +77,7 @@ class SignInPasscodePage extends GetView<AuthController> {
 
             const SizedBox(height: 32),
             Obx(
-              () => CustomButton(
+              () => AppButton(
                 text: controller.cooldownSecondsLeft.value > 0
                     ? Constants.locale.tryAgainIn.trParams({
                         'seconds': '${controller.cooldownSecondsLeft.value}',
