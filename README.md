@@ -1,6 +1,77 @@
-# Meritbox Mobile App
+Here's a comprehensive README for your Flutter project with emphasis on the design system:
 
-A modern Flutter mobile application for Meritbox platform, featuring secure 6-digit passcode authentication, Google Sign-In, and clean GetX architecture.
+---
+
+# Meritbox Mobile
+
+A Flutter mobile application for Meritbox platform with clean GetX architecture, consistent design system, and multi-language support.
+
+## 📁 Project Structure
+
+```
+lib/
+├── bindings/          # Dependency injection
+├── config/            # App configuration
+├── constants/         # App constants & keys
+├── controllers/       # GetX controllers (business logic)
+├── design/            # 🎨 Design System (READ THIS!)
+├── locales/           # Internationalization
+├── models/            # Data models
+├── pages/             # UI screens
+├── routes/            # Navigation & route guards
+├── services/          # API & storage services
+└── widgets/           # Reusable widgets
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Flutter SDK >=3.0.0
+- Dart >=3.0.0
+- Android Studio / VS Code
+- iOS Simulator / Android Emulator
+
+### Installation
+
+1. **Clone the repository**
+
+```bash
+git clone https://github.com/yourusername/meritbox_mobile.git
+cd meritbox_mobile
+```
+
+2. **Install dependencies**
+
+```bash
+flutter pub get
+```
+
+3. **Configure API endpoints**
+
+Update `lib/routes/server_routes.dart`:
+
+```dart
+static const String baseUrl = 'https://your-api-server.com';
+```
+
+4. **Configure Google Sign-In**
+
+#### Android
+
+- Add `google-services.json` to `android/app/`
+- Configure SHA-1 and SHA-256 fingerprints
+
+#### iOS
+
+- Add `GoogleService-Info.plist` to `ios/Runner/`
+- Configure URL schemes in `Info.plist`
+
+5. **Run the app**
+
+```bash
+flutter run
+```
 
 ## 📱 Features
 
@@ -29,289 +100,122 @@ A modern Flutter mobile application for Meritbox platform, featuring secure 6-di
   - One active session per platform (`X-Platform: mobile`); replaced sessions are signed out with a notice
   - Forgot passcode reset-link email with resend countdown
 
-## 🏗️ Project Structure
+---
 
-```
-lib/
-├── bindings/           # Dependency injection
-│   └── initial_binding.dart
-├── config/             # Configurations
-│   └── app_config.dart
-├── constants/          # Constants
-│   └── app_constants.dart
-│   └── locale_constants.dart
-├── controllers/        # Business logic
-│   └── auth_controller.dart
-├── design/             # Core utilities
-│   ├── app_colors.dart/
-│   └── app_decoration.dart/
-│   └── app_icons.dart/
-│   └── app_media.dart/
-│   └── app_spacing.dart/
-│   └── app_theme.dart/
-│   └── app_typography.dart/
-├── locales/            # Localization
-│   └── app_translations.dart
-├── models/             # Data models
-│   ├── user_model.dart
-│   └── api_response.dart
-├── pages/              # UI screens
-│   ├── auth_page.dart
-│   ├── signin_passcode_page.dart
-│   ├── signup_passcode_page.dart
-│   ├── signup_info_page.dart
-│   ├── verify_email_page.dart
-│   └── home_page.dart
-├── routes/             # Navigation
-│   ├── app_routes.dart
-│   └── server_routes.dart
-├── services/           # API and business services
-│   ├── api_service.dart
-│   ├── auth_service.dart
-│   └── storage_service.dart
-└── widgets/            # Reusable components
-    ├── custom_button.dart
-    └── custom_textfield.dart
-```
+## 📂 Configuration & Constants
 
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Flutter SDK (>=3.0.0)
-- Dart (>=3.0.0)
-- Android Studio / VS Code
-- iOS Simulator / Android Emulator
-
-### Installation
-
-1. **Clone the repository**
-
-```bash
-git clone https://github.com/yourusername/meritbox_mobile.git
-cd meritbox_mobile
-```
-
-2. **Install dependencies**
-
-```bash
-flutter pub get
-```
-
-3. **Configure API endpoints**
-
-Update the base URL in `lib/routes/server_routes.dart`:
+### Config (`lib/config/`)
 
 ```dart
-static const String baseUrl = 'https://your-api-server.com'; // Replace with your backend URL
+import 'package:meritbox_mobile/config/config.dart';
+
+// App config
+AppConfig().googleServerClientIdKey
+AppConfig().apiBaseUrl
 ```
 
-4. **Configure Google Sign-In**
+### Constants (`lib/constants/`)
 
-#### Android
+```dart
+import 'package:meritbox_mobile/constants/constants.dart';
 
-- Add your `google-services.json` to `android/app/`
-- Configure SHA-1 and SHA-256 fingerprints in Google Cloud Console
+// App constants
+Constants.app.name
+Constants.app.version
 
-#### iOS
+// Locale keys (for translations)
+Constants.locale.welcomeTitle
+Constants.locale.signIn
+Constants.locale.error
+```
 
-- Add `GoogleService-Info.plist` to `ios/Runner/`
-- Configure URL schemes in `Info.plist`
+### Locales (`lib/locales/`)
 
-#### Web
+```dart
+import 'package:meritbox_mobile/locales/app_translations.dart';
 
-- Configure OAuth 2.0 Client ID in Google Cloud Console
-- Update `web/index.html` with your client ID
+// Use translations
+'key'.tr
+'key'.trParams({'name': 'John'})
 
-5. **Run the app**
+// Supported locales
+AppTranslations.supportedLocales  // {'en_US': 'English', ...}
+```
+
+### Routes (`lib/routes/`)
+
+```dart
+import 'package:meritbox_mobile/routes/routes.dart';
+
+// Navigate
+AppRoutes.toHome()
+AppRoutes.toSettings()
+AppRoutes.toAuth()
+
+// Server endpoints
+ServerRoutes.baseUrl
+ServerRoutes.peekUser
+ServerRoutes.signIn
+```
+
+---
+
+## 🧪 Running Tests
 
 ```bash
-flutter run
-```
-
-## 🔧 Configuration
-
-### Environment Setup
-
-Create `.env` file (optional for different environments):
-
-```env
-API_BASE_URL=https://your-api-server.com
-GOOGLE_CLIENT_ID=your_google_client_id
-```
-
-### Backend API Endpoints
-
-Make sure your backend has these endpoints configured:
-
-| Endpoint                     | Method | Description            |
-| ---------------------------- | ------ | ---------------------- |
-| `/users/peek`                | GET    | Check if user exists   |
-| `/signin`                    | POST   | Email/Password sign in |
-| `/signin/token`              | POST   | Token-based sign in    |
-| `/signin/google`             | POST   | Google Sign-In         |
-| `/signup`                    | POST   | User registration      |
-| `/confirmation/send_code`    | POST   | Send verification code |
-| `/confirmation/confirm_code` | POST   | Verify email code      |
-| `/password/forgot`           | POST   | Forgot password        |
-| `/password/reset`            | PUT    | Reset password         |
-| `/users/current`             | GET    | Get current user       |
-| `/signout`                   | DELETE | Sign out               |
-
-## 🎨 Design System
-
-### Color Palette
-
-- **Primary**: Indigo (#6366F1)
-- **Secondary**: Violet (#8B5CF6)
-- **Success**: Emerald (#10B981)
-- **Error**: Red (#EF4444)
-
-### Typography
-
-- **Font Family**: Poppins
-- **Headlines**: 20-32px, Bold/SemiBold
-- **Body**: 12-16px, Regular
-- **Buttons**: 14-16px, SemiBold
-
-### Spacing System
-
-- Base unit: 4px
-- Screen padding: 20px
-- Card padding: 16px
-- Button height: 48px
-
-## 📱 App Flow
-
-### Existing User Flow
-
-1. Enter Email → Detected as existing user
-2. Enter 6-digit passcode
-3. Successful sign in → Redirect to Home
-
-### New User Flow
-
-1. Enter Email → Detected as new user
-2. Create 6-digit passcode (confirm twice)
-3. Verify email with OTP code
-4. Complete profile (Name, Username)
-5. Account created → Redirect to Home
-
-### Google Sign-In Flow
-
-1. Tap "Continue with Google"
-2. Select Google account
-3. Existing account → signed straight in
-4. New account → create + confirm a 6-digit passcode (challenge token) → account created
-5. Redirect to Home
-
-### Forgot Passcode Flow
-
-1. "Forgot your passcode?" on the sign-in passcode page
-2. Enter email → reset link sent (60s resend countdown)
-3. Reset passcode via the emailed link, then sign in again
-
-## 🛠️ Built With
-
-- **GetX** - State management, navigation, dependency injection
-- **GetConnect** - HTTP client
-- **GetStorage** - Local storage
-- **Google Sign-In** - Social authentication
-- **Pin Code Fields** - OTP input
-- **ScreenUtil** - Responsive design
-
-## 📦 Dependencies
-
-```yaml
-dependencies:
-  flutter:
-    sdk: flutter
-  get: ^4.6.6
-  google_sign_in: ^7.2.0
-  pin_code_fields: ^9.0.0
-  flutter_screenutil: ^5.9.0
-  get_storage: ^2.1.1
-  get_connect: ^4.6.6
-```
-
-## 🔐 Security
-
-- JWT tokens stored securely using GetStorage
-- No sensitive data in URL parameters
-- HTTPS enforced in production
-- Passcode validated on both client and server
-- Automatic sign out on 401 responses
-
-## 🧪 Testing
-
-```bash
-# Run unit tests
+# Unit tests
 flutter test
 
-# Run integration tests
+# Integration tests
 flutter test integration_test/
-
-# Generate coverage report
-flutter test --coverage
 ```
 
-## 📱 Building for Production
+---
 
-### Android APK
+## 📦 Building for Production
 
 ```bash
+# Android APK
 flutter build apk --release
-```
 
-### Android App Bundle
-
-```bash
+# Android App Bundle
 flutter build appbundle --release
-```
 
-### iOS IPA
-
-```bash
+# iOS IPA
 flutter build ios --release
-```
 
-### Web
-
-```bash
+# Web
 flutter build web --release
 ```
 
-## 🤝 Contributing
+---
 
-1. Fork the repository
-2. Create feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open Pull Request
+## 🛠️ Dependencies
+
+| Package              | Purpose                          |
+| -------------------- | -------------------------------- |
+| `get`                | State management, navigation, DI |
+| `get_storage`        | Local storage                    |
+| `google_sign_in`     | Google authentication            |
+| `pin_code_fields`    | OTP/Passcode input               |
+| `flutter_screenutil` | Responsive design                |
+
+---
 
 ## 📄 License
 
 This project is proprietary and confidential.
 
-## 📞 Support
-
-For support, email support@meritbox.com or create an issue in the repository.
-
-## 🎯 Roadmap
-
-- [ ] Biometric authentication (FaceID / Fingerprint)
-- [ ] Push notifications
-- [ ] Offline mode
-- [ ] Social media sharing
-- [ ] Dark mode improvements
-- [ ] Accessibility enhancements
+---
 
 ## 🙏 Acknowledgments
 
-- Flutter team for amazing framework
-- GetX team for state management solution
-- Google Sign-In team for authentication
+- Flutter team
+- GetX team
+- Google Sign-In team
 
 ---
 
 **Made with ❤️ by Meritbox Team**
+
+---
