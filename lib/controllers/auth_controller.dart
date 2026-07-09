@@ -8,8 +8,7 @@ import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/design/components/components.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import '../routes/app_routes.dart';
-import '../services/auth_service.dart';
-import '../services/storage_service.dart';
+import '../services/services.dart';
 import '../models/user_model.dart';
 
 class AuthController extends GetxController {
@@ -78,18 +77,27 @@ class AuthController extends GetxController {
 
   Future<void> checkAuthStatus() async {
     isCheckingAuth.value = true;
+
+    // Try to get token
     final token = _storage.getToken();
     if (token != null && token.isNotEmpty) {
       authToken.value = token;
-      isLoggedIn.value = true;
-      final storedUser = _storage.getUserData();
+
+      // Try to get user from storage first
+      final UserModel? storedUser = _storage.getUserData();
       if (storedUser != null) {
-        currentUser.value = UserModel.fromJson(storedUser);
+        currentUser.value = storedUser;
+        isLoggedIn.value = true;
+        isCheckingAuth.value = false;
+        return;
       }
+
+      // Fallback: fetch from API
       await getCurrentUser();
     } else {
       isLoggedIn.value = false;
     }
+
     isCheckingAuth.value = false;
   }
 
@@ -235,14 +243,17 @@ class AuthController extends GetxController {
 
   void _storeSession(Map<String, dynamic> data) {
     final token = data['token'];
+    final userJson = data['user'] as Map<String, dynamic>;
+
     authToken.value = token;
     _storage.setToken(token);
-    _storage.setUserEmail(email.value);
-    final user = data['user'];
-    if (user is Map) {
-      currentUser.value = UserModel.fromJson(Map<String, dynamic>.from(user));
-      _storage.setUserData(Map<String, dynamic>.from(user));
-    }
+    _storage.setUserEmail(userJson['email']);
+
+    // Save user data
+    final user = UserModel.fromJson(userJson);
+    currentUser.value = user;
+    _storage.setUserData(user);
+
     isLoggedIn.value = true;
   }
 
@@ -468,11 +479,12 @@ class AuthController extends GetxController {
     try {
       final response = await _auth.getCurrentUser();
       if (response.success && response.data != null) {
-        currentUser.value = UserModel.fromJson(response.data!);
-        _storage.setUserData(response.data!);
+        final user = UserModel.fromJson(response.data!);
+        currentUser.value = user;
+        _storage.setUserData(user); // Save to storage
       }
     } catch (e) {
-      // Error getting user; keep the cached one.
+      // Error getting user; keep cached one if exists
     }
   }
 
@@ -548,7 +560,7 @@ class AuthController extends GetxController {
     }
 
     _clearLocalSession();
-    Get.find<StorageService>().clearRouteStack(); // Clear saved routes
+    _storage.clearRouteStack();
     AppRoutes.toAuth();
   }
 }

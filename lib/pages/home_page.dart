@@ -31,10 +31,33 @@ class HomePage extends GetView<AuthController> {
             ),
             SizedBox(height: Design.spacing.lg),
             Obx(
-              () => Text(
-                'Email: ${controller.currentUser.value?.email ?? Constants.locale.loading.tr}',
-                style: context.typo.bodyMedium,
-                textAlign: TextAlign.center,
+              () => Column(
+                children: [
+                  // User photo if available
+                  if (controller.currentUser.value?.photo != null)
+                    CircleAvatar(
+                      radius: 40,
+                      backgroundImage: NetworkImage(
+                        controller.currentUser.value!.photo!,
+                      ),
+                    ),
+                  SizedBox(height: Design.spacing.md),
+                  Text(
+                    controller.currentUser.value?.name ??
+                        controller.currentUser.value?.username ??
+                        controller.currentUser.value?.email ??
+                        Constants.locale.loading.tr,
+                    style: context.typo.bodyLarge,
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: Design.spacing.xs),
+                  Text(
+                    controller.currentUser.value?.email ??
+                        Constants.locale.loading.tr,
+                    style: context.typo.bodyMedium,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
             ),
           ],

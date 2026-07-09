@@ -1,8 +1,17 @@
 // lib/services/storage_service.dart
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import '../models/user_model.dart';
 
-class StorageService {
-  final GetStorage _box = GetStorage();
+class StorageService extends GetxService {
+  late final GetStorage _box;
+
+  // ===== LIFECYCLE =====
+  @override
+  void onInit() {
+    super.onInit();
+    _box = GetStorage();
+  }
 
   // ============================================================
   // AUTH SESSION
@@ -13,8 +22,13 @@ class StorageService {
   void setUserEmail(String email) => _box.write('user_email', email);
   String? getUserEmail() => _box.read('user_email');
 
-  void setUserData(Map<String, dynamic> user) => _box.write('user_data', user);
-  Map<String, dynamic>? getUserData() => _box.read('user_data');
+  void setUserData(UserModel user) => _box.write('user_data', user.toJson());
+
+  UserModel? getUserData() {
+    final data = _box.read('user_data');
+    if (data == null) return null;
+    return UserModel.fromJson(Map<String, dynamic>.from(data));
+  }
 
   /// Clears session data only (keeps theme/locale settings).
   void clearSession() {
@@ -51,14 +65,14 @@ class StorageService {
   // ============================================================
   // PASSCODE RETRY (Per email)
   // ============================================================
-  String retryKey(String email) =>
+  String _retryKey(String email) =>
       'passcode-retry:${email.trim().toLowerCase()}';
 
   void setPasscodeRetry(String email, Map<String, dynamic> state) =>
-      _box.write(retryKey(email), state);
+      _box.write(_retryKey(email), state);
 
   Map<String, dynamic>? getPasscodeRetry(String email) {
-    final raw = _box.read(retryKey(email));
+    final raw = _box.read(_retryKey(email));
     return raw is Map ? Map<String, dynamic>.from(raw) : null;
   }
 

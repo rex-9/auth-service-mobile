@@ -1,27 +1,28 @@
 // lib/bindings/initial_binding.dart
 import 'package:get/get.dart';
-import '../services/api_service.dart';
-import '../services/auth_service.dart';
-import '../services/storage_service.dart';
-import '../controllers/auth_controller.dart';
-import '../controllers/settings_controller.dart';
+import '../services/services.dart';
+import '../controllers/controllers.dart';
 
 class InitialBinding extends Bindings {
   @override
   void dependencies() {
+    // ===== Services =====
+
     // Storage (no dependencies)
-    Get.put(StorageService());
+    Get.put(StorageService(), permanent: true);
 
-    // Settings: theme + locale (depends on StorageService)
-    Get.put(SettingsController());
-
-    // API Core (depends on nothing)
-    Get.put(ApiService());
+    // API Service (interface + implementation)
+    Get.put<ApiService>(ApiService(), permanent: true);
 
     // Auth Service (depends on ApiService)
-    Get.put(AuthService());
+    Get.put<AuthService>(AuthServiceImpl(), permanent: true);
+
+    // ===== Controllers =====
+
+    // Settings: theme + locale (depends on StorageService)
+    Get.put(SettingsController(), permanent: true);
 
     // Auth Controller (depends on AuthService and StorageService)
-    Get.put(AuthController());
+    Get.put(AuthController(), permanent: true);
   }
 }

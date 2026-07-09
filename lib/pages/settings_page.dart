@@ -154,12 +154,19 @@ class SettingsPage extends GetView<SettingsController> {
       child: Column(
         children: [
           ListTile(
-            leading: Icon(
-              Design.icons.person,
-              color: context.colors.textSecondary,
+            leading: CircleAvatar(
+              backgroundColor: context.colors.primary.withValues(alpha: 0.1),
+              backgroundImage: authController.currentUser.value?.photo != null
+                  ? NetworkImage(authController.currentUser.value!.photo!)
+                  : null,
+              child: authController.currentUser.value?.photo == null
+                  ? Icon(Design.icons.person, color: context.colors.primary)
+                  : null,
             ),
             title: Text(
-              Constants.locale.account.tr,
+              authController.currentUser.value?.name ??
+                  authController.currentUser.value?.username ??
+                  Constants.locale.account.tr,
               style: context.typo.bodyLarge,
             ),
             subtitle: Obx(
