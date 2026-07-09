@@ -1,4 +1,7 @@
+// Export Components and Extensions
 export 'package:meritbox_mobile/design/extensions/theme_extensions.dart';
+export 'package:meritbox_mobile/design/components/components.dart';
+
 import 'package:meritbox_mobile/design/elements/elements.dart';
 
 class Design {

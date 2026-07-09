@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
-import 'package:meritbox_mobile/design/components/components.dart';
 import 'package:meritbox_mobile/design/design.dart';
 import '../controllers/auth_controller.dart';
 import '../routes/app_routes.dart';
@@ -54,78 +53,67 @@ class SignUpPasscodePage extends GetView<AuthController> {
   Widget build(BuildContext context) {
     final isGoogle = controller.isGooglePasscodeSetup;
 
-    return Scaffold(
-      backgroundColor: context.colors.background,
-      appBar: AppBar(
-        backgroundColor: context.colors.surface,
-        foregroundColor: context.colors.textPrimary,
-        elevation: 0,
-        title: Text(
-          Constants.locale.signupTitle.tr,
-          style: context.typo.headline4,
-        ),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(Design.spacing.screenPadding),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                isGoogle
-                    ? Constants.locale.googlePasscodeHeading.tr
-                    : Constants.locale.createPasscodeHeading.tr,
-                style: context.typo.headline3,
-              ),
-              SizedBox(height: Design.spacing.sm),
-              Text(
-                isGoogle
-                    ? Constants.locale.googlePasscodeSubtitle.tr
-                    : Constants.locale.createPasscodeSubtitle.tr,
-                style: context.typo.bodyMedium,
-              ),
-              SizedBox(height: Design.spacing.xxxl),
+    return AppPage(
+      title: Constants.locale.signupTitle.tr,
+      showBackButton: true,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              isGoogle
+                  ? Constants.locale.googlePasscodeHeading.tr
+                  : Constants.locale.createPasscodeHeading.tr,
+              style: context.typo.headline3,
+            ),
+            SizedBox(height: Design.spacing.sm),
+            Text(
+              isGoogle
+                  ? Constants.locale.googlePasscodeSubtitle.tr
+                  : Constants.locale.createPasscodeSubtitle.tr,
+              style: context.typo.bodyMedium,
+            ),
+            SizedBox(height: Design.spacing.xxxl),
 
-              Text(
-                Constants.locale.passcodeLabel.tr,
-                style: context.typo.labelMedium,
-              ),
-              SizedBox(height: Design.spacing.sm),
-              AppPasscodeField(
-                pinController: controller.signupPin,
-                onChanged: (value) {
-                  controller.passcode.value = value;
-                  _syncConfirmError();
-                },
-              ),
+            Text(
+              Constants.locale.passcodeLabel.tr,
+              style: context.typo.labelMedium,
+            ),
+            SizedBox(height: Design.spacing.sm),
+            AppPasscodeField(
+              pinController: controller.signupPin,
+              onChanged: (value) {
+                controller.passcode.value = value;
+                _syncConfirmError();
+              },
+            ),
 
-              SizedBox(height: Design.spacing.xxl),
-              Text(
-                Constants.locale.confirmPasscodeLabel.tr,
-                style: context.typo.labelMedium,
-              ),
-              SizedBox(height: Design.spacing.sm),
-              AppPasscodeField(
-                pinController: controller.signupConfirmPin,
-                onChanged: (value) {
-                  controller.confirmPasscode.value = value;
-                  _syncConfirmError();
-                },
-              ),
+            SizedBox(height: Design.spacing.xxl),
+            Text(
+              Constants.locale.confirmPasscodeLabel.tr,
+              style: context.typo.labelMedium,
+            ),
+            SizedBox(height: Design.spacing.sm),
+            AppPasscodeField(
+              pinController: controller.signupConfirmPin,
+              onChanged: (value) {
+                controller.confirmPasscode.value = value;
+                _syncConfirmError();
+              },
+            ),
 
-              SizedBox(height: Design.spacing.xxxl),
-              Obx(
-                () => AppButton(
-                  text: controller.isLoading.value
-                      ? (isGoogle
-                            ? Constants.locale.signingIn.tr
-                            : Constants.locale.sendingCode.tr)
-                      : Constants.locale.continueButton.tr,
-                  onPressed: _onContinue,
-                ),
+            SizedBox(height: Design.spacing.xxxl),
+            Obx(
+              () => AppButton(
+                text: controller.isLoading.value
+                    ? (isGoogle
+                          ? Constants.locale.signingIn.tr
+                          : Constants.locale.sendingCode.tr)
+                    : Constants.locale.continueButton.tr,
+                onPressed: _onContinue,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -13,41 +13,25 @@ class SettingsPage extends GetView<SettingsController> {
   Widget build(BuildContext context) {
     final authController = Get.find<AuthController>();
 
-    return Scaffold(
-      backgroundColor: context.colors.background,
-      appBar: AppBar(
-        backgroundColor: context.colors.surface,
-        foregroundColor: context.colors.textPrimary,
-        elevation: 0,
-        title: Text(
-          Constants.locale.settings.tr,
-          style: context.typo.headline4,
-        ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_rounded,
-            color: context.colors.textPrimary,
-          ),
-          onPressed: () => Get.back(),
-        ),
-      ),
-      body: ListView(
-        padding: EdgeInsets.all(Design.spacing.screenPadding),
+    return AppPage(
+      title: Constants.locale.settings.tr,
+      showBackButton: true,
+      child: ListView(
         children: [
           // Theme Section
-          _buildSectionHeader(Constants.locale.theme.tr, context),
+          _buildSectionHeader(context, Constants.locale.theme.tr),
           _buildThemeTile(context),
 
           SizedBox(height: Design.spacing.xxl),
 
           // Language Section
-          _buildSectionHeader(Constants.locale.language.tr, context),
+          _buildSectionHeader(context, Constants.locale.language.tr),
           _buildLanguageTile(context),
 
           SizedBox(height: Design.spacing.xxl),
 
           // Account Section
-          _buildSectionHeader(Constants.locale.account.tr, context),
+          _buildSectionHeader(context, Constants.locale.account.tr),
           _buildAccountTile(context, authController),
 
           SizedBox(height: Design.spacing.xl),
@@ -56,7 +40,7 @@ class SettingsPage extends GetView<SettingsController> {
     );
   }
 
-  Widget _buildSectionHeader(String title, BuildContext context) {
+  Widget _buildSectionHeader(BuildContext context, String title) {
     return Padding(
       padding: EdgeInsets.only(
         left: Design.spacing.sm,

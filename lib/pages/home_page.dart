@@ -4,29 +4,23 @@ import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/design/design.dart';
 import 'package:meritbox_mobile/pages/pages.dart';
-import '../controllers/auth_controller.dart';
+import 'package:meritbox_mobile/controllers/controllers.dart';
 
 class HomePage extends GetView<AuthController> {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: context.colors.background,
-      appBar: AppBar(
-        backgroundColor: context.colors.surface,
-        foregroundColor: context.colors.textPrimary,
-        elevation: 0,
-        title: Text(Constants.locale.home.tr, style: context.typo.headline3),
-        actions: [
-          IconButton(
-            icon: Icon(Design.icons.settings),
-            onPressed: () => Get.to(() => const SettingsPage()),
-            tooltip: 'Settings',
-          ),
-        ],
-      ),
-      body: Center(
+    return AppPage(
+      title: Constants.locale.home.tr,
+      actions: [
+        IconButton(
+          icon: Icon(Design.icons.settings),
+          onPressed: () => Get.to(() => const SettingsPage()),
+          tooltip: Constants.locale.settings.tr,
+        ),
+      ],
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
