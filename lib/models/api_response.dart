@@ -31,12 +31,13 @@ class ApiResponse<T> {
     required String message,
     required int statusCode,
     String? error,
+    T? data,
   }) {
     return ApiResponse(
       success: false,
       statusCode: statusCode,
       message: message,
-      data: null,
+      data: data,
       error: error,
     );
   }
