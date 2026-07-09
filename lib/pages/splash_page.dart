@@ -1,6 +1,7 @@
 // lib/pages/splash_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:meritbox_mobile/services/services.dart';
 import '../design/design.dart';
 import '../controllers/auth_controller.dart';
 import '../routes/app_routes.dart';
@@ -21,20 +22,22 @@ class _SplashPageState extends State<SplashPage> {
 
   Future<void> _checkAuthAndNavigate() async {
     final authController = Get.find<AuthController>();
+    final storage = Get.find<StorageService>();
 
     // Wait for auth check to complete
-    await Future.delayed(const Duration(milliseconds: 500));
+    await Future.delayed(const Duration(milliseconds: 10));
 
     if (authController.isLoggedIn.value) {
-      // If logged in, go to last visited page or home
-      final currentRoute = Get.currentRoute;
-      if (currentRoute != '/' &&
-          currentRoute != AppRoutes.splash &&
-          currentRoute != AppRoutes.auth) {
-        // Stay on current route
-        return;
+      final lastRoute = storage.getLastRoute();
+
+      // Only restore protected routes
+      const protectedRoutes = [AppRoutes.home, AppRoutes.settings];
+
+      if (lastRoute != null && protectedRoutes.contains(lastRoute)) {
+        Get.offAllNamed(lastRoute);
+      } else {
+        Get.offAllNamed(AppRoutes.home);
       }
-      Get.offAllNamed(AppRoutes.home);
     } else {
       Get.offAllNamed(AppRoutes.auth);
     }

@@ -4,6 +4,9 @@ import 'package:get_storage/get_storage.dart';
 class StorageService {
   final GetStorage _box = GetStorage();
 
+  // ============================================================
+  // AUTH SESSION
+  // ============================================================
   void setToken(String token) => _box.write('auth_token', token);
   String? getToken() => _box.read('auth_token');
 
@@ -13,14 +16,32 @@ class StorageService {
   void setUserData(Map<String, dynamic> user) => _box.write('user_data', user);
   Map<String, dynamic>? getUserData() => _box.read('user_data');
 
-  // Settings (mirrors web themeAtom "auto"|"day"|"night" and i18n language)
+  /// Clears session data only (keeps theme/locale settings).
+  void clearSession() {
+    _box.remove('auth_token');
+    _box.remove('user_email');
+    _box.remove('user_data');
+  }
+
+  // ============================================================
+  // ROUTE
+  // ============================================================
+  void setLastRoute(String route) => _box.write('last_route', route);
+  String? getLastRoute() => _box.read('last_route');
+  void clearLastRoute() => _box.remove('last_route');
+
+  // ============================================================
+  // SETTINGS (Theme & Locale)
+  // ============================================================
   void setThemeName(String name) => _box.write('theme', name);
   String? getThemeName() => _box.read('theme');
 
   void setLocaleCode(String code) => _box.write('locale', code);
   String? getLocaleCode() => _box.read('locale');
 
-  // Per-email passcode retry state (mirrors the web localStorage key)
+  // ============================================================
+  // PASSCODE RETRY (Per email)
+  // ============================================================
   String _retryKey(String email) =>
       'passcode-retry:${email.trim().toLowerCase()}';
 
@@ -32,12 +53,8 @@ class StorageService {
     return raw is Map ? Map<String, dynamic>.from(raw) : null;
   }
 
-  /// Clears session data only (keeps theme/locale settings).
-  void clearSession() {
-    _box.remove('auth_token');
-    _box.remove('user_email');
-    _box.remove('user_data');
-  }
-
+  // ============================================================
+  // UTILITY
+  // ============================================================
   void clearAll() => _box.erase();
 }
