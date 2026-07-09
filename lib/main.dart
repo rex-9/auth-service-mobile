@@ -7,12 +7,8 @@ import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/design/design.dart';
 import 'package:meritbox_mobile/routes/app_routes.dart';
 import 'bindings/initial_binding.dart';
-import 'controllers/auth_controller.dart';
 import 'controllers/settings_controller.dart';
 import 'locales/app_translations.dart';
-import 'pages/auth_page.dart';
-import 'pages/home_page.dart';
-import 'pages/splash_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,20 +36,8 @@ class MyApp extends StatelessWidget {
           locale: settings.locale,
           fallbackLocale: const Locale('en', 'US'),
           debugShowCheckedModeBanner: false,
+          initialRoute: AppRoutes.splash,
           getPages: AppRoutes.pages,
-          home: Obx(() {
-            final authController = Get.find<AuthController>();
-
-            if (authController.isCheckingAuth.value) {
-              return const SplashPage();
-            }
-
-            if (authController.isLoggedIn.value) {
-              return const HomePage();
-            }
-
-            return const AuthPage();
-          }),
         ),
       ),
     );

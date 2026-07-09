@@ -1,6 +1,7 @@
 // lib/routes/app_routes.dart
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/pages/pages.dart';
+import 'package:meritbox_mobile/routes/route_guard.dart';
 
 class AppRoutes {
   // ===== PUBLIC ROUTES (No Auth Required) =====
@@ -42,7 +43,15 @@ class AppRoutes {
     GetPage(name: forgotPasscode, page: () => const ForgotPasscodePage()),
 
     // Protected Pages
-    GetPage(name: home, page: () => const HomePage()),
-    GetPage(name: settings, page: () => const SettingsPage()),
+    GetPage(
+      name: home,
+      page: () => const HomePage(),
+      middlewares: [RouteGuard()],
+    ),
+    GetPage(
+      name: settings,
+      page: () => const SettingsPage(),
+      middlewares: [RouteGuard()],
+    ),
   ];
 }
