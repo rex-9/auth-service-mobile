@@ -1,26 +1,54 @@
-Here's a comprehensive README for your Flutter project with emphasis on the design system:
-
----
-
 # Meritbox Mobile
 
 A Flutter mobile application for Meritbox platform with clean GetX architecture, consistent design system, and multi-language support.
+
+---
 
 ## 📁 Project Structure
 
 ```
 lib/
 ├── bindings/          # Dependency injection
+│   └── initial_binding.dart
 ├── config/            # App configuration
+│   ├── app_config.dart
+│   └── config.dart
 ├── constants/         # App constants & keys
+│   ├── app_constants.dart
+│   ├── http_status.dart
+│   └── locale_constants.dart
 ├── controllers/       # GetX controllers (business logic)
+│   ├── auth_controller.dart
+│   └── settings_controller.dart
 ├── design/            # 🎨 Design System (READ THIS!)
+│   ├── components/    # Reusable UI components
+│   ├── elements/      # Design tokens
+│   ├── extensions/    # Theme-aware extensions
+│   └── design.dart    # Single entry point
+├── helpers/           # Utility helpers
+│   └── flag_helper.dart
 ├── locales/           # Internationalization
+│   └── app_translations.dart
 ├── models/            # Data models
+│   ├── api_response.dart
+│   └── user_model.dart
 ├── pages/             # UI screens
+│   ├── auth_page.dart
+│   ├── home_page.dart
+│   ├── settings_page.dart
+│   └── splash_page.dart
 ├── routes/            # Navigation & route guards
-├── services/          # API & storage services
+│   ├── app_routes.dart
+│   ├── route_guard.dart
+│   └── server_routes.dart
+└── services/          # API & storage services
+    ├── api_service.dart
+    ├── auth_service.dart
+    ├── auth_service_impl.dart
+    └── storage_service.dart
 ```
+
+---
 
 ## 🚀 Getting Started
 
@@ -46,12 +74,25 @@ cd meritbox_mobile
 flutter pub get
 ```
 
-3. **Configure API endpoints**
+3. **Environment Configuration**
 
-Update `lib/routes/server_routes.dart`:
+Create `.env.dev` file in project root:
 
-```dart
-static const String baseUrl = 'https://your-api-server.com';
+```env
+APP_NAME=Meritbox
+APP_VERSION=1.0.0
+GOOGLE_SERVER_CLIENT_ID=your_client_id.apps.googleusercontent.com
+API_BASE_URL=http://10.0.2.2:3000
+```
+
+Add to `pubspec.yaml`:
+
+```yaml
+flutter:
+  assets:
+    - .env.dev
+    - .env.uat
+    - .env.prod
 ```
 
 4. **Configure Google Sign-In**
@@ -69,8 +110,14 @@ static const String baseUrl = 'https://your-api-server.com';
 5. **Run the app**
 
 ```bash
+# Development
 flutter run
+
+# With specific environment
+flutter run --dart-define=APP_ENV=.env.dev
 ```
+
+---
 
 ## 📱 Features
 
@@ -81,13 +128,14 @@ flutter run
 
 - **Clean Architecture**
   - GetX MVC pattern
+  - Interface + Implementation pattern for services
   - Separation of concerns (Services, Controllers, Pages)
   - Centralized dependency injection
 
 - **Modern UI/UX**
   - Material Design 3
-  - Light/Dark theme support (auto / day / night toggle, persisted)
-  - Localization: English, Español, မြန်မာ (GetX translations, persisted)
+  - Light/Dark theme support (persisted)
+  - Localization: English, Español, မြန်မာ (persisted)
   - Responsive design with ScreenUtil
   - Smooth animations and transitions
 
@@ -95,8 +143,8 @@ flutter run
   - JWT token-based authentication
   - Secure local storage with GetStorage
   - 6-digit passcode validation
-  - Passcode attempt limiting with escalating cooldowns (30s/60s/120s), synced with server retry metadata and persisted per email
-  - One active session per platform (`X-Platform: mobile`); replaced sessions are signed out with a notice
+  - Passcode attempt limiting with escalating cooldowns (30s/60s/120s)
+  - One active session per platform (`X-Platform: mobile`)
   - Forgot passcode reset-link email with resend countdown
 
 ---
@@ -122,23 +170,29 @@ import 'package:meritbox_mobile/constants/constants.dart';
 Constants.app.name
 Constants.app.version
 
+// HTTP Status codes (no magic numbers!)
+HttpStatus.ok            // 200
+HttpStatus.unauthorized  // 401
+HttpStatus.tooManyRequests // 429
+
 // Locale keys (for translations)
 Constants.locale.welcomeTitle
 Constants.locale.signIn
 Constants.locale.error
 ```
 
-### Locales (`lib/locales/`)
+### HTTP Status Codes
 
 ```dart
-import 'package:meritbox_mobile/locales/app_translations.dart';
+// Use constants instead of hardcoded numbers
+if (response.statusCode == HttpStatus.unauthorized) {
+  // Handle unauthorized
+}
 
-// Use translations
-'key'.tr
-'key'.trParams({'name': 'John'})
-
-// Supported locales
-AppTranslations.supportedLocales  // {'en_US': 'English', ...}
+// Check status
+if (HttpStatusMap.isSuccess(response.statusCode)) {
+  // Success!
+}
 ```
 
 ### Routes (`lib/routes/`)
@@ -159,7 +213,7 @@ ServerRoutes.signIn
 
 ---
 
-## 🧪 Running Tests
+## 🧪 Testing
 
 ```bash
 # Unit tests
@@ -198,6 +252,8 @@ flutter build web --release
 | `google_sign_in`     | Google authentication            |
 | `pin_code_fields`    | OTP/Passcode input               |
 | `flutter_screenutil` | Responsive design                |
+| `package_info_plus`  | App version info                 |
+| `flutter_dotenv`     | Environment variables            |
 
 ---
 
@@ -216,5 +272,3 @@ This project is proprietary and confidential.
 ---
 
 **Made with ❤️ by Meritbox Team**
-
----
