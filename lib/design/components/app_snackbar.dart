@@ -7,7 +7,10 @@ import '../design.dart';
 class AppSnackbar {
   AppSnackbar._();
 
-  static void error(String message) {
+  static void error(String message, {dynamic e, StackTrace? stk}) {
+    // Log the error for debugging
+    _logError(message, e, stk);
+
     _show(
       title: Constants.locale.error.tr,
       message: message,
@@ -56,7 +59,7 @@ class AppSnackbar {
   }) {
     Get.closeAllSnackbars();
 
-    // Get the current context for theme-aware styles
+    // context for theme-aware styles
     final context = Get.context;
     if (context == null) return;
 
@@ -81,5 +84,34 @@ class AppSnackbar {
         style: context.typo.bodyMedium.copyWith(color: foreground),
       ),
     );
+  }
+
+  // ===== PRIVATE LOGGING =====
+  static void _logError(String message, dynamic e, StackTrace? stk) {
+    final buffer = StringBuffer();
+    buffer.writeln(
+      '═══════════════════════════════════════════════════════════',
+    );
+    buffer.writeln('❌ ERROR ===> $message');
+    buffer.writeln(
+      '───────────────────────────────────────────────────────────',
+    );
+
+    buffer.writeln('📦 Error ===> $e');
+    buffer.writeln('📦 Type ===> ${e.runtimeType}');
+
+    if (stk != null) {
+      buffer.writeln(
+        '───────────────────────────────────────────────────────────',
+      );
+      buffer.writeln('📚 Stack Trace:');
+      buffer.writeln(stk.toString());
+    }
+
+    // Print to console
+    debugPrint(buffer.toString());
+
+    // Optional: Send to crash reporting service
+    // Crashlytics.instance.recordError(e, stk, reason: message);
   }
 }

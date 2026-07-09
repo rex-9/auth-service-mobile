@@ -4,9 +4,12 @@ import 'package:package_info_plus/package_info_plus.dart';
 class AppConstants {
   const AppConstants();
 
-  // App Keys
+  // ===== ENVIRONMENT KEYS =====
+  String get envKey => 'APP_ENV';
   String get nameKey => 'APP_NAME';
   String get versionKey => 'APP_VERSION';
+  String get apiBaseUrlKey => 'API_BASE_URL';
+  String get googleServerClientIdKey => 'GOOGLE_SERVER_CLIENT_ID';
 
   // ===== VERSIONS from pubspec.yaml (Runtime) =====
   Future<String> getVersion() async {
@@ -23,10 +26,6 @@ class AppConstants {
     final packageInfo = await PackageInfo.fromPlatform();
     return '${packageInfo.version}+${packageInfo.buildNumber}';
   }
-
-  // Config Keys
-  String get googleServerClientIdKey => "GOOGLE_SERVER_CLIENT_ID";
-  String get apiBaseUrlKey => "API_BASE_URL";
 
   // Validation Rules
   int get minPasscodeLength => 6;

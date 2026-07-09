@@ -1,18 +1,20 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:meritbox_mobile/config/config.dart';
 import 'package:meritbox_mobile/design/design.dart';
-import 'package:meritbox_mobile/routes/app_routes.dart';
+import 'package:meritbox_mobile/routes/routes.dart';
+import 'package:meritbox_mobile/controllers/controllers.dart';
 import 'bindings/initial_binding.dart';
-import 'controllers/settings_controller.dart';
 import 'locales/app_translations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await dotenv.load(fileName: AppConfig().appEnv);
   await GetStorage.init();
   InitialBinding().dependencies();
 
@@ -25,6 +27,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final config = AppConfig();
+
+    // DEBUG: Test ENV...
+    // print('APP_NAME: ${config.appName}');
+    // print('APP_VERSION: ${config.appVersion}');
+    // print('API_BASE_URL: ${config.apiBaseUrl}');
+    // print('GOOGLE_CLIENT_ID: ${config.googleServerClientId}');
+
     return GetBuilder<SettingsController>(
       builder: (settings) => ScreenUtilInit(
         designSize: const Size(375, 812),

@@ -4,19 +4,19 @@
       "name": "Dev",
       "request": "launch",
       "type": "dart",
-      "args": ["--dart-define-from-file=.env.dev"]
+      "args": ["--dart-define=APP_ENV=.env.dev"]
     },
     {
       "name": "UAT",
       "request": "launch",
       "type": "dart",
-      "args": ["--dart-define-from-file=.env.uat"]
+      "args": ["--dart-define=APP_ENV=.env.uat"]
     },
     {
       "name": "Prod",
       "request": "launch",
       "type": "dart",
-      "args": ["--dart-define-from-file=.env.prod"]
+      "args": ["--dart-define=APP_ENV=.env.prod"]
     }
   ]
 }

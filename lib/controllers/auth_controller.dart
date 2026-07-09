@@ -275,8 +275,8 @@ class AuthController extends GetxController {
         _applySignInFailure(response.data);
         AppSnackbar.error(response.message);
       }
-    } catch (e) {
-      AppSnackbar.error(Constants.locale.signInFailed.tr);
+    } catch (e, stk) {
+      AppSnackbar.error(Constants.locale.signInFailed.tr, e: e, stk: stk);
     } finally {
       isLoading.value = false;
     }
@@ -297,8 +297,8 @@ class AuthController extends GetxController {
       } else {
         AppSnackbar.error(response.message);
       }
-    } catch (e) {
-      AppSnackbar.error(Constants.locale.sendCodeFailed.tr);
+    } catch (e, stk) {
+      AppSnackbar.error(Constants.locale.sendCodeFailed.tr, e: e, stk: stk);
     } finally {
       isLoading.value = false;
     }
@@ -319,8 +319,8 @@ class AuthController extends GetxController {
         verifyPin.triggerError();
         AppSnackbar.error(response.message);
       }
-    } catch (e) {
-      AppSnackbar.error(Constants.locale.verificationFailed.tr);
+    } catch (e, stk) {
+      AppSnackbar.error(Constants.locale.verificationFailed.tr, e: e, stk: stk);
     } finally {
       isLoading.value = false;
     }
@@ -358,8 +358,8 @@ class AuthController extends GetxController {
       } else {
         AppSnackbar.error(response.message);
       }
-    } catch (e) {
-      AppSnackbar.error(Constants.locale.registrationFailed.tr);
+    } catch (e, stk) {
+      AppSnackbar.error(Constants.locale.registrationFailed.tr, e: e, stk: stk);
     } finally {
       isLoading.value = false;
     }
@@ -373,9 +373,7 @@ class AuthController extends GetxController {
     try {
       final signIn = GoogleSignIn.instance;
       if (!_googleInitialized) {
-        await signIn.initialize(
-          serverClientId: _config.googleServerClientIdKey,
-        );
+        await signIn.initialize(serverClientId: _config.googleServerClientId);
         _googleInitialized = true;
       }
 
@@ -405,8 +403,12 @@ class AuthController extends GetxController {
       } else {
         AppSnackbar.error(response.message);
       }
-    } catch (e) {
-      AppSnackbar.error(Constants.locale.signInGoogleFailure.tr);
+    } catch (e, stk) {
+      AppSnackbar.error(
+        Constants.locale.signInGoogleFailure.tr,
+        e: e,
+        stk: stk,
+      );
     } finally {
       isLoading.value = false;
     }
@@ -450,8 +452,12 @@ class AuthController extends GetxController {
           AppRoutes.toAuth();
         }
       }
-    } catch (e) {
-      AppSnackbar.error(Constants.locale.signInGoogleFailure.tr);
+    } catch (e, stk) {
+      AppSnackbar.error(
+        Constants.locale.signInGoogleFailure.tr,
+        e: e,
+        stk: stk,
+      );
     } finally {
       isLoading.value = false;
     }
@@ -483,8 +489,8 @@ class AuthController extends GetxController {
       } else {
         AppSnackbar.error(response.message);
       }
-    } catch (e) {
-      AppSnackbar.error(Constants.locale.resetFailed.tr);
+    } catch (e, stk) {
+      AppSnackbar.error(Constants.locale.resetFailed.tr, e: e, stk: stk);
     } finally {
       isLoading.value = false;
     }
