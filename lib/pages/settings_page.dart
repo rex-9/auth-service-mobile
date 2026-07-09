@@ -5,6 +5,7 @@ import 'package:meritbox_mobile/config/config.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/controllers/controllers.dart';
 import 'package:meritbox_mobile/design/design.dart';
+import 'package:meritbox_mobile/helpers/helpers.dart';
 
 class SettingsPage extends GetView<SettingsController> {
   const SettingsPage({super.key});
@@ -85,7 +86,7 @@ class SettingsPage extends GetView<SettingsController> {
     return Container(
       decoration: Design.styles.card.copyWith(color: context.colors.surface),
       child: ListTile(
-        leading: Icon(Design.icons.language, color: context.colors.primary),
+        leading: _buildFlagIcon(context),
         title: Text(
           Constants.locale.language.tr,
           style: context.typo.bodyLarge,
@@ -109,14 +110,7 @@ class SettingsPage extends GetView<SettingsController> {
                   child: Obx(
                     () => Row(
                       children: [
-                        if (controller.isLocale(entry.key))
-                          Icon(
-                            Design.icons.check,
-                            size: Design.spacing.iconSmall,
-                            color: context.colors.primary,
-                          )
-                        else
-                          SizedBox(width: Design.spacing.iconSmall),
+                        _buildFlagIcon(context, locale: entry.key),
                         SizedBox(width: Design.spacing.sm),
                         Text(
                           entry.value,
@@ -126,6 +120,12 @@ class SettingsPage extends GetView<SettingsController> {
                                 : context.colors.textPrimary,
                           ),
                         ),
+                        if (controller.isLocale(entry.key))
+                          Icon(
+                            Design.icons.check,
+                            size: Design.spacing.iconSmall,
+                            color: context.colors.primary,
+                          ),
                       ],
                     ),
                   ),
@@ -134,6 +134,14 @@ class SettingsPage extends GetView<SettingsController> {
               .toList(),
         ),
       ),
+    );
+  }
+
+  Widget _buildFlagIcon(BuildContext context, {String? locale}) {
+    final String code = locale ?? controller.localeCode.value;
+    return Text(
+      FlagHelper.getEmoji(code),
+      style: TextStyle(fontSize: Design.spacing.iconLarge),
     );
   }
 

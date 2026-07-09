@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/controllers/controllers.dart';
 import 'package:meritbox_mobile/design/design.dart';
+import 'package:meritbox_mobile/helpers/helpers.dart';
 import 'package:meritbox_mobile/models/models.dart';
 import 'package:meritbox_mobile/routes/app_routes.dart';
 
@@ -40,6 +41,14 @@ class AuthPage extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     final settingsController = Get.find<SettingsController>();
+    Widget buildFlagIcon(BuildContext context, {String? locale}) {
+      final String code = locale ?? settingsController.localeCode.value;
+      return Text(
+        FlagHelper.getEmoji(code),
+        style: TextStyle(fontSize: Design.spacing.iconLarge),
+      );
+    }
+
     return AppPage(
       actions: [
         Row(
@@ -53,7 +62,7 @@ class AuthPage extends GetView<AuthController> {
               ),
             ),
             PopupMenuButton<String>(
-              icon: Icon(Design.icons.language),
+              icon: buildFlagIcon(context),
               onSelected: settingsController.changeLocale,
               itemBuilder: (context) => settingsController.supportedLocales
                   .map(
@@ -62,15 +71,14 @@ class AuthPage extends GetView<AuthController> {
                       child: Obx(
                         () => Row(
                           children: [
+                            buildFlagIcon(context, locale: entry.key),
+                            SizedBox(width: Design.spacing.sm),
+                            Text(entry.value),
                             if (settingsController.isLocale(entry.key))
                               Icon(
                                 Design.icons.check,
                                 size: Design.spacing.iconSmall,
-                              )
-                            else
-                              SizedBox(width: Design.spacing.iconSmall),
-                            SizedBox(width: Design.spacing.sm),
-                            Text(entry.value),
+                              ),
                           ],
                         ),
                       ),
