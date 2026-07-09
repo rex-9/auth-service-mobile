@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
+import 'package:meritbox_mobile/controllers/controllers.dart';
 import 'package:meritbox_mobile/design/design.dart';
-import '../controllers/auth_controller.dart';
-import '../routes/app_routes.dart';
+import 'package:meritbox_mobile/routes/routes.dart';
 
 /// Create + confirm a 6-digit passcode. Used for both email sign up and
 /// finishing a new Google account (challenge token flow).

@@ -98,7 +98,7 @@ class SettingsPage extends GetView<SettingsController> {
         ),
         trailing: PopupMenuButton<String>(
           icon: Icon(
-            Icons.arrow_drop_down_rounded,
+            Design.icons.downArrow,
             color: context.colors.textSecondary,
           ),
           onSelected: controller.changeLocale,

@@ -2,8 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
+import 'package:meritbox_mobile/controllers/controllers.dart';
 import 'package:meritbox_mobile/design/design.dart';
-import '../controllers/auth_controller.dart';
 
 class SignUpInfoPage extends GetView<AuthController> {
   const SignUpInfoPage({super.key});

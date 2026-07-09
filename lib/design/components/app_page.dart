@@ -64,7 +64,7 @@ class AppPage extends StatelessWidget {
       leading: showBackButton
           ? IconButton(
               icon: Icon(
-                Icons.arrow_back_rounded,
+                Design.icons.backArrow,
                 color: context.colors.textPrimary,
               ),
               onPressed: onBackPressed ?? () => _handleBackPressed(context),
