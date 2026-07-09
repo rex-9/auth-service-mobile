@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/design/design.dart';
-import 'package:meritbox_mobile/pages/pages.dart';
 import 'package:meritbox_mobile/controllers/controllers.dart';
+import 'package:meritbox_mobile/routes/app_routes.dart';
 
 class HomePage extends GetView<AuthController> {
   const HomePage({super.key});
@@ -16,7 +16,7 @@ class HomePage extends GetView<AuthController> {
       actions: [
         IconButton(
           icon: Icon(Design.icons.settings),
-          onPressed: () => Get.to(() => const SettingsPage()),
+          onPressed: () => AppRoutes.toSettings(),
           tooltip: Constants.locale.settings.tr,
         ),
       ],

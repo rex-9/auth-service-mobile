@@ -1,6 +1,5 @@
 // lib/design/components/button.dart
 import 'package:flutter/material.dart';
-import 'package:meritbox_mobile/design/components/app_loading.dart';
 import 'package:meritbox_mobile/design/design.dart';
 
 class AppButton extends StatelessWidget {
