@@ -1,27 +1,42 @@
 // lib/constants/app_constants.dart
+import 'package:package_info_plus/package_info_plus.dart';
+
 class AppConstants {
-  // App Info
-  static const String appName = 'Meritbox';
-  static const String appVersion = '1.0.0';
+  const AppConstants();
+
+  // ===== ENVIRONMENT KEYS =====
+  String get envKey => 'APP_ENV';
+  String get nameKey => 'APP_NAME';
+  String get versionKey => 'APP_VERSION';
+  String get apiBaseUrlKey => 'API_BASE_URL';
+  String get googleServerClientIdKey => 'GOOGLE_SERVER_CLIENT_ID';
+
+  // ===== VERSIONS from pubspec.yaml (Runtime) =====
+  Future<String> getVersion() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    return packageInfo.version;
+  }
+
+  Future<String> getBuildNumber() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    return packageInfo.buildNumber;
+  }
+
+  Future<String> getFullVersion() async {
+    final packageInfo = await PackageInfo.fromPlatform();
+    return '${packageInfo.version}+${packageInfo.buildNumber}';
+  }
 
   // Validation Rules
-  static const int minPasscodeLength = 6;
-  static const int maxPasscodeLength = 6;
-  static const int minUsernameLength = 3;
-  static const int maxUsernameLength = 20;
-  static const int minNameLength = 2;
-  static const int maxNameLength = 50;
-
-  // Timeouts
-  static const int apiTimeoutSeconds = 30;
-  static const int verificationCodeExpirySeconds = 600; // 10 minutes
-
-  // Animations
-  static const Duration animationDuration = Duration(milliseconds: 300);
-  static const Duration shortAnimationDuration = Duration(milliseconds: 150);
+  int get minPasscodeLength => 6;
+  int get maxPasscodeLength => 6;
+  int get minUsernameLength => 3;
+  int get maxUsernameLength => 20;
+  int get minNameLength => 2;
+  int get maxNameLength => 50;
 
   // Storage Keys
-  static const String storageKeyToken = 'auth_token';
-  static const String storageKeyUserEmail = 'user_email';
-  static const String storageKeyUserData = 'user_data';
+  String get storageKeyToken => 'auth_token';
+  String get storageKeyUserEmail => 'user_email';
+  String get storageKeyUserData => 'user_data';
 }
