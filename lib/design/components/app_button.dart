@@ -84,7 +84,7 @@ class AppButton extends StatelessWidget {
             width: Design.spacing.iconMedium,
           ),
           SizedBox(width: Design.spacing.sm),
-          Text(text, style: Design.typography.bodyMedium),
+          Text(text, style: context.typo.bodyMedium),
         ],
       );
     }
@@ -96,12 +96,12 @@ class AppButton extends StatelessWidget {
         children: [
           icon!,
           SizedBox(width: Design.spacing.sm),
-          Text(text, style: Design.typography.button),
+          Text(text, style: context.typo.button),
         ],
       );
     }
 
-    return Text(text, style: Design.typography.button);
+    return Text(text, style: context.typo.button);
   }
 
   Color _getLoaderColor() {

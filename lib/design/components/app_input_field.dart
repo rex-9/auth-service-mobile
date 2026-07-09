@@ -45,7 +45,7 @@ class AppInputField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: Design.typography.labelMedium),
+        Text(label, style: context.typo.labelMedium),
         SizedBox(height: Design.spacing.xs),
         TextField(
           controller: controller,

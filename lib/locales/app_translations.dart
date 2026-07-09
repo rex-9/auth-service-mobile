@@ -113,6 +113,14 @@ class AppTranslations extends Translations {
       Constants.locale.registrationFailed: 'Registration failed',
       Constants.locale.sendCodeFailed: 'Failed to send verification code',
       Constants.locale.resetFailed: 'Failed to send reset instructions',
+
+      // Settings
+      Constants.locale.settings: 'Settings',
+      Constants.locale.theme: 'Theme',
+      Constants.locale.language: 'Language',
+      Constants.locale.account: 'Account',
+      Constants.locale.logoutConfirmation: 'Are you sure you want to sign out?',
+      Constants.locale.cancel: 'Cancel',
     },
     'es_ES': {
       Constants.locale.welcomeTitle: '✨ Bienvenido a Meritbox ✨',
@@ -202,6 +210,15 @@ class AppTranslations extends Translations {
       Constants.locale.sendCodeFailed:
           'No se pudo enviar el código de verificación',
       Constants.locale.resetFailed: 'No se pudieron enviar las instrucciones',
+
+      // Settings
+      Constants.locale.settings: 'Ajustes',
+      Constants.locale.theme: 'Tema',
+      Constants.locale.language: 'Idioma',
+      Constants.locale.account: 'Cuenta',
+      Constants.locale.logoutConfirmation:
+          '¿Estás seguro de que quieres cerrar sesión?',
+      Constants.locale.cancel: 'Cancelar',
     },
     'my_MM': {
       Constants.locale.welcomeTitle: '✨ Meritbox မှ ကြိုဆိုပါတယ် ✨',
@@ -289,6 +306,14 @@ class AppTranslations extends Translations {
       Constants.locale.registrationFailed: 'အကောင့်ဖွင့်ခြင်း မအောင်မြင်ပါ',
       Constants.locale.sendCodeFailed: 'အတည်ပြုကုဒ် ပို့၍မရပါ',
       Constants.locale.resetFailed: 'ပြန်သတ်မှတ်ရန် ညွှန်ကြားချက် ပို့၍မရပါ',
+
+      // Settings
+      Constants.locale.settings: 'ဆက်တင်များ',
+      Constants.locale.theme: 'အပြင်အဆင်',
+      Constants.locale.language: 'ဘာသာစကား',
+      Constants.locale.account: 'အကောင့်',
+      Constants.locale.logoutConfirmation: 'ထွက်ရန် သေချာပါသလား?',
+      Constants.locale.cancel: 'မလုပ်တော့ပါ',
     },
   };
 }

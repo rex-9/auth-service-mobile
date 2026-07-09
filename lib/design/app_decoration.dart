@@ -1,6 +1,5 @@
-// lib/design/elements/app_styles.dart
+// lib/design/app_styles.dart
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:meritbox_mobile/design/design.dart';
 
 class AppStyles {
@@ -11,40 +10,36 @@ class AppStyles {
     String? label,
     String? hint,
     String? error,
-    String? helper,
     Widget? prefixIcon,
     Widget? suffixIcon,
   }) {
-    final colors = Get.theme.colorScheme;
-
     return InputDecoration(
       labelText: label,
       hintText: hint,
       errorText: error,
-      helperText: helper,
       prefixIcon: prefixIcon,
       suffixIcon: suffixIcon,
       filled: true,
-      fillColor: colors.surface,
+      fillColor: Design.colors.surface,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
-        borderSide: BorderSide(color: colors.outline),
+        borderSide: BorderSide(color: Design.colors.border),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
-        borderSide: BorderSide(color: colors.outline),
+        borderSide: BorderSide(color: Design.colors.border),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
-        borderSide: BorderSide(color: colors.primary, width: 2),
+        borderSide: BorderSide(color: Design.colors.primary, width: 2),
       ),
       errorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
-        borderSide: BorderSide(color: colors.error),
+        borderSide: BorderSide(color: Design.colors.error),
       ),
       focusedErrorBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
-        borderSide: BorderSide(color: colors.error, width: 2),
+        borderSide: BorderSide(color: Design.colors.error, width: 2),
       ),
       contentPadding: EdgeInsets.symmetric(
         horizontal: Design.spacing.lg,
@@ -52,7 +47,7 @@ class AppStyles {
       ),
       labelStyle: Design.typo.labelMedium,
       hintStyle: Design.typo.helper,
-      errorStyle: Design.typo.caption.copyWith(color: colors.error),
+      errorStyle: Design.typo.caption.copyWith(color: Design.colors.error),
     );
   }
 
@@ -97,8 +92,8 @@ class AppStyles {
   );
 
   ButtonStyle get buttonGoogle => ElevatedButton.styleFrom(
-    backgroundColor: Get.theme.colorScheme.surface,
-    foregroundColor: Get.theme.colorScheme.onSurface,
+    backgroundColor: Colors.white,
+    foregroundColor: Design.colors.textPrimary,
     minimumSize: Size(double.infinity, Design.spacing.buttonHeight),
     padding: EdgeInsets.symmetric(
       horizontal: Design.spacing.xl,
@@ -107,7 +102,7 @@ class AppStyles {
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
     ),
-    side: BorderSide(color: Get.theme.colorScheme.outline),
+    side: BorderSide(color: Design.colors.border),
     textStyle: Design.typo.button,
     elevation: 0,
   );

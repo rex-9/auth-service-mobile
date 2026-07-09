@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/design/components/components.dart';
 import 'package:meritbox_mobile/design/design.dart';
-import 'package:meritbox_mobile/design/extensions/theme_extensions.dart';
 import '../controllers/auth_controller.dart';
 
 /// Email a passcode reset link (mirrors the web ForgotPasswordDialog,
@@ -29,7 +28,7 @@ class ForgotPasscodePage extends GetView<AuthController> {
           children: [
             Text(
               Constants.locale.forgotPasscodeSubtitle.tr,
-              style: context.styles.bodyMedium,
+              style: context.typo.bodyMedium,
             ),
             SizedBox(height: Design.spacing.xxxl),
 
@@ -68,7 +67,7 @@ class ForgotPasscodePage extends GetView<AuthController> {
                 onPressed: () => Get.back(),
                 child: Text(
                   Constants.locale.backToSignIn.tr,
-                  style: context.styles.labelLarge,
+                  style: context.typo.labelLarge,
                 ),
               ),
             ),

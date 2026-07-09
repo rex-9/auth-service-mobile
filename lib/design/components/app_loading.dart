@@ -26,7 +26,7 @@ class AppLoading extends StatelessWidget {
       case LoadingType.pulse:
         return _buildPulse(context);
       case LoadingType.page:
-        return _buildPageLoader();
+        return _buildPageLoader(context);
     }
   }
 
@@ -119,13 +119,13 @@ class AppLoading extends StatelessWidget {
     );
   }
 
-  Widget _buildPageLoader() {
+  Widget _buildPageLoader(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
         AppLoading(size: LoadingSize.large, type: LoadingType.pulse),
         SizedBox(height: Design.spacing.xl),
-        Text('Loading...', style: Design.typography.bodyMedium),
+        Text('Loading...', style: context.typo.bodyMedium),
       ],
     );
   }
@@ -209,7 +209,7 @@ class AppLoadingOverlay extends StatelessWidget {
               SizedBox(height: Design.spacing.lg),
               Text(
                 message!,
-                style: Design.typography.bodyMedium,
+                style: context.typo.bodyMedium,
                 textAlign: TextAlign.center,
               ),
             ],

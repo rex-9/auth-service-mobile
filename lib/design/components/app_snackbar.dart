@@ -74,11 +74,11 @@ class AppSnackbar {
       borderWidth: 1,
       titleText: Text(
         title,
-        style: Design.typography.labelLarge.copyWith(color: foreground),
+        style: context.typo.labelLarge.copyWith(color: foreground),
       ),
       messageText: Text(
         message,
-        style: Design.typography.bodyMedium.copyWith(color: foreground),
+        style: context.typo.bodyMedium.copyWith(color: foreground),
       ),
     );
   }

@@ -88,21 +88,21 @@ class AppDialog {
             Expanded(
               child: Text(
                 title,
-                style: Design.typography.headline4.copyWith(color: foreground),
+                style: context.typo.headline4.copyWith(color: foreground),
               ),
             ),
           ],
         ),
         content: Text(
           message,
-          style: Design.typography.bodyMedium.copyWith(color: foreground),
+          style: context.typo.bodyMedium.copyWith(color: foreground),
         ),
         actions: [
           TextButton(
             onPressed: Get.back,
             child: Text(
               'OK',
-              style: Design.typography.labelLarge.copyWith(color: foreground),
+              style: context.typo.labelLarge.copyWith(color: foreground),
             ),
           ),
         ],

@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/design/components/components.dart';
 import 'package:meritbox_mobile/design/design.dart';
-import 'package:meritbox_mobile/design/extensions/theme_extensions.dart';
 import '../controllers/auth_controller.dart';
 
 class SignUpInfoPage extends GetView<AuthController> {
@@ -27,7 +26,7 @@ class SignUpInfoPage extends GetView<AuthController> {
         elevation: 0,
         title: Text(
           Constants.locale.signupInfoTitle.tr,
-          style: context.styles.headline4,
+          style: context.typo.headline4,
         ),
       ),
       body: Padding(
@@ -37,7 +36,7 @@ class SignUpInfoPage extends GetView<AuthController> {
           children: [
             Text(
               Constants.locale.signupInfoHeading.tr,
-              style: context.styles.headline3,
+              style: context.typo.headline3,
             ),
             SizedBox(height: Design.spacing.xxxl),
 

@@ -15,4 +15,6 @@ class AppIcons {
   IconData get check => Icons.check_circle_outline_rounded;
   IconData get language => Icons.language_rounded;
   IconData get lock => Icons.lock_rounded;
+  IconData get person => Icons.person_rounded;
+  IconData get settings => Icons.settings_outlined;
 }

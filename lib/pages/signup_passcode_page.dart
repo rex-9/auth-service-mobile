@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/design/components/components.dart';
 import 'package:meritbox_mobile/design/design.dart';
-import 'package:meritbox_mobile/design/extensions/theme_extensions.dart';
 import '../controllers/auth_controller.dart';
 import '../routes/app_routes.dart';
 
@@ -63,7 +62,7 @@ class SignUpPasscodePage extends GetView<AuthController> {
         elevation: 0,
         title: Text(
           Constants.locale.signupTitle.tr,
-          style: context.styles.headline4,
+          style: context.typo.headline4,
         ),
       ),
       body: Padding(
@@ -76,20 +75,20 @@ class SignUpPasscodePage extends GetView<AuthController> {
                 isGoogle
                     ? Constants.locale.googlePasscodeHeading.tr
                     : Constants.locale.createPasscodeHeading.tr,
-                style: context.styles.headline3,
+                style: context.typo.headline3,
               ),
               SizedBox(height: Design.spacing.sm),
               Text(
                 isGoogle
                     ? Constants.locale.googlePasscodeSubtitle.tr
                     : Constants.locale.createPasscodeSubtitle.tr,
-                style: context.styles.bodyMedium,
+                style: context.typo.bodyMedium,
               ),
               SizedBox(height: Design.spacing.xxxl),
 
               Text(
                 Constants.locale.passcodeLabel.tr,
-                style: context.styles.labelMedium,
+                style: context.typo.labelMedium,
               ),
               SizedBox(height: Design.spacing.sm),
               AppPasscodeField(
@@ -103,7 +102,7 @@ class SignUpPasscodePage extends GetView<AuthController> {
               SizedBox(height: Design.spacing.xxl),
               Text(
                 Constants.locale.confirmPasscodeLabel.tr,
-                style: context.styles.labelMedium,
+                style: context.typo.labelMedium,
               ),
               SizedBox(height: Design.spacing.sm),
               AppPasscodeField(

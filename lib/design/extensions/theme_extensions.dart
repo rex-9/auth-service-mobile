@@ -28,66 +28,65 @@ class _ThemeColors {
       _context.theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6);
 }
 
-extension ThemeStyles on BuildContext {
-  _ThemeStyles get styles => _ThemeStyles(this);
+extension ThemeTypography on BuildContext {
+  _ThemeTypography get typo => _ThemeTypography(this);
 }
 
-class _ThemeStyles {
-  const _ThemeStyles(this._context);
+class _ThemeTypography {
+  const _ThemeTypography(this._context);
   final BuildContext _context;
 
   // Headlines
-  TextStyle get headline1 => Design.typography.headline1.copyWith(
+  TextStyle get headline1 => Design.typo.headline1.copyWith(
     color: _context.theme.colorScheme.onSurface,
   );
 
-  TextStyle get headline2 => Design.typography.headline2.copyWith(
+  TextStyle get headline2 => Design.typo.headline2.copyWith(
     color: _context.theme.colorScheme.onSurface,
   );
 
-  TextStyle get headline3 => Design.typography.headline3.copyWith(
+  TextStyle get headline3 => Design.typo.headline3.copyWith(
     color: _context.theme.colorScheme.onSurface,
   );
 
-  TextStyle get headline4 => Design.typography.headline4.copyWith(
+  TextStyle get headline4 => Design.typo.headline4.copyWith(
     color: _context.theme.colorScheme.onSurface,
   );
 
   // Body
-  TextStyle get bodyLarge => Design.typography.bodyLarge.copyWith(
+  TextStyle get bodyLarge => Design.typo.bodyLarge.copyWith(
     color: _context.theme.colorScheme.onSurface,
   );
 
-  TextStyle get bodyMedium => Design.typography.bodyMedium.copyWith(
+  TextStyle get bodyMedium => Design.typo.bodyMedium.copyWith(
     color: _context.theme.colorScheme.onSurfaceVariant,
   );
 
-  TextStyle get bodySmall => Design.typography.bodySmall.copyWith(
+  TextStyle get bodySmall => Design.typo.bodySmall.copyWith(
     color: _context.theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
   );
 
   // Labels
-  TextStyle get labelLarge => Design.typography.labelLarge.copyWith(
+  TextStyle get labelLarge => Design.typo.labelLarge.copyWith(
     color: _context.theme.colorScheme.onSurface,
   );
 
-  TextStyle get labelMedium => Design.typography.labelMedium.copyWith(
+  TextStyle get labelMedium => Design.typo.labelMedium.copyWith(
     color: _context.theme.colorScheme.onSurfaceVariant,
   );
 
   // Buttons
-  TextStyle get button => Design.typography.button.copyWith(
-    color: _context.theme.colorScheme.onSurface,
-  );
+  TextStyle get button =>
+      Design.typo.button.copyWith(color: _context.theme.colorScheme.onSurface);
 
   // Caption & Helper
-  TextStyle get caption => Design.typography.caption.copyWith(
+  TextStyle get caption => Design.typo.caption.copyWith(
     color: _context.theme.colorScheme.onSurfaceVariant,
   );
 
-  TextStyle get helper => Design.typography.helper.copyWith(
+  TextStyle get helper => Design.typo.helper.copyWith(
     color: _context.theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
   );
 
-  TextStyle get link => Design.typography.link;
+  TextStyle get link => Design.typo.link;
 }

@@ -1,6 +1,5 @@
 // lib/pages/splash_page.dart
 import 'package:flutter/material.dart';
-import 'package:meritbox_mobile/design/extensions/theme_extensions.dart';
 import '../design/design.dart';
 import '../design/components/app_loading.dart';
 
@@ -15,9 +14,9 @@ class SplashPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('✨ Meritbox ✨', style: context.styles.headline1),
+            Text('✨ Meritbox ✨', style: context.typo.headline1),
             SizedBox(height: Design.spacing.md),
-            Text('Loading...', style: context.styles.bodyMedium),
+            Text('Loading...', style: context.typo.bodyMedium),
             SizedBox(height: Design.spacing.lg),
             const AppLoading(),
           ],

@@ -5,8 +5,7 @@ import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/controllers/controllers.dart';
 import 'package:meritbox_mobile/design/components/components.dart';
 import 'package:meritbox_mobile/design/design.dart';
-import 'package:meritbox_mobile/design/extensions/theme_extensions.dart';
-import 'package:meritbox_mobile/widgets/widgets.dart';
+import 'package:meritbox_mobile/pages/pages.dart';
 import 'package:meritbox_mobile/models/models.dart';
 import 'package:meritbox_mobile/routes/app_routes.dart';
 
@@ -49,9 +48,10 @@ class AuthPage extends GetView<AuthController> {
           padding: EdgeInsets.all(Design.spacing.screenPadding),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: settingsActions(),
+              IconButton(
+                icon: Icon(Design.icons.settings),
+                onPressed: () => Get.to(() => const SettingsPage()),
+                tooltip: 'Settings',
               ),
               Expanded(
                 child: Column(
@@ -60,7 +60,7 @@ class AuthPage extends GetView<AuthController> {
                     // Welcome Title
                     Text(
                       Constants.locale.welcomeTitle.tr,
-                      style: Design.typography.headline1,
+                      style: context.typo.headline1,
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: Design.spacing.md),
@@ -68,7 +68,7 @@ class AuthPage extends GetView<AuthController> {
                     // Welcome Subtitle
                     Text(
                       Constants.locale.welcomeSubtitle.tr,
-                      style: Design.typography.bodyMedium,
+                      style: context.typo.bodyMedium,
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: Design.spacing.xxxl),
@@ -97,7 +97,7 @@ class AuthPage extends GetView<AuthController> {
                           ),
                           child: Text(
                             Constants.locale.or.tr,
-                            style: Design.typography.bodyMedium,
+                            style: context.typo.bodyMedium,
                           ),
                         ),
                         Expanded(

@@ -44,24 +44,24 @@ ThemeData _buildLightTheme() {
       onSurface: Design.colors.textPrimary,
       onSurfaceVariant: Design.colors.textSecondary,
     ),
-    fontFamily: Design.typography.fontFamily,
+    fontFamily: Design.typo.fontFamily,
     textTheme: TextTheme(
-      displayLarge: Design.typography.headline1,
-      displayMedium: Design.typography.headline2,
-      displaySmall: Design.typography.headline3,
-      bodyLarge: Design.typography.bodyLarge,
-      bodyMedium: Design.typography.bodyMedium,
-      bodySmall: Design.typography.bodySmall,
-      labelLarge: Design.typography.labelLarge,
-      labelMedium: Design.typography.labelMedium,
-      labelSmall: Design.typography.labelSmall,
+      displayLarge: Design.typo.headline1,
+      displayMedium: Design.typo.headline2,
+      displaySmall: Design.typo.headline3,
+      bodyLarge: Design.typo.bodyLarge,
+      bodyMedium: Design.typo.bodyMedium,
+      bodySmall: Design.typo.bodySmall,
+      labelLarge: Design.typo.labelLarge,
+      labelMedium: Design.typo.labelMedium,
+      labelSmall: Design.typo.labelSmall,
     ),
     appBarTheme: AppBarTheme(
       backgroundColor: Design.colors.surface,
       foregroundColor: Design.colors.textPrimary,
       elevation: 0,
       centerTitle: false,
-      titleTextStyle: Design.typography.headline4,
+      titleTextStyle: Design.typo.headline4,
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -75,7 +75,7 @@ ThemeData _buildLightTheme() {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
         ),
-        textStyle: Design.typography.button,
+        textStyle: Design.typo.button,
         elevation: 0,
       ),
     ),
@@ -91,13 +91,13 @@ ThemeData _buildLightTheme() {
           borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
         ),
         side: BorderSide(color: Design.colors.primary),
-        textStyle: Design.typography.button,
+        textStyle: Design.typo.button,
       ),
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: Design.colors.primary,
-        textStyle: Design.typography.labelLarge,
+        textStyle: Design.typo.labelLarge,
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
@@ -123,11 +123,9 @@ ThemeData _buildLightTheme() {
         horizontal: Design.spacing.inputHorizontal,
         vertical: Design.spacing.inputVertical,
       ),
-      labelStyle: Design.typography.labelMedium,
-      hintStyle: Design.typography.helper,
-      errorStyle: Design.typography.caption.copyWith(
-        color: Design.colors.error,
-      ),
+      labelStyle: Design.typo.labelMedium,
+      hintStyle: Design.typo.helper,
+      errorStyle: Design.typo.caption.copyWith(color: Design.colors.error),
     ),
     cardTheme: CardThemeData(
       color: Design.colors.surface,
@@ -154,9 +152,7 @@ ThemeData _buildLightTheme() {
         borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
       ),
       backgroundColor: Design.colors.textPrimary,
-      contentTextStyle: Design.typography.bodyMedium.copyWith(
-        color: Colors.white,
-      ),
+      contentTextStyle: Design.typo.bodyMedium.copyWith(color: Colors.white),
     ),
   );
 }
@@ -174,33 +170,33 @@ ThemeData _buildDarkTheme() {
       onSurface: Design.colors.textPrimaryDark,
       onSurfaceVariant: Design.colors.textSecondaryDark,
     ),
-    fontFamily: Design.typography.fontFamily,
+    fontFamily: Design.typo.fontFamily,
     textTheme: TextTheme(
-      displayLarge: Design.typography.headline1.copyWith(
+      displayLarge: Design.typo.headline1.copyWith(
         color: Design.colors.textPrimaryDark,
       ),
-      displayMedium: Design.typography.headline2.copyWith(
+      displayMedium: Design.typo.headline2.copyWith(
         color: Design.colors.textPrimaryDark,
       ),
-      displaySmall: Design.typography.headline3.copyWith(
+      displaySmall: Design.typo.headline3.copyWith(
         color: Design.colors.textPrimaryDark,
       ),
-      bodyLarge: Design.typography.bodyLarge.copyWith(
+      bodyLarge: Design.typo.bodyLarge.copyWith(
         color: Design.colors.textPrimaryDark,
       ),
-      bodyMedium: Design.typography.bodyMedium.copyWith(
+      bodyMedium: Design.typo.bodyMedium.copyWith(
         color: Design.colors.textSecondaryDark,
       ),
-      bodySmall: Design.typography.bodySmall.copyWith(
+      bodySmall: Design.typo.bodySmall.copyWith(
         color: Design.colors.textTertiaryDark,
       ),
-      labelLarge: Design.typography.labelLarge.copyWith(
+      labelLarge: Design.typo.labelLarge.copyWith(
         color: Design.colors.textPrimaryDark,
       ),
-      labelMedium: Design.typography.labelMedium.copyWith(
+      labelMedium: Design.typo.labelMedium.copyWith(
         color: Design.colors.textSecondaryDark,
       ),
-      labelSmall: Design.typography.labelSmall.copyWith(
+      labelSmall: Design.typo.labelSmall.copyWith(
         color: Design.colors.textTertiaryDark,
       ),
     ),
@@ -209,7 +205,7 @@ ThemeData _buildDarkTheme() {
       foregroundColor: Design.colors.textPrimaryDark,
       elevation: 0,
       centerTitle: false,
-      titleTextStyle: Design.typography.headline4.copyWith(
+      titleTextStyle: Design.typo.headline4.copyWith(
         color: Design.colors.textPrimaryDark,
       ),
     ),
@@ -225,7 +221,7 @@ ThemeData _buildDarkTheme() {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
         ),
-        textStyle: Design.typography.button,
+        textStyle: Design.typo.button,
         elevation: 0,
       ),
     ),
@@ -241,13 +237,13 @@ ThemeData _buildDarkTheme() {
           borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
         ),
         side: BorderSide(color: Design.colors.primary),
-        textStyle: Design.typography.button,
+        textStyle: Design.typo.button,
       ),
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
         foregroundColor: Design.colors.primary,
-        textStyle: Design.typography.labelLarge,
+        textStyle: Design.typo.labelLarge,
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
@@ -273,15 +269,13 @@ ThemeData _buildDarkTheme() {
         horizontal: Design.spacing.inputHorizontal,
         vertical: Design.spacing.inputVertical,
       ),
-      labelStyle: Design.typography.labelMedium.copyWith(
+      labelStyle: Design.typo.labelMedium.copyWith(
         color: Design.colors.textSecondaryDark,
       ),
-      hintStyle: Design.typography.helper.copyWith(
+      hintStyle: Design.typo.helper.copyWith(
         color: Design.colors.textTertiaryDark,
       ),
-      errorStyle: Design.typography.caption.copyWith(
-        color: Design.colors.error,
-      ),
+      errorStyle: Design.typo.caption.copyWith(color: Design.colors.error),
     ),
     cardTheme: CardThemeData(
       color: Design.colors.surfaceDark,
@@ -308,9 +302,7 @@ ThemeData _buildDarkTheme() {
         borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
       ),
       backgroundColor: Design.colors.textPrimaryDark,
-      contentTextStyle: Design.typography.bodyMedium.copyWith(
-        color: Colors.white,
-      ),
+      contentTextStyle: Design.typo.bodyMedium.copyWith(color: Colors.white),
     ),
   );
 }

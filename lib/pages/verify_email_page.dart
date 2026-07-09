@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/design/components/components.dart';
 import 'package:meritbox_mobile/design/design.dart';
-import 'package:meritbox_mobile/design/extensions/theme_extensions.dart';
 import '../controllers/auth_controller.dart';
 
 class VerifyEmailPage extends GetView<AuthController> {
@@ -24,7 +23,7 @@ class VerifyEmailPage extends GetView<AuthController> {
         elevation: 0,
         title: Text(
           Constants.locale.verifyEmailTitle.tr,
-          style: context.styles.headline4,
+          style: context.typo.headline4,
         ),
       ),
       body: Padding(
@@ -34,7 +33,7 @@ class VerifyEmailPage extends GetView<AuthController> {
           children: [
             Text(
               Constants.locale.verifyEmailHeading.tr,
-              style: context.styles.headline3,
+              style: context.typo.headline3,
             ),
             SizedBox(height: Design.spacing.sm),
             Obx(
@@ -42,7 +41,7 @@ class VerifyEmailPage extends GetView<AuthController> {
                 Constants.locale.verifyEmailSubtitle.trParams({
                   'email': controller.email.value,
                 }),
-                style: context.styles.bodyMedium,
+                style: context.typo.bodyMedium,
               ),
             ),
             SizedBox(height: Design.spacing.xxxl),
@@ -84,7 +83,7 @@ class VerifyEmailPage extends GetView<AuthController> {
                             'seconds': '${controller.resendSecondsLeft.value}',
                           })
                         : Constants.locale.resendCode.tr,
-                    style: context.styles.labelLarge.copyWith(
+                    style: context.typo.labelLarge.copyWith(
                       color: controller.resendSecondsLeft.value > 0
                           ? context.colors.textTertiary
                           : context.colors.primary,

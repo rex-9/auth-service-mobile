@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/design/components/components.dart';
 import 'package:meritbox_mobile/design/design.dart';
-import 'package:meritbox_mobile/design/extensions/theme_extensions.dart';
 import '../controllers/auth_controller.dart';
 import '../routes/app_routes.dart';
 
@@ -21,7 +20,7 @@ class SignInPasscodePage extends GetView<AuthController> {
         elevation: 0,
         title: Text(
           Constants.locale.signinTitle.tr,
-          style: context.styles.headline4,
+          style: context.typo.headline4,
         ),
       ),
       body: Padding(
@@ -31,7 +30,7 @@ class SignInPasscodePage extends GetView<AuthController> {
           children: [
             Text(
               Constants.locale.signinHeading.tr,
-              style: context.styles.headline3,
+              style: context.typo.headline3,
             ),
             SizedBox(height: Design.spacing.sm),
             Obx(
@@ -39,7 +38,7 @@ class SignInPasscodePage extends GetView<AuthController> {
                 Constants.locale.signinSubtitle.trParams({
                   'email': controller.email.value,
                 }),
-                style: context.styles.bodyMedium,
+                style: context.typo.bodyMedium,
               ),
             ),
             SizedBox(height: Design.spacing.xxxl),
@@ -65,7 +64,7 @@ class SignInPasscodePage extends GetView<AuthController> {
                     Constants.locale.cooldownMessage.trParams({
                       'seconds': '${controller.cooldownSecondsLeft.value}',
                     }),
-                    style: context.styles.caption.copyWith(
+                    style: context.typo.caption.copyWith(
                       color: context.colors.error,
                     ),
                   ),
@@ -80,7 +79,7 @@ class SignInPasscodePage extends GetView<AuthController> {
                       'left': '${controller.attemptsLeft.value}',
                       'total': '${AuthController.maxAttempts}',
                     }),
-                    style: context.styles.caption,
+                    style: context.typo.caption,
                   ),
                 );
               }
@@ -111,7 +110,7 @@ class SignInPasscodePage extends GetView<AuthController> {
                 },
                 child: Text(
                   Constants.locale.useDifferentEmail.tr,
-                  style: context.styles.labelLarge,
+                  style: context.typo.labelLarge,
                 ),
               ),
             ),
@@ -120,7 +119,7 @@ class SignInPasscodePage extends GetView<AuthController> {
                 onPressed: () => Get.toNamed(AppRoutes.forgotPasscode),
                 child: Text(
                   Constants.locale.forgotPasscodeLink.tr,
-                  style: context.styles.labelLarge,
+                  style: context.typo.labelLarge,
                 ),
               ),
             ),

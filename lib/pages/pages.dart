@@ -6,3 +6,4 @@ export 'signup_passcode_page.dart';
 export 'signup_info_page.dart';
 export 'splash_page.dart';
 export 'verify_email_page.dart';
+export 'settings_page.dart';
