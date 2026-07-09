@@ -1,22 +1,21 @@
 // lib/main.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:meritbox_mobile/routes/app_routes.dart';
+import 'package:meritbox_mobile/config/config.dart';
+import 'package:meritbox_mobile/design/design.dart';
+import 'package:meritbox_mobile/routes/routes.dart';
+import 'package:meritbox_mobile/controllers/controllers.dart';
 import 'bindings/initial_binding.dart';
-import 'controllers/auth_controller.dart';
-import 'pages/auth_page.dart';
-import 'pages/home_page.dart';
-import 'pages/splash_page.dart';
+import 'locales/app_translations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize GetStorage
+  await dotenv.load(fileName: AppConfig().appEnv);
   await GetStorage.init();
-
-  // Initialize all dependencies at once
   InitialBinding().dependencies();
 
   runApp(const MyApp());
@@ -27,30 +26,29 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(375, 812),
-      builder: (context, child) => GetMaterialApp(
-        title: 'Meritbox',
-        theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Poppins'),
-        debugShowCheckedModeBanner: false,
-        initialRoute: AppRoutes.auth,
-        getPages: AppRoutes.pages,
-        initialBinding: InitialBinding(),
-        home: Obx(() {
-          final authController = Get.find<AuthController>();
+    final config = AppConfig();
 
-          // Show splash while checking auth status
-          if (authController.isCheckingAuth.value) {
-            return const SplashPage();
-          }
+    // DEBUG: Test ENV...
+    // print('APP_NAME: ${config.appName}');
+    // print('APP_VERSION: ${config.appVersion}');
+    // print('API_BASE_URL: ${config.apiBaseUrl}');
+    // print('GOOGLE_CLIENT_ID: ${config.googleServerClientId}');
 
-          // Redirect based on auth status
-          if (authController.isLoggedIn.value) {
-            return const HomePage();
-          }
-
-          return const AuthPage();
-        }),
+    return GetBuilder<SettingsController>(
+      builder: (settings) => ScreenUtilInit(
+        designSize: const Size(375, 812),
+        builder: (context, child) => GetMaterialApp(
+          title: config.appName,
+          theme: Design.theme.light,
+          darkTheme: Design.theme.dark,
+          themeMode: settings.themeMode,
+          translations: AppTranslations(),
+          locale: settings.locale,
+          fallbackLocale: const Locale('en', 'US'),
+          debugShowCheckedModeBanner: false,
+          initialRoute: AppRoutes.splash,
+          getPages: AppRoutes.pages,
+        ),
       ),
     );
   }

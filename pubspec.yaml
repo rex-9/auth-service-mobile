@@ -1,5 +1,5 @@
 name: meritbox_mobile
-description: "A new Flutter project."
+description: Meritbox Mobile App # $APP_NAME
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
@@ -39,10 +39,15 @@ dependencies:
   flutter_screenutil: ^5.9.3
   pin_code_fields: ^9.3.0
   get_storage: ^2.1.1
+  package_info_plus: ^10.2.0
+  flutter_dotenv: ^6.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  # Test-only: lets tests point path_provider (used by get_storage) at a
+  # temp directory, since platform channels are unavailable in flutter test.
+  path_provider_platform_interface: ^2.1.2
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -50,6 +55,15 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+
+  flutter_launcher_icons: ^0.14.4
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/app_icon.png"
+  adaptive_icon_background: "#fff"
+  adaptive_icon_foreground: "assets/icon/app_icon_foreground.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -65,6 +79,11 @@ flutter:
   assets:
     - assets/images/
     # - images/a_dot_ham.jpeg
+
+    # Environment Variables
+    - .env.dev
+    - .env.uat
+    - .env.prod
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
