@@ -51,13 +51,7 @@ class _SplashPageState extends State<SplashPage> {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('✨ Meritbox ✨', style: context.typo.headline1),
-            SizedBox(height: Design.spacing.md),
-            Text('Loading...', style: context.typo.bodyMedium),
-            SizedBox(height: Design.spacing.lg),
-            const AppLoading(),
-          ],
+          children: [const AppLoading()],
         ),
       ),
     );
