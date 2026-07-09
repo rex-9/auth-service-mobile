@@ -542,6 +542,7 @@ class AuthController extends GetxController {
     }
 
     _clearLocalSession();
+    Get.find<StorageService>().clearRouteStack(); // Clear saved routes
     AppRoutes.toAuth();
   }
 }

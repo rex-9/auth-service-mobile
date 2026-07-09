@@ -1,4 +1,4 @@
-// lib/routes/auth_middleware.dart
+// lib/routes/route_guard.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/controllers/auth_controller.dart';
@@ -16,23 +16,45 @@ class RouteGuard extends GetMiddleware {
     const protectedRoutes = [AppRoutes.home, AppRoutes.settings];
 
     // If not logged in and trying to access protected route
-    if (protectedRoutes.contains(route) && !isLoggedIn) {
-      storage.clearLastRoute();
+    if (route != null && protectedRoutes.contains(route) && !isLoggedIn) {
+      storage.clearRouteStack();
       return const RouteSettings(name: AppRoutes.auth);
     }
 
-    // If logged in and on auth page - redirect to last protected route or home
+    // If logged in and on auth page - restore last route
     if (route == AppRoutes.auth && isLoggedIn) {
-      final lastRoute = storage.getLastRoute();
-      if (lastRoute != null && protectedRoutes.contains(lastRoute)) {
-        return RouteSettings(name: lastRoute);
+      final stack = storage.getRouteStack();
+      if (stack.isNotEmpty) {
+        return RouteSettings(name: stack.last);
       }
       return const RouteSettings(name: AppRoutes.home);
     }
 
-    // Save protected routes when accessed
-    if (protectedRoutes.contains(route) && isLoggedIn) {
-      storage.setLastRoute(route!);
+    // Manage route stack for protected routes
+    if (route != null && protectedRoutes.contains(route) && isLoggedIn) {
+      final stack = storage.getRouteStack();
+
+      // If going to home, clear stack and add home as root
+      if (route == AppRoutes.home) {
+        storage.saveRouteStack([AppRoutes.home]);
+        return null;
+      }
+
+      // For settings (or other protected routes)
+      // Ensure home is always the first item in stack
+      if (stack.isEmpty) {
+        // If stack is empty, add home first, then the route
+        storage.saveRouteStack([AppRoutes.home, route]);
+      } else if (stack.last != route) {
+        // If route is not already the last, add it
+        // But ensure we don't have duplicates
+        if (stack.contains(route)) {
+          // Remove existing occurrence
+          stack.remove(route);
+        }
+        stack.add(route);
+        storage.saveRouteStack(stack);
+      }
     }
 
     // Don't save public/flow routes

@@ -24,11 +24,20 @@ class StorageService {
   }
 
   // ============================================================
-  // ROUTE
+  // ROUTE STACK
   // ============================================================
-  void setLastRoute(String route) => _box.write('last_route', route);
-  String? getLastRoute() => _box.read('last_route');
-  void clearLastRoute() => _box.remove('last_route');
+  void saveRouteStack(List<String> routes) {
+    _box.write('routes', routes);
+  }
+
+  List<String> getRouteStack() {
+    final stack = _box.read('routes');
+    return stack is List ? List<String>.from(stack) : [];
+  }
+
+  void clearRouteStack() {
+    _box.remove('routes');
+  }
 
   // ============================================================
   // SETTINGS (Theme & Locale)
@@ -42,14 +51,14 @@ class StorageService {
   // ============================================================
   // PASSCODE RETRY (Per email)
   // ============================================================
-  String _retryKey(String email) =>
+  String retryKey(String email) =>
       'passcode-retry:${email.trim().toLowerCase()}';
 
   void setPasscodeRetry(String email, Map<String, dynamic> state) =>
-      _box.write(_retryKey(email), state);
+      _box.write(retryKey(email), state);
 
   Map<String, dynamic>? getPasscodeRetry(String email) {
-    final raw = _box.read(_retryKey(email));
+    final raw = _box.read(retryKey(email));
     return raw is Map ? Map<String, dynamic>.from(raw) : null;
   }
 

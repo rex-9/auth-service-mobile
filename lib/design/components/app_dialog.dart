@@ -1,6 +1,7 @@
 // lib/design/components/app_dialog.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:meritbox_mobile/constants/constants.dart';
 import '../design.dart';
 
 class AppDialog {
@@ -108,5 +109,49 @@ class AppDialog {
         ],
       ),
     );
+  }
+
+  static Future<bool> exit(BuildContext context) async {
+    final result = await Get.dialog<bool>(
+      AlertDialog(
+        backgroundColor: Get.theme.colorScheme.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Design.spacing.radiusLarge),
+        ),
+        title: Text(
+          Constants.locale.exitTitle.tr,
+          style: context.typo.headline4.copyWith(
+            color: Get.theme.colorScheme.onSurface,
+          ),
+        ),
+        content: Text(
+          Constants.locale.exitConfirm.tr,
+          style: context.typo.bodyMedium.copyWith(
+            color: Get.theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Get.back(result: false),
+            child: Text(
+              Constants.locale.cancel.tr,
+              style: context.typo.labelLarge.copyWith(
+                color: Get.theme.colorScheme.onSurface,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Get.back(result: true),
+            child: Text(
+              Constants.locale.exit.tr,
+              style: context.typo.labelLarge.copyWith(
+                color: Get.theme.colorScheme.error,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+    return result ?? false;
   }
 }

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/design/design.dart';
+import 'package:meritbox_mobile/services/storage_service.dart';
 
 class AppPage extends StatelessWidget {
   const AppPage({
@@ -16,6 +17,7 @@ class AppPage extends StatelessWidget {
     this.bottomNavigationBar,
     this.floatingActionButton,
     this.floatingActionButtonLocation,
+    this.showExitConfirmation = true,
   });
 
   final Widget child;
@@ -28,21 +30,29 @@ class AppPage extends StatelessWidget {
   final Widget? bottomNavigationBar;
   final Widget? floatingActionButton;
   final FloatingActionButtonLocation? floatingActionButtonLocation;
+  final bool showExitConfirmation;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor ?? context.colors.background,
-      appBar: _buildAppBar(context),
-      body: SafeArea(
-        child: Padding(
-          padding: padding ?? EdgeInsets.all(Design.spacing.screenPadding),
-          child: child,
+    return PopScope(
+      canPop: !showBackButton,
+      // NOT WORKING AT ALL!!!
+      onPopInvokedWithResult: (bool didPop, dynamic result) async {
+        if (!didPop) _handleBackPressed(context);
+      },
+      child: Scaffold(
+        backgroundColor: backgroundColor ?? context.colors.background,
+        appBar: _buildAppBar(context),
+        body: SafeArea(
+          child: Padding(
+            padding: padding ?? EdgeInsets.all(Design.spacing.screenPadding),
+            child: child,
+          ),
         ),
+        bottomNavigationBar: bottomNavigationBar,
+        floatingActionButton: floatingActionButton,
+        floatingActionButtonLocation: floatingActionButtonLocation,
       ),
-      bottomNavigationBar: bottomNavigationBar,
-      floatingActionButton: floatingActionButton,
-      floatingActionButtonLocation: floatingActionButtonLocation,
     );
   }
 
@@ -57,11 +67,28 @@ class AppPage extends StatelessWidget {
                 Icons.arrow_back_rounded,
                 color: context.colors.textPrimary,
               ),
-              onPressed: onBackPressed ?? () => Get.back(),
+              onPressed: onBackPressed ?? () => _handleBackPressed(context),
             )
           : null,
       title: title != null ? Text(title!, style: context.typo.headline4) : null,
       actions: actions,
     );
   }
+
+  void _handleBackPressed(BuildContext context) {
+    final storage = Get.find<StorageService>();
+    final stack = storage.getRouteStack();
+
+    if (stack.length > 1) {
+      stack.removeLast();
+      storage.saveRouteStack(stack);
+      Get.offAllNamed(stack.last);
+    } else {
+      _showExitDialog(context);
+    }
+  }
+}
+
+Future<bool> _showExitDialog(BuildContext context) async {
+  return await AppDialog.exit(context);
 }

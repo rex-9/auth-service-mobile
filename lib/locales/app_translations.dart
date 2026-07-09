@@ -121,6 +121,9 @@ class AppTranslations extends Translations {
       Constants.locale.account: 'Account',
       Constants.locale.logoutConfirmation: 'Are you sure you want to sign out?',
       Constants.locale.cancel: 'Cancel',
+      Constants.locale.exit: 'Exit',
+      Constants.locale.exitConfirm: 'Are you sure you want to exit the app?',
+      Constants.locale.exitTitle: 'Exit App',
     },
     'es_ES': {
       Constants.locale.welcomeTitle: '✨ Bienvenido a Meritbox ✨',
@@ -219,6 +222,10 @@ class AppTranslations extends Translations {
       Constants.locale.logoutConfirmation:
           '¿Estás seguro de que quieres cerrar sesión?',
       Constants.locale.cancel: 'Cancelar',
+      Constants.locale.exit: 'Salir',
+      Constants.locale.exitConfirm:
+          '¿Estás seguro de que quieres salir de la aplicación?',
+      Constants.locale.exitTitle: 'Salir de la aplicación',
     },
     'my_MM': {
       Constants.locale.welcomeTitle: '✨ Meritbox မှ ကြိုဆိုပါတယ် ✨',
@@ -314,6 +321,9 @@ class AppTranslations extends Translations {
       Constants.locale.account: 'အကောင့်',
       Constants.locale.logoutConfirmation: 'ထွက်ရန် သေချာပါသလား?',
       Constants.locale.cancel: 'မလုပ်တော့ပါ',
+      Constants.locale.exit: 'ထွက်ရန်',
+      Constants.locale.exitConfirm: 'ထွက်ရန် သေချာပါသလား?',
+      Constants.locale.exitTitle: 'အက်ပ်မှ ထွက်ရန်',
     },
   };
 }

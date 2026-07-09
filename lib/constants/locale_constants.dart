@@ -92,11 +92,14 @@ class LocaleConstants {
   String get usernameMinLength => 'username_min_length';
   String get usernameCharset => 'username_charset';
 
-  // lib/constants/locale_constants.dart
+  // Settings
   String get settings => 'settings';
   String get theme => 'theme';
   String get language => 'language';
   String get account => 'account';
   String get logoutConfirmation => 'logout_confirmation';
   String get cancel => 'cancel';
+  String get exit => 'exit';
+  String get exitConfirm => 'exit_confirm';
+  String get exitTitle => 'exit_title';
 }

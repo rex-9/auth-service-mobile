@@ -28,17 +28,18 @@ class _SplashPageState extends State<SplashPage> {
     await Future.delayed(const Duration(milliseconds: 10));
 
     if (authController.isLoggedIn.value) {
-      final lastRoute = storage.getLastRoute();
+      final stack = storage.getRouteStack();
 
       // Only restore protected routes
       const protectedRoutes = [AppRoutes.home, AppRoutes.settings];
 
-      if (lastRoute != null && protectedRoutes.contains(lastRoute)) {
-        Get.offAllNamed(lastRoute);
+      if (stack.isNotEmpty && protectedRoutes.contains(stack.last)) {
+        Get.offAllNamed(stack.last);
       } else {
         Get.offAllNamed(AppRoutes.home);
       }
     } else {
+      storage.clearRouteStack();
       Get.offAllNamed(AppRoutes.auth);
     }
   }
