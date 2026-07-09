@@ -7,6 +7,7 @@ import 'package:meritbox_mobile/design/design.dart';
 import 'package:meritbox_mobile/routes/routes.dart';
 import 'package:meritbox_mobile/models/api_response.dart';
 
+// #TODO: API impl
 class ApiService extends GetConnect {
   static const String sessionReplacedError = 'Active session not found';
 
