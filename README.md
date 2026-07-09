@@ -20,7 +20,6 @@ lib/
 ├── pages/             # UI screens
 ├── routes/            # Navigation & route guards
 ├── services/          # API & storage services
-└── widgets/           # Reusable widgets
 ```
 
 ## 🚀 Getting Started
