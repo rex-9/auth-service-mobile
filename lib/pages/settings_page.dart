@@ -1,6 +1,7 @@
 // lib/pages/settings_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:meritbox_mobile/config/config.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/controllers/settings_controller.dart';
 import 'package:meritbox_mobile/design/design.dart';
@@ -33,6 +34,12 @@ class SettingsPage extends GetView<SettingsController> {
           // Account Section
           _buildSectionHeader(context, Constants.locale.account.tr),
           _buildAccountTile(context, authController),
+
+          SizedBox(height: Design.spacing.xxl),
+
+          // App Info Section
+          _buildSectionHeader(context, Constants.locale.appInfo.tr),
+          _buildAppInfoTile(context),
 
           SizedBox(height: Design.spacing.xl),
         ],
@@ -173,6 +180,24 @@ class SettingsPage extends GetView<SettingsController> {
             onTap: () => _showLogoutDialog(context, authController),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildAppInfoTile(BuildContext context) {
+    final config = AppConfig();
+
+    return Container(
+      decoration: Design.styles.card.copyWith(color: context.colors.surface),
+      child: ListTile(
+        leading: Icon(Design.icons.info, color: context.colors.textSecondary),
+        title: Text(config.appName, style: context.typo.bodyLarge),
+        subtitle: Obx(
+          () => Text(
+            'v${controller.appVersion.value}',
+            style: context.typo.bodyMedium,
+          ),
+        ),
       ),
     );
   }

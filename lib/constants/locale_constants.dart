@@ -102,4 +102,5 @@ class LocaleConstants {
   String get exit => 'exit';
   String get exitConfirm => 'exit_confirm';
   String get exitTitle => 'exit_title';
+  String get appInfo => 'app_info';
 }

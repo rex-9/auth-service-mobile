@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:meritbox_mobile/constants/constants.dart';
+import 'package:meritbox_mobile/config/config.dart';
 import 'package:meritbox_mobile/design/design.dart';
 import 'package:meritbox_mobile/routes/app_routes.dart';
 import 'bindings/initial_binding.dart';
@@ -24,11 +24,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final config = AppConfig();
     return GetBuilder<SettingsController>(
       builder: (settings) => ScreenUtilInit(
         designSize: const Size(375, 812),
         builder: (context, child) => GetMaterialApp(
-          title: Constants.app.name,
+          title: config.appName,
           theme: Design.theme.light,
           darkTheme: Design.theme.dark,
           themeMode: settings.themeMode,

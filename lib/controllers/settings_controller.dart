@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/design/design.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import '../services/storage_service.dart';
 import '../locales/app_translations.dart';
 
@@ -10,8 +11,9 @@ class SettingsController extends GetxController {
   final StorageService _storage = Get.find();
 
   // ===== OBSERVABLES =====
-  var isDarkMode = false.obs; // true = dark mode, false = light mode
-  var localeCode = 'en_US'.obs; // e.g. 'en_US', 'es_ES', 'fr_FR'
+  var isDarkMode = false.obs; // true = dark, false = light
+  var localeCode = 'en_US'.obs; // e.g. 'en_US', 'es_ES', 'my_MM'
+  var appVersion = ''.obs; // e.g. '1.0.0'
 
   // ===== THEME MODE =====
   ThemeMode get themeMode =>
@@ -41,6 +43,17 @@ class SettingsController extends GetxController {
     final savedTheme = _storage.getThemeName();
     isDarkMode.value = savedTheme == 'dark';
     localeCode.value = _storage.getLocaleCode() ?? 'en_US';
+    _loadAppVersion();
+  }
+
+  // ===== APP VERSION =====
+  Future<void> _loadAppVersion() async {
+    try {
+      final packageInfo = await PackageInfo.fromPlatform();
+      appVersion.value = packageInfo.version;
+    } catch (e) {
+      appVersion.value = '1.0.0';
+    }
   }
 
   // ===== THEME METHODS =====
@@ -48,7 +61,7 @@ class SettingsController extends GetxController {
     isDarkMode.value = !isDarkMode.value;
     _storage.setThemeName(isDarkMode.value ? 'dark' : 'light');
     Get.changeThemeMode(themeMode);
-    update(); // This triggers GetBuilder rebuilds
+    update();
   }
 
   void setDarkMode(bool isDark) {
