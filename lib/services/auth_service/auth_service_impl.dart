@@ -1,13 +1,17 @@
+// lib/services/auth_service_impl.dart
 import 'package:get/get.dart';
-
-import '../../models/api_response.dart';
-import '../../routes/server_routes.dart';
-import '../api_service.dart';
-import 'auth_service.dart';
+import 'package:meritbox_mobile/models/api_response.dart';
+import 'package:meritbox_mobile/routes/routes.dart';
+import 'package:meritbox_mobile/services/services.dart';
 
 class AuthServiceImpl extends GetxService implements AuthService {
   final ApiService _api = Get.find();
 
+  // ===== LIFECYCLE =====
+
+  // ===== AUTH METHODS =====
+
+  // 1. Check if user exists
   @override
   Future<ApiResponse<bool>> peekUser(String email) async {
     final response = await _api.get(
@@ -20,6 +24,7 @@ class AuthServiceImpl extends GetxService implements AuthService {
     );
   }
 
+  // 2. Sign in with email/username and password
   @override
   Future<ApiResponse<Map<String, dynamic>>> signIn(
     String signinKey,
@@ -34,6 +39,7 @@ class AuthServiceImpl extends GetxService implements AuthService {
     );
   }
 
+  // 3. Sign in with token (from email confirmation)
   @override
   Future<ApiResponse<Map<String, dynamic>>> signInWithToken(
     String token,
@@ -47,6 +53,7 @@ class AuthServiceImpl extends GetxService implements AuthService {
     );
   }
 
+  // 4. Sign in with Google
   @override
   Future<ApiResponse<Map<String, dynamic>>> signInWithGoogle(
     String idToken,
@@ -60,6 +67,7 @@ class AuthServiceImpl extends GetxService implements AuthService {
     );
   }
 
+  // 4b. Complete Google sign in (new Google account sets a passcode)
   @override
   Future<ApiResponse<Map<String, dynamic>>> googleSignInComplete(
     String passcode,
@@ -75,6 +83,7 @@ class AuthServiceImpl extends GetxService implements AuthService {
     );
   }
 
+  // 5. Sign up (register new user)
   @override
   Future<ApiResponse<Map<String, dynamic>>> signUp({
     required String username,
@@ -98,6 +107,7 @@ class AuthServiceImpl extends GetxService implements AuthService {
     );
   }
 
+  // 6. Send confirmation code (for email verification)
   @override
   Future<ApiResponse<void>> sendConfirmationCode(String signinKey) async {
     final response = await _api.post(ServerRoutes.sendConfirmationCode, {
@@ -106,6 +116,7 @@ class AuthServiceImpl extends GetxService implements AuthService {
     return _api.parseResponse<void>(response, (_) {});
   }
 
+  // 7. Confirm email with code
   @override
   Future<ApiResponse<Map<String, dynamic>>> confirmCode(
     String signinKey,
@@ -121,6 +132,7 @@ class AuthServiceImpl extends GetxService implements AuthService {
     );
   }
 
+  // 8. Forgot password - send reset instructions
   @override
   Future<ApiResponse<void>> forgotPassword(String email) async {
     final response = await _api.post(ServerRoutes.forgotPassword, {
@@ -129,6 +141,7 @@ class AuthServiceImpl extends GetxService implements AuthService {
     return _api.parseResponse<void>(response, (_) {});
   }
 
+  // 9. Reset password
   @override
   Future<ApiResponse<void>> resetPassword({
     required String resetPasswordToken,
@@ -145,6 +158,7 @@ class AuthServiceImpl extends GetxService implements AuthService {
     return _api.parseResponse<void>(response, (_) {});
   }
 
+  // 10. Get current user
   @override
   Future<ApiResponse<Map<String, dynamic>>> getCurrentUser() async {
     final response = await _api.get(ServerRoutes.currentUser);
@@ -154,6 +168,7 @@ class AuthServiceImpl extends GetxService implements AuthService {
     );
   }
 
+  // 11. Sign out
   @override
   Future<ApiResponse<void>> signOut() async {
     final response = await _api.delete(ServerRoutes.signOut);

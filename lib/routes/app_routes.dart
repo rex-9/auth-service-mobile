@@ -1,16 +1,10 @@
 // lib/routes/app_routes.dart
 import 'package:get/get.dart';
-import '../pages/auth_page.dart';
-import '../pages/forgot_passcode_page.dart';
-import '../pages/home_page.dart';
-import '../pages/signin_passcode_page.dart';
-import '../pages/signup_passcode_page.dart';
-import '../pages/signup_info_page.dart';
-import '../pages/splash_page.dart';
-import '../pages/verify_email_page.dart';
+import 'package:meritbox_mobile/pages/pages.dart';
+import 'package:meritbox_mobile/routes/route_guard.dart';
 
 class AppRoutes {
-  // Client Routes (Navigation)
+  // ===== PUBLIC ROUTES (No Auth Required) =====
   static const String splash = '/splash';
   static const String auth = '/auth';
   static const String signinPasscode = '/signin-passcode';
@@ -18,9 +12,12 @@ class AppRoutes {
   static const String signupInfo = '/signup-info';
   static const String verifyEmail = '/verify-email';
   static const String forgotPasscode = '/forgot-passcode';
-  static const String home = '/home';
 
-  // Navigation methods
+  // ===== PROTECTED ROUTES (Auth Required) =====
+  static const String home = '/home';
+  static const String settings = '/settings';
+
+  // ===== PUBLIC NAVIGATION =====
   static void toSplash() => Get.offAllNamed(splash);
   static void toAuth() => Get.offAllNamed(auth);
   static void toSignInPasscode() => Get.toNamed(signinPasscode);
@@ -30,16 +27,31 @@ class AppRoutes {
   static void toVerifyEmail({Map<String, dynamic>? arguments}) =>
       Get.toNamed(verifyEmail, arguments: arguments);
   static void toForgotPasscode() => Get.toNamed(forgotPasscode);
+
+  // ===== PROTECTED NAVIGATION =====
   static void toHome() => Get.offAllNamed(home);
+  static void toSettings() => Get.toNamed(settings);
 
   static final pages = [
+    // Public Pages
     GetPage(name: splash, page: () => const SplashPage()),
-    GetPage(name: auth, page: () => const AuthPage()),
+    GetPage(name: auth, page: () => AuthPage()),
     GetPage(name: signinPasscode, page: () => const SignInPasscodePage()),
     GetPage(name: signupPasscode, page: () => const SignUpPasscodePage()),
     GetPage(name: signupInfo, page: () => const SignUpInfoPage()),
     GetPage(name: verifyEmail, page: () => const VerifyEmailPage()),
     GetPage(name: forgotPasscode, page: () => const ForgotPasscodePage()),
-    GetPage(name: home, page: () => const HomePage()),
+
+    // Protected Pages
+    GetPage(
+      name: home,
+      page: () => const HomePage(),
+      middlewares: [RouteGuard()],
+    ),
+    GetPage(
+      name: settings,
+      page: () => const SettingsPage(),
+      middlewares: [RouteGuard()],
+    ),
   ];
 }

@@ -3,17 +3,18 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:meritbox_mobile/services/auth_service/auth_service_impl.dart';
+import 'package:meritbox_mobile/config/config.dart';
+import 'package:meritbox_mobile/constants/constants.dart';
+import 'package:meritbox_mobile/design/components/components.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import '../routes/app_routes.dart';
-import '../services/auth_service/auth_service.dart';
-import '../services/storage_service.dart';
+import '../services/services.dart';
 import '../models/user_model.dart';
 
 class AuthController extends GetxController {
   final AuthService _auth = Get.find<AuthServiceImpl>();
   final StorageService _storage = Get.find();
-
+  final AppConfig _config = AppConfig();
 
   static const int maxAttempts = 3;
   static const List<int> cooldownSecondsByLevel = [30, 60, 120];
@@ -76,18 +77,27 @@ class AuthController extends GetxController {
 
   Future<void> checkAuthStatus() async {
     isCheckingAuth.value = true;
+
+    // Try to get token
     final token = _storage.getToken();
     if (token != null && token.isNotEmpty) {
       authToken.value = token;
-      isLoggedIn.value = true;
-      final storedUser = _storage.getUserData();
+
+      // Try to get user from storage first
+      final UserModel? storedUser = _storage.getUserData();
       if (storedUser != null) {
-        currentUser.value = UserModel.fromJson(storedUser);
+        currentUser.value = storedUser;
+        isLoggedIn.value = true;
+        isCheckingAuth.value = false;
+        return;
       }
+
+      // Fallback: fetch from API
       await getCurrentUser();
     } else {
       isLoggedIn.value = false;
     }
+
     isCheckingAuth.value = false;
   }
 
@@ -155,8 +165,7 @@ class AuthController extends GetxController {
 
     if (waitSeconds > 0) {
       attemptsLeft.value = 0;
-      final until =
-          DateTime.now().millisecondsSinceEpoch + waitSeconds * 1000;
+      final until = DateTime.now().millisecondsSinceEpoch + waitSeconds * 1000;
       _startCooldownUntil(until);
       _persistRetryState(cooldownUntilMs: until);
     } else {
@@ -167,8 +176,8 @@ class AuthController extends GetxController {
   void _startCooldownUntil(int untilMs) {
     _cooldownTimer?.cancel();
     void tick() {
-      final left =
-          ((untilMs - DateTime.now().millisecondsSinceEpoch) / 1000).ceil();
+      final left = ((untilMs - DateTime.now().millisecondsSinceEpoch) / 1000)
+          .ceil();
       if (left <= 0) {
         cooldownSecondsLeft.value = 0;
         _cooldownTimer?.cancel();
@@ -206,7 +215,7 @@ class AuthController extends GetxController {
   bool validateEmail() {
     final emailRegex = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');
     if (!emailRegex.hasMatch(email.value.trim())) {
-      emailError.value = 'invalid_email'.tr;
+      emailError.value = Constants.locale.invalidEmail.tr;
       return false;
     }
     emailError.value = null;
@@ -234,14 +243,17 @@ class AuthController extends GetxController {
 
   void _storeSession(Map<String, dynamic> data) {
     final token = data['token'];
+    final userJson = data['user'] as Map<String, dynamic>;
+
     authToken.value = token;
     _storage.setToken(token);
-    _storage.setUserEmail(email.value);
-    final user = data['user'];
-    if (user is Map) {
-      currentUser.value = UserModel.fromJson(Map<String, dynamic>.from(user));
-      _storage.setUserData(Map<String, dynamic>.from(user));
-    }
+    _storage.setUserEmail(userJson['email']);
+
+    // Save user data
+    final user = UserModel.fromJson(userJson);
+    currentUser.value = user;
+    _storage.setUserData(user);
+
     isLoggedIn.value = true;
   }
 
@@ -250,7 +262,7 @@ class AuthController extends GetxController {
     if (isLoading.value || cooldownSecondsLeft.value > 0) return;
     if (passcode.value.length != 6) {
       signinPin.triggerError();
-      Get.snackbar('error'.tr, 'passcode_6_digits'.tr);
+      AppSnackbar.error(Constants.locale.passcode6Digits.tr);
       return;
     }
 
@@ -266,16 +278,16 @@ class AuthController extends GetxController {
       } else if (response.success) {
         // Signed in with an unconfirmed email: the server just sent a
         // fresh confirmation code, so continue to email verification.
-        Get.snackbar('success'.tr, response.message);
+        AppSnackbar.success(response.message);
         _startResendCountdown(30);
         AppRoutes.toVerifyEmail(arguments: {'email': email.value});
       } else {
         signinPin.triggerError();
         _applySignInFailure(response.data);
-        Get.snackbar('error'.tr, response.message);
+        AppSnackbar.error(response.message);
       }
-    } catch (e) {
-      Get.snackbar('error'.tr, 'sign_in_failed'.tr);
+    } catch (e, stk) {
+      AppSnackbar.error(Constants.locale.signInFailed.tr, e: e, stk: stk);
     } finally {
       isLoading.value = false;
     }
@@ -294,10 +306,10 @@ class AuthController extends GetxController {
           AppRoutes.toVerifyEmail(arguments: {'email': email.value});
         }
       } else {
-        Get.snackbar('error'.tr, response.message);
+        AppSnackbar.error(response.message);
       }
-    } catch (e) {
-      Get.snackbar('error'.tr, 'send_code_failed'.tr);
+    } catch (e, stk) {
+      AppSnackbar.error(Constants.locale.sendCodeFailed.tr, e: e, stk: stk);
     } finally {
       isLoading.value = false;
     }
@@ -316,10 +328,10 @@ class AuthController extends GetxController {
         AppRoutes.toHome();
       } else {
         verifyPin.triggerError();
-        Get.snackbar('error'.tr, response.message);
+        AppSnackbar.error(response.message);
       }
-    } catch (e) {
-      Get.snackbar('error'.tr, 'verification_failed'.tr);
+    } catch (e, stk) {
+      AppSnackbar.error(Constants.locale.verificationFailed.tr, e: e, stk: stk);
     } finally {
       isLoading.value = false;
     }
@@ -328,15 +340,15 @@ class AuthController extends GetxController {
   // Register new user with full details
   Future<void> signUp() async {
     if (fullName.value.trim().length < 2) {
-      Get.snackbar('error'.tr, 'enter_full_name'.tr);
+      AppSnackbar.error(Constants.locale.enterFullName.tr);
       return;
     }
     if (username.value.length < 3) {
-      Get.snackbar('error'.tr, 'username_min_length'.tr);
+      AppSnackbar.error(Constants.locale.usernameMinLength.tr);
       return;
     }
     if (!RegExp(r'^[a-z0-9_]+$').hasMatch(username.value)) {
-      Get.snackbar('error'.tr, 'username_charset'.tr);
+      AppSnackbar.error(Constants.locale.usernameCharset.tr);
       return;
     }
 
@@ -355,10 +367,10 @@ class AuthController extends GetxController {
         _startResendCountdown(30);
         AppRoutes.toVerifyEmail(arguments: {'email': email.value});
       } else {
-        Get.snackbar('error'.tr, response.message);
+        AppSnackbar.error(response.message);
       }
-    } catch (e) {
-      Get.snackbar('error'.tr, 'registration_failed'.tr);
+    } catch (e, stk) {
+      AppSnackbar.error(Constants.locale.registrationFailed.tr, e: e, stk: stk);
     } finally {
       isLoading.value = false;
     }
@@ -372,7 +384,7 @@ class AuthController extends GetxController {
     try {
       final signIn = GoogleSignIn.instance;
       if (!_googleInitialized) {
-        await signIn.initialize();
+        await signIn.initialize(serverClientId: _config.googleServerClientId);
         _googleInitialized = true;
       }
 
@@ -400,10 +412,14 @@ class AuthController extends GetxController {
         _storeSession(response.data!);
         AppRoutes.toHome();
       } else {
-        Get.snackbar('error'.tr, response.message);
+        AppSnackbar.error(response.message);
       }
-    } catch (e) {
-      Get.snackbar('error'.tr, 'sign_in_google_failure'.tr);
+    } catch (e, stk) {
+      AppSnackbar.error(
+        Constants.locale.signInGoogleFailure.tr,
+        e: e,
+        stk: stk,
+      );
     } finally {
       isLoading.value = false;
     }
@@ -413,12 +429,12 @@ class AuthController extends GetxController {
   Future<void> completeGoogleSignIn() async {
     if (passcode.value.length != 6) {
       signupPin.triggerError();
-      Get.snackbar('error'.tr, 'passcode_6_digits'.tr);
+      AppSnackbar.error(Constants.locale.passcode6Digits.tr);
       return;
     }
     if (passcode.value != confirmPasscode.value) {
       signupConfirmPin.triggerError();
-      Get.snackbar('error'.tr, 'passcodes_do_not_match'.tr);
+      AppSnackbar.error(Constants.locale.passcodesDoNotMatch.tr);
       return;
     }
 
@@ -436,20 +452,23 @@ class AuthController extends GetxController {
         AppRoutes.toHome();
       } else if (response.statusCode == 429) {
         final wait = (response.data?['retry_after'] as num?)?.toInt() ?? 30;
-        Get.snackbar(
-          'error'.tr,
-          'google_too_many_attempts'.trParams({'seconds': '$wait'}),
+        AppSnackbar.error(
+          Constants.locale.googleTooManyAttempts.trParams({'seconds': '$wait'}),
         );
       } else {
-        Get.snackbar('error'.tr, response.message);
+        AppSnackbar.error(response.message);
         if (response.statusCode == 401) {
           // Challenge expired: restart the Google flow.
           googleChallengeToken.value = '';
           AppRoutes.toAuth();
         }
       }
-    } catch (e) {
-      Get.snackbar('error'.tr, 'sign_in_google_failure'.tr);
+    } catch (e, stk) {
+      AppSnackbar.error(
+        Constants.locale.signInGoogleFailure.tr,
+        e: e,
+        stk: stk,
+      );
     } finally {
       isLoading.value = false;
     }
@@ -460,11 +479,12 @@ class AuthController extends GetxController {
     try {
       final response = await _auth.getCurrentUser();
       if (response.success && response.data != null) {
-        currentUser.value = UserModel.fromJson(response.data!);
-        _storage.setUserData(response.data!);
+        final user = UserModel.fromJson(response.data!);
+        currentUser.value = user;
+        _storage.setUserData(user); // Save to storage
       }
     } catch (e) {
-      // Error getting user; keep the cached one.
+      // Error getting user; keep cached one if exists
     }
   }
 
@@ -477,12 +497,12 @@ class AuthController extends GetxController {
       final response = await _auth.forgotPassword(email.value);
       if (response.success) {
         _startResendCountdown(60);
-        Get.snackbar('success'.tr, response.message);
+        AppSnackbar.success(response.message);
       } else {
-        Get.snackbar('error'.tr, response.message);
+        AppSnackbar.error(response.message);
       }
-    } catch (e) {
-      Get.snackbar('error'.tr, 'reset_failed'.tr);
+    } catch (e, stk) {
+      AppSnackbar.error(Constants.locale.resetFailed.tr, e: e, stk: stk);
     } finally {
       isLoading.value = false;
     }
@@ -495,7 +515,7 @@ class AuthController extends GetxController {
     _clearLocalSession();
     AppRoutes.toAuth();
     if (replaced) {
-      Get.snackbar('error'.tr, 'session_replaced'.tr);
+      AppSnackbar.error(Constants.locale.sessionReplaced.tr);
     }
   }
 
@@ -524,7 +544,7 @@ class AuthController extends GetxController {
   }
 
   // Sign out
-  Future<void> signout() async {
+  Future<void> signOut() async {
     try {
       await _auth.signOut();
     } catch (e) {
@@ -540,6 +560,7 @@ class AuthController extends GetxController {
     }
 
     _clearLocalSession();
+    _storage.clearRouteStack();
     AppRoutes.toAuth();
   }
 }

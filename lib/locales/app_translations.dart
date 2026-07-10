@@ -1,5 +1,6 @@
 // lib/locales/app_translations.dart
 import 'package:get/get.dart';
+import 'package:meritbox_mobile/constants/constants.dart';
 
 /// Mirrors the web client's locales (en / es / my in `src/locales/*.json`).
 /// Use with `'key'.tr` or `'key'.trParams({'email': ...})`.
@@ -14,262 +15,318 @@ class AppTranslations extends Translations {
   Map<String, Map<String, String>> get keys => {
     'en_US': {
       // Auth (initial)
-      'welcome_title': '✨ Welcome to Meritbox ✨',
-      'welcome_subtitle': 'Support dreams or make yours come true',
-      'continue_with_google': 'Continue with Google',
-      'or': 'or',
-      'email_label': 'Email',
-      'email_hint': 'your@email.com',
-      'email_helper': 'Enter your email to sign in or create an account',
-      'continue_button': 'Continue',
-      'checking': 'Checking...',
-      'invalid_email':
+      Constants.locale.welcomeTitle: '✨ Welcome to Meritbox ✨',
+      Constants.locale.welcomeSubtitle:
+          'Support dreams or make yours come true',
+      Constants.locale.continueWithGoogle: 'Continue with Google',
+      Constants.locale.or: 'or',
+      Constants.locale.emailLabel: 'Email',
+      Constants.locale.emailHint: 'your@email.com',
+      Constants.locale.emailHelper:
+          'Enter your email to sign in or create an account',
+      Constants.locale.continueButton: 'Continue',
+      Constants.locale.checking: 'Checking...',
+      Constants.locale.invalidEmail:
           'Please enter a valid email address. (e.g. example@domain.com)',
-      'connection_failed': 'Connection failed. Please try again.',
+      Constants.locale.connectionFailed: 'Connection failed. Please try again.',
 
       // Sign in passcode
-      'signin_title': 'Sign In',
-      'signin_heading': 'Enter your passcode',
-      'signin_subtitle': 'Enter your 6-digit passcode for @email',
-      'passcode_label': 'Passcode',
-      'signing_in': 'Signing in...',
-      'use_different_email': 'Use different email',
-      'forgot_passcode_link': 'Forgot your passcode?',
-      'passcode_6_digits': 'Please enter 6-digit passcode',
-      'attempts_remaining':
+      Constants.locale.signinTitle: 'Sign In',
+      Constants.locale.signinHeading: 'Enter your passcode',
+      Constants.locale.signinSubtitle: 'Enter your 6-digit passcode for @email',
+      Constants.locale.passcodeLabel: 'Passcode',
+      Constants.locale.signingIn: 'Signing in...',
+      Constants.locale.useDifferentEmail: 'Use different email',
+      Constants.locale.forgotPasscodeLink: 'Forgot your passcode?',
+      Constants.locale.passcode6Digits: 'Please enter 6-digit passcode',
+      Constants.locale.attemptsRemaining:
           'Attempts remaining before cooldown: @left/@total',
-      'cooldown_message':
+      Constants.locale.cooldownMessage:
           'Too many incorrect passcode attempts. Please wait @seconds seconds.',
-      'try_again_in': 'Try again in @seconds⁠s',
+      Constants.locale.tryAgainIn: 'Try again in @seconds⁠s',
 
       // Sign up passcode
-      'signup_title': 'Create Account',
-      'create_passcode_heading': 'Create a passcode',
-      'create_passcode_subtitle':
+      Constants.locale.signupTitle: 'Create Account',
+      Constants.locale.createPasscodeHeading: 'Create a passcode',
+      Constants.locale.createPasscodeSubtitle:
           "You'll use this 6-digit passcode to sign in",
-      'google_passcode_heading': 'One last step',
-      'google_passcode_subtitle':
+      Constants.locale.googlePasscodeHeading: 'One last step',
+      Constants.locale.googlePasscodeSubtitle:
           'Create and confirm a passcode to finish Google sign up',
-      'confirm_passcode_label': 'Confirm Passcode',
-      'passcodes_do_not_match': 'Passcodes do not match',
-      'sending_code': 'Sending code...',
+      Constants.locale.confirmPasscodeLabel: 'Confirm Passcode',
+      Constants.locale.passcodesDoNotMatch: 'Passcodes do not match',
+      Constants.locale.sendingCode: 'Sending code...',
 
       // Sign up info
-      'signup_info_title': 'Complete Profile',
-      'signup_info_heading': 'Tell us about yourself',
-      'full_name_label': 'Full Name',
-      'full_name_hint': 'John Doe',
-      'username_label': 'Username',
-      'username_hint': 'john_doe',
-      'create_account_button': 'Create Account',
-      'creating_account': 'Creating account...',
-      'enter_full_name': 'Please enter your full name',
-      'username_min_length': 'Username must be at least 3 characters',
-      'username_charset':
+      Constants.locale.signupInfoTitle: 'Complete Profile',
+      Constants.locale.signupInfoHeading: 'Tell us about yourself',
+      Constants.locale.fullNameLabel: 'Full Name',
+      Constants.locale.fullNameHint: 'John Doe',
+      Constants.locale.usernameLabel: 'Username',
+      Constants.locale.usernameHint: 'john_doe',
+      Constants.locale.createAccountButton: 'Create Account',
+      Constants.locale.creatingAccount: 'Creating account...',
+      Constants.locale.enterFullName: 'Please enter your full name',
+      Constants.locale.usernameMinLength:
+          'Username must be at least 3 characters',
+      Constants.locale.usernameCharset:
           'Username can only contain letters, numbers, and underscores',
 
       // Verify email
-      'verify_email_title': 'Verify Email',
-      'verify_email_heading': 'Verify your email',
-      'verify_email_subtitle': 'We sent a 6-digit code to @email',
-      'verify_code_button': 'Verify Code',
-      'verifying': 'Verifying...',
-      'resend_code': 'Resend Code',
-      'resend_code_in': 'Resend code in @seconds⁠s',
-      'enter_6_digit_code': 'Please enter 6-digit code',
+      Constants.locale.verifyEmailTitle: 'Verify Email',
+      Constants.locale.verifyEmailHeading: 'Verify your email',
+      Constants.locale.verifyEmailSubtitle: 'We sent a 6-digit code to @email',
+      Constants.locale.verifyCodeButton: 'Verify Code',
+      Constants.locale.verifying: 'Verifying...',
+      Constants.locale.resendCode: 'Resend Code',
+      Constants.locale.resendCodeIn: 'Resend code in @seconds⁠s',
+      Constants.locale.enter6DigitCode: 'Please enter 6-digit code',
 
       // Forgot passcode
-      'forgot_passcode_title': 'Forgot Passcode',
-      'forgot_passcode_subtitle':
+      Constants.locale.forgotPasscodeTitle: 'Forgot Passcode',
+      Constants.locale.forgotPasscodeSubtitle:
           'Enter your email and we will send you a link to reset your passcode.',
-      'send_reset_link': 'Send Passcode Reset Link',
-      'sending': 'Sending...',
-      'back_to_sign_in': 'Back to Sign In',
+      Constants.locale.sendResetLink: 'Send Passcode Reset Link',
+      Constants.locale.sending: 'Sending...',
+      Constants.locale.backToSignIn: 'Back to Sign In',
 
       // Home
-      'home': 'Home',
-      'welcome_home': 'Welcome to Meritbox!',
-      'loading': 'Loading...',
-      'sign_out_button': 'Sign Out',
+      Constants.locale.home: 'Home',
+      Constants.locale.welcomeHome: 'Welcome to Meritbox!',
+      Constants.locale.loading: 'Loading...',
+      Constants.locale.signOutButton: 'Sign Out',
 
       // Google / session
-      'sign_in_google_failure': 'Google authentication failed!',
-      'google_too_many_attempts':
+      Constants.locale.signInGoogleFailure: 'Google authentication failed!',
+      Constants.locale.googleTooManyAttempts:
           'Too many attempts. Please wait @seconds seconds and try again.',
-      'session_replaced':
+      Constants.locale.sessionReplaced:
           'Your session was replaced by a newer sign in on this platform.',
 
       // Generic
-      'error': 'Error',
-      'success': 'Success',
-      'sign_in_failed': 'Sign in failed. Please try again.',
-      'verification_failed': 'Verification failed',
-      'registration_failed': 'Registration failed',
-      'send_code_failed': 'Failed to send verification code',
-      'reset_failed': 'Failed to send reset instructions',
+      Constants.locale.error: 'Error',
+      Constants.locale.success: 'Success',
+      Constants.locale.warning: 'Warning',
+      Constants.locale.info: 'Info',
+      Constants.locale.signInFailed: 'Sign in failed. Please try again.',
+      Constants.locale.verificationFailed: 'Verification failed',
+      Constants.locale.registrationFailed: 'Registration failed',
+      Constants.locale.sendCodeFailed: 'Failed to send verification code',
+      Constants.locale.resetFailed: 'Failed to send reset instructions',
+
+      // Settings
+      Constants.locale.settings: 'Settings',
+      Constants.locale.theme: 'Theme',
+      Constants.locale.language: 'Language',
+      Constants.locale.account: 'Account',
+      Constants.locale.logoutConfirmation: 'Are you sure you want to sign out?',
+      Constants.locale.cancel: 'Cancel',
+      Constants.locale.exit: 'Exit',
+      Constants.locale.exitConfirm: 'Are you sure you want to exit the app?',
+      Constants.locale.exitTitle: 'Exit App',
+      Constants.locale.appInfo: 'App Info',
     },
     'es_ES': {
-      'welcome_title': '✨ Bienvenido a Meritbox ✨',
-      'welcome_subtitle': 'Apoya sueños o haz realidad los tuyos',
-      'continue_with_google': 'Continuar con Google',
-      'or': 'o',
-      'email_label': 'Correo electrónico',
-      'email_hint': 'tu@email.com',
-      'email_helper':
+      Constants.locale.welcomeTitle: '✨ Bienvenido a Meritbox ✨',
+      Constants.locale.welcomeSubtitle: 'Apoya sueños o haz realidad los tuyos',
+      Constants.locale.continueWithGoogle: 'Continuar con Google',
+      Constants.locale.or: 'o',
+      Constants.locale.emailLabel: 'Correo electrónico',
+      Constants.locale.emailHint: 'tu@email.com',
+      Constants.locale.emailHelper:
           'Ingresa tu correo para iniciar sesión o crear una cuenta',
-      'continue_button': 'Continuar',
-      'checking': 'Verificando...',
-      'invalid_email':
+      Constants.locale.continueButton: 'Continuar',
+      Constants.locale.checking: 'Verificando...',
+      Constants.locale.invalidEmail:
           'Ingresa un correo electrónico válido. (ej. ejemplo@dominio.com)',
-      'connection_failed': 'Falló la conexión. Inténtalo de nuevo.',
-      'signin_title': 'Iniciar sesión',
-      'signin_heading': 'Ingresa tu código',
-      'signin_subtitle': 'Ingresa tu código de 6 dígitos para @email',
-      'passcode_label': 'Código',
-      'signing_in': 'Iniciando sesión...',
-      'use_different_email': 'Usar otro correo',
-      'forgot_passcode_link': '¿Olvidaste tu código?',
-      'passcode_6_digits': 'Ingresa un código de 6 dígitos',
-      'attempts_remaining':
+      Constants.locale.connectionFailed:
+          'Falló la conexión. Inténtalo de nuevo.',
+      Constants.locale.signinTitle: 'Iniciar sesión',
+      Constants.locale.signinHeading: 'Ingresa tu código',
+      Constants.locale.signinSubtitle:
+          'Ingresa tu código de 6 dígitos para @email',
+      Constants.locale.passcodeLabel: 'Código',
+      Constants.locale.signingIn: 'Iniciando sesión...',
+      Constants.locale.useDifferentEmail: 'Usar otro correo',
+      Constants.locale.forgotPasscodeLink: '¿Olvidaste tu código?',
+      Constants.locale.passcode6Digits: 'Ingresa un código de 6 dígitos',
+      Constants.locale.attemptsRemaining:
           'Intentos restantes antes del bloqueo: @left/@total',
-      'cooldown_message':
+      Constants.locale.cooldownMessage:
           'Demasiados intentos incorrectos. Espera @seconds segundos.',
-      'try_again_in': 'Reintentar en @seconds⁠s',
-      'signup_title': 'Crear cuenta',
-      'create_passcode_heading': 'Crea un código',
-      'create_passcode_subtitle':
+      Constants.locale.tryAgainIn: 'Reintentar en @seconds⁠s',
+      Constants.locale.signupTitle: 'Crear cuenta',
+      Constants.locale.createPasscodeHeading: 'Crea un código',
+      Constants.locale.createPasscodeSubtitle:
           'Usarás este código de 6 dígitos para iniciar sesión',
-      'google_passcode_heading': 'Un último paso',
-      'google_passcode_subtitle':
+      Constants.locale.googlePasscodeHeading: 'Un último paso',
+      Constants.locale.googlePasscodeSubtitle:
           'Crea y confirma un código para completar el registro con Google',
-      'confirm_passcode_label': 'Confirmar código',
-      'passcodes_do_not_match': 'Los códigos no coinciden',
-      'sending_code': 'Enviando código...',
-      'signup_info_title': 'Completar perfil',
-      'signup_info_heading': 'Cuéntanos sobre ti',
-      'full_name_label': 'Nombre completo',
-      'full_name_hint': 'Juan Pérez',
-      'username_label': 'Nombre de usuario',
-      'username_hint': 'juan_perez',
-      'create_account_button': 'Crear cuenta',
-      'creating_account': 'Creando cuenta...',
-      'enter_full_name': 'Ingresa tu nombre completo',
-      'username_min_length':
+      Constants.locale.confirmPasscodeLabel: 'Confirmar código',
+      Constants.locale.passcodesDoNotMatch: 'Los códigos no coinciden',
+      Constants.locale.sendingCode: 'Enviando código...',
+      Constants.locale.signupInfoTitle: 'Completar perfil',
+      Constants.locale.signupInfoHeading: 'Cuéntanos sobre ti',
+      Constants.locale.fullNameLabel: 'Nombre completo',
+      Constants.locale.fullNameHint: 'Juan Pérez',
+      Constants.locale.usernameLabel: 'Nombre de usuario',
+      Constants.locale.usernameHint: 'juan_perez',
+      Constants.locale.createAccountButton: 'Crear cuenta',
+      Constants.locale.creatingAccount: 'Creando cuenta...',
+      Constants.locale.enterFullName: 'Ingresa tu nombre completo',
+      Constants.locale.usernameMinLength:
           'El nombre de usuario debe tener al menos 3 caracteres',
-      'username_charset':
+      Constants.locale.usernameCharset:
           'El nombre de usuario solo puede contener letras, números y guiones bajos',
-      'verify_email_title': 'Verificar correo',
-      'verify_email_heading': 'Verifica tu correo',
-      'verify_email_subtitle': 'Enviamos un código de 6 dígitos a @email',
-      'verify_code_button': 'Verificar código',
-      'verifying': 'Verificando...',
-      'resend_code': 'Reenviar código',
-      'resend_code_in': 'Reenviar código en @seconds⁠s',
-      'enter_6_digit_code': 'Ingresa un código de 6 dígitos',
-      'forgot_passcode_title': 'Código olvidado',
-      'forgot_passcode_subtitle':
+      Constants.locale.verifyEmailTitle: 'Verificar correo',
+      Constants.locale.verifyEmailHeading: 'Verifica tu correo',
+      Constants.locale.verifyEmailSubtitle:
+          'Enviamos un código de 6 dígitos a @email',
+      Constants.locale.verifyCodeButton: 'Verificar código',
+      Constants.locale.verifying: 'Verificando...',
+      Constants.locale.resendCode: 'Reenviar código',
+      Constants.locale.resendCodeIn: 'Reenviar código en @seconds⁠s',
+      Constants.locale.enter6DigitCode: 'Ingresa un código de 6 dígitos',
+      Constants.locale.forgotPasscodeTitle: 'Código olvidado',
+      Constants.locale.forgotPasscodeSubtitle:
           'Ingresa tu correo y te enviaremos un enlace para restablecer tu código.',
-      'send_reset_link': 'Enviar enlace de restablecimiento',
-      'sending': 'Enviando...',
-      'back_to_sign_in': 'Volver a iniciar sesión',
-      'home': 'Inicio',
-      'welcome_home': '¡Bienvenido a Meritbox!',
-      'loading': 'Cargando...',
-      'sign_out_button': 'Cerrar sesión',
-      'sign_in_google_failure': '¡La autenticación de Google falló!',
-      'google_too_many_attempts':
+      Constants.locale.sendResetLink: 'Enviar enlace de restablecimiento',
+      Constants.locale.sending: 'Enviando...',
+      Constants.locale.backToSignIn: 'Volver a iniciar sesión',
+      Constants.locale.home: 'Inicio',
+      Constants.locale.welcomeHome: '¡Bienvenido a Meritbox!',
+      Constants.locale.loading: 'Cargando...',
+      Constants.locale.signOutButton: 'Cerrar sesión',
+      Constants.locale.signInGoogleFailure:
+          '¡La autenticación de Google falló!',
+      Constants.locale.googleTooManyAttempts:
           'Demasiados intentos. Espera @seconds segundos e inténtalo de nuevo.',
-      'session_replaced':
+      Constants.locale.sessionReplaced:
           'Tu sesión fue reemplazada por un inicio de sesión más reciente en esta plataforma.',
-      'error': 'Error',
-      'success': 'Éxito',
-      'sign_in_failed': 'Falló el inicio de sesión. Inténtalo de nuevo.',
-      'verification_failed': 'La verificación falló',
-      'registration_failed': 'El registro falló',
-      'send_code_failed': 'No se pudo enviar el código de verificación',
-      'reset_failed': 'No se pudieron enviar las instrucciones',
+      Constants.locale.error: 'Error',
+      Constants.locale.success: 'Éxito',
+      Constants.locale.warning: 'Advertencia',
+      Constants.locale.info: 'Información',
+      Constants.locale.signInFailed:
+          'Falló el inicio de sesión. Inténtalo de nuevo.',
+      Constants.locale.verificationFailed: 'La verificación falló',
+      Constants.locale.registrationFailed: 'El registro falló',
+      Constants.locale.sendCodeFailed:
+          'No se pudo enviar el código de verificación',
+      Constants.locale.resetFailed: 'No se pudieron enviar las instrucciones',
+
+      // Settings
+      Constants.locale.settings: 'Ajustes',
+      Constants.locale.theme: 'Tema',
+      Constants.locale.language: 'Idioma',
+      Constants.locale.account: 'Cuenta',
+      Constants.locale.logoutConfirmation:
+          '¿Estás seguro de que quieres cerrar sesión?',
+      Constants.locale.cancel: 'Cancelar',
+      Constants.locale.exit: 'Salir',
+      Constants.locale.exitConfirm:
+          '¿Estás seguro de que quieres salir de la aplicación?',
+      Constants.locale.exitTitle: 'Salir de la aplicación',
+      Constants.locale.appInfo: 'Información de la aplicación',
     },
     'my_MM': {
-      'welcome_title': '✨ Meritbox မှ ကြိုဆိုပါတယ် ✨',
-      'welcome_subtitle':
+      Constants.locale.welcomeTitle: '✨ Meritbox မှ ကြိုဆိုပါတယ် ✨',
+      Constants.locale.welcomeSubtitle:
           'အိပ်မက်များကို ပံ့ပိုးပါ သို့မဟုတ် သင့်အိပ်မက်ကို အကောင်အထည်ဖော်ပါ',
-      'continue_with_google': 'Google ဖြင့် ဆက်လက်လုပ်ဆောင်ရန်',
-      'or': 'သို့မဟုတ်',
-      'email_label': 'အီးမေးလ်',
-      'email_hint': 'your@email.com',
-      'email_helper':
+      Constants.locale.continueWithGoogle: 'Google ဖြင့် ဆက်လက်လုပ်ဆောင်ရန်',
+      Constants.locale.or: 'သို့မဟုတ်',
+      Constants.locale.emailLabel: 'အီးမေးလ်',
+      Constants.locale.emailHint: 'your@email.com',
+      Constants.locale.emailHelper:
           'လော့ဂ်အင်ဝင်ရန် သို့မဟုတ် အကောင့်ဖွင့်ရန် အီးမေးလ်ထည့်ပါ',
-      'continue_button': 'ဆက်လုပ်ရန်',
-      'checking': 'စစ်ဆေးနေသည်...',
-      'invalid_email':
+      Constants.locale.continueButton: 'ဆက်လုပ်ရန်',
+      Constants.locale.checking: 'စစ်ဆေးနေသည်...',
+      Constants.locale.invalidEmail:
           'မှန်ကန်သော အီးမေးလ်လိပ်စာ ထည့်ပါ။ (ဥပမာ example@domain.com)',
-      'connection_failed': 'ချိတ်ဆက်မှု မအောင်မြင်ပါ။ ထပ်စမ်းကြည့်ပါ။',
-      'signin_title': 'လော့ဂ်အင်',
-      'signin_heading': 'သင့်လျှို့ဝှက်ကုဒ်ကို ထည့်ပါ',
-      'signin_subtitle': '@email အတွက် ဂဏန်း ၆ လုံး လျှို့ဝှက်ကုဒ်ထည့်ပါ',
-      'passcode_label': 'လျှို့ဝှက်ကုဒ်',
-      'signing_in': 'လော့ဂ်အင်ဝင်နေသည်...',
-      'use_different_email': 'အခြားအီးမေးလ် သုံးရန်',
-      'forgot_passcode_link': 'လျှို့ဝှက်ကုဒ် မေ့သွားပြီလား?',
-      'passcode_6_digits': 'ဂဏန်း ၆ လုံး လျှို့ဝှက်ကုဒ် ထည့်ပါ',
-      'attempts_remaining':
+      Constants.locale.connectionFailed:
+          'ချိတ်ဆက်မှု မအောင်မြင်ပါ။ ထပ်စမ်းကြည့်ပါ။',
+      Constants.locale.signinTitle: 'လော့ဂ်အင်',
+      Constants.locale.signinHeading: 'သင့်လျှို့ဝှက်ကုဒ်ကို ထည့်ပါ',
+      Constants.locale.signinSubtitle:
+          '@email အတွက် ဂဏန်း ၆ လုံး လျှို့ဝှက်ကုဒ်ထည့်ပါ',
+      Constants.locale.passcodeLabel: 'လျှို့ဝှက်ကုဒ်',
+      Constants.locale.signingIn: 'လော့ဂ်အင်ဝင်နေသည်...',
+      Constants.locale.useDifferentEmail: 'အခြားအီးမေးလ် သုံးရန်',
+      Constants.locale.forgotPasscodeLink: 'လျှို့ဝှက်ကုဒ် မေ့သွားပြီလား?',
+      Constants.locale.passcode6Digits: 'ဂဏန်း ၆ လုံး လျှို့ဝှက်ကုဒ် ထည့်ပါ',
+      Constants.locale.attemptsRemaining:
           'ခဏရပ်နားချိန်မတိုင်မီ ကျန်ကြိုးစားခွင့်: @left/@total',
-      'cooldown_message':
+      Constants.locale.cooldownMessage:
           'လျှို့ဝှက်ကုဒ် အမှားများလွန်းပါသည်။ @seconds စက္ကန့် စောင့်ပါ။',
-      'try_again_in': '@seconds⁠s အတွင်း ပြန်စမ်းပါ',
-      'signup_title': 'အကောင့်ဖွင့်ရန်',
-      'create_passcode_heading': 'လျှို့ဝှက်ကုဒ် သတ်မှတ်ပါ',
-      'create_passcode_subtitle':
+      Constants.locale.tryAgainIn: '@seconds⁠s အတွင်း ပြန်စမ်းပါ',
+      Constants.locale.signupTitle: 'အကောင့်ဖွင့်ရန်',
+      Constants.locale.createPasscodeHeading: 'လျှို့ဝှက်ကုဒ် သတ်မှတ်ပါ',
+      Constants.locale.createPasscodeSubtitle:
           'လော့ဂ်အင်ဝင်ရန် ဤဂဏန်း ၆ လုံး လျှို့ဝှက်ကုဒ်ကို သုံးပါမည်',
-      'google_passcode_heading': 'နောက်ဆုံးအဆင့်',
-      'google_passcode_subtitle':
+      Constants.locale.googlePasscodeHeading: 'နောက်ဆုံးအဆင့်',
+      Constants.locale.googlePasscodeSubtitle:
           'Google အကောင့်ဖွင့်ခြင်း ပြီးမြောက်ရန် လျှို့ဝှက်ကုဒ် သတ်မှတ်ပြီး အတည်ပြုပါ',
-      'confirm_passcode_label': 'လျှို့ဝှက်ကုဒ် အတည်ပြုရန်',
-      'passcodes_do_not_match': 'လျှို့ဝှက်ကုဒ်များ မကိုက်ညီပါ',
-      'sending_code': 'ကုဒ် ပို့နေသည်...',
-      'signup_info_title': 'ပရိုဖိုင် ဖြည့်ရန်',
-      'signup_info_heading': 'သင့်အကြောင်း ပြောပြပါ',
-      'full_name_label': 'အမည်အပြည့်အစုံ',
-      'full_name_hint': 'မောင်မောင်',
-      'username_label': 'အသုံးပြုသူအမည်',
-      'username_hint': 'maung_maung',
-      'create_account_button': 'အကောင့်ဖွင့်ရန်',
-      'creating_account': 'အကောင့်ဖွင့်နေသည်...',
-      'enter_full_name': 'အမည်အပြည့်အစုံ ထည့်ပါ',
-      'username_min_length':
+      Constants.locale.confirmPasscodeLabel: 'လျှို့ဝှက်ကုဒ် အတည်ပြုရန်',
+      Constants.locale.passcodesDoNotMatch: 'လျှို့ဝှက်ကုဒ်များ မကိုက်ညီပါ',
+      Constants.locale.sendingCode: 'ကုဒ် ပို့နေသည်...',
+      Constants.locale.signupInfoTitle: 'ပရိုဖိုင် ဖြည့်ရန်',
+      Constants.locale.signupInfoHeading: 'သင့်အကြောင်း ပြောပြပါ',
+      Constants.locale.fullNameLabel: 'အမည်အပြည့်အစုံ',
+      Constants.locale.fullNameHint: 'မောင်မောင်',
+      Constants.locale.usernameLabel: 'အသုံးပြုသူအမည်',
+      Constants.locale.usernameHint: 'maung_maung',
+      Constants.locale.createAccountButton: 'အကောင့်ဖွင့်ရန်',
+      Constants.locale.creatingAccount: 'အကောင့်ဖွင့်နေသည်...',
+      Constants.locale.enterFullName: 'အမည်အပြည့်အစုံ ထည့်ပါ',
+      Constants.locale.usernameMinLength:
           'အသုံးပြုသူအမည်သည် အနည်းဆုံး စာလုံး ၃ လုံး ရှိရမည်',
-      'username_charset':
+      Constants.locale.usernameCharset:
           'အသုံးပြုသူအမည်တွင် စာလုံး၊ ဂဏန်းနှင့် underscore များသာ ပါဝင်နိုင်သည်',
-      'verify_email_title': 'အီးမေးလ် အတည်ပြုရန်',
-      'verify_email_heading': 'သင့်အီးမေးလ်ကို အတည်ပြုပါ',
-      'verify_email_subtitle': '@email သို့ ဂဏန်း ၆ လုံး ကုဒ် ပို့ထားပါသည်',
-      'verify_code_button': 'ကုဒ် အတည်ပြုရန်',
-      'verifying': 'အတည်ပြုနေသည်...',
-      'resend_code': 'ကုဒ် ပြန်ပို့ရန်',
-      'resend_code_in': '@seconds⁠s အတွင်း ကုဒ်ပြန်ပို့နိုင်သည်',
-      'enter_6_digit_code': 'ဂဏန်း ၆ လုံး ကုဒ် ထည့်ပါ',
-      'forgot_passcode_title': 'လျှို့ဝှက်ကုဒ် မေ့နေပါသလား',
-      'forgot_passcode_subtitle':
+      Constants.locale.verifyEmailTitle: 'အီးမေးလ် အတည်ပြုရန်',
+      Constants.locale.verifyEmailHeading: 'သင့်အီးမေးလ်ကို အတည်ပြုပါ',
+      Constants.locale.verifyEmailSubtitle:
+          '@email သို့ ဂဏန်း ၆ လုံး ကုဒ် ပို့ထားပါသည်',
+      Constants.locale.verifyCodeButton: 'ကုဒ် အတည်ပြုရန်',
+      Constants.locale.verifying: 'အတည်ပြုနေသည်...',
+      Constants.locale.resendCode: 'ကုဒ် ပြန်ပို့ရန်',
+      Constants.locale.resendCodeIn: '@seconds⁠s အတွင်း ကုဒ်ပြန်ပို့နိုင်သည်',
+      Constants.locale.enter6DigitCode: 'ဂဏန်း ၆ လုံး ကုဒ် ထည့်ပါ',
+      Constants.locale.forgotPasscodeTitle: 'လျှို့ဝှက်ကုဒ် မေ့နေပါသလား',
+      Constants.locale.forgotPasscodeSubtitle:
           'အီးမေးလ်ထည့်ပါ။ လျှို့ဝှက်ကုဒ် ပြန်သတ်မှတ်ရန် လင့်ခ် ပို့ပေးပါမည်။',
-      'send_reset_link': 'ပြန်သတ်မှတ်ရန် လင့်ခ် ပို့ရန်',
-      'sending': 'ပို့နေသည်...',
-      'back_to_sign_in': 'လော့ဂ်အင်သို့ ပြန်သွားရန်',
-      'home': 'မူလစာမျက်နှာ',
-      'welcome_home': 'Meritbox မှ ကြိုဆိုပါတယ်!',
-      'loading': 'ဖွင့်နေသည်...',
-      'sign_out_button': 'ထွက်ရန်',
-      'sign_in_google_failure': 'Google အတည်ပြုမှု မအောင်မြင်ပါ!',
-      'google_too_many_attempts':
+      Constants.locale.sendResetLink: 'ပြန်သတ်မှတ်ရန် လင့်ခ် ပို့ရန်',
+      Constants.locale.sending: 'ပို့နေသည်...',
+      Constants.locale.backToSignIn: 'လော့ဂ်အင်သို့ ပြန်သွားရန်',
+      Constants.locale.home: 'မူလစာမျက်နှာ',
+      Constants.locale.welcomeHome: 'Meritbox မှ ကြိုဆိုပါတယ်!',
+      Constants.locale.loading: 'ဖွင့်နေသည်...',
+      Constants.locale.signOutButton: 'ထွက်ရန်',
+      Constants.locale.signInGoogleFailure: 'Google အတည်ပြုမှု မအောင်မြင်ပါ!',
+      Constants.locale.googleTooManyAttempts:
           'ကြိုးစားမှုများလွန်းပါသည်။ @seconds စက္ကန့် စောင့်ပြီး ထပ်စမ်းပါ။',
-      'session_replaced':
+      Constants.locale.sessionReplaced:
           'ဤစက်ပေါ်တွင် နောက်ဆုံးလော့ဂ်အင်ဝင်မှုကြောင့် သင့် session အသစ်ဖြင့် အစားထိုးခံရပါသည်။',
-      'error': 'အမှား',
-      'success': 'အောင်မြင်သည်',
-      'sign_in_failed': 'လော့ဂ်အင် မအောင်မြင်ပါ။ ထပ်စမ်းကြည့်ပါ။',
-      'verification_failed': 'အတည်ပြုမှု မအောင်မြင်ပါ',
-      'registration_failed': 'အကောင့်ဖွင့်ခြင်း မအောင်မြင်ပါ',
-      'send_code_failed': 'အတည်ပြုကုဒ် ပို့၍မရပါ',
-      'reset_failed': 'ပြန်သတ်မှတ်ရန် ညွှန်ကြားချက် ပို့၍မရပါ',
+      Constants.locale.error: 'အမှား',
+      Constants.locale.success: 'အောင်မြင်သည်',
+      Constants.locale.warning: 'သတိပေးချက်',
+      Constants.locale.info: 'သတင်းအချက်အလက်',
+      Constants.locale.signInFailed: 'လော့ဂ်အင် မအောင်မြင်ပါ။ ထပ်စမ်းကြည့်ပါ။',
+      Constants.locale.verificationFailed: 'အတည်ပြုမှု မအောင်မြင်ပါ',
+      Constants.locale.registrationFailed: 'အကောင့်ဖွင့်ခြင်း မအောင်မြင်ပါ',
+      Constants.locale.sendCodeFailed: 'အတည်ပြုကုဒ် ပို့၍မရပါ',
+      Constants.locale.resetFailed: 'ပြန်သတ်မှတ်ရန် ညွှန်ကြားချက် ပို့၍မရပါ',
+
+      // Settings
+      Constants.locale.settings: 'ဆက်တင်များ',
+      Constants.locale.theme: 'အပြင်အဆင်',
+      Constants.locale.language: 'ဘာသာစကား',
+      Constants.locale.account: 'အကောင့်',
+      Constants.locale.logoutConfirmation: 'ထွက်ရန် သေချာပါသလား?',
+      Constants.locale.cancel: 'မလုပ်တော့ပါ',
+      Constants.locale.exit: 'ထွက်ရန်',
+      Constants.locale.exitConfirm: 'ထွက်ရန် သေချာပါသလား?',
+      Constants.locale.exitTitle: 'အက်ပ်မှ ထွက်ရန်',
+      Constants.locale.appInfo: 'အက်ပ်အချက်အလက်',
     },
   };
 }
