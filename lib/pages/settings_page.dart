@@ -67,16 +67,19 @@ class SettingsPage extends GetView<SettingsController> {
     return Obx(
       () => Container(
         decoration: Design.styles.card.copyWith(color: context.colors.surface),
-        child: ListTile(
-          leading: Icon(controller.themeIcon, color: context.colors.primary),
-          title: Text(Constants.locale.theme.tr, style: context.typo.bodyLarge),
-          subtitle: Text(controller.themeLabel, style: context.typo.bodyMedium),
-          trailing: Switch(
-            value: controller.isDarkMode.value,
-            onChanged: (_) => controller.toggleTheme(),
-            activeThumbColor: context.colors.primary,
+        child: Material(
+          color: Colors.transparent,
+          child: ListTile(
+            leading: Icon(controller.themeIcon, color: context.colors.primary),
+            title: Text(Constants.locale.theme.tr, style: context.typo.bodyLarge),
+            subtitle: Text(controller.themeLabel, style: context.typo.bodyMedium),
+            trailing: Switch(
+              value: controller.isDarkMode.value,
+              onChanged: (_) => controller.toggleTheme(),
+              activeThumbColor: context.colors.primary,
+            ),
+            onTap: controller.toggleTheme,
           ),
-          onTap: controller.toggleTheme,
         ),
       ),
     );
@@ -85,53 +88,56 @@ class SettingsPage extends GetView<SettingsController> {
   Widget _buildLanguageTile(BuildContext context) {
     return Container(
       decoration: Design.styles.card.copyWith(color: context.colors.surface),
-      child: ListTile(
-        leading: _buildFlagIcon(context),
-        title: Text(
-          Constants.locale.language.tr,
-          style: context.typo.bodyLarge,
-        ),
-        subtitle: Obx(
-          () => Text(
-            controller.currentLanguageName,
-            style: context.typo.bodyMedium,
+      child: Material(
+        color: Colors.transparent,
+        child: ListTile(
+          leading: _buildFlagIcon(context),
+          title: Text(
+            Constants.locale.language.tr,
+            style: context.typo.bodyLarge,
           ),
-        ),
-        trailing: PopupMenuButton<String>(
-          icon: Icon(
-            Design.icons.downArrow,
-            color: context.colors.textSecondary,
+          subtitle: Obx(
+            () => Text(
+              controller.currentLanguageName,
+              style: context.typo.bodyMedium,
+            ),
           ),
-          onSelected: controller.changeLocale,
-          itemBuilder: (context) => controller.supportedLocales
-              .map(
-                (entry) => PopupMenuItem<String>(
-                  value: entry.key,
-                  child: Obx(
-                    () => Row(
-                      children: [
-                        _buildFlagIcon(context, locale: entry.key),
-                        SizedBox(width: Design.spacing.sm),
-                        Text(
-                          entry.value,
-                          style: context.typo.bodyMedium.copyWith(
-                            color: controller.isLocale(entry.key)
-                                ? context.colors.primary
-                                : context.colors.textPrimary,
+          trailing: PopupMenuButton<String>(
+            icon: Icon(
+              Design.icons.downArrow,
+              color: context.colors.textSecondary,
+            ),
+            onSelected: controller.changeLocale,
+            itemBuilder: (context) => controller.supportedLocales
+                .map(
+                  (entry) => PopupMenuItem<String>(
+                    value: entry.key,
+                    child: Obx(
+                      () => Row(
+                        children: [
+                          _buildFlagIcon(context, locale: entry.key),
+                          SizedBox(width: Design.spacing.sm),
+                          Text(
+                            entry.value,
+                            style: context.typo.bodyMedium.copyWith(
+                              color: controller.isLocale(entry.key)
+                                  ? context.colors.primary
+                                  : context.colors.textPrimary,
+                            ),
                           ),
-                        ),
-                        if (controller.isLocale(entry.key))
-                          Icon(
-                            Design.icons.check,
-                            size: Design.spacing.iconSmall,
-                            color: context.colors.primary,
-                          ),
-                      ],
+                          if (controller.isLocale(entry.key))
+                            Icon(
+                              Design.icons.check,
+                              size: Design.spacing.iconSmall,
+                              color: context.colors.primary,
+                            ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              )
-              .toList(),
+                )
+                .toList(),
+          ),
         ),
       ),
     );
@@ -151,49 +157,52 @@ class SettingsPage extends GetView<SettingsController> {
   ) {
     return Container(
       decoration: Design.styles.card.copyWith(color: context.colors.surface),
-      child: Column(
-        children: [
-          ListTile(
-            leading: CircleAvatar(
-              backgroundColor: context.colors.primary.withValues(alpha: 0.1),
-              backgroundImage: authController.currentUser.value?.photo != null
-                  ? NetworkImage(authController.currentUser.value!.photo!)
-                  : null,
-              child: authController.currentUser.value?.photo == null
-                  ? Icon(Design.icons.person, color: context.colors.primary)
-                  : null,
-            ),
-            title: Text(
-              authController.currentUser.value?.name ??
-                  authController.currentUser.value?.username ??
-                  Constants.locale.account.tr,
-              style: context.typo.bodyLarge,
-            ),
-            subtitle: Obx(
-              () => Text(
-                authController.currentUser.value?.email ??
-                    Constants.locale.loading.tr,
-                style: context.typo.bodyMedium,
+      child: Material(
+        color: Colors.transparent,
+        child: Column(
+          children: [
+            ListTile(
+              leading: CircleAvatar(
+                backgroundColor: context.colors.primary.withValues(alpha: 0.1),
+                backgroundImage: authController.currentUser.value?.photo != null
+                    ? NetworkImage(authController.currentUser.value!.photo!)
+                    : null,
+                child: authController.currentUser.value?.photo == null
+                    ? Icon(Design.icons.person, color: context.colors.primary)
+                    : null,
+              ),
+              title: Text(
+                authController.currentUser.value?.name ??
+                    authController.currentUser.value?.username ??
+                    Constants.locale.account.tr,
+                style: context.typo.bodyLarge,
+              ),
+              subtitle: Obx(
+                () => Text(
+                  authController.currentUser.value?.email ??
+                      Constants.locale.loading.tr,
+                  style: context.typo.bodyMedium,
+                ),
               ),
             ),
-          ),
-          Divider(
-            color: context.colors.divider,
-            height: 1,
-            indent: Design.spacing.lg,
-            endIndent: Design.spacing.lg,
-          ),
-          ListTile(
-            leading: Icon(Design.icons.logout, color: context.colors.error),
-            title: Text(
-              Constants.locale.signOutButton.tr,
-              style: context.typo.bodyLarge.copyWith(
-                color: context.colors.error,
-              ),
+            Divider(
+              color: context.colors.divider,
+              height: 1,
+              indent: Design.spacing.lg,
+              endIndent: Design.spacing.lg,
             ),
-            onTap: () => _showLogoutDialog(context, authController),
-          ),
-        ],
+            ListTile(
+              leading: Icon(Design.icons.logout, color: context.colors.error),
+              title: Text(
+                Constants.locale.signOutButton.tr,
+                style: context.typo.bodyLarge.copyWith(
+                  color: context.colors.error,
+                ),
+              ),
+              onTap: () => _showLogoutDialog(context, authController),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -203,13 +212,16 @@ class SettingsPage extends GetView<SettingsController> {
 
     return Container(
       decoration: Design.styles.card.copyWith(color: context.colors.surface),
-      child: ListTile(
-        leading: Icon(Design.icons.info, color: context.colors.textSecondary),
-        title: Text(config.appName, style: context.typo.bodyLarge),
-        subtitle: Obx(
-          () => Text(
-            'v${controller.appVersion.value}',
-            style: context.typo.bodyMedium,
+      child: Material(
+        color: Colors.transparent,
+        child: ListTile(
+          leading: Icon(Design.icons.info, color: context.colors.textSecondary),
+          title: Text(config.appName, style: context.typo.bodyLarge),
+          subtitle: Obx(
+            () => Text(
+              'v${controller.appVersion.value}',
+              style: context.typo.bodyMedium,
+            ),
           ),
         ),
       ),
