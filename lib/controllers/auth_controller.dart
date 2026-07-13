@@ -6,6 +6,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meritbox_mobile/config/config.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/design/components/components.dart';
+import 'package:meritbox_mobile/helpers/validator/fullname_validator.dart';
+import 'package:meritbox_mobile/helpers/validator/user_name_validator.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import '../helpers/validator/email_validator.dart';
 import '../routes/app_routes.dart';
@@ -19,6 +21,8 @@ class AuthController extends GetxController {
   final StorageService _storage = Get.find();
   final AppConfig _config = AppConfig();
   final _emailValidator = EmailValidator();
+  final _fullNameValidator = FullnameValidator();
+  final _userNameValidator = UserNameValidator();
 
   static const int maxAttempts = 3;
   static const List<int> cooldownSecondsByLevel = [30, 60, 120];
@@ -36,6 +40,8 @@ class AuthController extends GetxController {
   var confirmPasscode = ''.obs;
   var fullName = ''.obs;
   var username = ''.obs;
+  var signUpInfoError = RxnString();
+
 
   // Passcode attempt limiting (mirrors the web: 3 attempts, then
   // escalating 30s/60s/120s cooldowns, persisted per email).
@@ -336,18 +342,33 @@ class AuthController extends GetxController {
     }
   }
 
+
+  //validate UserName
+
+  bool validateFullName() {
+    signUpInfoError.value = _fullNameValidator.validate(fullName.value);
+    return signUpInfoError.value == null;
+  }
+
+  bool validateUserName(){
+    signUpInfoError.value = _userNameValidator.validate(username.value);
+    return signUpInfoError.value == null;
+  }
+
+  bool validateSignUpInfo() {
+    final isFullNameValid = validateFullName();
+    final isUsernameValid = validateUserName();
+    return isFullNameValid && isUsernameValid;
+  }
+
+
   // Register new user with full details
   Future<void> signUp() async {
-    if (fullName.value.trim().length < 2) {
-      AppSnackbar.error(Constants.locale.enterFullName.tr);
-      return;
-    }
-    if (username.value.length < 3) {
-      AppSnackbar.error(Constants.locale.usernameMinLength.tr);
-      return;
-    }
-    if (!RegExp(r'^[a-z0-9_]+$').hasMatch(username.value)) {
-      AppSnackbar.error(Constants.locale.usernameCharset.tr);
+
+    if (!validateSignUpInfo()) {
+      AppSnackbar.error(
+        signUpInfoError.value ?? '',
+      );
       return;
     }
 

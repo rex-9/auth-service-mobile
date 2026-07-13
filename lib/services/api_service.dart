@@ -21,6 +21,7 @@ class ApiService extends GetConnect {
 
   // ===== SETUP =====
   void _setupHttpClient() {
+
     httpClient.baseUrl = ServerRoutes.baseUrl;
     httpClient.timeout = Design.timers.apiTimeout;
     httpClient.defaultContentType = 'application/json';

@@ -38,6 +38,7 @@ class AppPage extends StatelessWidget {
       canPop: !showBackButton,
       // TODO: NOT WORKING AT ALL!!!
       onPopInvokedWithResult: (bool didPop, dynamic result) async {
+
         if (!didPop) _handleBackPressed(context);
       },
       child: Scaffold(

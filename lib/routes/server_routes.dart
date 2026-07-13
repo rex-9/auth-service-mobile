@@ -2,7 +2,7 @@
 class ServerRoutes {
   // Base URL - Change for production
   // For Android Emulator - use 10.0.2.2 to reach host machine
-  static const String baseUrl = 'http://10.0.2.2:3000';
+  static const String baseUrl = 'http://localhost:3000';
 
   // Users Endpoints
   static const String peekUser = '/users/peek';
