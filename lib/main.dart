@@ -16,7 +16,7 @@ void main() async {
 
   await dotenv.load(fileName: AppConfig().appEnv);
   await GetStorage.init();
-  InitialBinding().dependencies();
+   InitialBinding().dependencies();
 
   runApp(const MyApp());
 }

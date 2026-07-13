@@ -7,14 +7,18 @@ import 'package:meritbox_mobile/config/config.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/design/components/components.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import '../helpers/validator/email_validator.dart';
 import '../routes/app_routes.dart';
 import '../services/services.dart';
 import '../models/user_model.dart';
 
 class AuthController extends GetxController {
-  final AuthService _auth = Get.find<AuthServiceImpl>();
+  //if we have the mulitple implementations of the same service, we can use the tag to differentiate between them
+  //we have to find by the type we pass // example: Get.find<AuthService>(tag: 'auth'); not with Get.find<AuthServiceImpl>();
+  final AuthService _auth = Get.find<AuthService>();
   final StorageService _storage = Get.find();
   final AppConfig _config = AppConfig();
+  final _emailValidator = EmailValidator();
 
   static const int maxAttempts = 3;
   static const List<int> cooldownSecondsByLevel = [30, 60, 120];
@@ -213,13 +217,8 @@ class AuthController extends GetxController {
   // ---------------------------------------------------------------------
 
   bool validateEmail() {
-    final emailRegex = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');
-    if (!emailRegex.hasMatch(email.value.trim())) {
-      emailError.value = Constants.locale.invalidEmail.tr;
-      return false;
-    }
-    emailError.value = null;
-    return true;
+    emailError.value = _emailValidator.validate(email.value);
+    return emailError.value == null;
   }
 
   // Step 1: Check if user exists

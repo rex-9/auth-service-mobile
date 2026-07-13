@@ -15,7 +15,8 @@ class InitialBinding extends Bindings {
     Get.put<ApiService>(ApiService(), permanent: true);
 
     // Auth Service (depends on ApiService)
-    Get.put<AuthService>(AuthServiceImpl(), permanent: true);
+    //if we have the mulitple implementations of the same service, we can use the tag to differentiate between them
+    Get.put<AuthService>(AuthServiceImpl(), permanent: true,);
 
     // ===== Controllers =====
 
