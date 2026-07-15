@@ -1,7 +1,7 @@
 // lib/services/storage_service.dart
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import '../models/user_model.dart';
+import '../models/user.model.dart';
 
 class StorageService extends GetxService {
   late final GetStorage _box;

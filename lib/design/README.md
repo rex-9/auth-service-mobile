@@ -130,7 +130,7 @@ AppInputField(
 // Passcode Field
 AppPasscodeField(
   pinController: pinController,
-  onCompleted: (pin) => verifyCode(pin),
+  onCompleted: (pin) => Code(pin),
 )
 
 // Page Layout

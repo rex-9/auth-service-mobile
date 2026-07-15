@@ -1,1 +1,2 @@
-export 'user_model.dart';
+export 'user.model.dart';
+export 'responses/responses.dart';
