@@ -67,5 +67,18 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<!-- iOS OAuth Client ID -->
+	<key>CFBundleURLTypes</key>
+	<array>
+			<dict>
+					<key>CFBundleTypeRole</key>
+					<string>Editor</string>
+
+					<key>CFBundleURLSchemes</key>
+					<array>
+							<string>com.googleusercontent.apps.690728597235-gn4u93uln936upb7ohrpq2q35v92eg3e</string>
+					</array>
+			</dict>
+	</array>
 </dict>
 </plist>
