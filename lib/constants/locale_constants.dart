@@ -44,11 +44,11 @@ class LocaleConstants {
   String get createAccountButton => 'create_account_button';
   String get creatingAccount => 'creating_account';
 
-  // Verify Email
-  String get verifyEmailTitle => 'verify_email_title';
-  String get verifyEmailHeading => 'verify_email_heading';
-  String get verifyEmailSubtitle => 'verify_email_subtitle';
-  String get verifyCodeButton => 'verify_code_button';
+  // Confirm Email
+  String get confirmEmailTitle => 'confirm_email_title';
+  String get confirmEmailHeading => 'confirm_email_heading';
+  String get confirmEmailSubtitle => 'confirm_email_subtitle';
+  String get confirmCodeButton => 'confirm_code_button';
   String get verifying => 'verifying';
   String get resendCode => 'resend_code';
   String get resendCodeIn => 'resend_code_in';

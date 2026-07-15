@@ -3,4 +3,4 @@ export 'forgot_passcode_page.dart';
 export 'signin_passcode_page.dart';
 export 'signup_passcode_page.dart';
 export 'signup_info_page.dart';
-export 'verify_email_page.dart';
+export 'confirm_email_page.dart';

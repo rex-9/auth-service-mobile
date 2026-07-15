@@ -5,7 +5,7 @@ import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/controllers/controllers.dart';
 import 'package:meritbox_mobile/design/design.dart';
 import 'package:meritbox_mobile/routes/routes.dart';
-import 'package:meritbox_mobile/models/api_response.dart';
+import 'package:meritbox_mobile/models/responses/api.response.dart';
 
 // #TODO: API impl
 class ApiService extends GetConnect {
@@ -48,38 +48,30 @@ class ApiService extends GetConnect {
   // ===== RESPONSE HANDLING =====
   ApiResponse<T> parseResponse<T>(
     Response response,
-    T Function(dynamic) fromJson,
+    T Function(Map<String, dynamic> data) fromJson,
   ) {
-    final statusCode =
-        response.body?['status']?['code'] ??
-        response.statusCode ??
-        HttpStatus.internalServerError;
+    final body = response.body as Map<String, dynamic>? ?? {};
+    final status = body['status'] as Map<String, dynamic>? ?? {};
+    final statusCode = status['code'] as int? ?? response.statusCode ?? 500;
+    final data = body['data'] as Map<String, dynamic>?;
 
-    if (response.hasError) {
-      T? errorData;
-      try {
-        final data = response.body?['data'];
-        if (data != null) errorData = fromJson(data);
-      } catch (_) {
-        // Error payload doesn't match expected shape; ignore.
-      }
-
+    if (response.hasError || !(status['success'] as bool? ?? false)) {
       return ApiResponse.error(
         message:
-            response.body?['status']?['error'] ??
+            status['error'] as String? ??
+            status['message'] as String? ??
             response.statusText ??
             HttpStatusMap.getMessage(statusCode),
         statusCode: statusCode,
-        data: errorData,
+        data: data != null ? fromJson(data) : null,
       );
     }
 
-    final body = response.body;
     return ApiResponse.success(
       message:
-          body['status']['message'] ?? HttpStatusMap.getMessage(statusCode),
-      data: body['data'] != null ? fromJson(body['data']) : null,
+          status['message'] as String? ?? HttpStatusMap.getMessage(statusCode),
       statusCode: statusCode,
+      data: fromJson(data!),
     );
   }
 

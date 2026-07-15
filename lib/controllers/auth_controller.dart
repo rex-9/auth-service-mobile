@@ -6,10 +6,11 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meritbox_mobile/config/config.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/design/components/components.dart';
+import 'package:meritbox_mobile/models/enums.dart';
+import 'package:meritbox_mobile/models/models.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import '../routes/app_routes.dart';
 import '../services/services.dart';
-import '../models/user_model.dart';
 
 class AuthController extends GetxController {
   final AuthService _auth = Get.find();
@@ -33,33 +34,28 @@ class AuthController extends GetxController {
   var fullName = ''.obs;
   var username = ''.obs;
 
-  // Passcode attempt limiting (mirrors the web: 3 attempts, then
-  // escalating 30s/60s/120s cooldowns, persisted per email).
+  // Passcode attempt limiting
   var attemptsLeft = maxAttempts.obs;
   var hasFailureHistory = false.obs;
   var cooldownSecondsLeft = 0.obs;
   int _cooldownLevel = 0;
   Timer? _cooldownTimer;
 
-  // Resend countdowns (30s verify email, 60s forgot passcode).
+  // Resend countdowns
   var resendSecondsLeft = 0.obs;
   Timer? _resendTimer;
 
-  // Google sign up challenge: non-empty means the new Google account
-  // must set a passcode to finish account creation.
+  // Google sign up challenge
   var googleChallengeToken = ''.obs;
   bool get isGooglePasscodeSetup => googleChallengeToken.value.isNotEmpty;
 
-  // Pin fields are owned here so GetView pages stay stateless and the
-  // controller can clear/disable them (e.g. when a cooldown ends).
+  // Pin controllers
   final signinPin = PinInputController();
   final signupPin = PinInputController();
   final signupConfirmPin = PinInputController();
-  final verifyPin = PinInputController();
+  final confirmPin = PinInputController();
 
-  // init loading state while checking auth status
   var isCheckingAuth = true.obs;
-
   bool _googleInitialized = false;
 
   @override
@@ -75,23 +71,23 @@ class AuthController extends GetxController {
     super.onClose();
   }
 
+  // ---------------------------------------------------------------------
+  // Auth Status
+  // ---------------------------------------------------------------------
+
   Future<void> checkAuthStatus() async {
     isCheckingAuth.value = true;
 
-    // Try to get token
     final token = _storage.getToken();
     if (token != null && token.isNotEmpty) {
       authToken.value = token;
-
-      // Try to get user from storage first
-      final UserModel? storedUser = _storage.getUserData();
+      final storedUser = _storage.getUserData();
       if (storedUser != null) {
         currentUser.value = storedUser;
         isLoggedIn.value = true;
         isCheckingAuth.value = false;
         return;
       }
-
       // Fallback: fetch from API
       await getCurrentUser();
     } else {
@@ -102,7 +98,7 @@ class AuthController extends GetxController {
   }
 
   // ---------------------------------------------------------------------
-  // Passcode retry state (persisted per email, like the web client)
+  // Passcode Retry State
   // ---------------------------------------------------------------------
 
   void loadRetryState() {
@@ -143,29 +139,19 @@ class AuthController extends GetxController {
     _persistRetryState();
   }
 
-  /// Applies a failed sign-in. Prefers the server retry metadata
-  /// (remaining_attempts / retry_after) and falls back to local counting.
-  void _applySignInFailure(Map<String, dynamic>? data) {
+  void _applySignInFailure({
+    required int remainingAttempts,
+    required int cooldownRemaining,
+  }) {
     hasFailureHistory.value = true;
 
-    final serverRemaining = (data?['remaining_attempts'] as num?)?.toInt();
-    final serverRetryAfter =
-        ((data?['retry_after'] ?? data?['cooldown_remaining']) as num?)
-            ?.toInt();
+    // Use server values directly
+    attemptsLeft.value = remainingAttempts;
 
-    attemptsLeft.value = serverRemaining ?? (attemptsLeft.value - 1);
-    if (attemptsLeft.value < 0) attemptsLeft.value = 0;
-
-    var waitSeconds = serverRetryAfter ?? 0;
-    if (waitSeconds <= 0 && attemptsLeft.value == 0) {
-      // No server cooldown given: escalate locally 30s -> 60s -> 120s.
-      _cooldownLevel = (_cooldownLevel + 1).clamp(1, 3);
-      waitSeconds = cooldownSecondsByLevel[_cooldownLevel - 1];
-    }
-
-    if (waitSeconds > 0) {
+    if (cooldownRemaining > 0) {
       attemptsLeft.value = 0;
-      final until = DateTime.now().millisecondsSinceEpoch + waitSeconds * 1000;
+      final until =
+          DateTime.now().millisecondsSinceEpoch + cooldownRemaining * 1000;
       _startCooldownUntil(until);
       _persistRetryState(cooldownUntilMs: until);
     } else {
@@ -181,7 +167,6 @@ class AuthController extends GetxController {
       if (left <= 0) {
         cooldownSecondsLeft.value = 0;
         _cooldownTimer?.cancel();
-        // Cooldown over: restore attempts and clear the typed passcode.
         attemptsLeft.value = maxAttempts;
         passcode.value = '';
         signinPin.clear();
@@ -209,7 +194,7 @@ class AuthController extends GetxController {
   }
 
   // ---------------------------------------------------------------------
-  // Auth flow
+  // Auth Flow
   // ---------------------------------------------------------------------
 
   bool validateEmail() {
@@ -226,34 +211,25 @@ class AuthController extends GetxController {
   Future<PeekedUserStatus> peekUser(String emailAddress) async {
     try {
       final response = await _auth.peekUser(emailAddress);
-
-      if (!response.success) {
-        // API call failed
+      if (!response.success || response.data == null) {
         return PeekedUserStatus.error;
       }
-      // API succeeded, check if user exists
-      return response.data == true
+      final data = response.data!;
+      if (!data.userExists) return PeekedUserStatus.notExists;
+      return data.confirmed
           ? PeekedUserStatus.exists
-          : PeekedUserStatus.notExists;
-    } catch (e) {
-      // Exception occurred
+          : PeekedUserStatus.existsUnconfirmed;
+    } catch (_) {
       return PeekedUserStatus.error;
     }
   }
 
-  void _storeSession(Map<String, dynamic> data) {
-    final token = data['token'];
-    final userJson = data['user'] as Map<String, dynamic>;
-
-    authToken.value = token;
-    _storage.setToken(token);
-    _storage.setUserEmail(userJson['email']);
-
-    // Save user data
-    final user = UserModel.fromJson(userJson);
-    currentUser.value = user;
-    _storage.setUserData(user);
-
+  void _storeSession(AuthResponse response) {
+    authToken.value = response.token;
+    _storage.setToken(response.token);
+    _storage.setUserEmail(response.user.email);
+    currentUser.value = response.user;
+    _storage.setUserData(response.user);
     isLoggedIn.value = true;
   }
 
@@ -267,24 +243,38 @@ class AuthController extends GetxController {
     }
 
     isLoading.value = true;
-
     try {
       final response = await _auth.signIn(email.value, passcode.value);
 
-      if (response.success && response.data?['token'] != null) {
-        _resetRetryState();
-        _storeSession(response.data!);
-        AppRoutes.toHome();
-      } else if (response.success) {
-        // Signed in with an unconfirmed email: the server just sent a
-        // fresh confirmation code, so continue to email verification.
-        AppSnackbar.success(response.message);
-        _startResendCountdown(30);
-        AppRoutes.toVerifyEmail(arguments: {'email': email.value});
+      if (response.success && response.data != null) {
+        final data = response.data!;
+
+        // Check if user is confirmed (has user + token)
+        if (data.user != null && data.token != null) {
+          _resetRetryState();
+          _storeSession(AuthResponse(user: data.user!, token: data.token!));
+          AppRoutes.toHome();
+        } else if (data.otpSent) {
+          // Unconfirmed user - OTP sent
+          AppSnackbar.success(response.message);
+          _startResendCountdown(30);
+          AppRoutes.toConfirmEmail(arguments: {'email': email.value});
+        } else {
+          AppSnackbar.error(response.message);
+        }
       } else {
         signinPin.triggerError();
-        _applySignInFailure(response.data);
-        AppSnackbar.error(response.message);
+
+        final data = response.data;
+        final remainingAttempts = data?.remainingAttempts ?? 0;
+        final cooldownRemaining = data?.cooldownRemaining ?? 0;
+
+        _applySignInFailure(
+          remainingAttempts: remainingAttempts,
+          cooldownRemaining: cooldownRemaining,
+        );
+
+        AppSnackbar.error(response.error ?? response.message);
       }
     } catch (e, stk) {
       AppSnackbar.error(Constants.locale.signInFailed.tr, e: e, stk: stk);
@@ -296,17 +286,15 @@ class AuthController extends GetxController {
   // Step 2b: Send confirmation code (for new user registration)
   Future<void> sendConfirmationCode() async {
     isLoading.value = true;
-
     try {
       final response = await _auth.sendConfirmationCode(email.value);
-
       if (response.success) {
         _startResendCountdown(30);
-        if (Get.currentRoute != AppRoutes.verifyEmail) {
-          AppRoutes.toVerifyEmail(arguments: {'email': email.value});
+        if (Get.currentRoute != AppRoutes.confirmEmail) {
+          AppRoutes.toConfirmEmail(arguments: {'email': email.value});
         }
       } else {
-        AppSnackbar.error(response.message);
+        AppSnackbar.error(response.error ?? response.message);
       }
     } catch (e, stk) {
       AppSnackbar.error(Constants.locale.sendCodeFailed.tr, e: e, stk: stk);
@@ -315,20 +303,17 @@ class AuthController extends GetxController {
     }
   }
 
-  // Step 3: Verify code (for new user)
-  Future<void> verifyCode(String code) async {
+  // Step 3: Confirm code (for new user)
+  Future<void> confirmCode(String code) async {
     isLoading.value = true;
-
     try {
       final response = await _auth.confirmCode(email.value, code);
-
-      if (response.success && response.data?['token'] != null) {
-        // User is confirmed and signed in
+      if (response.success && response.data != null) {
         _storeSession(response.data!);
         AppRoutes.toHome();
       } else {
-        verifyPin.triggerError();
-        AppSnackbar.error(response.message);
+        confirmPin.triggerError();
+        AppSnackbar.error(response.error ?? response.message);
       }
     } catch (e, stk) {
       AppSnackbar.error(Constants.locale.verificationFailed.tr, e: e, stk: stk);
@@ -353,7 +338,6 @@ class AuthController extends GetxController {
     }
 
     isLoading.value = true;
-
     try {
       final response = await _auth.signUp(
         username: username.value,
@@ -365,9 +349,9 @@ class AuthController extends GetxController {
 
       if (response.success) {
         _startResendCountdown(30);
-        AppRoutes.toVerifyEmail(arguments: {'email': email.value});
+        AppRoutes.toConfirmEmail(arguments: {'email': email.value});
       } else {
-        AppSnackbar.error(response.message);
+        AppSnackbar.error(response.error ?? response.message);
       }
     } catch (e, stk) {
       AppSnackbar.error(Constants.locale.registrationFailed.tr, e: e, stk: stk);
@@ -380,7 +364,6 @@ class AuthController extends GetxController {
   // gets a challenge token and must set a passcode to finish sign up).
   Future<void> signInWithGoogle() async {
     isLoading.value = true;
-
     try {
       final signIn = GoogleSignIn.instance;
       if (!_googleInitialized) {
@@ -388,31 +371,35 @@ class AuthController extends GetxController {
         _googleInitialized = true;
       }
 
-      // Step 1: authenticate user
       final user = await signIn.authenticate();
-
-      // Step 2: request authorization (scopes)
       const scopes = <String>['email'];
       final auth = await user.authorizationClient.authorizeScopes(scopes);
       final accessToken = auth.accessToken;
 
       final response = await _auth.signInWithGoogle(accessToken);
 
-      if (response.success && response.data?['passcode_required'] == true) {
+      if (response.success && response.data != null) {
         // New Google account: set a passcode to complete account creation.
-        googleChallengeToken.value = response.data?['challenge_token'] ?? '';
-        email.value = user.email;
-        passcode.value = '';
-        confirmPasscode.value = '';
-        signupPin.clear();
-        signupConfirmPin.clear();
-        AppRoutes.toSignUpPasscode();
-      } else if (response.success && response.data?['token'] != null) {
-        email.value = user.email;
-        _storeSession(response.data!);
-        AppRoutes.toHome();
+        final data = response.data!;
+        if (data.passwordRequired && data.challengeToken != null) {
+          googleChallengeToken.value = data.challengeToken!;
+          email.value = user.email;
+          passcode.value = '';
+          confirmPasscode.value = '';
+          signupPin.clear();
+          signupConfirmPin.clear();
+          AppRoutes.toSignUpPasscode();
+        } else {
+          email.value = user.email;
+          // Existing user - fetch full session
+          final sessionResponse = await _auth.signInWithGoogle(accessToken);
+          if (sessionResponse.success && sessionResponse.data != null) {
+            _storeSession(AuthResponse(user: data.user!, token: data.token!));
+            AppRoutes.toHome();
+          }
+        }
       } else {
-        AppSnackbar.error(response.message);
+        AppSnackbar.error(response.error ?? response.message);
       }
     } catch (e, stk) {
       AppSnackbar.error(
@@ -439,26 +426,21 @@ class AuthController extends GetxController {
     }
 
     isLoading.value = true;
-
     try {
       final response = await _auth.googleSignInComplete(
         passcode.value,
         googleChallengeToken.value,
       );
 
-      if (response.success && response.data?['token'] != null) {
+      if (response.success && response.data != null) {
         googleChallengeToken.value = '';
         _storeSession(response.data!);
         AppRoutes.toHome();
       } else if (response.statusCode == 429) {
-        final wait = (response.data?['retry_after'] as num?)?.toInt() ?? 30;
-        AppSnackbar.error(
-          Constants.locale.googleTooManyAttempts.trParams({'seconds': '$wait'}),
-        );
+        AppSnackbar.error(Constants.locale.googleTooManyAttempts.tr);
       } else {
-        AppSnackbar.error(response.message);
+        AppSnackbar.error(response.error ?? response.message);
         if (response.statusCode == 401) {
-          // Challenge expired: restart the Google flow.
           googleChallengeToken.value = '';
           AppRoutes.toAuth();
         }
@@ -479,27 +461,23 @@ class AuthController extends GetxController {
     try {
       final response = await _auth.getCurrentUser();
       if (response.success && response.data != null) {
-        final user = UserModel.fromJson(response.data!);
-        currentUser.value = user;
-        _storage.setUserData(user); // Save to storage
+        currentUser.value = response.data;
+        _storage.setUserData(response.data!);
       }
-    } catch (e) {
-      // Error getting user; keep cached one if exists
-    }
+    } catch (_) {}
   }
 
   // Forgot passcode: email a reset link (60s resend countdown).
   Future<void> forgotPassword() async {
     if (!validateEmail()) return;
     isLoading.value = true;
-
     try {
       final response = await _auth.forgotPassword(email.value);
       if (response.success) {
         _startResendCountdown(60);
         AppSnackbar.success(response.message);
       } else {
-        AppSnackbar.error(response.message);
+        AppSnackbar.error(response.error ?? response.message);
       }
     } catch (e, stk) {
       AppSnackbar.error(Constants.locale.resetFailed.tr, e: e, stk: stk);
@@ -508,7 +486,7 @@ class AuthController extends GetxController {
     }
   }
 
-  /// Called by the API layer when the active session was replaced by a
+  /// TODO: Called by the API layer when the active session was replaced by a
   /// newer sign in on this platform (or session validation fails).
   void handleSessionExpired({bool replaced = false}) {
     if (!isLoggedIn.value) return;
@@ -534,7 +512,7 @@ class AuthController extends GetxController {
     signinPin.clear();
     signupPin.clear();
     signupConfirmPin.clear();
-    verifyPin.clear();
+    confirmPin.clear();
     _cooldownTimer?.cancel();
     _resendTimer?.cancel();
     cooldownSecondsLeft.value = 0;
@@ -547,16 +525,12 @@ class AuthController extends GetxController {
   Future<void> signOut() async {
     try {
       await _auth.signOut();
-    } catch (e) {
-      // Ignore network error on sign out
-    }
+    } catch (_) {}
 
     if (currentUser.value?.provider == 'google') {
       try {
         await GoogleSignIn.instance.signOut();
-      } catch (e) {
-        // Local sign out still proceeds
-      }
+      } catch (_) {}
     }
 
     _clearLocalSession();
