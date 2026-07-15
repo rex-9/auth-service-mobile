@@ -73,10 +73,10 @@ class AppTranslations extends Translations {
           'Username can only contain letters, numbers, and underscores',
 
       // Verify email
-      Constants.locale.verifyEmailTitle: 'Verify Email',
-      Constants.locale.verifyEmailHeading: 'Verify your email',
-      Constants.locale.verifyEmailSubtitle: 'We sent a 6-digit code to @email',
-      Constants.locale.verifyCodeButton: 'Verify Code',
+      Constants.locale.confirmEmailTitle: 'Verify Email',
+      Constants.locale.confirmEmailHeading: 'Verify your email',
+      Constants.locale.confirmEmailSubtitle: 'We sent a 6-digit code to @email',
+      Constants.locale.confirmCodeButton: 'Verify Code',
       Constants.locale.verifying: 'Verifying...',
       Constants.locale.resendCode: 'Resend Code',
       Constants.locale.resendCodeIn: 'Resend code in @seconds⁠s',
@@ -178,11 +178,11 @@ class AppTranslations extends Translations {
           'El nombre de usuario debe tener al menos 3 caracteres',
       Constants.locale.usernameCharset:
           'El nombre de usuario solo puede contener letras, números y guiones bajos',
-      Constants.locale.verifyEmailTitle: 'Verificar correo',
-      Constants.locale.verifyEmailHeading: 'Verifica tu correo',
-      Constants.locale.verifyEmailSubtitle:
+      Constants.locale.confirmEmailTitle: 'Verificar correo',
+      Constants.locale.confirmEmailHeading: 'Verifica tu correo',
+      Constants.locale.confirmEmailSubtitle:
           'Enviamos un código de 6 dígitos a @email',
-      Constants.locale.verifyCodeButton: 'Verificar código',
+      Constants.locale.confirmCodeButton: 'Verificar código',
       Constants.locale.verifying: 'Verificando...',
       Constants.locale.resendCode: 'Reenviar código',
       Constants.locale.resendCodeIn: 'Reenviar código en @seconds⁠s',
@@ -282,11 +282,11 @@ class AppTranslations extends Translations {
           'အသုံးပြုသူအမည်သည် အနည်းဆုံး စာလုံး ၃ လုံး ရှိရမည်',
       Constants.locale.usernameCharset:
           'အသုံးပြုသူအမည်တွင် စာလုံး၊ ဂဏန်းနှင့် underscore များသာ ပါဝင်နိုင်သည်',
-      Constants.locale.verifyEmailTitle: 'အီးမေးလ် အတည်ပြုရန်',
-      Constants.locale.verifyEmailHeading: 'သင့်အီးမေးလ်ကို အတည်ပြုပါ',
-      Constants.locale.verifyEmailSubtitle:
+      Constants.locale.confirmEmailTitle: 'အီးမေးလ် အတည်ပြုရန်',
+      Constants.locale.confirmEmailHeading: 'သင့်အီးမေးလ်ကို အတည်ပြုပါ',
+      Constants.locale.confirmEmailSubtitle:
           '@email သို့ ဂဏန်း ၆ လုံး ကုဒ် ပို့ထားပါသည်',
-      Constants.locale.verifyCodeButton: 'ကုဒ် အတည်ပြုရန်',
+      Constants.locale.confirmCodeButton: 'ကုဒ် အတည်ပြုရန်',
       Constants.locale.verifying: 'အတည်ပြုနေသည်...',
       Constants.locale.resendCode: 'ကုဒ် ပြန်ပို့ရန်',
       Constants.locale.resendCodeIn: '@seconds⁠s အတွင်း ကုဒ်ပြန်ပို့နိုင်သည်',

@@ -1,6 +1,6 @@
 // lib/services/auth_service_impl.dart
 import 'package:get/get.dart';
-import 'package:meritbox_mobile/models/api_response.dart';
+import 'package:meritbox_mobile/models/models.dart';
 import 'package:meritbox_mobile/routes/routes.dart';
 import 'package:meritbox_mobile/services/services.dart';
 
@@ -13,63 +13,59 @@ class AuthServiceImpl extends GetxService implements AuthService {
 
   // 1. Check if user exists
   @override
-  Future<ApiResponse<bool>> peekUser(String email) async {
+  Future<ApiResponse<PeekUserResponse>> peekUser(String email) async {
     final response = await _api.get(
       ServerRoutes.peekUser,
       query: {'email': email},
     );
-    return _api.parseResponse<bool>(
+    return _api.parseResponse<PeekUserResponse>(
       response,
-      (data) => data['user_exists'] as bool,
+      (data) => PeekUserResponse.fromJson(data),
     );
   }
 
   // 2. Sign in with email/username and password
   @override
-  Future<ApiResponse<Map<String, dynamic>>> signIn(
+  Future<ApiResponse<SignInResponse>> signIn(
     String signinKey,
     String password,
   ) async {
     final response = await _api.post(ServerRoutes.signIn, {
       'user': {'signin_key': signinKey, 'password': password},
     });
-    return _api.parseResponse<Map<String, dynamic>>(
+    return _api.parseResponse<SignInResponse>(
       response,
-      (data) => data as Map<String, dynamic>,
+      (data) => SignInResponse.fromJson(data),
     );
   }
 
   // 3. Sign in with token (from email confirmation)
   @override
-  Future<ApiResponse<Map<String, dynamic>>> signInWithToken(
-    String token,
-  ) async {
+  Future<ApiResponse<AuthResponse>> signInWithToken(String token) async {
     final response = await _api.post(ServerRoutes.signInWithToken, {
       'token': token,
     });
-    return _api.parseResponse<Map<String, dynamic>>(
+    return _api.parseResponse<AuthResponse>(
       response,
-      (data) => data as Map<String, dynamic>,
+      (data) => AuthResponse.fromJson(data),
     );
   }
 
   // 4. Sign in with Google
   @override
-  Future<ApiResponse<Map<String, dynamic>>> signInWithGoogle(
-    String idToken,
-  ) async {
+  Future<ApiResponse<GoogleResponse>> signInWithGoogle(String idToken) async {
     final response = await _api.post(ServerRoutes.signInWithGoogle, {
       'token': idToken,
     });
-    return _api.parseResponse<Map<String, dynamic>>(
+    return _api.parseResponse<GoogleResponse>(
       response,
-      (data) => data as Map<String, dynamic>,
+      (data) => GoogleResponse.fromJson(data),
     );
   }
 
   // 4b. Complete Google sign in (new Google account sets a passcode)
   @override
-  Future<ApiResponse<Map<String, dynamic>>> googleSignInComplete(
+  Future<ApiResponse<AuthResponse>> googleSignInComplete(
     String passcode,
     String challengeToken,
   ) async {
@@ -77,15 +73,15 @@ class AuthServiceImpl extends GetxService implements AuthService {
       'passcode': passcode,
       'challenge_token': challengeToken,
     });
-    return _api.parseResponse<Map<String, dynamic>>(
+    return _api.parseResponse<AuthResponse>(
       response,
-      (data) => data as Map<String, dynamic>,
+      (data) => AuthResponse.fromJson(data),
     );
   }
 
   // 5. Sign up (register new user)
   @override
-  Future<ApiResponse<Map<String, dynamic>>> signUp({
+  Future<ApiResponse<AuthResponse>> signUp({
     required String username,
     required String name,
     required String email,
@@ -101,9 +97,9 @@ class AuthServiceImpl extends GetxService implements AuthService {
         'password_confirmation': passwordConfirmation,
       },
     });
-    return _api.parseResponse<Map<String, dynamic>>(
+    return _api.parseResponse<AuthResponse>(
       response,
-      (data) => data as Map<String, dynamic>,
+      (data) => AuthResponse.fromJson(data),
     );
   }
 
@@ -118,7 +114,7 @@ class AuthServiceImpl extends GetxService implements AuthService {
 
   // 7. Confirm email with code
   @override
-  Future<ApiResponse<Map<String, dynamic>>> confirmCode(
+  Future<ApiResponse<AuthResponse>> confirmCode(
     String signinKey,
     String confirmationCode,
   ) async {
@@ -126,9 +122,9 @@ class AuthServiceImpl extends GetxService implements AuthService {
       'signin_key': signinKey,
       'confirmation_code': confirmationCode,
     });
-    return _api.parseResponse<Map<String, dynamic>>(
+    return _api.parseResponse<AuthResponse>(
       response,
-      (data) => data as Map<String, dynamic>,
+      (data) => AuthResponse.fromJson(data),
     );
   }
 
@@ -160,11 +156,11 @@ class AuthServiceImpl extends GetxService implements AuthService {
 
   // 10. Get current user
   @override
-  Future<ApiResponse<Map<String, dynamic>>> getCurrentUser() async {
+  Future<ApiResponse<UserModel>> getCurrentUser() async {
     final response = await _api.get(ServerRoutes.currentUser);
-    return _api.parseResponse<Map<String, dynamic>>(
+    return _api.parseResponse<UserModel>(
       response,
-      (data) => data['user'] as Map<String, dynamic>,
+      (data) => UserModel.fromJson(data),
     );
   }
 
