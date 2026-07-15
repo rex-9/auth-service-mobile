@@ -25,23 +25,14 @@ class ServerRoutes {
   // Password Endpoints
   static const String forgotPassword = '/password/forgot';
   static const String resetPassword = '/password/reset';
-
-
 }
 
-
-
-class ApiConstant{
-
-    static final auth = _Auth();
-
+class ApiConstant {
+  static final auth = _Auth();
 }
-
 
 class _Auth {
-
   String get base => '/auth';
 
   String get login => '$base/login';
-
 }
