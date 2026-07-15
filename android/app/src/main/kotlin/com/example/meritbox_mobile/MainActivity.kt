@@ -1,4 +1,4 @@
-package com.example.meritbox_mobile
+package com.meritmoon.app
 
 import io.flutter.embedding.android.FlutterActivity
 
