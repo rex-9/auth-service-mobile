@@ -1,5 +1,5 @@
 // lib/services/services.dart
-export 'storage_service.dart';
-export 'api_service.dart';
-export 'auth_service/auth_service.dart';
-export 'auth_service/auth_service_impl.dart';
+export 'storage.service.dart';
+export 'api.service.dart';
+export 'auth_service/auth.service.dart';
+export 'auth_service/auth.service.impl.dart';

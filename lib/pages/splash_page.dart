@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/services/services.dart';
+import 'package:meritbox_mobile/controllers/controllers.dart';
+import 'package:meritbox_mobile/routes/routes.dart';
 import '../design/design.dart';
-import '../controllers/auth_controller.dart';
-import '../routes/app_routes.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});

@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/design/design.dart';
-import 'package:meritbox_mobile/services/storage_service.dart';
+import 'package:meritbox_mobile/services/services.dart';
 
 class AppPage extends StatelessWidget {
   const AppPage({
