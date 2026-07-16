@@ -48,7 +48,7 @@ class ApiService extends GetConnect {
   // ===== RESPONSE HANDLING =====
   ApiResponse<T> parseResponse<T>(
     Response response,
-    T Function(Map<String, dynamic> data) fromJson,
+    T? Function(Map<String, dynamic> data) fromJson,
   ) {
     final body = response.body as Map<String, dynamic>? ?? {};
     final status = body['status'] as Map<String, dynamic>? ?? {};
@@ -71,7 +71,7 @@ class ApiService extends GetConnect {
       message:
           status['message'] as String? ?? HttpStatusMap.getMessage(statusCode),
       statusCode: statusCode,
-      data: fromJson(data!),
+      data: data != null ? fromJson(data) : null,
     );
   }
 

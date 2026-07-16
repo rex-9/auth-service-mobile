@@ -24,7 +24,7 @@ abstract class AuthService extends GetxService {
   );
 
   // 5. Sign up (register new user)
-  Future<ApiResponse<AuthResponse>> signUp({
+  Future<ApiResponse<UserModel>> signUp({
     required String username,
     required String name,
     required String email,

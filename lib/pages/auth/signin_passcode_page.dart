@@ -105,7 +105,7 @@ class SignInPasscodePage extends GetView<AuthController> {
           ),
           Center(
             child: TextButton(
-              onPressed: () => Get.toNamed(AppRoutes.forgotPasscode),
+              onPressed: () => AppRoutes.toForgotPasscode(),
               child: Text(
                 Constants.locale.forgotPasscodeLink.tr,
                 style: context.typo.labelLarge,
