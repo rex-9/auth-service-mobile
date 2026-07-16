@@ -82,8 +82,6 @@ class SignInPasscodePage extends GetView<AuthController> {
                   ? Constants.locale.tryAgainIn.trParams({
                       'seconds': '${controller.cooldownSecondsLeft.value}',
                     })
-                  : controller.isLoading.value
-                  ? Constants.locale.signingIn.tr
                   : Constants.locale.signinTitle.tr,
               onPressed: () => controller.signIn(),
             ),

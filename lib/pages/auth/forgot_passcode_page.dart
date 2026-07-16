@@ -45,11 +45,9 @@ class ForgotPasscodePage extends GetView<AuthController> {
                   ? Constants.locale.resendCodeIn.trParams({
                       'seconds': '${controller.resendSecondsLeft.value}',
                     })
-                  : controller.isLoading.value
-                  ? Constants.locale.sending.tr
                   : Constants.locale.sendResetLink.tr,
               onPressed: () {
-                if (waiting || controller.isLoading.value) return;
+                if (waiting) return;
                 controller.forgotPassword();
               },
             );

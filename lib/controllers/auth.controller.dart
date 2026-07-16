@@ -21,7 +21,6 @@ class AuthController extends GetxController {
   static const List<int> cooldownSecondsByLevel = [30, 60, 120];
 
   // Observables
-  var isLoading = false.obs;
   var isLoggedIn = false.obs;
   var authToken = ''.obs;
   var currentUser = Rxn<UserModel>();
@@ -235,14 +234,13 @@ class AuthController extends GetxController {
 
   // Step 2a: Sign in with email and passcode (existing user)
   Future<void> signIn() async {
-    if (isLoading.value || cooldownSecondsLeft.value > 0) return;
+    if (cooldownSecondsLeft.value > 0) return;
     if (passcode.value.length != 6) {
       signinPin.triggerError();
       AppSnackbar.error(Constants.locale.passcode6Digits.tr);
       return;
     }
 
-    isLoading.value = true;
     try {
       final response = await _auth.signIn(email.value, passcode.value);
 
@@ -278,14 +276,11 @@ class AuthController extends GetxController {
       }
     } catch (e, stk) {
       AppSnackbar.error(Constants.locale.signInFailed.tr, e: e, stk: stk);
-    } finally {
-      isLoading.value = false;
     }
   }
 
   // Step 2b: Send confirmation code (for new user registration)
   Future<void> sendConfirmationCode() async {
-    isLoading.value = true;
     try {
       final response = await _auth.sendConfirmationCode(email.value);
       if (response.success) {
@@ -298,14 +293,11 @@ class AuthController extends GetxController {
       }
     } catch (e, stk) {
       AppSnackbar.error(Constants.locale.sendCodeFailed.tr, e: e, stk: stk);
-    } finally {
-      isLoading.value = false;
     }
   }
 
   // Step 3: Confirm code (for new user)
   Future<void> confirmCode(String code) async {
-    isLoading.value = true;
     try {
       final response = await _auth.confirmCode(email.value, code);
       if (response.success && response.data != null) {
@@ -317,8 +309,6 @@ class AuthController extends GetxController {
       }
     } catch (e, stk) {
       AppSnackbar.error(Constants.locale.verificationFailed.tr, e: e, stk: stk);
-    } finally {
-      isLoading.value = false;
     }
   }
 
@@ -337,7 +327,6 @@ class AuthController extends GetxController {
       return;
     }
 
-    isLoading.value = true;
     try {
       final response = await _auth.signUp(
         username: username.value,
@@ -355,15 +344,12 @@ class AuthController extends GetxController {
       }
     } catch (e, stk) {
       AppSnackbar.error(Constants.locale.registrationFailed.tr, e: e, stk: stk);
-    } finally {
-      isLoading.value = false;
     }
   }
 
   // Google Sign In (existing account signs straight in; a new account
   // gets a challenge token and must set a passcode to finish sign up).
   Future<void> signInWithGoogle() async {
-    isLoading.value = true;
     try {
       final signIn = GoogleSignIn.instance;
       if (!_googleInitialized) {
@@ -407,8 +393,6 @@ class AuthController extends GetxController {
         e: e,
         stk: stk,
       );
-    } finally {
-      isLoading.value = false;
     }
   }
 
@@ -425,7 +409,6 @@ class AuthController extends GetxController {
       return;
     }
 
-    isLoading.value = true;
     try {
       final response = await _auth.googleSignInComplete(
         passcode.value,
@@ -451,8 +434,6 @@ class AuthController extends GetxController {
         e: e,
         stk: stk,
       );
-    } finally {
-      isLoading.value = false;
     }
   }
 
@@ -470,7 +451,6 @@ class AuthController extends GetxController {
   // Forgot passcode: email a reset link (60s resend countdown).
   Future<void> forgotPassword() async {
     if (!validateEmail()) return;
-    isLoading.value = true;
     try {
       final response = await _auth.forgotPassword(email.value);
       if (response.success) {
@@ -481,8 +461,6 @@ class AuthController extends GetxController {
       }
     } catch (e, stk) {
       AppSnackbar.error(Constants.locale.resetFailed.tr, e: e, stk: stk);
-    } finally {
-      isLoading.value = false;
     }
   }
 
