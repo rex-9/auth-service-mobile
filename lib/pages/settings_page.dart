@@ -66,10 +66,7 @@ class SettingsPage extends GetView<SettingsController> {
   Widget _buildThemeTile(BuildContext context) {
     return Obx(
       () => Card(
-        color: context.colors.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
-        ),
+        clipBehavior: Clip.antiAlias,
         child: AppListTile(
           leading: Icon(controller.themeIcon, color: context.colors.primary),
           title: Text(Constants.locale.theme.tr),
@@ -86,10 +83,7 @@ class SettingsPage extends GetView<SettingsController> {
 
   Widget _buildLanguageTile(BuildContext context) {
     return Card(
-      color: context.colors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
-      ),
+      clipBehavior: Clip.antiAlias,
       child: AppListTile(
         leading: _buildFlagIcon(context),
         title: Text(Constants.locale.language.tr),
@@ -147,10 +141,7 @@ class SettingsPage extends GetView<SettingsController> {
     AuthController authController,
   ) {
     return Card(
-      color: context.colors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
-      ),
+      clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
           AppListTile(
@@ -194,10 +185,7 @@ class SettingsPage extends GetView<SettingsController> {
 
   Widget _buildAppInfoTile(BuildContext context) {
     return Card(
-      color: context.colors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
-      ),
+      clipBehavior: Clip.antiAlias,
       child: AppListTile(
         leading: Icon(Design.icons.info, color: context.colors.textSecondary),
         title: Text(AppConfig.appName),
