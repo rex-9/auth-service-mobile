@@ -68,8 +68,9 @@ class AuthPage extends GetView<AuthController> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Obx(
-              () => IconButton(
-                icon: Icon(settingsController.themeIcon),
+              () => AppButton(
+                type: ButtonType.icon,
+                icon: settingsController.themeIcon,
                 tooltip: settingsController.themeLabel,
                 onPressed: settingsController.toggleTheme,
               ),
