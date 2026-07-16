@@ -1,0 +1,65 @@
+// lib/pages/auth/signup_passcode_confirm_page.dart
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:meritbox_mobile/constants/constants.dart';
+import 'package:meritbox_mobile/controllers/controllers.dart';
+import 'package:meritbox_mobile/design/design.dart';
+
+class SignUpPasscodeConfirmPage extends GetView<AuthController> {
+  const SignUpPasscodeConfirmPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppPage(
+      title: Constants.locale.signupTitle.tr,
+      showBackButton: true,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            Constants.locale.confirmPasscodeHeading.tr,
+            style: context.typo.headline3,
+          ),
+          SizedBox(height: Design.spacing.sm),
+          Text(
+            Constants.locale.confirmPasscodeSubtitle.tr,
+            style: context.typo.bodyMedium,
+          ),
+          SizedBox(height: Design.spacing.xxxl),
+
+          Text(
+            Constants.locale.confirmPasscodeHeading.tr,
+            style: context.typo.labelMedium,
+          ),
+          SizedBox(height: Design.spacing.sm),
+          AppPasscodeField(
+            pinController: controller.signupConfirmPin,
+            onChanged: (value) => controller.confirmPasscode.value = value,
+            onCompleted: (_) => controller.handleConfirmPasscode(),
+          ),
+
+          SizedBox(height: Design.spacing.xxxl),
+          AppButton(
+            text: Constants.locale.confirm.tr,
+            onPressed: controller.handleConfirmPasscode,
+          ),
+
+          SizedBox(height: Design.spacing.lg),
+          Center(
+            child: AppButton(
+              type: ButtonType.text,
+              onPressed: () {
+                controller.confirmPasscode.value = '';
+                controller.signupConfirmPin.clear();
+                controller.passcode.value = '';
+                controller.signupPin.clear();
+                Get.back();
+              },
+              text: Constants.locale.changePasscode.tr,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

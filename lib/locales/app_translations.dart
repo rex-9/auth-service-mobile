@@ -29,6 +29,7 @@ class AppTranslations extends Translations {
       Constants.locale.invalidEmail:
           'Please enter a valid email address. (e.g. example@domain.com)',
       Constants.locale.connectionFailed: 'Connection failed. Please try again.',
+      Constants.locale.goBack: 'Go Back',
 
       // Sign in passcode
       Constants.locale.signinTitle: 'Sign In',
@@ -53,7 +54,10 @@ class AppTranslations extends Translations {
       Constants.locale.googlePasscodeHeading: 'One last step',
       Constants.locale.googlePasscodeSubtitle:
           'Create and confirm a passcode to finish Google sign up',
-      Constants.locale.confirmPasscodeLabel: 'Confirm Passcode',
+      Constants.locale.confirmPasscodeHeading: 'Confirm Passcode',
+      Constants.locale.confirmPasscodeSubtitle: 'Please confirm your passcode.',
+      Constants.locale.confirm: 'Confirm',
+      Constants.locale.changePasscode: 'Change Passcode',
       Constants.locale.passcodesDoNotMatch: 'Passcodes do not match',
       Constants.locale.sendingCode: 'Sending code...',
 
@@ -141,6 +145,8 @@ class AppTranslations extends Translations {
           'Ingresa un correo electrónico válido. (ej. ejemplo@dominio.com)',
       Constants.locale.connectionFailed:
           'Falló la conexión. Inténtalo de nuevo.',
+      Constants.locale.goBack: 'volver',
+
       Constants.locale.signinTitle: 'Iniciar sesión',
       Constants.locale.signinHeading: 'Ingresa tu código',
       Constants.locale.signinSubtitle:
@@ -162,7 +168,11 @@ class AppTranslations extends Translations {
       Constants.locale.googlePasscodeHeading: 'Un último paso',
       Constants.locale.googlePasscodeSubtitle:
           'Crea y confirma un código para completar el registro con Google',
-      Constants.locale.confirmPasscodeLabel: 'Confirmar código',
+      Constants.locale.confirmPasscodeHeading: 'Confirmar código',
+      Constants.locale.confirmPasscodeSubtitle:
+          'Por favor confirma tu código de acceso.',
+      Constants.locale.confirm: 'Confirmar',
+      Constants.locale.changePasscode: 'Cambiar código',
       Constants.locale.passcodesDoNotMatch: 'Los códigos no coinciden',
       Constants.locale.sendingCode: 'Enviando código...',
       Constants.locale.signupInfoTitle: 'Completar perfil',
@@ -245,6 +255,7 @@ class AppTranslations extends Translations {
           'မှန်ကန်သော အီးမေးလ်လိပ်စာ ထည့်ပါ။ (ဥပမာ example@domain.com)',
       Constants.locale.connectionFailed:
           'ချိတ်ဆက်မှု မအောင်မြင်ပါ။ ထပ်စမ်းကြည့်ပါ။',
+      Constants.locale.goBack: 'ပြန်သွား',
       Constants.locale.signinTitle: 'လော့ဂ်အင်',
       Constants.locale.signinHeading: 'သင့်လျှို့ဝှက်ကုဒ်ကို ထည့်ပါ',
       Constants.locale.signinSubtitle:
@@ -266,7 +277,11 @@ class AppTranslations extends Translations {
       Constants.locale.googlePasscodeHeading: 'နောက်ဆုံးအဆင့်',
       Constants.locale.googlePasscodeSubtitle:
           'Google အကောင့်ဖွင့်ခြင်း ပြီးမြောက်ရန် လျှို့ဝှက်ကုဒ် သတ်မှတ်ပြီး အတည်ပြုပါ',
-      Constants.locale.confirmPasscodeLabel: 'လျှို့ဝှက်ကုဒ် အတည်ပြုရန်',
+      Constants.locale.confirmPasscodeHeading: 'လျှို့ဝှက်ကုဒ် အတည်ပြုရန်',
+      Constants.locale.confirmPasscodeSubtitle:
+          'ကျေးဇူးပြု၍ သင့်ကုဒ်ကို အတည်ပြုပါ။',
+      Constants.locale.confirm: 'အတည်ပြုပါ',
+      Constants.locale.changePasscode: 'ကုဒ်ပြောင်းမည်',
       Constants.locale.passcodesDoNotMatch: 'လျှို့ဝှက်ကုဒ်များ မကိုက်ညီပါ',
       Constants.locale.sendingCode: 'ကုဒ် ပို့နေသည်...',
       Constants.locale.signupInfoTitle: 'ပရိုဖိုင် ဖြည့်ရန်',

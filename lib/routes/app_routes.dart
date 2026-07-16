@@ -8,7 +8,8 @@ class AppRoutes {
   static const String splash = '/splash';
   static const String auth = '/auth';
   static const String signinPasscode = '/signin-passcode';
-  static const String signupPasscode = '/signup-passcode';
+  static const String signupPasscodeCreate = '/signup-passcode-create';
+  static const String signupPasscodeConfirm = '/signup-passcode-confirm';
   static const String signupInfo = '/signup-info';
   static const String confirmEmail = '/confirm-email';
   static const String forgotPasscode = '/forgot-passcode';
@@ -21,7 +22,8 @@ class AppRoutes {
   static void toSplash() => Get.offAllNamed(splash);
   static void toAuth() => Get.offAllNamed(auth);
   static void toSignInPasscode() => Get.toNamed(signinPasscode);
-  static void toSignUpPasscode() => Get.toNamed(signupPasscode);
+  static void toSignUpPasscodeCreate() => Get.toNamed(signupPasscodeCreate);
+  static void toSignUpPasscodeConfirm() => Get.toNamed(signupPasscodeConfirm);
   static void toSignUpInfo({
     required String email,
     required String passcode,
@@ -52,7 +54,14 @@ class AppRoutes {
     GetPage(name: splash, page: () => const SplashPage()),
     GetPage(name: auth, page: () => AuthPage()),
     GetPage(name: signinPasscode, page: () => const SignInPasscodePage()),
-    GetPage(name: signupPasscode, page: () => const SignUpPasscodePage()),
+    GetPage(
+      name: signupPasscodeCreate,
+      page: () => const SignUpPasscodeCreatePage(),
+    ),
+    GetPage(
+      name: signupPasscodeConfirm,
+      page: () => const SignUpPasscodeConfirmPage(),
+    ),
     GetPage(name: signupInfo, page: () => const SignUpInfoPage()),
     GetPage(name: confirmEmail, page: () => const ConfirmEmailPage()),
     GetPage(name: forgotPasscode, page: () => const ForgotPasscodePage()),
