@@ -19,7 +19,6 @@ class SignUpInfoPage extends GetView<AuthController> {
 
     return AppPage(
       title: Constants.locale.signupInfoTitle.tr,
-      showBackButton: true,
       child: Center(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: Design.spacing.lg),
@@ -52,6 +51,17 @@ class SignUpInfoPage extends GetView<AuthController> {
               AppButton(
                 text: Constants.locale.createAccountButton.tr,
                 onPressed: () => controller.signUp(),
+              ),
+
+              SizedBox(height: Design.spacing.lg),
+              AppButton(
+                type: ButtonType.text,
+                onPressed: () {
+                  controller.passcode.value = '';
+                  controller.signinPin.clear();
+                  Get.back();
+                },
+                text: Constants.locale.useDifferentEmail.tr,
               ),
             ],
           ),

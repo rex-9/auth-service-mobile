@@ -13,7 +13,6 @@ class SignInPasscodePage extends GetView<AuthController> {
   Widget build(BuildContext context) {
     return AppPage(
       title: Constants.locale.signinTitle.tr,
-      showBackButton: true,
       child: Center(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: Design.spacing.lg),

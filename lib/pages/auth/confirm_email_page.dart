@@ -24,13 +24,6 @@ class ConfirmEmailPage extends GetView<AuthController> {
 
     return AppPage(
       title: Constants.locale.confirmEmailTitle.tr,
-      showBackButton: true,
-      onBackPressed: () {
-        // Clear everything and go back to auth page
-        controller.email.value = '';
-        controller.confirmPin.clear();
-        Get.offAllNamed(AppRoutes.auth);
-      },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -84,6 +77,18 @@ class ConfirmEmailPage extends GetView<AuthController> {
                     : Constants.locale.resendCode.tr,
               ),
             ),
+          ),
+
+          SizedBox(height: Design.spacing.lg),
+          AppButton(
+            type: ButtonType.text,
+            onPressed: () {
+              // Clear everything and go back to auth page
+              controller.email.value = '';
+              controller.confirmPin.clear();
+              Get.offAllNamed(AppRoutes.auth);
+            },
+            text: Constants.locale.useDifferentEmail.tr,
           ),
         ],
       ),

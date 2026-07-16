@@ -515,7 +515,7 @@ class AuthController extends GetxController {
   Future<void> forgotPassword() async {
     if (!validateEmail()) return;
     try {
-      final response = await _auth.forgotPassword(email.value);
+      final response = await _auth.forgotPasscode(email.value);
       if (response.success) {
         _startResendCountdown(60);
         AppSnackbar.success(response.message);
