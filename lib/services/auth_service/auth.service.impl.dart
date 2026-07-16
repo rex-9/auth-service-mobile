@@ -70,7 +70,7 @@ class AuthServiceImpl extends GetxService implements AuthService {
     String challengeToken,
   ) async {
     final response = await _api.post(ServerRoutes.signInGoogleComplete, {
-      'passcode': passcode,
+      'password': passcode,
       'challenge_token': challengeToken,
     });
     return _api.parseResponse<AuthResponse>(
@@ -130,29 +130,29 @@ class AuthServiceImpl extends GetxService implements AuthService {
 
   // 8. Forgot password - send reset instructions
   @override
-  Future<ApiResponse<void>> forgotPassword(String email) async {
+  Future<ApiResponse<void>> forgotPasscode(String email) async {
     final response = await _api.post(ServerRoutes.forgotPassword, {
       'email': email,
     });
     return _api.parseResponse<void>(response, (data) {});
   }
 
-  // 9. Reset password
-  @override
-  Future<ApiResponse<void>> resetPassword({
-    required String resetPasswordToken,
-    required String password,
-    required String passwordConfirmation,
-  }) async {
-    final response = await _api.put(ServerRoutes.resetPassword, {
-      'user': {
-        'reset_password_token': resetPasswordToken,
-        'password': password,
-        'password_confirmation': passwordConfirmation,
-      },
-    });
-    return _api.parseResponse<void>(response, (data) {});
-  }
+  // 9. WEB: Reset password
+  // @override
+  // Future<ApiResponse<void>> resetPasscode({
+  //   required String resetPasswordToken,
+  //   required String password,
+  //   required String passwordConfirmation,
+  // }) async {
+  //   final response = await _api.put(ServerRoutes.resetPassword, {
+  //     'user': {
+  //       'reset_password_token': resetPasswordToken,
+  //       'password': password,
+  //       'password_confirmation': passwordConfirmation,
+  //     },
+  //   });
+  //   return _api.parseResponse<void>(response, (data) {});
+  // }
 
   // 10. Get current user
   @override

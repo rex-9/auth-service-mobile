@@ -42,14 +42,14 @@ abstract class AuthService extends GetxService {
   );
 
   // 8. Forgot password - send reset instructions
-  Future<ApiResponse<void>> forgotPassword(String email);
+  Future<ApiResponse<void>> forgotPasscode(String email);
 
-  // 9. Reset password
-  Future<ApiResponse<void>> resetPassword({
-    required String resetPasswordToken,
-    required String password,
-    required String passwordConfirmation,
-  });
+  // 9. WEB: Reset password
+  // Future<ApiResponse<void>> resetPasscode({
+  //   required String resetPasswordToken,
+  //   required String password,
+  //   required String passwordConfirmation,
+  // });
 
   // 10. Get current user
   Future<ApiResponse<UserModel>> getCurrentUser();
