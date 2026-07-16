@@ -52,6 +52,7 @@ class SettingsPage extends GetView<SettingsController> {
       padding: EdgeInsets.only(
         left: Design.spacing.sm,
         bottom: Design.spacing.md,
+        top: Design.spacing.md,
       ),
       child: Text(
         title.toUpperCase(),
@@ -65,8 +66,8 @@ class SettingsPage extends GetView<SettingsController> {
 
   Widget _buildThemeTile(BuildContext context) {
     return Obx(
-      () => Container(
-        decoration: Design.styles.card.copyWith(color: context.colors.surface),
+      () => Card(
+        color: context.colors.surface,
         child: ListTile(
           leading: Icon(controller.themeIcon, color: context.colors.primary),
           title: Text(Constants.locale.theme.tr, style: context.typo.bodyLarge),
@@ -83,8 +84,8 @@ class SettingsPage extends GetView<SettingsController> {
   }
 
   Widget _buildLanguageTile(BuildContext context) {
-    return Container(
-      decoration: Design.styles.card.copyWith(color: context.colors.surface),
+    return Card(
+      color: context.colors.surface,
       child: ListTile(
         leading: _buildFlagIcon(context),
         title: Text(
@@ -149,8 +150,8 @@ class SettingsPage extends GetView<SettingsController> {
     BuildContext context,
     AuthController authController,
   ) {
-    return Container(
-      decoration: Design.styles.card.copyWith(color: context.colors.surface),
+    return Card(
+      color: context.colors.surface,
       child: Column(
         children: [
           ListTile(
@@ -201,8 +202,8 @@ class SettingsPage extends GetView<SettingsController> {
   Widget _buildAppInfoTile(BuildContext context) {
     final config = AppConfig();
 
-    return Container(
-      decoration: Design.styles.card.copyWith(color: context.colors.surface),
+    return Card(
+      color: context.colors.surface,
       child: ListTile(
         leading: Icon(Design.icons.info, color: context.colors.textSecondary),
         title: Text(config.appName, style: context.typo.bodyLarge),

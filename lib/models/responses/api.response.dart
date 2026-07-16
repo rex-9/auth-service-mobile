@@ -16,7 +16,7 @@ class ApiResponse<T> {
   factory ApiResponse.success({
     required String message,
     required int statusCode,
-    required T data,
+    T? data,
   }) = SuccessApiResponse<T>;
 
   factory ApiResponse.error({
@@ -30,7 +30,7 @@ class SuccessApiResponse<T> extends ApiResponse<T> {
   const SuccessApiResponse({
     required super.message,
     required super.statusCode,
-    required super.data,
+    super.data,
   }) : super(success: true, error: null);
 }
 
