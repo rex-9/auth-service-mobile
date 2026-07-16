@@ -91,25 +91,21 @@ class SignInPasscodePage extends GetView<AuthController> {
 
           SizedBox(height: Design.spacing.lg),
           Center(
-            child: TextButton(
+            child: AppButton(
+              type: ButtonType.text,
               onPressed: () {
                 controller.passcode.value = '';
                 controller.signinPin.clear();
                 Get.back();
               },
-              child: Text(
-                Constants.locale.useDifferentEmail.tr,
-                style: context.typo.labelLarge,
-              ),
+              text: Constants.locale.useDifferentEmail.tr,
             ),
           ),
           Center(
-            child: TextButton(
-              onPressed: () => Get.toNamed(AppRoutes.forgotPasscode),
-              child: Text(
-                Constants.locale.forgotPasscodeLink.tr,
-                style: context.typo.labelLarge,
-              ),
+            child: AppButton(
+              type: ButtonType.text,
+              onPressed: () => AppRoutes.toForgotPasscode(),
+              text: Constants.locale.forgotPasscodeLink.tr,
             ),
           ),
         ],

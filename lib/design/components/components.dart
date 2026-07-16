@@ -5,3 +5,4 @@ export 'app_dialog.dart';
 export 'app_snackbar.dart';
 export 'app_loading.dart';
 export 'app_page.dart';
+export 'app_platform.dart';

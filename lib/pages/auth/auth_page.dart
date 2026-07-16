@@ -26,7 +26,7 @@ class AuthPage extends GetView<AuthController> {
         controller.passcode.value = '';
         controller.signinPin.clear();
         controller.loadRetryState();
-        Get.toNamed(AppRoutes.signinPasscode);
+        AppRoutes.toSignInPasscode();
         break;
 
       case PeekedUserStatus.existsUnconfirmed:
@@ -37,6 +37,7 @@ class AuthPage extends GetView<AuthController> {
         controller.confirmPin.clear();
         // Send new confirmation code
         await controller.sendConfirmationCode();
+        AppRoutes.toConfirmEmail(email: controller.email.value);
         break;
 
       case PeekedUserStatus.notExists:
@@ -45,7 +46,7 @@ class AuthPage extends GetView<AuthController> {
         controller.confirmPasscode.value = '';
         controller.signupPin.clear();
         controller.signupConfirmPin.clear();
-        Get.toNamed(AppRoutes.signupPasscode);
+        AppRoutes.toSignUpPasscode();
         break;
     }
   }
@@ -67,8 +68,9 @@ class AuthPage extends GetView<AuthController> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Obx(
-              () => IconButton(
-                icon: Icon(settingsController.themeIcon),
+              () => AppButton(
+                type: ButtonType.icon,
+                icon: settingsController.themeIcon,
                 tooltip: settingsController.themeLabel,
                 onPressed: settingsController.toggleTheme,
               ),

@@ -52,6 +52,7 @@ class SettingsPage extends GetView<SettingsController> {
       padding: EdgeInsets.only(
         left: Design.spacing.sm,
         bottom: Design.spacing.md,
+        top: Design.spacing.md,
       ),
       child: Text(
         title.toUpperCase(),
@@ -65,9 +66,9 @@ class SettingsPage extends GetView<SettingsController> {
 
   Widget _buildThemeTile(BuildContext context) {
     return Obx(
-      () => Container(
-        decoration: Design.styles.card.copyWith(color: context.colors.surface),
-        child: ListTile(
+      () => Card(
+        color: context.colors.surface,
+        child: AppPlatform.listTile(
           leading: Icon(controller.themeIcon, color: context.colors.primary),
           title: Text(Constants.locale.theme.tr, style: context.typo.bodyLarge),
           subtitle: Text(controller.themeLabel, style: context.typo.bodyMedium),
@@ -83,9 +84,9 @@ class SettingsPage extends GetView<SettingsController> {
   }
 
   Widget _buildLanguageTile(BuildContext context) {
-    return Container(
-      decoration: Design.styles.card.copyWith(color: context.colors.surface),
-      child: ListTile(
+    return Card(
+      color: context.colors.surface,
+      child: AppPlatform.listTile(
         leading: _buildFlagIcon(context),
         title: Text(
           Constants.locale.language.tr,
@@ -149,11 +150,11 @@ class SettingsPage extends GetView<SettingsController> {
     BuildContext context,
     AuthController authController,
   ) {
-    return Container(
-      decoration: Design.styles.card.copyWith(color: context.colors.surface),
+    return Card(
+      color: context.colors.surface,
       child: Column(
         children: [
-          ListTile(
+          AppPlatform.listTile(
             leading: CircleAvatar(
               backgroundColor: context.colors.primary.withValues(alpha: 0.1),
               backgroundImage: authController.currentUser.value?.photo != null
@@ -183,7 +184,7 @@ class SettingsPage extends GetView<SettingsController> {
             indent: Design.spacing.lg,
             endIndent: Design.spacing.lg,
           ),
-          ListTile(
+          AppPlatform.listTile(
             leading: Icon(Design.icons.logout, color: context.colors.error),
             title: Text(
               Constants.locale.signOutButton.tr,
@@ -201,9 +202,9 @@ class SettingsPage extends GetView<SettingsController> {
   Widget _buildAppInfoTile(BuildContext context) {
     final config = AppConfig();
 
-    return Container(
-      decoration: Design.styles.card.copyWith(color: context.colors.surface),
-      child: ListTile(
+    return Card(
+      color: context.colors.surface,
+      child: AppPlatform.listTile(
         leading: Icon(Design.icons.info, color: context.colors.textSecondary),
         title: Text(config.appName, style: context.typo.bodyLarge),
         subtitle: Obx(
@@ -232,24 +233,18 @@ class SettingsPage extends GetView<SettingsController> {
           style: context.typo.bodyMedium,
         ),
         actions: [
-          TextButton(
+          AppButton(
+            type: ButtonType.text,
             onPressed: Get.back,
-            child: Text(
-              Constants.locale.cancel.tr,
-              style: context.typo.labelLarge,
-            ),
+            text: Constants.locale.cancel.tr,
           ),
-          TextButton(
+          AppButton(
+            type: ButtonType.text,
             onPressed: () {
               Get.back();
               authController.signOut();
             },
-            child: Text(
-              Constants.locale.signOutButton.tr,
-              style: context.typo.labelLarge.copyWith(
-                color: context.colors.error,
-              ),
-            ),
+            text: Constants.locale.signOutButton.tr,
           ),
         ],
       ),

@@ -81,7 +81,7 @@ class AuthServiceImpl extends GetxService implements AuthService {
 
   // 5. Sign up (register new user)
   @override
-  Future<ApiResponse<AuthResponse>> signUp({
+  Future<ApiResponse<UserModel>> signUp({
     required String username,
     required String name,
     required String email,
@@ -97,9 +97,9 @@ class AuthServiceImpl extends GetxService implements AuthService {
         'password_confirmation': passwordConfirmation,
       },
     });
-    return _api.parseResponse<AuthResponse>(
+    return _api.parseResponse<UserModel>(
       response,
-      (data) => AuthResponse.fromJson(data),
+      (data) => UserModel.fromJson(data),
     );
   }
 
@@ -109,7 +109,7 @@ class AuthServiceImpl extends GetxService implements AuthService {
     final response = await _api.post(ServerRoutes.sendConfirmationCode, {
       'signin_key': signinKey,
     });
-    return _api.parseResponse<void>(response, (_) {});
+    return _api.parseResponse<void>(response, (data) {});
   }
 
   // 7. Confirm email with code
@@ -134,7 +134,7 @@ class AuthServiceImpl extends GetxService implements AuthService {
     final response = await _api.post(ServerRoutes.forgotPassword, {
       'email': email,
     });
-    return _api.parseResponse<void>(response, (_) {});
+    return _api.parseResponse<void>(response, (data) {});
   }
 
   // 9. Reset password
@@ -151,7 +151,7 @@ class AuthServiceImpl extends GetxService implements AuthService {
         'password_confirmation': passwordConfirmation,
       },
     });
-    return _api.parseResponse<void>(response, (_) {});
+    return _api.parseResponse<void>(response, (data) {});
   }
 
   // 10. Get current user
@@ -168,6 +168,6 @@ class AuthServiceImpl extends GetxService implements AuthService {
   @override
   Future<ApiResponse<void>> signOut() async {
     final response = await _api.delete(ServerRoutes.signOut);
-    return _api.parseResponse<void>(response, (_) {});
+    return _api.parseResponse<void>(response, (data) {});
   }
 }

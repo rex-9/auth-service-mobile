@@ -99,13 +99,7 @@ class AppDialog {
           style: context.typo.bodyMedium.copyWith(color: foreground),
         ),
         actions: [
-          TextButton(
-            onPressed: Get.back,
-            child: Text(
-              'OK',
-              style: context.typo.labelLarge.copyWith(color: foreground),
-            ),
-          ),
+          AppButton(type: ButtonType.text, onPressed: Get.back, text: 'OK'),
         ],
       ),
     );
@@ -131,23 +125,15 @@ class AppDialog {
           ),
         ),
         actions: [
-          TextButton(
+          AppButton(
+            type: ButtonType.text,
             onPressed: () => Get.back(result: false),
-            child: Text(
-              Constants.locale.cancel.tr,
-              style: context.typo.labelLarge.copyWith(
-                color: Get.theme.colorScheme.onSurface,
-              ),
-            ),
+            text: Constants.locale.cancel.tr,
           ),
-          TextButton(
+          AppButton(
+            type: ButtonType.text,
             onPressed: () => Get.back(result: true),
-            child: Text(
-              Constants.locale.exit.tr,
-              style: context.typo.labelLarge.copyWith(
-                color: Get.theme.colorScheme.error,
-              ),
-            ),
+            text: Constants.locale.exit.tr,
           ),
         ],
       ),

@@ -40,7 +40,7 @@ class AppPage extends StatelessWidget {
       onPopInvokedWithResult: (bool didPop, dynamic result) async {
         if (!didPop) _handleBackPressed(context);
       },
-      child: Scaffold(
+      child: AppPlatform.scaffold(
         backgroundColor: backgroundColor ?? context.colors.background,
         appBar: _buildAppBar(context),
         body: SafeArea(
@@ -62,11 +62,9 @@ class AppPage extends StatelessWidget {
       foregroundColor: context.colors.textPrimary,
       elevation: 0,
       leading: showBackButton
-          ? IconButton(
-              icon: Icon(
-                Design.icons.backArrow,
-                color: context.colors.textPrimary,
-              ),
+          ? AppButton(
+              type: ButtonType.icon,
+              icon: Design.icons.backArrow,
               onPressed: onBackPressed ?? () => _handleBackPressed(context),
             )
           : null,

@@ -69,22 +69,16 @@ class ConfirmEmailPage extends GetView<AuthController> {
           SizedBox(height: Design.spacing.lg),
           Center(
             child: Obx(
-              () => TextButton(
+              () => AppButton(
+                type: ButtonType.text,
                 onPressed: controller.resendSecondsLeft.value > 0
                     ? null
                     : () => controller.sendConfirmationCode(),
-                child: Text(
-                  controller.resendSecondsLeft.value > 0
-                      ? Constants.locale.resendCodeIn.trParams({
-                          'seconds': '${controller.resendSecondsLeft.value}',
-                        })
-                      : Constants.locale.resendCode.tr,
-                  style: context.typo.labelLarge.copyWith(
-                    color: controller.resendSecondsLeft.value > 0
-                        ? context.colors.textTertiary
-                        : context.colors.primary,
-                  ),
-                ),
+                text: controller.resendSecondsLeft.value > 0
+                    ? Constants.locale.resendCodeIn.trParams({
+                        'seconds': '${controller.resendSecondsLeft.value}',
+                      })
+                    : Constants.locale.resendCode.tr,
               ),
             ),
           ),

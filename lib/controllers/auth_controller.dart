@@ -258,7 +258,7 @@ class AuthController extends GetxController {
           // Unconfirmed user - OTP sent
           AppSnackbar.success(response.message);
           _startResendCountdown(30);
-          AppRoutes.toConfirmEmail(arguments: {'email': email.value});
+          AppRoutes.toConfirmEmail(email: email.value);
         } else {
           AppSnackbar.error(response.message);
         }
@@ -291,7 +291,7 @@ class AuthController extends GetxController {
       if (response.success) {
         _startResendCountdown(30);
         if (Get.currentRoute != AppRoutes.confirmEmail) {
-          AppRoutes.toConfirmEmail(arguments: {'email': email.value});
+          AppRoutes.toConfirmEmail(email: email.value);
         }
       } else {
         AppSnackbar.error(response.error ?? response.message);
@@ -349,7 +349,7 @@ class AuthController extends GetxController {
 
       if (response.success) {
         _startResendCountdown(30);
-        AppRoutes.toConfirmEmail(arguments: {'email': email.value});
+        AppRoutes.toConfirmEmail(email: email.value);
       } else {
         AppSnackbar.error(response.error ?? response.message);
       }

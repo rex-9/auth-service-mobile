@@ -47,7 +47,7 @@ class AppInputField extends StatelessWidget {
       children: [
         Text(label, style: context.typo.labelMedium),
         SizedBox(height: Design.spacing.xs),
-        TextField(
+        AppPlatform.textField(
           controller: controller,
           focusNode: focusNode,
           autofocus: autoFocus,
@@ -58,13 +58,11 @@ class AppInputField extends StatelessWidget {
           minLines: minLines,
           enabled: enabled,
           textCapitalization: textCapitalization,
-          decoration: Design.styles.input(
-            hint: hint,
-            error: error,
-            helper: helper,
-            prefixIcon: prefixIcon,
-            suffixIcon: suffixIcon,
-          ),
+          hint: hint,
+          error: error,
+          helper: helper,
+          prefixIcon: prefixIcon,
+          suffixIcon: suffixIcon,
         ),
       ],
     );
