@@ -10,7 +10,6 @@ class AppButton extends StatelessWidget {
     super.key,
     required this.onPressed,
     this.type = ButtonType.primary,
-    this.isLoading = false,
     this.isExpanded = false,
     this.text,
     this.icon,
@@ -19,7 +18,6 @@ class AppButton extends StatelessWidget {
 
   final VoidCallback? onPressed;
   final ButtonType type;
-  final bool isLoading;
   final bool isExpanded;
   final String? text;
   final IconData? icon;
@@ -37,39 +35,27 @@ class AppButton extends StatelessWidget {
   }
 
   Widget _buildButton(BuildContext context) {
-    final child = isLoading ? AppLoading() : _buildContent(context);
+    final child = _buildContent(context);
 
     switch (type) {
       case ButtonType.primary:
-        return osElevatedButton(
-          onPressed: isLoading ? null : onPressed,
-          child: child,
-        );
+        return osElevatedButton(onPressed: onPressed, child: child);
 
       case ButtonType.secondary:
-        return osOutlinedButton(
-          onPressed: isLoading ? null : onPressed,
-          child: child,
-        );
+        return osOutlinedButton(onPressed: onPressed, child: child);
 
       case ButtonType.text:
-        return osTextButton(
-          onPressed: isLoading ? null : onPressed,
-          child: child,
-        );
+        return osTextButton(onPressed: onPressed, child: child);
 
       case ButtonType.icon:
         return osIconButton(
-          onPressed: isLoading ? null : onPressed,
+          onPressed: onPressed,
           icon: icon!,
           tooltip: tooltip,
         );
 
       case ButtonType.google:
-        return osGoogleButton(
-          onPressed: isLoading ? null : onPressed,
-          child: child,
-        );
+        return osGoogleButton(onPressed: onPressed, child: child);
     }
   }
 

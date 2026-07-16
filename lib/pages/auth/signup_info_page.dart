@@ -44,13 +44,9 @@ class SignUpInfoPage extends GetView<AuthController> {
           ),
 
           SizedBox(height: Design.spacing.xxxl),
-          Obx(
-            () => AppButton(
-              text: controller.isLoading.value
-                  ? Constants.locale.creatingAccount.tr
-                  : Constants.locale.createAccountButton.tr,
-              onPressed: () => controller.signUp(),
-            ),
+          AppButton(
+            text: Constants.locale.createAccountButton.tr,
+            onPressed: () => controller.signUp(),
           ),
         ],
       ),

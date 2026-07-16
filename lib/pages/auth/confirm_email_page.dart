@@ -50,20 +50,16 @@ class ConfirmEmailPage extends GetView<AuthController> {
           ),
 
           SizedBox(height: Design.spacing.xxxl),
-          Obx(
-            () => AppButton(
-              text: controller.isLoading.value
-                  ? Constants.locale.verifying.tr
-                  : Constants.locale.confirmCodeButton.tr,
-              onPressed: () {
-                if (controller.confirmPin.text.length != 6) {
-                  controller.confirmPin.triggerError();
-                  AppSnackbar.error(Constants.locale.enter6DigitCode.tr);
-                  return;
-                }
-                controller.confirmCode(controller.confirmPin.text);
-              },
-            ),
+          AppButton(
+            text: Constants.locale.confirmCodeButton.tr,
+            onPressed: () {
+              if (controller.confirmPin.text.length != 6) {
+                controller.confirmPin.triggerError();
+                AppSnackbar.error(Constants.locale.enter6DigitCode.tr);
+                return;
+              }
+              controller.confirmCode(controller.confirmPin.text);
+            },
           ),
 
           SizedBox(height: Design.spacing.lg),
