@@ -18,6 +18,7 @@ class SettingsPage extends GetView<SettingsController> {
       title: Constants.locale.settings.tr,
       showBackButton: true,
       child: ListView(
+        padding: EdgeInsets.all(Design.spacing.lg),
         children: [
           // Theme Section
           _buildSectionHeader(context, Constants.locale.theme.tr),
@@ -40,8 +41,6 @@ class SettingsPage extends GetView<SettingsController> {
           // App Info Section
           _buildSectionHeader(context, Constants.locale.appInfo.tr),
           _buildAppInfoTile(context),
-
-          SizedBox(height: Design.spacing.xl),
         ],
       ),
     );
@@ -68,14 +67,17 @@ class SettingsPage extends GetView<SettingsController> {
     return Obx(
       () => Card(
         color: context.colors.surface,
-        child: AppPlatform.listTile(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+        ),
+        child: AppListTile(
           leading: Icon(controller.themeIcon, color: context.colors.primary),
-          title: Text(Constants.locale.theme.tr, style: context.typo.bodyLarge),
-          subtitle: Text(controller.themeLabel, style: context.typo.bodyMedium),
-          trailing: Switch(
+          title: Text(Constants.locale.theme.tr),
+          subtitle: Text(controller.themeLabel),
+          trailing: AppToggle(
             value: controller.isDarkMode.value,
             onChanged: (_) => controller.toggleTheme(),
-            activeThumbColor: context.colors.primary,
+            activeColor: context.colors.primary,
           ),
           onTap: controller.toggleTheme,
         ),
@@ -86,18 +88,13 @@ class SettingsPage extends GetView<SettingsController> {
   Widget _buildLanguageTile(BuildContext context) {
     return Card(
       color: context.colors.surface,
-      child: AppPlatform.listTile(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+      ),
+      child: AppListTile(
         leading: _buildFlagIcon(context),
-        title: Text(
-          Constants.locale.language.tr,
-          style: context.typo.bodyLarge,
-        ),
-        subtitle: Obx(
-          () => Text(
-            controller.currentLanguageName,
-            style: context.typo.bodyMedium,
-          ),
-        ),
+        title: Text(Constants.locale.language.tr),
+        subtitle: Obx(() => Text(controller.currentLanguageName)),
         trailing: PopupMenuButton<String>(
           icon: Icon(
             Design.icons.downArrow,
@@ -152,9 +149,12 @@ class SettingsPage extends GetView<SettingsController> {
   ) {
     return Card(
       color: context.colors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+      ),
       child: Column(
         children: [
-          AppPlatform.listTile(
+          AppListTile(
             leading: CircleAvatar(
               backgroundColor: context.colors.primary.withValues(alpha: 0.1),
               backgroundImage: authController.currentUser.value?.photo != null
@@ -168,13 +168,11 @@ class SettingsPage extends GetView<SettingsController> {
               authController.currentUser.value?.name ??
                   authController.currentUser.value?.username ??
                   Constants.locale.account.tr,
-              style: context.typo.bodyLarge,
             ),
             subtitle: Obx(
               () => Text(
                 authController.currentUser.value?.email ??
                     Constants.locale.loading.tr,
-                style: context.typo.bodyMedium,
               ),
             ),
           ),
@@ -184,14 +182,10 @@ class SettingsPage extends GetView<SettingsController> {
             indent: Design.spacing.lg,
             endIndent: Design.spacing.lg,
           ),
-          AppPlatform.listTile(
+          AppListTile(
             leading: Icon(Design.icons.logout, color: context.colors.error),
-            title: Text(
-              Constants.locale.signOutButton.tr,
-              style: context.typo.bodyLarge.copyWith(
-                color: context.colors.error,
-              ),
-            ),
+            title: Text(Constants.locale.signOutButton.tr),
+            isDestructive: true,
             onTap: () => _showLogoutDialog(context, authController),
           ),
         ],
@@ -204,50 +198,20 @@ class SettingsPage extends GetView<SettingsController> {
 
     return Card(
       color: context.colors.surface,
-      child: AppPlatform.listTile(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+      ),
+      child: AppListTile(
         leading: Icon(Design.icons.info, color: context.colors.textSecondary),
-        title: Text(config.appName, style: context.typo.bodyLarge),
-        subtitle: Obx(
-          () => Text(
-            'v${controller.appVersion.value}',
-            style: context.typo.bodyMedium,
-          ),
-        ),
+        title: Text(config.appName),
+        subtitle: Obx(() => Text('v${controller.appVersion.value}')),
       ),
     );
   }
 
   void _showLogoutDialog(BuildContext context, AuthController authController) {
-    Get.dialog(
-      AlertDialog(
-        backgroundColor: context.colors.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Design.spacing.radiusLarge),
-        ),
-        title: Text(
-          Constants.locale.signOutButton.tr,
-          style: context.typo.headline4,
-        ),
-        content: Text(
-          Constants.locale.logoutConfirmation.tr,
-          style: context.typo.bodyMedium,
-        ),
-        actions: [
-          AppButton(
-            type: ButtonType.text,
-            onPressed: Get.back,
-            text: Constants.locale.cancel.tr,
-          ),
-          AppButton(
-            type: ButtonType.text,
-            onPressed: () {
-              Get.back();
-              authController.signOut();
-            },
-            text: Constants.locale.signOutButton.tr,
-          ),
-        ],
-      ),
-    );
+    AppDialog.exit(context).then((confirmed) {
+      if (confirmed) authController.signOut();
+    });
   }
 }

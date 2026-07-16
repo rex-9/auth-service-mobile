@@ -1,4 +1,5 @@
 // lib/design/components/app_page.dart
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/design/design.dart';
@@ -32,6 +33,8 @@ class AppPage extends StatelessWidget {
   final FloatingActionButtonLocation? floatingActionButtonLocation;
   final bool showExitConfirmation;
 
+  static bool get isIOS => GetPlatform.isIOS;
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -40,7 +43,7 @@ class AppPage extends StatelessWidget {
       onPopInvokedWithResult: (bool didPop, dynamic result) async {
         if (!didPop) _handleBackPressed(context);
       },
-      child: AppPlatform.scaffold(
+      child: osScaffold(
         backgroundColor: backgroundColor ?? context.colors.background,
         appBar: _buildAppBar(context),
         body: SafeArea(
@@ -84,6 +87,48 @@ class AppPage extends StatelessWidget {
     } else {
       _showExitDialog(context);
     }
+  }
+
+  static Widget osScaffold({
+    required Widget body,
+    PreferredSizeWidget? appBar,
+    Widget? bottomNavigationBar,
+    Widget? floatingActionButton,
+    FloatingActionButtonLocation? floatingActionButtonLocation,
+    Color? backgroundColor,
+    bool resizeToAvoidBottomInset = true,
+  }) {
+    if (isIOS) {
+      return CupertinoPageScaffold(
+        navigationBar: appBar as CupertinoNavigationBar?,
+        backgroundColor: backgroundColor ?? CupertinoColors.systemBackground,
+        child: SafeArea(
+          child: Stack(
+            children: [
+              body,
+              if (bottomNavigationBar != null)
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: bottomNavigationBar,
+                ),
+              if (floatingActionButton != null)
+                Positioned(bottom: 80, right: 20, child: floatingActionButton),
+            ],
+          ),
+        ),
+      );
+    }
+    return Scaffold(
+      appBar: appBar,
+      backgroundColor: backgroundColor ?? Colors.white,
+      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
+      body: body,
+      bottomNavigationBar: bottomNavigationBar,
+      floatingActionButton: floatingActionButton,
+      floatingActionButtonLocation: floatingActionButtonLocation,
+    );
   }
 }
 
