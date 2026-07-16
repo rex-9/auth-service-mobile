@@ -7,11 +7,10 @@ import 'package:meritbox_mobile/design/design.dart';
 import 'package:meritbox_mobile/routes/routes.dart';
 import 'package:meritbox_mobile/models/responses/api.response.dart';
 
-// #TODO: API impl
 class ApiService extends GetConnect {
   static const String sessionReplacedError = 'Active session not found';
+  bool _isLoadingShown = false;
 
-  // ===== LIFECYCLE =====
   @override
   void onInit() {
     super.onInit();
@@ -19,7 +18,6 @@ class ApiService extends GetConnect {
     _setupInterceptors();
   }
 
-  // ===== SETUP =====
   void _setupHttpClient() {
 
     httpClient.baseUrl = ServerRoutes.baseUrl;
@@ -28,7 +26,6 @@ class ApiService extends GetConnect {
   }
 
   void _setupInterceptors() {
-    // Request interceptor: Add auth token + platform
     httpClient.addRequestModifier<dynamic>((request) async {
       request.headers['X-Platform'] = 'mobile';
       final authController = Get.find<AuthController>();
@@ -39,11 +36,120 @@ class ApiService extends GetConnect {
     return request;
     });
 
-    // Response interceptor: Handle session expiry
     httpClient.addResponseModifier((request, response) {
       _handleSessionExpiry(request, response);
       return response;
     });
+  }
+
+  @override
+  Future<Response<T>> get<T>(
+    String url, {
+    String? contentType,
+    Decoder<T>? decoder,
+    Map<String, String>? headers,
+    Map<String, dynamic>? query,
+  }) async {
+    _showLoading();
+    try {
+      return await super.get(
+        url,
+        contentType: contentType,
+        decoder: decoder,
+        headers: headers,
+        query: query,
+      );
+    } finally {
+      _hideLoading();
+    }
+  }
+
+  @override
+  Future<Response<T>> post<T>(
+    String? url,
+    dynamic body, {
+    String? contentType,
+    Decoder<T>? decoder,
+    Map<String, String>? headers,
+    Map<String, dynamic>? query,
+    Progress? uploadProgress,
+  }) async {
+    _showLoading();
+    try {
+      return await super.post(
+        url,
+        body,
+        contentType: contentType,
+        decoder: decoder,
+        headers: headers,
+        query: query,
+        uploadProgress: uploadProgress,
+      );
+    } finally {
+      _hideLoading();
+    }
+  }
+
+  @override
+  Future<Response<T>> put<T>(
+    String url,
+    dynamic body, {
+    String? contentType,
+    Decoder<T>? decoder,
+    Map<String, String>? headers,
+    Map<String, dynamic>? query,
+    Progress? uploadProgress,
+  }) async {
+    _showLoading();
+    try {
+      return await super.put(
+        url,
+        body,
+        contentType: contentType,
+        decoder: decoder,
+        headers: headers,
+        query: query,
+        uploadProgress: uploadProgress,
+      );
+    } finally {
+      _hideLoading();
+    }
+  }
+
+  @override
+  Future<Response<T>> delete<T>(
+    String url, {
+    String? contentType,
+    Decoder<T>? decoder,
+    Map<String, String>? headers,
+    Map<String, dynamic>? query,
+  }) async {
+    _showLoading();
+    try {
+      return await super.delete(
+        url,
+        contentType: contentType,
+        decoder: decoder,
+        headers: headers,
+        query: query,
+      );
+    } finally {
+      _hideLoading();
+    }
+  }
+
+  void _showLoading() {
+    if (!_isLoadingShown && Get.context != null) {
+      _isLoadingShown = true;
+      AppLoading.showOverlay(Get.context!);
+    }
+  }
+
+  void _hideLoading() {
+    if (_isLoadingShown && Get.context != null) {
+      _isLoadingShown = false;
+      AppLoading.hideOverlay(Get.context!);
+    }
   }
 
   // ===== RESPONSE HANDLING =====

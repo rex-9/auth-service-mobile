@@ -1,4 +1,4 @@
-// lib/pages/signup_info_page.dart
+// lib/pages/auth/signup_info_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
@@ -20,39 +20,42 @@ class SignUpInfoPage extends GetView<AuthController> {
     return AppPage(
       title: Constants.locale.signupInfoTitle.tr,
       showBackButton: true,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            Constants.locale.signupInfoHeading.tr,
-            style: context.typo.headline3,
-          ),
-          SizedBox(height: Design.spacing.xxxl),
+      child: Center(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: Design.spacing.lg),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                Constants.locale.signupInfoHeading.tr,
+                style: context.typo.headline1,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: Design.spacing.xxxl),
 
-          AppInputField(
-            label: Constants.locale.fullNameLabel.tr,
-            hint: Constants.locale.fullNameHint.tr,
-            onChanged: (value) => controller.fullName.value = value,
-          ),
-          SizedBox(height: Design.spacing.lg),
+              AppInputField(
+                label: Constants.locale.fullNameLabel.tr,
+                hint: Constants.locale.fullNameHint.tr,
+                onChanged: (value) => controller.fullName.value = value,
+              ),
+              SizedBox(height: Design.spacing.lg),
 
-          AppInputField(
-            label: Constants.locale.usernameLabel.tr,
-            hint: Constants.locale.usernameHint.tr,
-            onChanged: (value) =>
-                controller.username.value = value.toLowerCase().trim(),
-          ),
+              AppInputField(
+                label: Constants.locale.usernameLabel.tr,
+                hint: Constants.locale.usernameHint.tr,
+                onChanged: (value) =>
+                    controller.username.value = value.toLowerCase().trim(),
+              ),
 
-          SizedBox(height: Design.spacing.xxxl),
-          Obx(
-            () => AppButton(
-              text: controller.isLoading.value
-                  ? Constants.locale.creatingAccount.tr
-                  : Constants.locale.createAccountButton.tr,
-              onPressed: () => controller.signUp(),
-            ),
+              SizedBox(height: Design.spacing.xxxl),
+              AppButton(
+                text: Constants.locale.createAccountButton.tr,
+                onPressed: () => controller.signUp(),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
