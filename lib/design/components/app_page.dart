@@ -1,6 +1,7 @@
 // lib/design/components/app_page.dart
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/design/design.dart';
 import 'package:meritbox_mobile/services/services.dart';
@@ -38,11 +39,10 @@ class AppPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      // canPop: !showBackButton,
-      // // TODO: NOT WORKING AT ALL!!!
-      // onPopInvokedWithResult: (bool didPop, dynamic result) async {
-      //   if (!didPop) _handleBackPressed(context);
-      // },
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, dynamic result) async {
+        if (!didPop) _handleBackPressed(context);
+      },
       child: osScaffold(
         backgroundColor: backgroundColor ?? context.colors.background,
         appBar: (isIOS)
@@ -115,7 +115,7 @@ class AppPage extends StatelessWidget {
     );
   }
 
-  void _handleBackPressed(BuildContext context) {
+  void _handleBackPressed(BuildContext context) async {
     final storage = Get.find<StorageService>();
     final stack = storage.getRouteStack();
 
@@ -124,7 +124,21 @@ class AppPage extends StatelessWidget {
       storage.saveRouteStack(stack);
       Get.offAllNamed(stack.last);
     } else {
-      _showExitDialog(context);
+      final result = await _showExitDialog(context);
+      if (result == true) {
+        Get.back();
+        // Exit the app
+        if (GetPlatform.isIOS) {
+          Future.delayed(const Duration(milliseconds: 100), () {
+            SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+          });
+        } else {
+          // Android/Web/Desktop - just close the app
+          Future.delayed(const Duration(milliseconds: 100), () {
+            SystemNavigator.pop();
+          });
+        }
+      }
     }
   }
 
