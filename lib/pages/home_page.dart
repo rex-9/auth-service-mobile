@@ -15,7 +15,7 @@ class HomePage extends GetView<AuthController> {
       title: Constants.locale.home.tr,
       actions: [
         AppButton(
-          type: ButtonType.icon,
+          type: ButtonTypeEnum.icon,
           icon: Design.icons.settings,
           onPressed: () => AppRoutes.toSettings(),
           tooltip: Constants.locale.settings.tr,

@@ -71,7 +71,7 @@ class ConfirmEmailPage extends GetView<AuthController> {
               SizedBox(height: Design.spacing.lg),
               Obx(
                 () => AppButton(
-                  type: ButtonType.text,
+                  type: ButtonTypeEnum.text,
                   onPressed: controller.resendSecondsLeft.value > 0
                       ? null
                       : () => controller.sendConfirmationCode(),
@@ -85,7 +85,7 @@ class ConfirmEmailPage extends GetView<AuthController> {
 
               SizedBox(height: Design.spacing.lg),
               AppButton(
-                type: ButtonType.text,
+                type: ButtonTypeEnum.text,
                 onPressed: () {
                   controller.email.value = '';
                   controller.confirmPin.clear();

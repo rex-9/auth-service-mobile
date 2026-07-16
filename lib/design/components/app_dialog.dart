@@ -97,7 +97,7 @@ class AppDialog {
         style: context.typo.bodyMedium.copyWith(color: foreground),
       ),
       actions: [
-        AppButton(type: ButtonType.text, onPressed: Get.back, text: 'OK'),
+        AppButton(type: ButtonTypeEnum.text, onPressed: Get.back, text: 'OK'),
       ],
     );
   }
@@ -123,12 +123,12 @@ class AppDialog {
         ),
         actions: [
           AppButton(
-            type: ButtonType.text,
+            type: ButtonTypeEnum.text,
             onPressed: () => Get.back(result: false),
             text: Constants.locale.cancel.tr,
           ),
           AppButton(
-            type: ButtonType.text,
+            type: ButtonTypeEnum.text,
             onPressed: () => Get.back(result: true),
             text: Constants.locale.exit.tr,
           ),

@@ -9,7 +9,7 @@ class AppButton extends StatelessWidget {
   const AppButton({
     super.key,
     required this.onPressed,
-    this.type = ButtonType.primary,
+    this.type = ButtonTypeEnum.primary,
     this.isExpanded = false,
     this.text,
     this.icon,
@@ -17,7 +17,7 @@ class AppButton extends StatelessWidget {
   });
 
   final VoidCallback? onPressed;
-  final ButtonType type;
+  final ButtonTypeEnum type;
   final bool isExpanded;
   final String? text;
   final IconData? icon;
@@ -38,29 +38,29 @@ class AppButton extends StatelessWidget {
     final child = _buildContent(context);
 
     switch (type) {
-      case ButtonType.primary:
+      case ButtonTypeEnum.primary:
         return osElevatedButton(onPressed: onPressed, child: child);
 
-      case ButtonType.secondary:
+      case ButtonTypeEnum.secondary:
         return osOutlinedButton(onPressed: onPressed, child: child);
 
-      case ButtonType.text:
+      case ButtonTypeEnum.text:
         return osTextButton(onPressed: onPressed, child: child);
 
-      case ButtonType.icon:
+      case ButtonTypeEnum.icon:
         return osIconButton(
           onPressed: onPressed,
           icon: icon!,
           tooltip: tooltip,
         );
 
-      case ButtonType.google:
+      case ButtonTypeEnum.google:
         return osGoogleButton(onPressed: onPressed, child: child);
     }
   }
 
   Widget _buildContent(BuildContext context) {
-    if (type == ButtonType.google) {
+    if (type == ButtonTypeEnum.google) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -191,7 +191,3 @@ class AppButton extends StatelessWidget {
     );
   }
 }
-
-// ===== ENUMS =====
-
-enum ButtonType { primary, secondary, text, icon, google }

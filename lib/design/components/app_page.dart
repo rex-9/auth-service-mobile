@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:meritbox_mobile/constants/enums.dart';
 import 'package:meritbox_mobile/design/design.dart';
 import 'package:meritbox_mobile/services/services.dart';
 
@@ -68,7 +69,7 @@ class AppPage extends StatelessWidget {
       elevation: 0,
       leading: showBackButton
           ? AppButton(
-              type: ButtonType.icon,
+              type: ButtonTypeEnum.icon,
               icon: Design.icons.backArrow,
               onPressed: onBackPressed ?? () => _handleBackPressed(context),
             )
@@ -83,7 +84,7 @@ class AppPage extends StatelessWidget {
       backgroundColor: context.colors.surface,
       leading: showBackButton
           ? AppButton(
-              type: ButtonType.icon,
+              type: ButtonTypeEnum.icon,
               icon: Design.icons.backArrow,
               onPressed: onBackPressed ?? () => _handleBackPressed(context),
             )

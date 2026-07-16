@@ -51,7 +51,7 @@ class SignUpPasscodeConfirmPage extends GetView<AuthController> {
 
               SizedBox(height: Design.spacing.lg),
               AppButton(
-                type: ButtonType.text,
+                type: ButtonTypeEnum.text,
                 onPressed: () {
                   controller.confirmPasscode.value = '';
                   controller.signupConfirmPin.clear();

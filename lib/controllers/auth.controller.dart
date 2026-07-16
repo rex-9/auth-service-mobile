@@ -6,7 +6,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meritbox_mobile/config/config.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/design/components/components.dart';
-import 'package:meritbox_mobile/models/enums.dart';
+import 'package:meritbox_mobile/constants/enums.dart';
 import 'package:meritbox_mobile/models/models.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import '../helpers/helpers.dart';
@@ -214,18 +214,18 @@ class AuthController extends GetxController {
     final status = await peekUser(email.value);
 
     switch (status) {
-      case PeekedUserStatus.error:
+      case EPeekedUserStatus.error:
         AppSnackbar.error(Constants.locale.connectionFailed.tr);
         break;
 
-      case PeekedUserStatus.exists:
+      case EPeekedUserStatus.exists:
         passcode.value = '';
         signinPin.clear();
         loadRetryState();
         AppRoutes.toSignInPasscode();
         break;
 
-      case PeekedUserStatus.existsUnconfirmed:
+      case EPeekedUserStatus.existsUnconfirmed:
         passcode.value = '';
         signupPin.clear();
         signupConfirmPin.clear();
@@ -234,7 +234,7 @@ class AuthController extends GetxController {
         AppRoutes.toConfirmEmail(email: email.value);
         break;
 
-      case PeekedUserStatus.notExists:
+      case EPeekedUserStatus.notExists:
         passcode.value = '';
         confirmPasscode.value = '';
         signupPin.clear();
@@ -271,19 +271,19 @@ class AuthController extends GetxController {
   }
 
   // Step 1: Check if user exists
-  Future<PeekedUserStatus> peekUser(String emailAddress) async {
+  Future<EPeekedUserStatus> peekUser(String emailAddress) async {
     try {
       final response = await _auth.peekUser(emailAddress);
       if (!response.success || response.data == null) {
-        return PeekedUserStatus.error;
+        return EPeekedUserStatus.error;
       }
       final data = response.data!;
-      if (!data.userExists) return PeekedUserStatus.notExists;
+      if (!data.userExists) return EPeekedUserStatus.notExists;
       return data.confirmed
-          ? PeekedUserStatus.exists
-          : PeekedUserStatus.existsUnconfirmed;
+          ? EPeekedUserStatus.exists
+          : EPeekedUserStatus.existsUnconfirmed;
     } catch (_) {
-      return PeekedUserStatus.error;
+      return EPeekedUserStatus.error;
     }
   }
 

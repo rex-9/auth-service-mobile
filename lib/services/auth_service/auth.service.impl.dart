@@ -79,7 +79,7 @@ class AuthServiceImpl extends GetxService implements AuthService {
     );
   }
 
-  // 5. Sign up (register new user)
+  // 5. Sign up (register new user) TODO: request
   @override
   Future<ApiResponse<UserModel>> signUp({
     required String username,
