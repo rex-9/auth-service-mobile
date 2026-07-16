@@ -46,9 +46,9 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return AppPlatform.scaffold(
+    return AppPage(
       backgroundColor: context.colors.background,
-      body: Center(
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [const AppLoading()],

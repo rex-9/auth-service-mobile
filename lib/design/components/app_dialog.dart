@@ -1,4 +1,5 @@
 // lib/design/components/app_dialog.dart
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
@@ -6,6 +7,8 @@ import '../design.dart';
 
 class AppDialog {
   AppDialog._();
+
+  static bool get isIOS => GetPlatform.isIOS;
 
   static Future<void> error({
     required BuildContext context,
@@ -75,33 +78,27 @@ class AppDialog {
     required Color foreground,
     required IconData icon,
   }) {
-    return Get.dialog(
-      AlertDialog(
-        backgroundColor: background,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Design.spacing.radiusLarge),
-          side: BorderSide(color: foreground.withValues(alpha: 0.25)),
-        ),
-        title: Row(
-          children: [
-            Icon(icon, color: foreground),
-            SizedBox(width: Design.spacing.md),
-            Expanded(
-              child: Text(
-                title,
-                style: context.typo.headline4.copyWith(color: foreground),
-              ),
+    return _showOsDialog<void>(
+      backgroundColor: background,
+      title: Row(
+        children: [
+          Icon(icon, color: foreground),
+          SizedBox(width: Design.spacing.md),
+          Expanded(
+            child: Text(
+              title,
+              style: context.typo.headline4.copyWith(color: foreground),
             ),
-          ],
-        ),
-        content: Text(
-          message,
-          style: context.typo.bodyMedium.copyWith(color: foreground),
-        ),
-        actions: [
-          AppButton(type: ButtonType.text, onPressed: Get.back, text: 'OK'),
+          ),
         ],
       ),
+      content: Text(
+        message,
+        style: context.typo.bodyMedium.copyWith(color: foreground),
+      ),
+      actions: [
+        AppButton(type: ButtonType.text, onPressed: Get.back, text: 'OK'),
+      ],
     );
   }
 
@@ -139,5 +136,44 @@ class AppDialog {
       ),
     );
     return result ?? false;
+  }
+
+  static Future<T?> _showOsDialog<T>({
+    required Widget title,
+    required Widget content,
+    required List<Widget> actions,
+    Color? backgroundColor,
+  }) {
+    if (isIOS) {
+      return Get.dialog<T>(
+        CupertinoAlertDialog(
+          title: title,
+          content: content,
+          actions: actions.map((action) {
+            if (action is TextButton) {
+              return CupertinoDialogAction(
+                onPressed: action.onPressed,
+                isDestructiveAction:
+                    action.style?.foregroundColor?.resolve({}) == Colors.red,
+                child: action.child ?? const Text(''),
+              );
+            }
+            return CupertinoDialogAction(
+              onPressed: () => Get.back(),
+              child: const Text('OK'),
+            );
+          }).toList(),
+        ),
+      );
+    }
+    return Get.dialog<T>(
+      AlertDialog(
+        backgroundColor: backgroundColor ?? Get.theme.colorScheme.surface,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: title,
+        content: content,
+        actions: actions,
+      ),
+    );
   }
 }
