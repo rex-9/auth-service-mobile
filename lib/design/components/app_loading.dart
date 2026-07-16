@@ -33,6 +33,7 @@ class AppLoading extends StatelessWidget {
   }
 
   static bool get isIOS => GetPlatform.isIOS;
+
   Widget _buildCircular(BuildContext context) {
     return SizedBox(
       height: size.value,

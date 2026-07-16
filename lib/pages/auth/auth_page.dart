@@ -67,13 +67,11 @@ class AuthPage extends GetView<AuthController> {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Obx(
-              () => AppButton(
-                type: ButtonType.icon,
-                icon: settingsController.themeIcon,
-                tooltip: settingsController.themeLabel,
-                onPressed: settingsController.toggleTheme,
-              ),
+            AppButton(
+              type: ButtonType.icon,
+              icon: settingsController.themeIcon,
+              tooltip: settingsController.themeLabel,
+              onPressed: settingsController.toggleTheme,
             ),
             PopupMenuButton<String>(
               icon: buildFlagIcon(context),
@@ -121,13 +119,10 @@ class AuthPage extends GetView<AuthController> {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: Design.spacing.xxxl),
-                Obx(
-                  () => AppButton(
-                    text: Constants.locale.continueWithGoogle.tr,
-                    onPressed: () => controller.signInWithGoogle(),
-                    isLoading: controller.isLoading.value,
-                    type: ButtonType.google,
-                  ),
+                AppButton(
+                  text: Constants.locale.continueWithGoogle.tr,
+                  onPressed: () => controller.signInWithGoogle(),
+                  type: ButtonType.google,
                 ),
                 SizedBox(height: Design.spacing.xl),
                 Row(
@@ -157,15 +152,10 @@ class AuthPage extends GetView<AuthController> {
                   ),
                 ),
                 SizedBox(height: Design.spacing.xl),
-                Obx(
-                  () => AppButton(
-                    text: controller.isLoading.value
-                        ? Constants.locale.checking.tr
-                        : Constants.locale.continueButton.tr,
-                    onPressed: _onContinue,
-                    isLoading: controller.isLoading.value,
-                    type: ButtonType.primary,
-                  ),
+                AppButton(
+                  text: Constants.locale.continueButton.tr,
+                  onPressed: _onContinue,
+                  type: ButtonType.primary,
                 ),
               ],
             ),

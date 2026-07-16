@@ -100,15 +100,9 @@ class SignUpPasscodePage extends GetView<AuthController> {
             ),
 
             SizedBox(height: Design.spacing.xxxl),
-            Obx(
-              () => AppButton(
-                text: controller.isLoading.value
-                    ? (isGoogle
-                          ? Constants.locale.signingIn.tr
-                          : Constants.locale.sendingCode.tr)
-                    : Constants.locale.continueButton.tr,
-                onPressed: _onContinue,
-              ),
+            AppButton(
+              text: Constants.locale.continueButton.tr,
+              onPressed: _onContinue,
             ),
           ],
         ),

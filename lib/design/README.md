@@ -116,7 +116,6 @@ AppButton(
   text: 'Continue',
   onPressed: () {},
   type: ButtonType.primary,  // primary | secondary | text | google
-  isLoading: false,
 )
 
 // Input Fields
