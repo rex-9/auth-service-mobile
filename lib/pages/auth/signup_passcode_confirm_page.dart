@@ -12,53 +12,58 @@ class SignUpPasscodeConfirmPage extends GetView<AuthController> {
   Widget build(BuildContext context) {
     return AppPage(
       title: Constants.locale.signupTitle.tr,
-      showBackButton: true,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            Constants.locale.confirmPasscodeHeading.tr,
-            style: context.typo.headline3,
-          ),
-          SizedBox(height: Design.spacing.sm),
-          Text(
-            Constants.locale.confirmPasscodeSubtitle.tr,
-            style: context.typo.bodyMedium,
-          ),
-          SizedBox(height: Design.spacing.xxxl),
+      child: Center(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: Design.spacing.lg),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                Constants.locale.confirmPasscodeHeading.tr,
+                style: context.typo.headline1,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: Design.spacing.sm),
+              Text(
+                Constants.locale.confirmPasscodeSubtitle.tr,
+                style: context.typo.bodyMedium,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: Design.spacing.xxxl),
 
-          Text(
-            Constants.locale.confirmPasscodeHeading.tr,
-            style: context.typo.labelMedium,
-          ),
-          SizedBox(height: Design.spacing.sm),
-          AppPasscodeField(
-            pinController: controller.signupConfirmPin,
-            onChanged: (value) => controller.confirmPasscode.value = value,
-            onCompleted: (_) => controller.handleConfirmPasscode(),
-          ),
+              Text(
+                Constants.locale.confirmPasscodeHeading.tr,
+                style: context.typo.labelMedium,
+              ),
+              SizedBox(height: Design.spacing.sm),
+              AppPasscodeField(
+                pinController: controller.signupConfirmPin,
+                onChanged: (value) => controller.confirmPasscode.value = value,
+                onCompleted: (_) => controller.handleConfirmPasscode(),
+              ),
 
-          SizedBox(height: Design.spacing.xxxl),
-          AppButton(
-            text: Constants.locale.confirm.tr,
-            onPressed: controller.handleConfirmPasscode,
-          ),
+              SizedBox(height: Design.spacing.xxxl),
+              AppButton(
+                text: Constants.locale.confirm.tr,
+                onPressed: controller.handleConfirmPasscode,
+              ),
 
-          SizedBox(height: Design.spacing.lg),
-          Center(
-            child: AppButton(
-              type: ButtonType.text,
-              onPressed: () {
-                controller.confirmPasscode.value = '';
-                controller.signupConfirmPin.clear();
-                controller.passcode.value = '';
-                controller.signupPin.clear();
-                Get.back();
-              },
-              text: Constants.locale.changePasscode.tr,
-            ),
+              SizedBox(height: Design.spacing.lg),
+              AppButton(
+                type: ButtonType.text,
+                onPressed: () {
+                  controller.confirmPasscode.value = '';
+                  controller.signupConfirmPin.clear();
+                  controller.passcode.value = '';
+                  controller.signupPin.clear();
+                  Get.back();
+                },
+                text: Constants.locale.changePasscode.tr,
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

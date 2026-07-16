@@ -15,52 +15,57 @@ class SignUpPasscodeCreatePage extends GetView<AuthController> {
 
     return AppPage(
       title: Constants.locale.signupTitle.tr,
-      showBackButton: true,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            isGoogle
-                ? Constants.locale.googlePasscodeHeading.tr
-                : Constants.locale.createPasscodeHeading.tr,
-            style: context.typo.headline3,
-          ),
-          SizedBox(height: Design.spacing.sm),
-          Text(
-            isGoogle
-                ? Constants.locale.googlePasscodeSubtitle.tr
-                : Constants.locale.createPasscodeSubtitle.tr,
-            style: context.typo.bodyMedium,
-          ),
-          SizedBox(height: Design.spacing.xxxl),
+      child: Center(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: Design.spacing.lg),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                isGoogle
+                    ? Constants.locale.googlePasscodeHeading.tr
+                    : Constants.locale.createPasscodeHeading.tr,
+                style: context.typo.headline1,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: Design.spacing.sm),
+              Text(
+                isGoogle
+                    ? Constants.locale.googlePasscodeSubtitle.tr
+                    : Constants.locale.createPasscodeSubtitle.tr,
+                style: context.typo.bodyMedium,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: Design.spacing.xxxl),
 
-          Text(
-            Constants.locale.passcodeLabel.tr,
-            style: context.typo.labelMedium,
-          ),
-          SizedBox(height: Design.spacing.sm),
-          AppPasscodeField(
-            pinController: controller.signupPin,
-            onChanged: (value) => controller.passcode.value = value,
-            onCompleted: (_) {
-              // Auto-move to confirm page when 6 digits entered
-              if (controller.passcode.value.length == 6) {
-                controller.signupConfirmPin.clear();
-                controller.confirmPasscode.value = '';
-                AppRoutes.toSignUpPasscodeConfirm();
-              }
-            },
-          ),
+              Text(
+                Constants.locale.passcodeLabel.tr,
+                style: context.typo.labelMedium,
+              ),
+              SizedBox(height: Design.spacing.sm),
+              AppPasscodeField(
+                pinController: controller.signupPin,
+                onChanged: (value) => controller.passcode.value = value,
+                onCompleted: (_) {
+                  // Auto-move to confirm page when 6 digits entered
+                  if (controller.passcode.value.length == 6) {
+                    controller.signupConfirmPin.clear();
+                    controller.confirmPasscode.value = '';
+                    AppRoutes.toSignUpPasscodeConfirm();
+                  }
+                },
+              ),
 
-          SizedBox(height: Design.spacing.xl),
-          Center(
-            child: AppButton(
-              type: ButtonType.text,
-              onPressed: () => Get.back(),
-              text: Constants.locale.goBack.tr,
-            ),
+              SizedBox(height: Design.spacing.xl),
+              AppButton(
+                type: ButtonType.text,
+                onPressed: () => Get.back(),
+                text: Constants.locale.goBack.tr,
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

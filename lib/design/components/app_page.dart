@@ -38,11 +38,11 @@ class AppPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: !showBackButton,
-      // TODO: NOT WORKING AT ALL!!!
-      onPopInvokedWithResult: (bool didPop, dynamic result) async {
-        if (!didPop) _handleBackPressed(context);
-      },
+      // canPop: !showBackButton,
+      // // TODO: NOT WORKING AT ALL!!!
+      // onPopInvokedWithResult: (bool didPop, dynamic result) async {
+      //   if (!didPop) _handleBackPressed(context);
+      // },
       child: osScaffold(
         backgroundColor: backgroundColor ?? context.colors.background,
         appBar: (isIOS) ? _buildIosAppBar(context) : _buildAndroidAppBar(context),
