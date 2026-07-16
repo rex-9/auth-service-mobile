@@ -1,5 +1,7 @@
 // lib/design/components/loading.dart
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:meritbox_mobile/design/design.dart';
 
 class AppLoading extends StatelessWidget {
@@ -30,14 +32,19 @@ class AppLoading extends StatelessWidget {
     }
   }
 
+  static bool get isIOS => GetPlatform.isIOS;
   Widget _buildCircular(BuildContext context) {
     return SizedBox(
       height: size.value,
       width: size.value,
-      child: CircularProgressIndicator(
-        strokeWidth: strokeWidth ?? _getStrokeWidth(),
-        color: color ?? Design.theme.colors.primary,
-      ),
+      child: isIOS
+          ? CupertinoActivityIndicator(
+              color: color ?? Design.theme.colors.primary,
+            )
+          : CircularProgressIndicator(
+              strokeWidth: strokeWidth ?? _getStrokeWidth(),
+              color: color ?? Design.theme.colors.primary,
+            ),
     );
   }
 

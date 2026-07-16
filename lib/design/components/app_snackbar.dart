@@ -8,9 +8,7 @@ class AppSnackbar {
   AppSnackbar._();
 
   static void error(String message, {dynamic e, StackTrace? stk}) {
-    // Log the error for debugging
     _logError(message, e, stk);
-
     _show(
       title: Constants.locale.error.tr,
       message: message,
@@ -57,32 +55,12 @@ class AppSnackbar {
     required Color foreground,
     required IconData icon,
   }) {
-    Get.closeAllSnackbars();
-
-    // context for theme-aware styles
-    final context = Get.context;
-    if (context == null) return;
-
-    Get.snackbar(
-      title,
-      message,
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: background,
-      colorText: foreground,
-      margin: EdgeInsets.all(Design.spacing.lg),
-      borderRadius: Design.spacing.radiusMedium,
-      duration: Design.timers.snackbar,
-      icon: Icon(icon, color: foreground),
-      borderColor: foreground.withValues(alpha: 0.25),
-      borderWidth: 1,
-      titleText: Text(
-        title,
-        style: context.typo.labelLarge.copyWith(color: foreground),
-      ),
-      messageText: Text(
-        message,
-        style: context.typo.bodyMedium.copyWith(color: foreground),
-      ),
+    AppPlatform.snackbar(
+      title: title,
+      message: message,
+      background: background,
+      foreground: foreground,
+      icon: icon,
     );
   }
 

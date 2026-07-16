@@ -1,24 +1,28 @@
 // lib/design/components/button.dart
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/design/design.dart';
 
 class AppButton extends StatelessWidget {
   const AppButton({
     super.key,
-    required this.text,
     required this.onPressed,
     this.type = ButtonType.primary,
     this.isLoading = false,
-    this.isExpanded = true,
+    this.isExpanded = false,
+    this.text,
     this.icon,
+    this.tooltip,
   });
 
-  final String text;
   final VoidCallback? onPressed;
   final ButtonType type;
   final bool isLoading;
   final bool isExpanded;
-  final Widget? icon;
+  final String? text;
+  final IconData? icon;
+  final String? tooltip;
 
   @override
   Widget build(BuildContext context) {
@@ -30,44 +34,38 @@ class AppButton extends StatelessWidget {
   }
 
   Widget _buildButton(BuildContext context) {
-    final child = isLoading
-        ? SizedBox(
-            height: Design.spacing.iconMedium,
-            width: Design.spacing.iconMedium,
-            child: AppLoading(strokeWidth: 2, color: _getLoaderColor()),
-          )
-        : _buildContent(context);
+    final child = isLoading ? AppLoading() : _buildContent(context);
 
     switch (type) {
       case ButtonType.primary:
-        return ElevatedButton(
+        return AppPlatform.elevatedButton(
           onPressed: isLoading ? null : onPressed,
-          style: Design.styles.buttonPrimary,
           child: child,
         );
 
       case ButtonType.secondary:
-        return OutlinedButton(
+        return AppPlatform.outlinedButton(
           onPressed: isLoading ? null : onPressed,
-          style: Design.styles.buttonSecondary,
           child: child,
         );
 
       case ButtonType.text:
-        return TextButton(
+        return AppPlatform.textButton(
           onPressed: isLoading ? null : onPressed,
-          style: Design.styles.buttonText,
           child: child,
         );
 
+      case ButtonType.icon:
+        return AppPlatform.iconButton(
+          onPressed: isLoading ? null : onPressed,
+          icon: icon!,
+          tooltip: tooltip,
+        );
+
       case ButtonType.google:
-        return SizedBox(
-          height: Design.spacing.buttonHeight,
-          child: OutlinedButton(
-            onPressed: isLoading ? null : onPressed,
-            style: Design.styles.buttonGoogle,
-            child: child,
-          ),
+        return AppPlatform.googleButton(
+          onPressed: isLoading ? null : onPressed,
+          child: child,
         );
     }
   }
@@ -83,38 +81,30 @@ class AppButton extends StatelessWidget {
             width: Design.spacing.iconMedium,
           ),
           SizedBox(width: Design.spacing.sm),
-          Text(text, style: context.typo.bodyMedium),
+          Text(
+            text ?? Constants.locale.continueWithGoogle.tr,
+            style: context.typo.bodyMedium,
+          ),
         ],
       );
     }
 
-    if (icon != null) {
+    if (icon != null && text != null) {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          icon!,
+          Icon(icon),
           SizedBox(width: Design.spacing.sm),
-          Text(text, style: context.typo.button),
+          Text(text!, style: context.typo.button),
         ],
       );
     }
 
-    return Text(text, style: context.typo.button);
-  }
-
-  Color _getLoaderColor() {
-    switch (type) {
-      case ButtonType.primary:
-        return Colors.white;
-      case ButtonType.secondary:
-      case ButtonType.text:
-      case ButtonType.google:
-        return Design.colors.primary; // Fixed: was Colors.red
-    }
+    return Text(text ?? '', style: context.typo.button);
   }
 }
 
 // ===== ENUMS =====
 
-enum ButtonType { primary, secondary, text, google }
+enum ButtonType { primary, secondary, text, icon, google }
