@@ -1,5 +1,6 @@
 // lib/design/components/button.dart
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/design/design.dart';
@@ -24,6 +25,8 @@ class AppButton extends StatelessWidget {
   final IconData? icon;
   final String? tooltip;
 
+  static bool get isIOS => GetPlatform.isIOS;
+
   @override
   Widget build(BuildContext context) {
     final button = _buildButton(context);
@@ -38,32 +41,32 @@ class AppButton extends StatelessWidget {
 
     switch (type) {
       case ButtonType.primary:
-        return AppPlatform.elevatedButton(
+        return osElevatedButton(
           onPressed: isLoading ? null : onPressed,
           child: child,
         );
 
       case ButtonType.secondary:
-        return AppPlatform.outlinedButton(
+        return osOutlinedButton(
           onPressed: isLoading ? null : onPressed,
           child: child,
         );
 
       case ButtonType.text:
-        return AppPlatform.textButton(
+        return osTextButton(
           onPressed: isLoading ? null : onPressed,
           child: child,
         );
 
       case ButtonType.icon:
-        return AppPlatform.iconButton(
+        return osIconButton(
           onPressed: isLoading ? null : onPressed,
           icon: icon!,
           tooltip: tooltip,
         );
 
       case ButtonType.google:
-        return AppPlatform.googleButton(
+        return osGoogleButton(
           onPressed: isLoading ? null : onPressed,
           child: child,
         );
@@ -102,6 +105,103 @@ class AppButton extends StatelessWidget {
     }
 
     return Text(text ?? '', style: context.typo.button);
+  }
+
+  static Widget osElevatedButton({
+    required VoidCallback? onPressed,
+    required Widget child,
+  }) {
+    if (isIOS) {
+      return CupertinoButton(
+        onPressed: onPressed,
+        color: CupertinoColors.systemBlue,
+        borderRadius: BorderRadius.circular(8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: child,
+      );
+    }
+    return ElevatedButton(
+      onPressed: onPressed,
+      style: Design.styles.buttonPrimary,
+      child: child,
+    );
+  }
+
+  static Widget osOutlinedButton({
+    required VoidCallback? onPressed,
+    required Widget child,
+  }) {
+    if (isIOS) {
+      return CupertinoButton(
+        onPressed: onPressed,
+        color: CupertinoColors.systemGrey5,
+        borderRadius: BorderRadius.circular(8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: child,
+      );
+    }
+    return OutlinedButton(
+      onPressed: onPressed,
+      style: Design.styles.buttonSecondary,
+      child: child,
+    );
+  }
+
+  static Widget osTextButton({
+    required VoidCallback? onPressed,
+    required Widget child,
+  }) {
+    if (isIOS) {
+      return CupertinoButton(
+        onPressed: onPressed,
+        borderRadius: BorderRadius.circular(8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: child,
+      );
+    }
+    return TextButton(
+      onPressed: onPressed,
+      style: Design.styles.buttonText,
+      child: child,
+    );
+  }
+
+  static Widget osIconButton({
+    required VoidCallback? onPressed,
+    required IconData icon,
+    String? tooltip,
+  }) {
+    if (isIOS) {
+      return CupertinoButton(
+        onPressed: onPressed,
+        padding: EdgeInsets.zero,
+        child: Icon(icon),
+      );
+    }
+    return IconButton(onPressed: onPressed, icon: Icon(icon), tooltip: tooltip);
+  }
+
+  static Widget osGoogleButton({
+    required VoidCallback? onPressed,
+    required Widget child,
+  }) {
+    if (isIOS) {
+      return CupertinoButton(
+        onPressed: onPressed,
+        color: CupertinoColors.white,
+        borderRadius: BorderRadius.circular(8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: child,
+      );
+    }
+    return SizedBox(
+      height: Design.spacing.buttonHeight,
+      child: OutlinedButton(
+        onPressed: onPressed,
+        style: Design.styles.buttonGoogle,
+        child: child,
+      ),
+    );
   }
 }
 

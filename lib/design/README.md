@@ -41,7 +41,7 @@ import 'package:meritbox_mobile/design/design.dart';
 ```dart
 @override
 Widget build(BuildContext context) {
-  return AppPlatform.scaffold(
+  return AppPage(
     backgroundColor: context.colors.background,      // Theme-aware color
     body: Text(
       'Hello World',
