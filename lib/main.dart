@@ -14,9 +14,9 @@ import 'locales/app_translations.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await dotenv.load(fileName: AppConfig().appEnv);
+  await dotenv.load(fileName: AppConfig.appEnv);
   await GetStorage.init();
-   InitialBinding().dependencies();
+  InitialBinding().dependencies();
 
   runApp(const MyApp());
 }
@@ -26,19 +26,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final config = AppConfig();
-
     // DEBUG: Test ENV...
-    // print('APP_NAME: ${config.appName}');
-    // print('APP_VERSION: ${config.appVersion}');
-    // print('API_BASE_URL: ${config.apiBaseUrl}');
-    // print('GOOGLE_CLIENT_ID: ${config.googleServerClientId}');
+    // print('APP_NAME: ${AppConfig.appName}');
+    // print('APP_VERSION: ${AppConfig.appVersion}');
+    // print('API_BASE_URL: ${AppConfig.apiBaseUrl}');
+    // print('GOOGLE_CLIENT_ID: ${AppConfig.googleServerClientId}');
 
     return GetBuilder<SettingsController>(
       builder: (settings) => ScreenUtilInit(
         designSize: const Size(375, 812),
         builder: (context, child) => GetMaterialApp(
-          title: config.appName,
+          title: AppConfig.appName,
           theme: Design.theme.light,
           darkTheme: Design.theme.dark,
           themeMode: settings.themeMode,

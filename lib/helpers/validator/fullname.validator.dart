@@ -3,8 +3,7 @@ import 'package:meritbox_mobile/helpers/validator/validator.dart';
 
 import '../../constants/constants.dart';
 
-class FullnameValidator implements Validator{
-
+class FullnameValidator implements Validator {
   @override
   String? validate(input) {
     if (input.trim().length < 2) {
@@ -12,5 +11,4 @@ class FullnameValidator implements Validator{
     }
     return null;
   }
-
 }

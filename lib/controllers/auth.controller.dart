@@ -18,10 +18,9 @@ class AuthController extends GetxController {
   //we have to find by the type we pass // example: Get.find<AuthService>(tag: 'auth'); not with Get.find<AuthServiceImpl>();
   final AuthService _auth = Get.find<AuthService>();
   final StorageService _storage = Get.find();
-  final AppConfig _config = AppConfig();
   final _emailValidator = EmailValidator();
   final _fullNameValidator = FullnameValidator();
-  final _userNameValidator = UserNameValidator();
+  final _userNameValidator = UsernameValidator();
 
   static const int maxAttempts = 3;
   static const List<int> cooldownSecondsByLevel = [30, 60, 120];
@@ -39,7 +38,6 @@ class AuthController extends GetxController {
   var fullName = ''.obs;
   var username = ''.obs;
   var signUpInfoError = RxnString();
-
 
   // Passcode attempt limiting
   var attemptsLeft = maxAttempts.obs;
@@ -378,7 +376,6 @@ class AuthController extends GetxController {
     }
   }
 
-
   //validate UserName
 
   bool validateFullName() {
@@ -386,7 +383,7 @@ class AuthController extends GetxController {
     return signUpInfoError.value == null;
   }
 
-  bool validateUserName(){
+  bool validateUserName() {
     signUpInfoError.value = _userNameValidator.validate(username.value);
     return signUpInfoError.value == null;
   }
@@ -397,14 +394,10 @@ class AuthController extends GetxController {
     return isFullNameValid && isUsernameValid;
   }
 
-
   // Register new user with full details
   Future<void> signUp() async {
-
     if (!validateSignUpInfo()) {
-      AppSnackbar.error(
-        signUpInfoError.value ?? '',
-      );
+      AppSnackbar.error(signUpInfoError.value ?? '');
       return;
     }
 
@@ -435,7 +428,7 @@ class AuthController extends GetxController {
       final signIn = GoogleSignIn.instance;
 
       if (!_googleInitialized) {
-        await signIn.initialize(serverClientId: _config.googleServerClientId);
+        await signIn.initialize(serverClientId: AppConfig.googleServerClientId);
         _googleInitialized = true;
       }
 

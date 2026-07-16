@@ -7,13 +7,14 @@ class AppConfig {
   const AppConfig();
 
   // ===== ENVIRONMENT VARIABLES =====
-  String get appEnv =>
+  static String get appEnv =>
       String.fromEnvironment(Constants.app.envKey, defaultValue: '.env.dev');
-  String get appName => dotenv.env[Constants.app.nameKey] ?? 'Meritbox';
-  String get appVersion => dotenv.env[Constants.app.versionKey] ?? '1.0.0';
-  String get apiBaseUrl =>
+  static String get appName => dotenv.env[Constants.app.nameKey] ?? 'Meritbox';
+  static String get appVersion =>
+      dotenv.env[Constants.app.versionKey] ?? '1.0.0';
+  static String get apiBaseUrl =>
       dotenv.env[Constants.app.apiBaseUrlKey] ?? 'api base url not found';
-  String get googleServerClientId =>
+  static String get googleServerClientId =>
       dotenv.env[Constants.app.googleServerClientIdKey] ??
       'google server client id not found';
 }

@@ -45,7 +45,9 @@ class AppPage extends StatelessWidget {
       // },
       child: osScaffold(
         backgroundColor: backgroundColor ?? context.colors.background,
-        appBar: (isIOS) ? _buildIosAppBar(context) : _buildAndroidAppBar(context),
+        appBar: (isIOS)
+            ? _buildIosAppBar(context)
+            : _buildAndroidAppBar(context),
         body: SafeArea(
           child: Padding(
             padding: padding ?? EdgeInsets.all(Design.spacing.screenPadding),
@@ -103,8 +105,9 @@ class AppPage extends StatelessWidget {
                   alignment: Alignment.centerRight,
                   widthFactor: 1,
                   child: Row(
-
-                      mainAxisSize: MainAxisSize.min, children: actions!),
+                    mainAxisSize: MainAxisSize.min,
+                    children: actions!,
+                  ),
                 ),
               ),
             )
@@ -151,7 +154,11 @@ class AppPage extends StatelessWidget {
                     child: bottomNavigationBar,
                   ),
                 if (floatingActionButton != null)
-                  Positioned(bottom: 80, right: 20, child: floatingActionButton),
+                  Positioned(
+                    bottom: 80,
+                    right: 20,
+                    child: floatingActionButton,
+                  ),
               ],
             ),
           ),

@@ -19,7 +19,6 @@ class ApiService extends GetConnect {
   }
 
   void _setupHttpClient() {
-
     httpClient.baseUrl = ServerRoutes.baseUrl;
     httpClient.timeout = Design.timers.apiTimeout;
     httpClient.defaultContentType = 'application/json';
@@ -33,7 +32,7 @@ class ApiService extends GetConnect {
         request.headers['Authorization'] =
             'Bearer ${authController.authToken.value}';
       }
-    return request;
+      return request;
     });
 
     httpClient.addResponseModifier((request, response) {

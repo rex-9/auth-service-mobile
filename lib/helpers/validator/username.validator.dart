@@ -3,10 +3,8 @@ import 'package:meritbox_mobile/helpers/validator/validator.dart';
 
 import '../../constants/constants.dart';
 
-class UserNameValidator implements Validator{
-
+class UsernameValidator implements Validator {
   static final _usernameRegex = RegExp(r'^[a-z0-9_]+$');
-
 
   @override
   String? validate(input) {
@@ -18,5 +16,4 @@ class UserNameValidator implements Validator{
     }
     return null; // valid
   }
-
 }

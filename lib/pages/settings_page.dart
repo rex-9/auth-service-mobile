@@ -94,43 +94,43 @@ class SettingsPage extends GetView<SettingsController> {
         leading: _buildFlagIcon(context),
         title: Text(Constants.locale.language.tr),
         subtitle: Obx(() => Text(controller.currentLanguageName)),
-          trailing: PopupMenuButton<String>(
-            icon: Icon(
-              Design.icons.downArrow,
-              color: context.colors.textSecondary,
-            ),
-            onSelected: controller.changeLocale,
-            itemBuilder: (context) => controller.supportedLocales
-                .map(
-                  (entry) => PopupMenuItem<String>(
-                    value: entry.key,
-                    child: Obx(
-                      () => Row(
-                        children: [
-                          _buildFlagIcon(context, locale: entry.key),
-                          SizedBox(width: Design.spacing.sm),
-                          Text(
-                            entry.value,
-                            style: context.typo.bodyMedium.copyWith(
-                              color: controller.isLocale(entry.key)
-                                  ? context.colors.primary
-                                  : context.colors.textPrimary,
-                            ),
+        trailing: PopupMenuButton<String>(
+          icon: Icon(
+            Design.icons.downArrow,
+            color: context.colors.textSecondary,
+          ),
+          onSelected: controller.changeLocale,
+          itemBuilder: (context) => controller.supportedLocales
+              .map(
+                (entry) => PopupMenuItem<String>(
+                  value: entry.key,
+                  child: Obx(
+                    () => Row(
+                      children: [
+                        _buildFlagIcon(context, locale: entry.key),
+                        SizedBox(width: Design.spacing.sm),
+                        Text(
+                          entry.value,
+                          style: context.typo.bodyMedium.copyWith(
+                            color: controller.isLocale(entry.key)
+                                ? context.colors.primary
+                                : context.colors.textPrimary,
                           ),
-                          if (controller.isLocale(entry.key))
-                            Icon(
-                              Design.icons.check,
-                              size: Design.spacing.iconSmall,
-                              color: context.colors.primary,
-                            ),
-                        ],
-                      ),
+                        ),
+                        if (controller.isLocale(entry.key))
+                          Icon(
+                            Design.icons.check,
+                            size: Design.spacing.iconSmall,
+                            color: context.colors.primary,
+                          ),
+                      ],
                     ),
                   ),
-                )
-                .toList(),
-          ),
+                ),
+              )
+              .toList(),
         ),
+      ),
     );
   }
 
@@ -193,8 +193,6 @@ class SettingsPage extends GetView<SettingsController> {
   }
 
   Widget _buildAppInfoTile(BuildContext context) {
-    final config = AppConfig();
-
     return Card(
       color: context.colors.surface,
       shape: RoundedRectangleBorder(
@@ -202,7 +200,7 @@ class SettingsPage extends GetView<SettingsController> {
       ),
       child: AppListTile(
         leading: Icon(Design.icons.info, color: context.colors.textSecondary),
-        title: Text(config.appName),
+        title: Text(AppConfig.appName),
         subtitle: Obx(() => Text('v${controller.appVersion.value}')),
       ),
     );

@@ -1,8 +1,10 @@
 // lib/routes/server_routes.dart
+import 'package:meritbox_mobile/config/config.dart';
+
 class ServerRoutes {
   // Base URL - Change for production
-  // For Android Emulator - use 10.0.2.2 to reach host machine
-  static const String baseUrl = 'http://localhost:3000';
+  // For Android Emulator - use 10.0.2.2 for android - use localhost for iOS
+  static String get baseUrl => AppConfig.apiBaseUrl;
 
   // Users Endpoints
   static const String peekUser = '/users/peek';
@@ -25,14 +27,4 @@ class ServerRoutes {
   // Password Endpoints
   static const String forgotPassword = '/password/forgot';
   static const String resetPassword = '/password/reset';
-}
-
-class ApiConstant {
-  static final auth = _Auth();
-}
-
-class _Auth {
-  String get base => '/auth';
-
-  String get login => '$base/login';
 }

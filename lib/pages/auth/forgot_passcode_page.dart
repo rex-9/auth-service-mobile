@@ -10,7 +10,6 @@ class ForgotPasscodePage extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
-
     //TODO : need to refactor at controller level
     final emailController = TextEditingController(text: controller.email.value);
 

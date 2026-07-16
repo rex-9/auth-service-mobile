@@ -10,11 +10,9 @@ class AuthPage extends GetView<AuthController> {
   const AuthPage({super.key});
 
   static bool get isIOS => GetPlatform.isIOS;
-  
+
   @override
   Widget build(BuildContext context) {
-
-
     final settingsController = Get.find<SettingsController>();
     Widget buildFlagIcon(BuildContext context, {String? locale}) {
       final String code = locale ?? settingsController.localeCode.value;
@@ -29,15 +27,13 @@ class AuthPage extends GetView<AuthController> {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Obx(
-              () => Padding(
-                padding: EdgeInsets.only(top: isIOS?5.0:0.0),
-                child: AppButton(
-                  type: ButtonType.icon,
-                  icon: settingsController.themeIcon,
-                  tooltip: settingsController.themeLabel,
-                  onPressed: settingsController.toggleTheme,
-                ),
+            Padding(
+              padding: EdgeInsets.only(top: isIOS ? 5.0 : 0.0),
+              child: AppButton(
+                type: ButtonType.icon,
+                icon: settingsController.themeIcon,
+                tooltip: settingsController.themeLabel,
+                onPressed: settingsController.toggleTheme,
               ),
             ),
             PopupMenuButton<String>(
