@@ -11,6 +11,7 @@ import 'package:meritbox_mobile/routes/routes.dart';
 class SignUpPasscodePage extends GetView<AuthController> {
   const SignUpPasscodePage({super.key});
 
+  //TODO : need to refactor at controller level
   void _onContinue() {
     if (controller.passcode.value.length != 6) {
       controller.signupPin.triggerError();

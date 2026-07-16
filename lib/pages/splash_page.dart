@@ -25,6 +25,7 @@ class _SplashPageState extends State<SplashPage> {
     final storage = Get.find<StorageService>();
 
     // Wait for auth check to complete
+    //TODO : Need to check
     await Future.delayed(const Duration(milliseconds: 10));
 
     if (authController.isLoggedIn.value) {

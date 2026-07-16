@@ -111,15 +111,15 @@ class AppButton extends StatelessWidget {
     required VoidCallback? onPressed,
     required Widget child,
   }) {
-    if (isIOS) {
-      return CupertinoButton(
-        onPressed: onPressed,
-        color: CupertinoColors.systemBlue,
-        borderRadius: BorderRadius.circular(8),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: child,
-      );
-    }
+    // if (isIOS) {
+    //   return CupertinoButton(
+    //     onPressed: onPressed,
+    //     color: CupertinoColors.systemBlue,
+    //     borderRadius: BorderRadius.circular(8),
+    //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    //     child: child,
+    //   );
+    // }
     return ElevatedButton(
       onPressed: onPressed,
       style: Design.styles.buttonPrimary,
@@ -131,15 +131,15 @@ class AppButton extends StatelessWidget {
     required VoidCallback? onPressed,
     required Widget child,
   }) {
-    if (isIOS) {
-      return CupertinoButton(
-        onPressed: onPressed,
-        color: CupertinoColors.systemGrey5,
-        borderRadius: BorderRadius.circular(8),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: child,
-      );
-    }
+    // if (isIOS) {
+    //   return CupertinoButton(
+    //     onPressed: onPressed,
+    //     color: CupertinoColors.systemGrey5,
+    //     borderRadius: BorderRadius.circular(8),
+    //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    //     child: child,
+    //   );
+    // }
     return OutlinedButton(
       onPressed: onPressed,
       style: Design.styles.buttonSecondary,
@@ -151,14 +151,14 @@ class AppButton extends StatelessWidget {
     required VoidCallback? onPressed,
     required Widget child,
   }) {
-    if (isIOS) {
-      return CupertinoButton(
-        onPressed: onPressed,
-        borderRadius: BorderRadius.circular(8),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: child,
-      );
-    }
+    // if (isIOS) {
+    //   return CupertinoButton(
+    //     onPressed: onPressed,
+    //     borderRadius: BorderRadius.circular(8),
+    //     padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+    //     child: child,
+    //   );
+    // }
     return TextButton(
       onPressed: onPressed,
       style: Design.styles.buttonText,
@@ -171,13 +171,13 @@ class AppButton extends StatelessWidget {
     required IconData icon,
     String? tooltip,
   }) {
-    if (isIOS) {
-      return CupertinoButton(
-        onPressed: onPressed,
-        padding: EdgeInsets.zero,
-        child: Icon(icon),
-      );
-    }
+    // if (isIOS) {
+    //   return CupertinoButton(
+    //     onPressed: onPressed,
+    //     padding: EdgeInsets.zero,
+    //     child: Icon(icon),
+    //   );
+    // }
     return IconButton(onPressed: onPressed, icon: Icon(icon), tooltip: tooltip);
   }
 
@@ -185,15 +185,16 @@ class AppButton extends StatelessWidget {
     required VoidCallback? onPressed,
     required Widget child,
   }) {
-    if (isIOS) {
-      return CupertinoButton(
-        onPressed: onPressed,
-        color: CupertinoColors.white,
-        borderRadius: BorderRadius.circular(8),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: child,
-      );
-    }
+    // if (isIOS) {
+    //   return CupertinoButton(
+    //     onPressed: onPressed,
+    //     color: CupertinoColors.white,
+    //     borderRadius: BorderRadius.circular(8),
+    //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        
+    //     child: child,
+    //   );
+    // }
     return SizedBox(
       height: Design.spacing.buttonHeight,
       child: OutlinedButton(

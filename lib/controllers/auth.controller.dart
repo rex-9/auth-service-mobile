@@ -384,6 +384,7 @@ class AuthController extends GetxController {
     isLoading.value = true;
     try {
       final signIn = GoogleSignIn.instance;
+
       if (!_googleInitialized) {
         await signIn.initialize(serverClientId: _config.googleServerClientId);
         _googleInitialized = true;

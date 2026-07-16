@@ -80,5 +80,9 @@
 					</array>
 			</dict>
 	</array>
+	<key>GIDClientID</key>
+    <string>690728597235-gn4u93uln936upb7ohrpq2q35v92eg3e.apps.googleusercontent.com</string>
+    <key>GIDServerClientID</key>
+    <string>690728597235-gn4u93uln936upb7ohrpq2q35v92eg3e.apps.googleusercontent.com</string>
 </dict>
 </plist>

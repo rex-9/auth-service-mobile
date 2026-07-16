@@ -99,7 +99,13 @@ class AppPage extends StatelessWidget {
               data: IconThemeData(color: context.colors.textPrimary),
               child: DefaultTextStyle(
                 style: TextStyle(color: context.colors.textPrimary),
-                child: Row(mainAxisSize: MainAxisSize.min, children: actions!),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  widthFactor: 1,
+                  child: Row(
+
+                      mainAxisSize: MainAxisSize.min, children: actions!),
+                ),
               ),
             )
           : null,
