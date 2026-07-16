@@ -5,51 +5,9 @@ import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/controllers/controllers.dart';
 import 'package:meritbox_mobile/design/design.dart';
 import 'package:meritbox_mobile/helpers/helpers.dart';
-import 'package:meritbox_mobile/models/enums.dart';
-import 'package:meritbox_mobile/routes/app_routes.dart';
 
 class AuthPage extends GetView<AuthController> {
   const AuthPage({super.key});
-
-  Future<void> _onContinue() async {
-    if (!controller.validateEmail()) return;
-
-    final status = await controller.peekUser(controller.email.value);
-
-    switch (status) {
-      case PeekedUserStatus.error:
-        AppSnackbar.error(Constants.locale.connectionFailed.tr);
-        break;
-
-      case PeekedUserStatus.exists:
-        // Fully onboarded user -> sign in with passcode
-        controller.passcode.value = '';
-        controller.signinPin.clear();
-        controller.loadRetryState();
-        AppRoutes.toSignInPasscode();
-        break;
-
-      case PeekedUserStatus.existsUnconfirmed:
-        // User exists but incomplete onboarding -> resume from confirm email
-        controller.passcode.value = '';
-        controller.signupPin.clear();
-        controller.signupConfirmPin.clear();
-        controller.confirmPin.clear();
-        // Send new confirmation code
-        await controller.sendConfirmationCode();
-        AppRoutes.toConfirmEmail(email: controller.email.value);
-        break;
-
-      case PeekedUserStatus.notExists:
-        // New user -> start sign up flow
-        controller.passcode.value = '';
-        controller.confirmPasscode.value = '';
-        controller.signupPin.clear();
-        controller.signupConfirmPin.clear();
-        AppRoutes.toSignUpPasscode();
-        break;
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +79,7 @@ class AuthPage extends GetView<AuthController> {
                 SizedBox(height: Design.spacing.xxxl),
                 AppButton(
                   text: Constants.locale.continueWithGoogle.tr,
-                  onPressed: () => controller.signInWithGoogle(),
+                  onPressed: controller.signInWithGoogle,
                   type: ButtonType.google,
                 ),
                 SizedBox(height: Design.spacing.xl),
@@ -154,7 +112,7 @@ class AuthPage extends GetView<AuthController> {
                 SizedBox(height: Design.spacing.xl),
                 AppButton(
                   text: Constants.locale.continueButton.tr,
-                  onPressed: _onContinue,
+                  onPressed: controller.handleContinue,
                   type: ButtonType.primary,
                 ),
               ],

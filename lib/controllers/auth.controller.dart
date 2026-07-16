@@ -206,6 +206,69 @@ class AuthController extends GetxController {
     return true;
   }
 
+  // Handle continue from auth page
+  Future<void> handleContinue() async {
+    if (!validateEmail()) return;
+
+    final status = await peekUser(email.value);
+
+    switch (status) {
+      case PeekedUserStatus.error:
+        AppSnackbar.error(Constants.locale.connectionFailed.tr);
+        break;
+
+      case PeekedUserStatus.exists:
+        passcode.value = '';
+        signinPin.clear();
+        loadRetryState();
+        AppRoutes.toSignInPasscode();
+        break;
+
+      case PeekedUserStatus.existsUnconfirmed:
+        passcode.value = '';
+        signupPin.clear();
+        signupConfirmPin.clear();
+        confirmPin.clear();
+        await sendConfirmationCode();
+        AppRoutes.toConfirmEmail(email: email.value);
+        break;
+
+      case PeekedUserStatus.notExists:
+        passcode.value = '';
+        confirmPasscode.value = '';
+        signupPin.clear();
+        signupConfirmPin.clear();
+        AppRoutes.toSignUpPasscodeCreate();
+        break;
+    }
+  }
+
+  // Handle confirm passcode
+  Future<void> handleConfirmPasscode() async {
+    if (confirmPasscode.value.length != 6) {
+      signupConfirmPin.triggerError();
+      AppSnackbar.error(Constants.locale.passcode6Digits.tr);
+      return;
+    }
+
+    if (passcode.value != confirmPasscode.value) {
+      signupConfirmPin.triggerError();
+      AppSnackbar.error(Constants.locale.passcodesDoNotMatch.tr);
+      return;
+    }
+
+    if (isGooglePasscodeSetup) {
+      await completeGoogleSignIn();
+      return;
+    }
+
+    AppRoutes.toSignUpInfo(
+      email: email.value,
+      passcode: passcode.value,
+      confirmPasscode: confirmPasscode.value,
+    );
+  }
+
   // Step 1: Check if user exists
   Future<PeekedUserStatus> peekUser(String emailAddress) async {
     try {
@@ -374,7 +437,7 @@ class AuthController extends GetxController {
           confirmPasscode.value = '';
           signupPin.clear();
           signupConfirmPin.clear();
-          AppRoutes.toSignUpPasscode();
+          AppRoutes.toSignUpPasscodeCreate();
         } else {
           email.value = user.email;
           // Existing user - fetch full session
