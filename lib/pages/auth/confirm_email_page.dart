@@ -1,9 +1,10 @@
-// lib/pages/confirm_email_page.dart
+// lib/pages/auth/confirm_email_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/controllers/controllers.dart';
 import 'package:meritbox_mobile/design/design.dart';
+import 'package:meritbox_mobile/routes/routes.dart';
 
 class ConfirmEmailPage extends GetView<AuthController> {
   const ConfirmEmailPage({super.key});
@@ -24,6 +25,12 @@ class ConfirmEmailPage extends GetView<AuthController> {
     return AppPage(
       title: Constants.locale.confirmEmailTitle.tr,
       showBackButton: true,
+      onBackPressed: () {
+        // Clear everything and go back to auth page
+        controller.email.value = '';
+        controller.confirmPin.clear();
+        Get.offAllNamed(AppRoutes.auth);
+      },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

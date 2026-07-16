@@ -12,6 +12,7 @@ class LocaleConstants {
   String get emailHelper => 'email_helper';
   String get continueButton => 'continue_button';
   String get checking => 'checking';
+  String get goBack => 'go_back';
 
   // Sign In
   String get signinTitle => 'signin_title';
@@ -31,7 +32,10 @@ class LocaleConstants {
   String get createPasscodeSubtitle => 'create_passcode_subtitle';
   String get googlePasscodeHeading => 'google_passcode_heading';
   String get googlePasscodeSubtitle => 'google_passcode_subtitle';
-  String get confirmPasscodeLabel => 'confirm_passcode_label';
+  String get confirmPasscodeHeading => 'confirm_passcode_heading';
+  String get confirmPasscodeSubtitle => 'confirm_passcode_subtitle';
+  String get confirm => 'confirm';
+  String get changePasscode => 'change_passcode';
   String get sendingCode => 'sending_code';
 
   // Sign Up Info
