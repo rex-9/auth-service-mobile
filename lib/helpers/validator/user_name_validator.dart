@@ -19,6 +19,4 @@ class UserNameValidator implements Validator{
     return null; // valid
   }
 
-
-  
 }

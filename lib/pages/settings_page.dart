@@ -18,6 +18,7 @@ class SettingsPage extends GetView<SettingsController> {
       title: Constants.locale.settings.tr,
       showBackButton: true,
       child: ListView(
+        padding: EdgeInsets.all(Design.spacing.lg),
         children: [
           // Theme Section
           _buildSectionHeader(context, Constants.locale.theme.tr),
@@ -40,8 +41,6 @@ class SettingsPage extends GetView<SettingsController> {
           // App Info Section
           _buildSectionHeader(context, Constants.locale.appInfo.tr),
           _buildAppInfoTile(context),
-
-          SizedBox(height: Design.spacing.xl),
         ],
       ),
     );
@@ -52,6 +51,7 @@ class SettingsPage extends GetView<SettingsController> {
       padding: EdgeInsets.only(
         left: Design.spacing.sm,
         bottom: Design.spacing.md,
+        top: Design.spacing.md,
       ),
       child: Text(
         title.toUpperCase(),
@@ -65,20 +65,19 @@ class SettingsPage extends GetView<SettingsController> {
 
   Widget _buildThemeTile(BuildContext context) {
     return Obx(
-      () => Container(
-        decoration: Design.styles.card.copyWith(color: context.colors.surface),
-        child: Material(
-          color: Colors.transparent,
-          child: ListTile(
-            leading: Icon(controller.themeIcon, color: context.colors.primary),
-            title: Text(Constants.locale.theme.tr, style: context.typo.bodyLarge),
-            subtitle: Text(controller.themeLabel, style: context.typo.bodyMedium),
-            trailing: Switch(
-              value: controller.isDarkMode.value,
-              onChanged: (_) => controller.toggleTheme(),
-              activeThumbColor: context.colors.primary,
-            ),
-            onTap: controller.toggleTheme,
+      () => Card(
+        color: context.colors.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+        ),
+        child: AppListTile(
+          leading: Icon(controller.themeIcon, color: context.colors.primary),
+          title: Text(Constants.locale.theme.tr),
+          subtitle: Text(controller.themeLabel),
+          trailing: AppToggle(
+            value: controller.isDarkMode.value,
+            onChanged: (_) => controller.toggleTheme(),
+            activeColor: context.colors.primary,
           ),
         ),
       ),
@@ -86,22 +85,15 @@ class SettingsPage extends GetView<SettingsController> {
   }
 
   Widget _buildLanguageTile(BuildContext context) {
-    return Container(
-      decoration: Design.styles.card.copyWith(color: context.colors.surface),
-      child: Material(
-        color: Colors.transparent,
-        child: ListTile(
-          leading: _buildFlagIcon(context),
-          title: Text(
-            Constants.locale.language.tr,
-            style: context.typo.bodyLarge,
-          ),
-          subtitle: Obx(
-            () => Text(
-              controller.currentLanguageName,
-              style: context.typo.bodyMedium,
-            ),
-          ),
+    return Card(
+      color: context.colors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+      ),
+      child: AppListTile(
+        leading: _buildFlagIcon(context),
+        title: Text(Constants.locale.language.tr),
+        subtitle: Obx(() => Text(controller.currentLanguageName)),
           trailing: PopupMenuButton<String>(
             icon: Icon(
               Design.icons.downArrow,
@@ -139,7 +131,6 @@ class SettingsPage extends GetView<SettingsController> {
                 .toList(),
           ),
         ),
-      ),
     );
   }
 
@@ -155,54 +146,48 @@ class SettingsPage extends GetView<SettingsController> {
     BuildContext context,
     AuthController authController,
   ) {
-    return Container(
-      decoration: Design.styles.card.copyWith(color: context.colors.surface),
-      child: Material(
-        color: Colors.transparent,
-        child: Column(
-          children: [
-            ListTile(
-              leading: CircleAvatar(
-                backgroundColor: context.colors.primary.withValues(alpha: 0.1),
-                backgroundImage: authController.currentUser.value?.photo != null
-                    ? NetworkImage(authController.currentUser.value!.photo!)
-                    : null,
-                child: authController.currentUser.value?.photo == null
-                    ? Icon(Design.icons.person, color: context.colors.primary)
-                    : null,
-              ),
-              title: Text(
-                authController.currentUser.value?.name ??
-                    authController.currentUser.value?.username ??
-                    Constants.locale.account.tr,
-                style: context.typo.bodyLarge,
-              ),
-              subtitle: Obx(
-                () => Text(
-                  authController.currentUser.value?.email ??
-                      Constants.locale.loading.tr,
-                  style: context.typo.bodyMedium,
-                ),
+    return Card(
+      color: context.colors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+      ),
+      child: Column(
+        children: [
+          AppListTile(
+            leading: CircleAvatar(
+              backgroundColor: context.colors.primary.withValues(alpha: 0.1),
+              backgroundImage: authController.currentUser.value?.photo != null
+                  ? NetworkImage(authController.currentUser.value!.photo!)
+                  : null,
+              child: authController.currentUser.value?.photo == null
+                  ? Icon(Design.icons.person, color: context.colors.primary)
+                  : null,
+            ),
+            title: Text(
+              authController.currentUser.value?.name ??
+                  authController.currentUser.value?.username ??
+                  Constants.locale.account.tr,
+            ),
+            subtitle: Obx(
+              () => Text(
+                authController.currentUser.value?.email ??
+                    Constants.locale.loading.tr,
               ),
             ),
-            Divider(
-              color: context.colors.divider,
-              height: 1,
-              indent: Design.spacing.lg,
-              endIndent: Design.spacing.lg,
-            ),
-            ListTile(
-              leading: Icon(Design.icons.logout, color: context.colors.error),
-              title: Text(
-                Constants.locale.signOutButton.tr,
-                style: context.typo.bodyLarge.copyWith(
-                  color: context.colors.error,
-                ),
-              ),
-              onTap: () => _showLogoutDialog(context, authController),
-            ),
-          ],
-        ),
+          ),
+          Divider(
+            color: context.colors.divider,
+            height: 1,
+            indent: Design.spacing.lg,
+            endIndent: Design.spacing.lg,
+          ),
+          AppListTile(
+            leading: Icon(Design.icons.logout, color: context.colors.error),
+            title: Text(Constants.locale.signOutButton.tr),
+            isDestructive: true,
+            onTap: () => _showLogoutDialog(context, authController),
+          ),
+        ],
       ),
     );
   }
@@ -210,61 +195,22 @@ class SettingsPage extends GetView<SettingsController> {
   Widget _buildAppInfoTile(BuildContext context) {
     final config = AppConfig();
 
-    return Container(
-      decoration: Design.styles.card.copyWith(color: context.colors.surface),
-      child: Material(
-        color: Colors.transparent,
-        child: ListTile(
-          leading: Icon(Design.icons.info, color: context.colors.textSecondary),
-          title: Text(config.appName, style: context.typo.bodyLarge),
-          subtitle: Obx(
-            () => Text(
-              'v${controller.appVersion.value}',
-              style: context.typo.bodyMedium,
-            ),
-          ),
-        ),
+    return Card(
+      color: context.colors.surface,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+      ),
+      child: AppListTile(
+        leading: Icon(Design.icons.info, color: context.colors.textSecondary),
+        title: Text(config.appName),
+        subtitle: Obx(() => Text('v${controller.appVersion.value}')),
       ),
     );
   }
 
   void _showLogoutDialog(BuildContext context, AuthController authController) {
-    Get.dialog(
-      AlertDialog(
-        backgroundColor: context.colors.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Design.spacing.radiusLarge),
-        ),
-        title: Text(
-          Constants.locale.signOutButton.tr,
-          style: context.typo.headline4,
-        ),
-        content: Text(
-          Constants.locale.logoutConfirmation.tr,
-          style: context.typo.bodyMedium,
-        ),
-        actions: [
-          TextButton(
-            onPressed: Get.back,
-            child: Text(
-              Constants.locale.cancel.tr,
-              style: context.typo.labelLarge,
-            ),
-          ),
-          TextButton(
-            onPressed: () {
-              Get.back();
-              authController.signOut();
-            },
-            child: Text(
-              Constants.locale.signOutButton.tr,
-              style: context.typo.labelLarge.copyWith(
-                color: context.colors.error,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+    AppDialog.exit(context).then((confirmed) {
+      if (confirmed) authController.signOut();
+    });
   }
 }

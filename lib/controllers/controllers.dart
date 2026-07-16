@@ -1,2 +1,2 @@
-export 'auth_controller.dart';
-export 'settings_controller.dart';
+export 'auth.controller.dart';
+export 'settings.controller.dart';

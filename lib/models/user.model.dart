@@ -1,4 +1,4 @@
-// lib/models/user_model.dart
+// lib/models/user.model.dart
 class UserModel {
   final String id;
   final String email;
@@ -37,10 +37,4 @@ class UserModel {
       'profile_pic_url': photo,
     };
   }
-}
-
-enum PeekedUserStatus {
-  error, // API call failed
-  exists, // User exists in database
-  notExists, // User does not exist
 }

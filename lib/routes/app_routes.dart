@@ -10,7 +10,7 @@ class AppRoutes {
   static const String signinPasscode = '/signin-passcode';
   static const String signupPasscode = '/signup-passcode';
   static const String signupInfo = '/signup-info';
-  static const String verifyEmail = '/verify-email';
+  static const String confirmEmail = '/confirm-email';
   static const String forgotPasscode = '/forgot-passcode';
 
   // ===== PROTECTED ROUTES (Auth Required) =====
@@ -22,10 +22,25 @@ class AppRoutes {
   static void toAuth() => Get.offAllNamed(auth);
   static void toSignInPasscode() => Get.toNamed(signinPasscode);
   static void toSignUpPasscode() => Get.toNamed(signupPasscode);
-  static void toSignUpInfo({Map<String, dynamic>? arguments}) =>
-      Get.toNamed(signupInfo, arguments: arguments);
-  static void toVerifyEmail({Map<String, dynamic>? arguments}) =>
-      Get.toNamed(verifyEmail, arguments: arguments);
+  static void toSignUpInfo({
+    required String email,
+    required String passcode,
+    required String confirmPasscode,
+  }) {
+    Get.toNamed(
+      signupInfo,
+      arguments: {
+        'email': email,
+        'passcode': passcode,
+        'confirm_passcode': confirmPasscode,
+      },
+    );
+  }
+
+  static void toConfirmEmail({required String email}) {
+    Get.toNamed(confirmEmail, arguments: {'email': email});
+  }
+
   static void toForgotPasscode() => Get.toNamed(forgotPasscode);
 
   // ===== PROTECTED NAVIGATION =====
@@ -39,7 +54,7 @@ class AppRoutes {
     GetPage(name: signinPasscode, page: () => const SignInPasscodePage()),
     GetPage(name: signupPasscode, page: () => const SignUpPasscodePage()),
     GetPage(name: signupInfo, page: () => const SignUpInfoPage()),
-    GetPage(name: verifyEmail, page: () => const VerifyEmailPage()),
+    GetPage(name: confirmEmail, page: () => const ConfirmEmailPage()),
     GetPage(name: forgotPasscode, page: () => const ForgotPasscodePage()),
 
     // Protected Pages

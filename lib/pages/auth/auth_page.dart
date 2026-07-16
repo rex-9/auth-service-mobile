@@ -5,7 +5,7 @@ import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/controllers/controllers.dart';
 import 'package:meritbox_mobile/design/design.dart';
 import 'package:meritbox_mobile/helpers/helpers.dart';
-import 'package:meritbox_mobile/models/models.dart';
+import 'package:meritbox_mobile/models/enums.dart';
 import 'package:meritbox_mobile/routes/app_routes.dart';
 
 class AuthPage extends GetView<AuthController> {
@@ -14,26 +14,39 @@ class AuthPage extends GetView<AuthController> {
   Future<void> _onContinue() async {
     if (!controller.validateEmail()) return;
 
-    final peekedUserStatus = await controller.peekUser(controller.email.value);
+    final status = await controller.peekUser(controller.email.value);
 
-    switch (peekedUserStatus) {
+    switch (status) {
       case PeekedUserStatus.error:
         AppSnackbar.error(Constants.locale.connectionFailed.tr);
         break;
 
       case PeekedUserStatus.exists:
+        // Fully onboarded user -> sign in with passcode
         controller.passcode.value = '';
         controller.signinPin.clear();
         controller.loadRetryState();
-        Get.toNamed(AppRoutes.signinPasscode);
+        AppRoutes.toSignInPasscode();
+        break;
+
+      case PeekedUserStatus.existsUnconfirmed:
+        // User exists but incomplete onboarding -> resume from confirm email
+        controller.passcode.value = '';
+        controller.signupPin.clear();
+        controller.signupConfirmPin.clear();
+        controller.confirmPin.clear();
+        // Send new confirmation code
+        await controller.sendConfirmationCode();
+        AppRoutes.toConfirmEmail(email: controller.email.value);
         break;
 
       case PeekedUserStatus.notExists:
+        // New user -> start sign up flow
         controller.passcode.value = '';
         controller.confirmPasscode.value = '';
         controller.signupPin.clear();
         controller.signupConfirmPin.clear();
-        Get.toNamed(AppRoutes.signupPasscode);
+        AppRoutes.toSignUpPasscode();
         break;
     }
   }
@@ -55,8 +68,9 @@ class AuthPage extends GetView<AuthController> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Obx(
-              () => IconButton(
-                icon: Icon(settingsController.themeIcon),
+              () => AppButton(
+                type: ButtonType.icon,
+                icon: settingsController.themeIcon,
                 tooltip: settingsController.themeLabel,
                 onPressed: settingsController.toggleTheme,
               ),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/design/design.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import '../services/storage_service.dart';
+import '../services/storage.service.dart';
 import '../locales/app_translations.dart';
 
 /// Theme + locale settings, persisted with GetStorage.

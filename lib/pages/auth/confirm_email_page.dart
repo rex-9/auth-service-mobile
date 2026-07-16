@@ -1,12 +1,12 @@
-// lib/pages/verify_email_page.dart
+// lib/pages/confirm_email_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/controllers/controllers.dart';
 import 'package:meritbox_mobile/design/design.dart';
 
-class VerifyEmailPage extends GetView<AuthController> {
-  const VerifyEmailPage({super.key});
+class ConfirmEmailPage extends GetView<AuthController> {
+  const ConfirmEmailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,20 +14,27 @@ class VerifyEmailPage extends GetView<AuthController> {
 
     controller.email.value = arguments['email'];
 
+    // Auto-send code if not already sent
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (controller.resendSecondsLeft.value == 0) {
+        controller.sendConfirmationCode();
+      }
+    });
+
     return AppPage(
-      title: Constants.locale.verifyEmailTitle.tr,
+      title: Constants.locale.confirmEmailTitle.tr,
       showBackButton: true,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            Constants.locale.verifyEmailHeading.tr,
+            Constants.locale.confirmEmailHeading.tr,
             style: context.typo.headline3,
           ),
           SizedBox(height: Design.spacing.sm),
           Obx(
             () => Text(
-              Constants.locale.verifyEmailSubtitle.trParams({
+              Constants.locale.confirmEmailSubtitle.trParams({
                 'email': controller.email.value,
               }),
               style: context.typo.bodyMedium,
@@ -36,9 +43,9 @@ class VerifyEmailPage extends GetView<AuthController> {
           SizedBox(height: Design.spacing.xxxl),
 
           AppPasscodeField(
-            pinController: controller.verifyPin,
+            pinController: controller.confirmPin,
             onCompleted: (pin) {
-              controller.verifyCode(pin);
+              controller.confirmCode(pin);
             },
           ),
 
@@ -47,14 +54,14 @@ class VerifyEmailPage extends GetView<AuthController> {
             () => AppButton(
               text: controller.isLoading.value
                   ? Constants.locale.verifying.tr
-                  : Constants.locale.verifyCodeButton.tr,
+                  : Constants.locale.confirmCodeButton.tr,
               onPressed: () {
-                if (controller.verifyPin.text.length != 6) {
-                  controller.verifyPin.triggerError();
+                if (controller.confirmPin.text.length != 6) {
+                  controller.confirmPin.triggerError();
                   AppSnackbar.error(Constants.locale.enter6DigitCode.tr);
                   return;
                 }
-                controller.verifyCode(controller.verifyPin.text);
+                controller.confirmCode(controller.confirmPin.text);
               },
             ),
           ),
@@ -62,22 +69,16 @@ class VerifyEmailPage extends GetView<AuthController> {
           SizedBox(height: Design.spacing.lg),
           Center(
             child: Obx(
-              () => TextButton(
+              () => AppButton(
+                type: ButtonType.text,
                 onPressed: controller.resendSecondsLeft.value > 0
                     ? null
                     : () => controller.sendConfirmationCode(),
-                child: Text(
-                  controller.resendSecondsLeft.value > 0
-                      ? Constants.locale.resendCodeIn.trParams({
-                          'seconds': '${controller.resendSecondsLeft.value}',
-                        })
-                      : Constants.locale.resendCode.tr,
-                  style: context.typo.labelLarge.copyWith(
-                    color: controller.resendSecondsLeft.value > 0
-                        ? context.colors.textTertiary
-                        : context.colors.primary,
-                  ),
-                ),
+                text: controller.resendSecondsLeft.value > 0
+                    ? Constants.locale.resendCodeIn.trParams({
+                        'seconds': '${controller.resendSecondsLeft.value}',
+                      })
+                    : Constants.locale.resendCode.tr,
               ),
             ),
           ),

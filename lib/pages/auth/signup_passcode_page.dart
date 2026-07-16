@@ -28,13 +28,10 @@ class SignUpPasscodePage extends GetView<AuthController> {
       return;
     }
 
-    Get.toNamed(
-      AppRoutes.signupInfo,
-      arguments: {
-        'email': controller.email.value,
-        'passcode': controller.passcode.value,
-        'confirm_passcode': controller.confirmPasscode.value,
-      },
+    AppRoutes.toSignUpInfo(
+      email: controller.email.value,
+      passcode: controller.passcode.value,
+      confirmPasscode: controller.confirmPasscode.value,
     );
   }
 

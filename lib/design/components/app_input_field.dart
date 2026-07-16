@@ -1,5 +1,7 @@
 // lib/design/components/app_input_field.dart
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:meritbox_mobile/design/design.dart';
 
 class AppInputField extends StatelessWidget {
@@ -40,6 +42,8 @@ class AppInputField extends StatelessWidget {
   final bool enabled;
   final TextCapitalization textCapitalization;
 
+  static bool get isIOS => GetPlatform.isIOS;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -47,7 +51,7 @@ class AppInputField extends StatelessWidget {
       children: [
         Text(label, style: context.typo.labelMedium),
         SizedBox(height: Design.spacing.xs),
-        TextField(
+        osTextField(
           controller: controller,
           focusNode: focusNode,
           autofocus: autoFocus,
@@ -58,15 +62,75 @@ class AppInputField extends StatelessWidget {
           minLines: minLines,
           enabled: enabled,
           textCapitalization: textCapitalization,
-          decoration: Design.styles.input(
-            hint: hint,
-            error: error,
-            helper: helper,
-            prefixIcon: prefixIcon,
-            suffixIcon: suffixIcon,
-          ),
+          hint: hint,
+          error: error,
+          helper: helper,
+          prefixIcon: prefixIcon,
+          suffixIcon: suffixIcon,
         ),
       ],
+    );
+  }
+
+  static Widget osTextField({
+    TextEditingController? controller,
+    FocusNode? focusNode,
+    bool autofocus = false,
+    bool obscureText = false,
+    TextInputType? keyboardType,
+    ValueChanged<String>? onChanged,
+    int maxLines = 1,
+    int? minLines,
+    bool enabled = true,
+    TextCapitalization textCapitalization = TextCapitalization.none,
+    String? hint,
+    String? error,
+    String? helper,
+    Widget? prefixIcon,
+    Widget? suffixIcon,
+  }) {
+    if (isIOS) {
+      return CupertinoTextField(
+        controller: controller,
+        focusNode: focusNode,
+        autofocus: autofocus,
+        obscureText: obscureText,
+        keyboardType: keyboardType,
+        onChanged: onChanged,
+        maxLines: maxLines,
+        minLines: minLines,
+        enabled: enabled,
+        placeholder: hint,
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: CupertinoColors.systemGrey6,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(
+            color: error != null
+                ? CupertinoColors.systemRed
+                : CupertinoColors.systemGrey4,
+          ),
+        ),
+      );
+    }
+    return TextField(
+      controller: controller,
+      focusNode: focusNode,
+      autofocus: autofocus,
+      obscureText: obscureText,
+      keyboardType: keyboardType,
+      onChanged: onChanged,
+      maxLines: maxLines,
+      minLines: minLines,
+      enabled: enabled,
+      textCapitalization: textCapitalization,
+      decoration: Design.styles.input(
+        hint: hint,
+        error: error,
+        helper: helper,
+        prefixIcon: prefixIcon,
+        suffixIcon: suffixIcon,
+      ),
     );
   }
 }

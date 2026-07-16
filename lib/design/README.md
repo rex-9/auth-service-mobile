@@ -41,7 +41,7 @@ import 'package:meritbox_mobile/design/design.dart';
 ```dart
 @override
 Widget build(BuildContext context) {
-  return Scaffold(
+  return AppPage(
     backgroundColor: context.colors.background,      // Theme-aware color
     body: Text(
       'Hello World',
@@ -130,7 +130,7 @@ AppInputField(
 // Passcode Field
 AppPasscodeField(
   pinController: pinController,
-  onCompleted: (pin) => verifyCode(pin),
+  onCompleted: (pin) => Code(pin),
 )
 
 // Page Layout
