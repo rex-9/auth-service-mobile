@@ -31,6 +31,12 @@ target 'Runner' do
   use_frameworks!
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+
+  # OneSignal Notification Service Extension
+  target 'OneSignalNotificationServiceExtension' do
+    pod 'OneSignalXCFramework/OneSignal', '>= 5.0.0', '< 6.0'
+  end
+
   target 'RunnerTests' do
     inherit! :search_paths
   end
