@@ -6,7 +6,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meritbox_mobile/config/config.dart';
 import 'package:meritbox_mobile/constants/constants.dart';
 import 'package:meritbox_mobile/design/components/components.dart';
-import 'package:meritbox_mobile/constants/enums.dart';
 import 'package:meritbox_mobile/models/models.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import '../helpers/helpers.dart';
@@ -18,6 +17,8 @@ class AuthController extends GetxController {
   //we have to find by the type we pass // example: Get.find<AuthService>(tag: 'auth'); not with Get.find<AuthServiceImpl>();
   final AuthService _auth = Get.find<AuthService>();
   final StorageService _storage = Get.find();
+  final PushNotiService _pushNotiService = Get.find<PushNotiService>();
+
   final _emailValidator = EmailValidator();
   final _fullNameValidator = FullnameValidator();
   final _userNameValidator = UsernameValidator();
@@ -230,7 +231,7 @@ class AuthController extends GetxController {
         signupPin.clear();
         signupConfirmPin.clear();
         confirmPin.clear();
-        await sendConfirmationCode();
+        await sendConfirmationOTPCode();
         AppRoutes.toConfirmEmail(email: email.value);
         break;
 
@@ -294,6 +295,9 @@ class AuthController extends GetxController {
     currentUser.value = response.user;
     _storage.setUserData(response.user);
     isLoggedIn.value = true;
+
+    // Sync user data with OneSignal
+    _pushNotiService.syncUser(response.user);
   }
 
   // Step 2a: Sign in with email and passcode (existing user)
@@ -314,8 +318,10 @@ class AuthController extends GetxController {
         // Check if user is confirmed (has user + token)
         if (data.user != null && data.token != null) {
           _resetRetryState();
-          _storeSession(AuthResponse(user: data.user!, token: data.token!));
-          AppRoutes.toHome();
+          // Sync noti user & Request permission after Email signin
+          await _handleSuccessfulAuth(
+            AuthResponse(user: data.user!, token: data.token!),
+          );
         } else if (data.otpSent) {
           // Unconfirmed user - OTP sent
           AppSnackbar.success(response.message);
@@ -344,9 +350,9 @@ class AuthController extends GetxController {
   }
 
   // Step 2b: Send confirmation code (for new user registration)
-  Future<void> sendConfirmationCode() async {
+  Future<void> sendConfirmationOTPCode() async {
     try {
-      final response = await _auth.sendConfirmationCode(email.value);
+      final response = await _auth.sendConfirmationOTPCode(email.value);
       if (response.success) {
         _startResendCountdown(30);
         if (Get.currentRoute != AppRoutes.confirmEmail) {
@@ -360,13 +366,13 @@ class AuthController extends GetxController {
     }
   }
 
-  // Step 3: Confirm code (for new user)
-  Future<void> confirmCode(String code) async {
+  // Step 3: Confirm OTP code (for new user)
+  Future<void> confirmOTPCode(String code) async {
     try {
-      final response = await _auth.confirmCode(email.value, code);
+      final response = await _auth.confirmOTPCode(email.value, code);
       if (response.success && response.data != null) {
-        _storeSession(response.data!);
-        AppRoutes.toHome();
+        // Sync noti user & Request permission after Email signup
+        await _handleSuccessfulAuth(response.data!);
       } else {
         confirmPin.triggerError();
         AppSnackbar.error(response.error ?? response.message);
@@ -455,8 +461,10 @@ class AuthController extends GetxController {
           // Existing user - fetch full session
           final sessionResponse = await _auth.signInWithGoogle(accessToken);
           if (sessionResponse.success && sessionResponse.data != null) {
-            _storeSession(AuthResponse(user: data.user!, token: data.token!));
-            AppRoutes.toHome();
+            // Sync noti user & Request permission after Google signin
+            await _handleSuccessfulAuth(
+              AuthResponse(user: data.user!, token: data.token!),
+            );
           }
         }
       } else {
@@ -492,8 +500,8 @@ class AuthController extends GetxController {
 
       if (response.success && response.data != null) {
         googleChallengeToken.value = '';
-        _storeSession(response.data!);
-        AppRoutes.toHome();
+        // Sync noti user & Request permission after Google signup
+        await _handleSuccessfulAuth(response.data!);
       } else if (response.statusCode == 429) {
         AppSnackbar.error(Constants.locale.googleTooManyAttempts.tr);
       } else {
@@ -572,6 +580,9 @@ class AuthController extends GetxController {
     resendSecondsLeft.value = 0;
     attemptsLeft.value = maxAttempts;
     hasFailureHistory.value = false;
+
+    // Clear OneSignal user data
+    _pushNotiService.clearUser();
   }
 
   // Sign out
@@ -589,5 +600,17 @@ class AuthController extends GetxController {
     _clearLocalSession();
     _storage.clearRouteStack();
     AppRoutes.toAuth();
+  }
+
+  // handle push noti and redirect after successful auth
+  Future<void> _handleSuccessfulAuth(AuthResponse response) async {
+    // 1. Store session + sync user
+    _storeSession(response);
+
+    // 2. Request push permission
+    await _pushNotiService.requestPermission();
+
+    // 3. Navigate to home
+    AppRoutes.toHome();
   }
 }

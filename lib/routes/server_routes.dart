@@ -21,7 +21,7 @@ class ServerRoutes {
   static const String signUp = '/signup';
 
   // Confirmation Endpoints
-  static const String sendConfirmationCode = '/confirmation/send_code';
+  static const String sendConfirmationOTPCode = '/confirmation/send_code';
   static const String confirmCode = '/confirmation/confirm_code';
 
   // Password Endpoints

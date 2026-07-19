@@ -33,10 +33,10 @@ abstract class AuthService extends GetxService {
   });
 
   // 6. Send confirmation code (for email verification)
-  Future<ApiResponse<void>> sendConfirmationCode(String signinKey);
+  Future<ApiResponse<void>> sendConfirmationOTPCode(String signinKey);
 
   // 7. Confirm email with code
-  Future<ApiResponse<AuthResponse>> confirmCode(
+  Future<ApiResponse<AuthResponse>> confirmOTPCode(
     String signinKey,
     String confirmationCode,
   );

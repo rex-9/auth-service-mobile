@@ -105,8 +105,8 @@ class AuthServiceImpl extends GetxService implements AuthService {
 
   // 6. Send confirmation code (for email verification)
   @override
-  Future<ApiResponse<void>> sendConfirmationCode(String signinKey) async {
-    final response = await _api.post(ServerRoutes.sendConfirmationCode, {
+  Future<ApiResponse<void>> sendConfirmationOTPCode(String signinKey) async {
+    final response = await _api.post(ServerRoutes.sendConfirmationOTPCode, {
       'signin_key': signinKey,
     });
     return _api.parseResponse<void>(response, (data) {});
@@ -114,7 +114,7 @@ class AuthServiceImpl extends GetxService implements AuthService {
 
   // 7. Confirm email with code
   @override
-  Future<ApiResponse<AuthResponse>> confirmCode(
+  Future<ApiResponse<AuthResponse>> confirmOTPCode(
     String signinKey,
     String confirmationCode,
   ) async {

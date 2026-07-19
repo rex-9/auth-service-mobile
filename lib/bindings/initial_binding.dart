@@ -1,4 +1,3 @@
-// lib/bindings/initial_binding.dart
 import 'package:get/get.dart';
 import '../services/services.dart';
 import '../controllers/controllers.dart';
@@ -15,8 +14,11 @@ class InitialBinding extends Bindings {
     Get.put<ApiService>(ApiService(), permanent: true);
 
     // Auth Service (depends on ApiService)
-    //if we have the mulitple implementations of the same service, we can use the tag to differentiate between them
+    // if we have the mulitple implementations of the same service, we can use the tag to differentiate between them
     Get.put<AuthService>(AuthServiceImpl(), permanent: true);
+
+    // Push Notification Service (no dependencies, initialized first)
+    Get.put<PushNotiService>(PushNotiService(), permanent: true);
 
     // ===== Controllers =====
 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "114547861209",
+    "project_id": "meritmoon-6711e",
+    "storage_bucket": "meritmoon-6711e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:114547861209:android:6820ab26d561b265bf80c8",
+        "android_client_info": {
+          "package_name": "com.meritmoon.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCdvHNHo8V-UscBM9-I0pKw5tjclAVf7fo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

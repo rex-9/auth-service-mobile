@@ -31,6 +31,7 @@ class MyApp extends StatelessWidget {
     // print('APP_VERSION: ${AppConfig.appVersion}');
     // print('API_BASE_URL: ${AppConfig.apiBaseUrl}');
     // print('GOOGLE_CLIENT_ID: ${AppConfig.googleServerClientId}');
+    // print('ONE_SIGNAL_APP_ID: ${AppConfig.oneSignalAppId}');
 
     return GetBuilder<SettingsController>(
       builder: (settings) => ScreenUtilInit(
