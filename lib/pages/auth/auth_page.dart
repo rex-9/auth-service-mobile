@@ -1,10 +1,10 @@
 // lib/pages/auth_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:meritbox_mobile/constants/constants.dart';
-import 'package:meritbox_mobile/controllers/controllers.dart';
-import 'package:meritbox_mobile/design/design.dart';
-import 'package:meritbox_mobile/helpers/helpers.dart';
+import 'package:auth_service_mobile/constants/constants.dart';
+import 'package:auth_service_mobile/controllers/controllers.dart';
+import 'package:auth_service_mobile/design/design.dart';
+import 'package:auth_service_mobile/helpers/helpers.dart';
 
 class AuthPage extends GetView<AuthController> {
   const AuthPage({super.key});

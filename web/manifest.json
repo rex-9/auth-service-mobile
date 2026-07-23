@@ -1,6 +1,6 @@
 {
-    "name": "meritbox_mobile",
-    "short_name": "meritbox_mobile",
+    "name": "auth_service_mobile",
+    "short_name": "auth_service_mobile",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

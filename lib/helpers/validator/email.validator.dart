@@ -1,6 +1,6 @@
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
-import 'package:meritbox_mobile/constants/constants.dart';
-import 'package:meritbox_mobile/helpers/validator/validator.dart';
+import 'package:auth_service_mobile/constants/constants.dart';
+import 'package:auth_service_mobile/helpers/validator/validator.dart';
 
 class EmailValidator implements Validator<String> {
   final emailRegex = RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$');

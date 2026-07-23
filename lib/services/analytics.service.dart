@@ -1,6 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:get/get.dart';
-import 'package:meritbox_mobile/constants/constants.dart';
+import 'package:auth_service_mobile/constants/constants.dart';
 
 class AnalyticsService extends GetxService {
   late FirebaseAnalytics _analytics;

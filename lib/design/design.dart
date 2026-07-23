@@ -1,8 +1,8 @@
 // Export Components and Extensions
-export 'package:meritbox_mobile/design/extensions/extensions.dart';
-export 'package:meritbox_mobile/design/components/components.dart';
+export 'package:auth_service_mobile/design/extensions/extensions.dart';
+export 'package:auth_service_mobile/design/components/components.dart';
 
-import 'package:meritbox_mobile/design/elements/elements.dart';
+import 'package:auth_service_mobile/design/elements/elements.dart';
 
 class Design {
   Design._();

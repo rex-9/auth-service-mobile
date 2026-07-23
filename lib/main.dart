@@ -5,12 +5,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:meritbox_mobile/services/services.dart';
+import 'package:auth_service_mobile/services/services.dart';
 import 'package:upgrader/upgrader.dart';
-import 'package:meritbox_mobile/config/config.dart';
-import 'package:meritbox_mobile/design/design.dart';
-import 'package:meritbox_mobile/routes/routes.dart';
-import 'package:meritbox_mobile/controllers/controllers.dart';
+import 'package:auth_service_mobile/config/config.dart';
+import 'package:auth_service_mobile/design/design.dart';
+import 'package:auth_service_mobile/routes/routes.dart';
+import 'package:auth_service_mobile/controllers/controllers.dart';
 import 'bindings/initial_binding.dart';
 import 'locales/app_translations.dart';
 

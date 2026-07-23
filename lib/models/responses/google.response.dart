@@ -1,5 +1,5 @@
 // models/responses/google_response.dart
-import 'package:meritbox_mobile/models/models.dart';
+import 'package:auth_service_mobile/models/models.dart';
 
 class GoogleResponse {
   final bool passwordRequired;

@@ -1,5 +1,5 @@
 import 'package:get/get_utils/src/extensions/internacionalization.dart';
-import 'package:meritbox_mobile/helpers/validator/validator.dart';
+import 'package:auth_service_mobile/helpers/validator/validator.dart';
 
 import '../../constants/constants.dart';
 

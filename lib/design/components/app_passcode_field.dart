@@ -1,6 +1,6 @@
 // lib/design/components/passcode_field.dart
 import 'package:flutter/material.dart';
-import 'package:meritbox_mobile/design/design.dart';
+import 'package:auth_service_mobile/design/design.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 /// A 6-digit passcode field with consistent styling across the app

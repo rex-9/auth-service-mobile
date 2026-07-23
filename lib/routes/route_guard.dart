@@ -1,8 +1,8 @@
 // lib/routes/route_guard.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:meritbox_mobile/controllers/controllers.dart';
-import 'package:meritbox_mobile/services/services.dart';
+import 'package:auth_service_mobile/controllers/controllers.dart';
+import 'package:auth_service_mobile/services/services.dart';
 import 'app_routes.dart';
 
 class RouteGuard extends GetMiddleware {

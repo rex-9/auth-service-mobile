@@ -1,7 +1,7 @@
 // lib/design/elements/app_styles.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:meritbox_mobile/design/design.dart';
+import 'package:auth_service_mobile/design/design.dart';
 
 class AppStyles {
   const AppStyles();

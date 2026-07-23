@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:meritbox_mobile/services/services.dart';
+import 'package:auth_service_mobile/services/services.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
-import 'package:meritbox_mobile/config/config.dart';
-import 'package:meritbox_mobile/models/models.dart';
+import 'package:auth_service_mobile/config/config.dart';
+import 'package:auth_service_mobile/models/models.dart';
 
 class PushNotiService extends GetxService {
   final AnalyticsService _analytics = Get.find<AnalyticsService>();

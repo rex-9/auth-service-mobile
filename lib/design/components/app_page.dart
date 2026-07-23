@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:meritbox_mobile/constants/enums.dart';
-import 'package:meritbox_mobile/design/design.dart';
-import 'package:meritbox_mobile/services/services.dart';
+import 'package:auth_service_mobile/constants/enums.dart';
+import 'package:auth_service_mobile/design/design.dart';
+import 'package:auth_service_mobile/services/services.dart';
 
 class AppPage extends StatelessWidget {
   const AppPage({

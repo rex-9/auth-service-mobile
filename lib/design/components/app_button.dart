@@ -1,8 +1,8 @@
 // lib/design/components/button.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:meritbox_mobile/constants/constants.dart';
-import 'package:meritbox_mobile/design/design.dart';
+import 'package:auth_service_mobile/constants/constants.dart';
+import 'package:auth_service_mobile/design/design.dart';
 
 class AppButton extends StatelessWidget {
   const AppButton({

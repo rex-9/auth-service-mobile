@@ -1,4 +1,4 @@
-package com.meritmoon.app
+package com.rex9.auth
 
 import io.flutter.embedding.android.FlutterActivity
 

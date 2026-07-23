@@ -1,7 +1,7 @@
 // lib/config/app_config.dart
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:meritbox_mobile/constants/constants.dart';
+import 'package:auth_service_mobile/constants/constants.dart';
 
 class AppConfig {
   const AppConfig();
@@ -9,7 +9,8 @@ class AppConfig {
   // ===== ENVIRONMENT VARIABLES =====
   static String get appEnv =>
       String.fromEnvironment(Constants.app.envKey, defaultValue: '.env.dev');
-  static String get appName => dotenv.env[Constants.app.nameKey] ?? 'Meritbox';
+  static String get appName =>
+      dotenv.env[Constants.app.nameKey] ?? 'Auth Service';
   static String get appVersion =>
       dotenv.env[Constants.app.versionKey] ?? '1.0.0';
   static String get apiBaseUrl =>

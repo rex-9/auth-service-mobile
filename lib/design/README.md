@@ -33,7 +33,7 @@ lib/design/
 #### 1. Import the Design System
 
 ```dart
-import 'package:meritbox_mobile/design/design.dart';
+import 'package:auth_service_mobile/design/design.dart';
 ```
 
 #### 2. Theme-Aware Colors & Typography (Use `context.colors` & `context.typo`)
