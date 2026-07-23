@@ -16,7 +16,8 @@ class AuthController extends GetxController {
   //if we have the mulitple implementations of the same service, we can use the tag to differentiate between them
   //we have to find by the type we pass // example: Get.find<AuthService>(tag: 'auth'); not with Get.find<AuthServiceImpl>();
   final AuthService _auth = Get.find<AuthService>();
-  final StorageService _storage = Get.find();
+  final AnalyticsService _analytics = Get.find<AnalyticsService>();
+  final StorageService _storage = Get.find<StorageService>();
   final PushNotiService _pushNotiService = Get.find<PushNotiService>();
 
   final _emailValidator = EmailValidator();
@@ -298,6 +299,11 @@ class AuthController extends GetxController {
 
     // Sync user data with OneSignal
     _pushNotiService.syncUser(response.user);
+
+    // ✅ Set user ID and properties
+    _analytics.setUserId(response.user.id);
+    _analytics.setUserProperty('email', response.user.email);
+    _analytics.setUserProperty('provider', response.user.provider ?? 'email');
   }
 
   // Step 2a: Sign in with email and passcode (existing user)
@@ -318,6 +324,7 @@ class AuthController extends GetxController {
         // Check if user is confirmed (has user + token)
         if (data.user != null && data.token != null) {
           _resetRetryState();
+          _analytics.logSignIn(method: 'email');
           // Sync noti user & Request permission after Email signin
           await _handleSuccessfulAuth(
             AuthResponse(user: data.user!, token: data.token!),
@@ -366,11 +373,13 @@ class AuthController extends GetxController {
     }
   }
 
-  // Step 3: Confirm OTP code (for new user)
+  // Step 3: Signup Confirm OTP code (for new user)
   Future<void> confirmOTPCode(String code) async {
     try {
       final response = await _auth.confirmOTPCode(email.value, code);
       if (response.success && response.data != null) {
+        _analytics.logEmailVerified();
+        _analytics.logOnboardingCompleted();
         // Sync noti user & Request permission after Email signup
         await _handleSuccessfulAuth(response.data!);
       } else {
@@ -418,6 +427,8 @@ class AuthController extends GetxController {
 
       if (response.success) {
         _startResendCountdown(30);
+        _analytics.logSignUp(method: 'email');
+        _analytics.logOnboardingStarted();
         AppRoutes.toConfirmEmail(email: email.value);
       } else {
         AppSnackbar.error(response.error ?? response.message);
@@ -461,6 +472,8 @@ class AuthController extends GetxController {
           // Existing user - fetch full session
           final sessionResponse = await _auth.signInWithGoogle(accessToken);
           if (sessionResponse.success && sessionResponse.data != null) {
+            _analytics.logSignIn(method: 'google');
+            _analytics.logOnboardingStarted();
             // Sync noti user & Request permission after Google signin
             await _handleSuccessfulAuth(
               AuthResponse(user: data.user!, token: data.token!),
@@ -500,7 +513,10 @@ class AuthController extends GetxController {
 
       if (response.success && response.data != null) {
         googleChallengeToken.value = '';
-        // Sync noti user & Request permission after Google signup
+
+        _analytics.logSignUp(method: 'google');
+        _analytics.logOnboardingCompleted();
+
         await _handleSuccessfulAuth(response.data!);
       } else if (response.statusCode == 429) {
         AppSnackbar.error(Constants.locale.googleTooManyAttempts.tr);
@@ -599,6 +615,8 @@ class AuthController extends GetxController {
 
     _clearLocalSession();
     _storage.clearRouteStack();
+    _analytics.logSignOut();
+    _analytics.clearUserId();
     AppRoutes.toAuth();
   }
 

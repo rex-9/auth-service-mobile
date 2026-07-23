@@ -1,9 +1,11 @@
 // lib/main.dart
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:meritbox_mobile/services/services.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:meritbox_mobile/config/config.dart';
 import 'package:meritbox_mobile/design/design.dart';
@@ -16,6 +18,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await dotenv.load(fileName: AppConfig.appEnv);
+  await Firebase.initializeApp();
   await GetStorage.init();
   InitialBinding().dependencies();
 
@@ -36,6 +39,8 @@ class MyApp extends StatelessWidget {
     // print('APP_STORE_APP_ID: ${AppConfig.appStoreAppId}');
     // print('APP_STORE_BUNDLE_ID: ${AppConfig.appStoreBundleId}');
 
+    final analytics = Get.find<AnalyticsService>();
+
     return GetBuilder<SettingsController>(
       builder: (settings) => ScreenUtilInit(
         designSize: const Size(375, 812),
@@ -50,6 +55,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           initialRoute: AppRoutes.splash,
           getPages: AppRoutes.pages,
+          navigatorObservers: [analytics.observer],
           builder: (context, child) {
             return UpgradeAlert(
               upgrader: Upgrader(

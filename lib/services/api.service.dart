@@ -162,6 +162,19 @@ class ApiService extends GetConnect {
     final data = body['data'] as Map<String, dynamic>?;
 
     if (response.hasError || !(status['success'] as bool? ?? false)) {
+      // Optional: Log API errors to analytics
+      // try {
+      //   final analytics = Get.find<AnalyticsService>();
+      //   analytics.logError(
+      //     status['error'] as String? ??
+      //         response.statusText ??
+      //         'Unknown API error',
+      //     context: response.url?.path ?? 'api_call',
+      //   );
+      // } catch (_) {
+      //   // Analytics not initialized, ignore
+      // }
+
       return ApiResponse.error(
         message:
             status['error'] as String? ??

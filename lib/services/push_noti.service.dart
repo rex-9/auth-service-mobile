@@ -1,29 +1,42 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:meritbox_mobile/services/services.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:meritbox_mobile/config/config.dart';
 import 'package:meritbox_mobile/models/models.dart';
 
 class PushNotiService extends GetxService {
+  final AnalyticsService _analytics = Get.find<AnalyticsService>();
+
   @override
   void onInit() {
     super.onInit();
     _initOneSignal();
+    _setupListeners();
   }
 
   void _initOneSignal() {
     // Initialize OneSignal without requesting permission
     OneSignal.Debug.setLogLevel(OSLogLevel.verbose);
     OneSignal.initialize(AppConfig.oneSignalAppId);
-    print('✅ OneSignal initialized');
+    debugPrint('✅ OneSignal initialized');
+  }
+
+  void _setupListeners() {
+    // Track notification clicks
+    OneSignal.Notifications.addClickListener((event) {
+      final data = event.notification.additionalData;
+      _analytics.logPushOpened(data ?? {});
+    });
   }
 
   // Request notification permission (call after onboarding/signin)
   Future<void> requestPermission() async {
     try {
       await OneSignal.Notifications.requestPermission(true);
-      print('✅ Push permission requested');
+      debugPrint('✅ Push permission requested');
     } catch (e) {
-      print('❌ Failed to request permission:===> $e');
+      debugPrint('❌ Failed to request permission:===> $e');
     }
   }
 
@@ -34,9 +47,9 @@ class PushNotiService extends GetxService {
       await OneSignal.User.addEmail(user.email);
       // 2 ok, 4 not ok probably max 3 tags for free plan
       OneSignal.User.addTags({'username': user.username ?? ''});
-      print('✅ OneSignal synced for user:===> ${user.email}');
+      debugPrint('✅ OneSignal synced for user:===> ${user.email}');
     } catch (e) {
-      print('❌ Failed to sync OneSignal:===> $e');
+      debugPrint('❌ Failed to sync OneSignal:===> $e');
     }
   }
 
@@ -44,9 +57,9 @@ class PushNotiService extends GetxService {
   Future<void> clearUser() async {
     try {
       OneSignal.logout();
-      print('✅ OneSignal user cleared');
+      debugPrint('✅ OneSignal user cleared');
     } catch (e) {
-      print('❌ Failed to clear OneSignal:===> $e');
+      debugPrint('❌ Failed to clear OneSignal:===> $e');
     }
   }
 }

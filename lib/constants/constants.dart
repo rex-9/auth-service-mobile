@@ -3,13 +3,17 @@ export 'enums.dart';
 
 import 'app.constants.dart';
 import 'locale.constants.dart';
+import 'analytics.constants.dart';
 
 class Constants {
   Constants._(); // Private constructor - never instantiate
 
-  // ===== COLORS =====
+  // ===== APP =====
   static const app = AppConstants();
 
-  // ===== TYPOGRAPHY =====
+  // ===== LOCALE =====
   static const locale = LocaleConstants();
+
+  // ===== ANALYTICS =====
+  static const analytics = AnalyticsConstants();
 }

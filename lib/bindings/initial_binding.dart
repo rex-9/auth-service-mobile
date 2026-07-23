@@ -17,6 +17,9 @@ class InitialBinding extends Bindings {
     // if we have the mulitple implementations of the same service, we can use the tag to differentiate between them
     Get.put<AuthService>(AuthServiceImpl(), permanent: true);
 
+    // Firebase Google Analytics Service
+    Get.put<AnalyticsService>(AnalyticsService(), permanent: true);
+
     // Push Notification Service (no dependencies, initialized first)
     Get.put<PushNotiService>(PushNotiService(), permanent: true);
 
