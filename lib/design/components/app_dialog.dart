@@ -10,6 +10,77 @@ class AppDialog {
 
   static bool get isIOS => GetPlatform.isIOS;
 
+  static Future<void> _show({
+    required BuildContext context,
+    required String title,
+    required String message,
+    required Color background,
+    required Color foreground,
+    required IconData icon,
+  }) {
+    return _showOsDialog<void>(
+      backgroundColor: background,
+      title: Row(
+        children: [
+          Icon(icon, color: foreground),
+          SizedBox(width: Design.spacing.md),
+          Expanded(
+            child: Text(
+              title,
+              style: context.typo.headline4.copyWith(color: foreground),
+            ),
+          ),
+        ],
+      ),
+      content: Text(
+        message,
+        style: context.typo.bodyMedium.copyWith(color: foreground),
+      ),
+      actions: [
+        AppButton(type: ButtonTypeEnum.text, onPressed: Get.back, text: 'OK'),
+      ],
+    );
+  }
+
+  static Future<T?> _showOsDialog<T>({
+    required Widget title,
+    required Widget content,
+    required List<Widget> actions,
+    Color? backgroundColor,
+  }) {
+    if (isIOS) {
+      return Get.dialog<T>(
+        CupertinoAlertDialog(
+          title: title,
+          content: content,
+          actions: actions.map((action) {
+            if (action is TextButton) {
+              return CupertinoDialogAction(
+                onPressed: action.onPressed,
+                isDestructiveAction:
+                    action.style?.foregroundColor?.resolve({}) == Colors.red,
+                child: action.child ?? const Text(''),
+              );
+            }
+            return CupertinoDialogAction(
+              onPressed: () => Get.back(),
+              child: const Text('OK'),
+            );
+          }).toList(),
+        ),
+      );
+    }
+    return Get.dialog<T>(
+      AlertDialog(
+        backgroundColor: backgroundColor ?? Get.theme.colorScheme.surface,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: title,
+        content: content,
+        actions: actions,
+      ),
+    );
+  }
+
   static Future<void> error({
     required BuildContext context,
     required String title,
@@ -70,38 +141,6 @@ class AppDialog {
     );
   }
 
-  static Future<void> _show({
-    required BuildContext context,
-    required String title,
-    required String message,
-    required Color background,
-    required Color foreground,
-    required IconData icon,
-  }) {
-    return _showOsDialog<void>(
-      backgroundColor: background,
-      title: Row(
-        children: [
-          Icon(icon, color: foreground),
-          SizedBox(width: Design.spacing.md),
-          Expanded(
-            child: Text(
-              title,
-              style: context.typo.headline4.copyWith(color: foreground),
-            ),
-          ),
-        ],
-      ),
-      content: Text(
-        message,
-        style: context.typo.bodyMedium.copyWith(color: foreground),
-      ),
-      actions: [
-        AppButton(type: ButtonTypeEnum.text, onPressed: Get.back, text: 'OK'),
-      ],
-    );
-  }
-
   static Future<bool> exit(BuildContext context) async {
     final result = await Get.dialog<bool>(
       AlertDialog(
@@ -136,44 +175,5 @@ class AppDialog {
       ),
     );
     return result ?? false;
-  }
-
-  static Future<T?> _showOsDialog<T>({
-    required Widget title,
-    required Widget content,
-    required List<Widget> actions,
-    Color? backgroundColor,
-  }) {
-    if (isIOS) {
-      return Get.dialog<T>(
-        CupertinoAlertDialog(
-          title: title,
-          content: content,
-          actions: actions.map((action) {
-            if (action is TextButton) {
-              return CupertinoDialogAction(
-                onPressed: action.onPressed,
-                isDestructiveAction:
-                    action.style?.foregroundColor?.resolve({}) == Colors.red,
-                child: action.child ?? const Text(''),
-              );
-            }
-            return CupertinoDialogAction(
-              onPressed: () => Get.back(),
-              child: const Text('OK'),
-            );
-          }).toList(),
-        ),
-      );
-    }
-    return Get.dialog<T>(
-      AlertDialog(
-        backgroundColor: backgroundColor ?? Get.theme.colorScheme.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: title,
-        content: content,
-        actions: actions,
-      ),
-    );
   }
 }

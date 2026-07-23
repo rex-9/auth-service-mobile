@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:upgrader/upgrader.dart';
 import 'package:meritbox_mobile/config/config.dart';
 import 'package:meritbox_mobile/design/design.dart';
 import 'package:meritbox_mobile/routes/routes.dart';
@@ -32,6 +33,8 @@ class MyApp extends StatelessWidget {
     // print('API_BASE_URL: ${AppConfig.apiBaseUrl}');
     // print('GOOGLE_CLIENT_ID: ${AppConfig.googleServerClientId}');
     // print('ONE_SIGNAL_APP_ID: ${AppConfig.oneSignalAppId}');
+    // print('APP_STORE_APP_ID: ${AppConfig.appStoreAppId}');
+    // print('APP_STORE_BUNDLE_ID: ${AppConfig.appStoreBundleId}');
 
     return GetBuilder<SettingsController>(
       builder: (settings) => ScreenUtilInit(
@@ -47,6 +50,17 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           initialRoute: AppRoutes.splash,
           getPages: AppRoutes.pages,
+          builder: (context, child) {
+            return UpgradeAlert(
+              upgrader: Upgrader(
+                debugLogging: AppConfig.appEnv == '.env.dev',
+                debugDisplayAlways: AppConfig.appEnv == '.env.dev',
+                durationUntilAlertAgain: const Duration(days: 3),
+              ),
+              dialogStyle: UpgradeDialogStyle.material,
+              child: child ?? const SizedBox.shrink(),
+            );
+          },
         ),
       ),
     );

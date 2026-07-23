@@ -19,4 +19,8 @@ class AppConfig {
       'google server client id not found';
   static String get oneSignalAppId =>
       dotenv.env[Constants.app.oneSignalAppId] ?? 'one signal app id not found';
+  static String get androidAppId =>
+      dotenv.env[Constants.app.androidAppId] ?? 'app store bundle id not found';
+  static String get iosAppId =>
+      dotenv.env[Constants.app.iosAppId] ?? 'app store app id not found';
 }
