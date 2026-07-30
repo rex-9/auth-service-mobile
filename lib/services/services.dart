@@ -5,3 +5,5 @@ export 'push_noti.service.dart';
 export 'analytics.service.dart';
 export 'auth_service/auth.service.dart';
 export 'auth_service/auth.service.impl.dart';
+export 'payment_service/payment.service.dart';
+export 'payment_service/payment.service.impl.dart';

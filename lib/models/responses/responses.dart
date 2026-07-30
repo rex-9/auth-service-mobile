@@ -1,5 +1,5 @@
 export 'api.response.dart';
-export 'list.response.dart';
+export 'products.response.dart';
 export 'user.response.dart';
 export 'auth.response.dart';
 export 'signin.response.dart';
