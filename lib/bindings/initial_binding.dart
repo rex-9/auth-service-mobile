@@ -23,6 +23,9 @@ class InitialBinding extends Bindings {
     // Push Notification Service (no dependencies, initialized first)
     Get.put<PushNotiService>(PushNotiService(), permanent: true);
 
+    // Payment Service (depends on ApiService)
+    Get.put<PaymentService>(PaymentServiceImpl(), permanent: true);
+
     // ===== Controllers =====
 
     // Settings: theme + locale (depends on StorageService)

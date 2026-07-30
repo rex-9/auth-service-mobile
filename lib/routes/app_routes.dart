@@ -1,5 +1,6 @@
 // lib/routes/app_routes.dart
 import 'package:get/get.dart';
+import 'package:auth_service_mobile/bindings/binding.dart';
 import 'package:auth_service_mobile/pages/pages.dart';
 import 'package:auth_service_mobile/routes/route_guard.dart';
 
@@ -17,6 +18,7 @@ class AppRoutes {
   // ===== PROTECTED ROUTES (Auth Required) =====
   static const String home = '/home';
   static const String settings = '/settings';
+  static const String subscription = '/subscription';
 
   // ===== PUBLIC NAVIGATION =====
   static void toSplash() => Get.offAllNamed(splash);
@@ -48,6 +50,7 @@ class AppRoutes {
   // ===== PROTECTED NAVIGATION =====
   static void toHome() => Get.offAllNamed(home);
   static void toSettings() => Get.toNamed(settings);
+  static void toSubscription() => Get.toNamed(subscription);
 
   static final pages = [
     // Public Pages
@@ -75,6 +78,12 @@ class AppRoutes {
     GetPage(
       name: settings,
       page: () => const SettingsPage(),
+      middlewares: [RouteGuard()],
+    ),
+    GetPage(
+      name: subscription,
+      page: () => const SubscriptionPage(),
+      binding: SubscriptionBinding(),
       middlewares: [RouteGuard()],
     ),
   ];

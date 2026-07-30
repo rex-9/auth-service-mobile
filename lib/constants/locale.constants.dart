@@ -110,4 +110,13 @@ class LocaleConstants {
   String get exitTitle => 'exit_title';
   String get appInfo => 'app_info';
   String get subscription => 'subscription';
+
+  // Subscription
+  String get choosePlan => 'choose_plan';
+  String get subscribe => 'subscribe';
+  String get planSubtitle => 'plan_subtitle';
+  String get planDescription => 'plan_description';
+  String get noPlans => 'no_plans';
+  String get loadPlansError => 'load_plans_error';
+  String get retry => 'retry';
 }

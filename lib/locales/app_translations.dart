@@ -130,6 +130,15 @@ class AppTranslations extends Translations {
       Constants.locale.exitTitle: 'Exit App',
       Constants.locale.appInfo: 'App Info',
       Constants.locale.subscription: 'Subscription',
+
+      // Subscription
+      Constants.locale.choosePlan: 'Choose a Plan',
+      Constants.locale.subscribe: 'Subscribe',
+      Constants.locale.planSubtitle: 'Pick the plan that fits you',
+      Constants.locale.planDescription: 'Unlock premium features and more',
+      Constants.locale.noPlans: 'No plans available',
+      Constants.locale.loadPlansError: 'Failed to load plans',
+      Constants.locale.retry: 'Retry',
     },
     'es_ES': {
       Constants.locale.welcomeTitle: '✨ Bienvenido a Auth Service ✨',
@@ -239,7 +248,16 @@ class AppTranslations extends Translations {
           '¿Estás seguro de que quieres salir de la aplicación?',
       Constants.locale.exitTitle: 'Salir de la aplicación',
       Constants.locale.appInfo: 'Información de la aplicación',
-      Constants.locale.subscription : 'Suscripción'
+      Constants.locale.subscription: 'Suscripción',
+
+      // Subscription
+      Constants.locale.choosePlan: 'Elige un plan',
+      Constants.locale.subscribe: 'Suscribirse',
+      Constants.locale.planSubtitle: 'Elige el plan que mejor se adapte a ti',
+      Constants.locale.planDescription: 'Desbloquea funciones premium y más',
+      Constants.locale.noPlans: 'No hay planes disponibles',
+      Constants.locale.loadPlansError: 'No se pudieron cargar los planes',
+      Constants.locale.retry: 'Reintentar',
     },
     'my_MM': {
       Constants.locale.welcomeTitle: '✨ Auth Service မှ ကြိုဆိုပါတယ် ✨',
@@ -344,7 +362,16 @@ class AppTranslations extends Translations {
       Constants.locale.exitConfirm: 'ထွက်ရန် သေချာပါသလား?',
       Constants.locale.exitTitle: 'အက်ပ်မှ ထွက်ရန်',
       Constants.locale.appInfo: 'အက်ပ်အချက်အလက်',
-      Constants.locale.subscription : "စာရင်းသွင်းမှု"
+      Constants.locale.subscription: 'စာရင်းသွင်းမှု',
+
+      // Subscription
+      Constants.locale.choosePlan: 'အစီအစဉ်ရွေးချယ်ပါ',
+      Constants.locale.subscribe: 'စာရင်းသွင်းမည်',
+      Constants.locale.planSubtitle: 'သင့်အတွက် သင့်တော်သော အစီအစဉ်ကို ရွေးပါ',
+      Constants.locale.planDescription: 'ပရီမီယံ လုပ်ဆောင်ချက်များနှင့် အခြားအရာများကို ဖွင့်ပါ',
+      Constants.locale.noPlans: 'အစီအစဉ်များ မရှိပါ',
+      Constants.locale.loadPlansError: 'အစီအစဉ်များ ဖွင့်၍မရပါ',
+      Constants.locale.retry: 'ထပ်မံကြိုးစားမည်',
     },
   };
 }

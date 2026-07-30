@@ -6,6 +6,7 @@ import 'package:auth_service_mobile/constants/constants.dart';
 import 'package:auth_service_mobile/controllers/controllers.dart';
 import 'package:auth_service_mobile/design/design.dart';
 import 'package:auth_service_mobile/helpers/helpers.dart';
+import 'package:auth_service_mobile/routes/routes.dart';
 
 class SettingsPage extends GetView<SettingsController> {
   const SettingsPage({super.key});
@@ -200,11 +201,21 @@ class SettingsPage extends GetView<SettingsController> {
     );
   }
 
-  Widget _buildSubscriptionTile(BuildContext context){
+  Widget _buildSubscriptionTile(BuildContext context) {
     return Card(
       clipBehavior: Clip.antiAlias,
-      child: AppListTile(leading: Icon(Design.icons.subscription,color: context.colors.textSecondary),
-      title: Text(Constants.locale.subscription),),
+      child: AppListTile(
+        leading: Icon(
+          Design.icons.subscription,
+          color: context.colors.primary,
+        ),
+        title: Text(Constants.locale.subscription.tr),
+        trailing: Icon(
+          Design.icons.chevronRight,
+          color: context.colors.textSecondary,
+        ),
+        onTap: () => AppRoutes.toSubscription(),
+      ),
     );
   }
 

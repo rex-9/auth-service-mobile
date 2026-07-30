@@ -13,7 +13,11 @@ class RouteGuard extends GetMiddleware {
     final isLoggedIn = authController.isLoggedIn.value;
 
     // ===== PROTECTED ROUTES (saved/restored) =====
-    const protectedRoutes = [AppRoutes.home, AppRoutes.settings];
+    const protectedRoutes = [
+      AppRoutes.home,
+      AppRoutes.settings,
+      AppRoutes.subscription,
+    ];
 
     // If not logged in and trying to access protected route
     if (route != null && protectedRoutes.contains(route) && !isLoggedIn) {
