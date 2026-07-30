@@ -27,4 +27,10 @@ class ServerRoutes {
   // Password Endpoints
   static const String forgotPassword = '/password/forgot';
   static const String resetPassword = '/password/reset';
+
+  //payments endpoints
+  static const String getProducts = '/payment/products';
+
+
+
 }

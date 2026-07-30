@@ -6,6 +6,7 @@ import 'package:auth_service_mobile/controllers/controllers.dart';
 import 'package:auth_service_mobile/design/design.dart';
 import 'package:auth_service_mobile/routes/routes.dart';
 import 'package:auth_service_mobile/models/responses/api.response.dart';
+import 'package:auth_service_mobile/models/responses/list.response.dart';
 
 class ApiService extends GetConnect {
   static const String sessionReplacedError = 'Active session not found';
@@ -191,6 +192,34 @@ class ApiService extends GetConnect {
           status['message'] as String? ?? HttpStatusMap.getMessage(statusCode),
       statusCode: statusCode,
       data: data != null ? fromJson(data) : null,
+    );
+  }
+
+  ApiResponse<ListResponse<T>> parseListResponse<T>(
+    Response response,
+    T Function(Map<String, dynamic> json) fromJsonT,
+  ) {
+    final body = response.body as Map<String, dynamic>? ?? {};
+    final status = body['status'] as Map<String, dynamic>? ?? {};
+    final statusCode = status['code'] as int? ?? response.statusCode ?? 500;
+    final data = body['data'];
+
+    if (response.hasError || !(status['success'] as bool? ?? false)) {
+      return ApiResponse.error(
+        message:
+            status['error'] as String? ??
+            status['message'] as String? ??
+            response.statusText ??
+            HttpStatusMap.getMessage(statusCode),
+        statusCode: statusCode,
+      );
+    }
+
+    return ApiResponse.success(
+      message:
+          status['message'] as String? ?? HttpStatusMap.getMessage(statusCode),
+      statusCode: statusCode,
+      data: ListResponse<T>.fromJson(data, fromJsonT),
     );
   }
 

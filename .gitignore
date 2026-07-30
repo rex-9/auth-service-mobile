@@ -58,3 +58,7 @@ coverage/
 .env.dev
 .env.uat
 .env.prod
+
+# Cursor agent context (local only)
+INSTRUCTION.md
+.cursor/skills/
