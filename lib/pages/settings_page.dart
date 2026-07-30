@@ -38,6 +38,12 @@ class SettingsPage extends GetView<SettingsController> {
 
           SizedBox(height: Design.spacing.xxl),
 
+          //SubscriptionSection
+          _buildSectionHeader(context, Constants.locale.subscription.tr),
+          _buildSubscriptionTile(context),
+
+          SizedBox(height: Design.spacing.xxl,),
+
           // App Info Section
           _buildSectionHeader(context, Constants.locale.appInfo.tr),
           _buildAppInfoTile(context),
@@ -191,6 +197,14 @@ class SettingsPage extends GetView<SettingsController> {
         title: Text(AppConfig.appName),
         subtitle: Obx(() => Text('v${controller.appVersion.value}')),
       ),
+    );
+  }
+
+  Widget _buildSubscriptionTile(BuildContext context){
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: AppListTile(leading: Icon(Design.icons.subscription,color: context.colors.textSecondary),
+      title: Text(Constants.locale.subscription),),
     );
   }
 

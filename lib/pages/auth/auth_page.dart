@@ -1,5 +1,6 @@
 // lib/pages/auth_page.dart
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:auth_service_mobile/constants/constants.dart';
 import 'package:auth_service_mobile/controllers/controllers.dart';
@@ -13,6 +14,7 @@ class AuthPage extends GetView<AuthController> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveHelper.isMobile(context);
     final settingsController = Get.find<SettingsController>();
     Widget buildFlagIcon(BuildContext context, {String? locale}) {
       final String code = locale ?? settingsController.localeCode.value;
@@ -65,62 +67,69 @@ class AuthPage extends GetView<AuthController> {
         ),
       ],
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  Constants.locale.welcomeTitle.tr,
-                  style: context.typo.headline1,
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: Design.spacing.md),
-                Text(
-                  Constants.locale.welcomeSubtitle.tr,
-                  style: context.typo.bodyMedium,
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: Design.spacing.xxxl),
-                AppButton(
-                  text: Constants.locale.continueWithGoogle.tr,
-                  onPressed: controller.signInWithGoogle,
-                  type: ButtonTypeEnum.google,
-                ),
-                SizedBox(height: Design.spacing.xl),
-                Row(
+            child: Center(
+              child: SizedBox(
+                width: isMobile ? double.infinity : 200.sp,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(child: Divider(color: context.colors.divider)),
-                    Padding(
-                      padding: Design.spacing.paddingSymmetric(
-                        h: Design.spacing.lg,
-                      ),
-                      child: Text(
-                        Constants.locale.or.tr,
-                        style: context.typo.bodyMedium,
+                    Text(
+                      Constants.locale.welcomeTitle.tr,
+                      style: context.typo.headline1,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: Design.spacing.md),
+                    Text(
+                      Constants.locale.welcomeSubtitle.tr,
+                      style: context.typo.bodyMedium,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: Design.spacing.xxxl),
+                    AppButton(
+                      text: Constants.locale.continueWithGoogle.tr,
+                      onPressed: controller.signInWithGoogle,
+                      type: ButtonTypeEnum.google,
+                    ),
+                    SizedBox(height: Design.spacing.xl),
+                    Row(
+                      children: [
+                        Expanded(child: Divider(color: context.colors.divider)),
+                        Padding(
+                          padding: Design.spacing.paddingSymmetric(
+                            h: Design.spacing.lg,
+                          ),
+                          child: Text(
+                            Constants.locale.or.tr,
+                            style: context.typo.bodyMedium,
+                          ),
+                        ),
+                        Expanded(child: Divider(color: context.colors.divider)),
+                      ],
+                    ),
+                    SizedBox(height: Design.spacing.xl),
+                    Obx(
+                      () => AppInputField(
+                        label: Constants.locale.emailLabel.tr,
+                        hint: Constants.locale.emailHint.tr,
+                        helper: Constants.locale.emailHelper.tr,
+                        error: controller.emailError.value,
+                        keyboardType: TextInputType.emailAddress,
+                        onChanged: (value) => controller.email.value = value,
                       ),
                     ),
-                    Expanded(child: Divider(color: context.colors.divider)),
+                    SizedBox(height: Design.spacing.xl),
+                    AppButton(
+                      text: Constants.locale.continueButton.tr,
+                      onPressed: controller.handleContinue,
+                      type: ButtonTypeEnum.primary,
+                    ),
                   ],
                 ),
-                SizedBox(height: Design.spacing.xl),
-                Obx(
-                  () => AppInputField(
-                    label: Constants.locale.emailLabel.tr,
-                    hint: Constants.locale.emailHint.tr,
-                    helper: Constants.locale.emailHelper.tr,
-                    error: controller.emailError.value,
-                    keyboardType: TextInputType.emailAddress,
-                    onChanged: (value) => controller.email.value = value,
-                  ),
-                ),
-                SizedBox(height: Design.spacing.xl),
-                AppButton(
-                  text: Constants.locale.continueButton.tr,
-                  onPressed: controller.handleContinue,
-                  type: ButtonTypeEnum.primary,
-                ),
-              ],
+              ),
             ),
           ),
         ],

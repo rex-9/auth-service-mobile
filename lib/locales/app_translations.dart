@@ -129,6 +129,7 @@ class AppTranslations extends Translations {
       Constants.locale.exitConfirm: 'Are you sure you want to exit the app?',
       Constants.locale.exitTitle: 'Exit App',
       Constants.locale.appInfo: 'App Info',
+      Constants.locale.subscription: 'Subscription',
     },
     'es_ES': {
       Constants.locale.welcomeTitle: '✨ Bienvenido a Auth Service ✨',
@@ -238,6 +239,7 @@ class AppTranslations extends Translations {
           '¿Estás seguro de que quieres salir de la aplicación?',
       Constants.locale.exitTitle: 'Salir de la aplicación',
       Constants.locale.appInfo: 'Información de la aplicación',
+      Constants.locale.subscription : 'Suscripción'
     },
     'my_MM': {
       Constants.locale.welcomeTitle: '✨ Auth Service မှ ကြိုဆိုပါတယ် ✨',
@@ -342,6 +344,7 @@ class AppTranslations extends Translations {
       Constants.locale.exitConfirm: 'ထွက်ရန် သေချာပါသလား?',
       Constants.locale.exitTitle: 'အက်ပ်မှ ထွက်ရန်',
       Constants.locale.appInfo: 'အက်ပ်အချက်အလက်',
+      Constants.locale.subscription : "စာရင်းသွင်းမှု"
     },
   };
 }

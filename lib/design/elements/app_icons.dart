@@ -19,4 +19,5 @@ class AppIcons {
   IconData get settings => Icons.settings_outlined;
   IconData get backArrow => Icons.arrow_back_rounded;
   IconData get downArrow => Icons.arrow_drop_down_rounded;
+  IconData get subscription => Icons.monetization_on;
 }

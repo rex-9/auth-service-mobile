@@ -1,5 +1,7 @@
 // lib/constants/locale_constants.dart
 class LocaleConstants {
+
+
   const LocaleConstants();
 
   // Auth (Initial)
@@ -107,4 +109,5 @@ class LocaleConstants {
   String get exitConfirm => 'exit_confirm';
   String get exitTitle => 'exit_title';
   String get appInfo => 'app_info';
+  String get subscription => 'subscription';
 }
