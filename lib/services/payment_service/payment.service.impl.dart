@@ -14,4 +14,18 @@ class PaymentServiceImpl extends PaymentService {
       (data) => ProductsResponse.fromJson(data),
     );
   }
+
+  @override
+  Future<ApiResponse<CheckoutSessionResponse>> createCheckoutSession(
+    String productId,
+  ) async {
+    final response = await _api.post(
+      ServerRoutes.createCheckoutSession,
+      {'product_id': productId},
+    );
+    return _api.parseResponse<CheckoutSessionResponse>(
+      response,
+      (data) => CheckoutSessionResponse.fromJson(data),
+    );
+  }
 }

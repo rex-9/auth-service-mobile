@@ -17,6 +17,7 @@ class RouteGuard extends GetMiddleware {
       AppRoutes.home,
       AppRoutes.settings,
       AppRoutes.subscription,
+      AppRoutes.checkout,
     ];
 
     // If not logged in and trying to access protected route

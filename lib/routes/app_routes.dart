@@ -19,6 +19,7 @@ class AppRoutes {
   static const String home = '/home';
   static const String settings = '/settings';
   static const String subscription = '/subscription';
+  static const String checkout = '/checkout';
 
   // ===== PUBLIC NAVIGATION =====
   static void toSplash() => Get.offAllNamed(splash);
@@ -51,6 +52,9 @@ class AppRoutes {
   static void toHome() => Get.offAllNamed(home);
   static void toSettings() => Get.toNamed(settings);
   static void toSubscription() => Get.toNamed(subscription);
+  static void toCheckout({required String checkoutUrl}) {
+    Get.toNamed(checkout, arguments: {'checkout_url': checkoutUrl});
+  }
 
   static final pages = [
     // Public Pages
@@ -84,6 +88,11 @@ class AppRoutes {
       name: subscription,
       page: () => const SubscriptionPage(),
       binding: SubscriptionBinding(),
+      middlewares: [RouteGuard()],
+    ),
+    GetPage(
+      name: checkout,
+      page: () => const CheckoutPage(),
       middlewares: [RouteGuard()],
     ),
   ];

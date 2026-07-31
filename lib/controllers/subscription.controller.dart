@@ -1,5 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:auth_service_mobile/constants/constants.dart';
+import 'package:auth_service_mobile/design/design.dart';
 import 'package:auth_service_mobile/models/models.dart';
+import 'package:auth_service_mobile/routes/routes.dart';
 import 'package:auth_service_mobile/services/services.dart';
 
 class SubscriptionController extends GetxController {
@@ -7,6 +11,7 @@ class SubscriptionController extends GetxController {
 
   final plans = <ProductModel>[].obs;
   final isLoading = false.obs;
+  final isSubscribing = false.obs;
   final error = RxnString();
   final selectedPlanId = RxnString();
 
@@ -42,5 +47,26 @@ class SubscriptionController extends GetxController {
     }
 
     isLoading.value = false;
+  }
+
+  Future<void> subscribe(BuildContext context) async {
+    final plan = selectedPlan;
+    if (plan == null || isSubscribing.value) return;
+
+    isSubscribing.value = true;
+    try {
+      final result = await _payment.createCheckoutSession(plan.id);
+      if (!context.mounted) return;
+
+      if (result.success &&
+          result.data != null &&
+          result.data!.checkoutUrl.isNotEmpty) {
+        AppRoutes.toCheckout(checkoutUrl: result.data!.checkoutUrl);
+      } else {
+         AppSnackbar.error( result.message, );
+      }
+    } finally {
+      isSubscribing.value = false;
+    }
   }
 }

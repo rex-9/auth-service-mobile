@@ -138,6 +138,8 @@ class AppTranslations extends Translations {
       Constants.locale.planDescription: 'Unlock premium features and more',
       Constants.locale.noPlans: 'No plans available',
       Constants.locale.loadPlansError: 'Failed to load plans',
+      Constants.locale.checkError: 'Check Error',
+      Constants.locale.checkout: 'Checkout',
       Constants.locale.retry: 'Retry',
     },
     'es_ES': {
@@ -257,6 +259,8 @@ class AppTranslations extends Translations {
       Constants.locale.planDescription: 'Desbloquea funciones premium y más',
       Constants.locale.noPlans: 'No hay planes disponibles',
       Constants.locale.loadPlansError: 'No se pudieron cargar los planes',
+      Constants.locale.checkError: 'Error de verificación',
+      Constants.locale.checkout: 'Pago',
       Constants.locale.retry: 'Reintentar',
     },
     'my_MM': {
@@ -371,6 +375,8 @@ class AppTranslations extends Translations {
       Constants.locale.planDescription: 'ပရီမီယံ လုပ်ဆောင်ချက်များနှင့် အခြားအရာများကို ဖွင့်ပါ',
       Constants.locale.noPlans: 'အစီအစဉ်များ မရှိပါ',
       Constants.locale.loadPlansError: 'အစီအစဉ်များ ဖွင့်၍မရပါ',
+      Constants.locale.checkError: 'စစ်ဆေးမှု အမှား',
+      Constants.locale.checkout: 'ငွေပေးချေမှု',
       Constants.locale.retry: 'ထပ်မံကြိုးစားမည်',
     },
   };

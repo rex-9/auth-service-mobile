@@ -30,7 +30,5 @@ class ServerRoutes {
 
   //payments endpoints
   static const String getProducts = '/payment/products';
-
-
-
+  static const String createCheckoutSession = '/payment/session';
 }

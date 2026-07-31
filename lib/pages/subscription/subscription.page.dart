@@ -36,7 +36,11 @@ class SubscriptionPage extends GetView<SubscriptionController> {
                 () => AppButton(
                   text: Constants.locale.subscribe.tr,
                   isExpanded: true,
-                  onPressed: controller.selectedPlan != null ? () {} : null,
+                  onPressed:
+                      controller.selectedPlan != null &&
+                          !controller.isSubscribing.value
+                      ? () => controller.subscribe(context)
+                      : null,
                 ),
               ),
             ],

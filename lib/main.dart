@@ -56,17 +56,17 @@ class MyApp extends StatelessWidget {
           initialRoute: AppRoutes.splash,
           getPages: AppRoutes.pages,
           navigatorObservers: [analytics.observer],
-          builder: (context, child) {
-            return UpgradeAlert(
-              upgrader: Upgrader(
-                debugLogging: AppConfig.appEnv == '.env.dev',
-                debugDisplayAlways: AppConfig.appEnv == '.env.dev',
-                durationUntilAlertAgain: const Duration(days: 3),
-              ),
-              dialogStyle: UpgradeDialogStyle.material,
-              child: child ?? const SizedBox.shrink(),
-            );
-          },
+          // builder: (context, child) {
+          //   return UpgradeAlert(
+          //     upgrader: Upgrader(
+          //       debugLogging: AppConfig.appEnv == '.env.dev',
+          //       debugDisplayAlways: AppConfig.appEnv == '.env.dev',
+          //       durationUntilAlertAgain: const Duration(days: 3),
+          //     ),
+          //     dialogStyle: UpgradeDialogStyle.material,
+          //     child: child ?? const SizedBox.shrink(),
+          //   );
+          // },
         ),
       ),
     );

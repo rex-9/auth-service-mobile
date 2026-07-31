@@ -161,6 +161,7 @@ class ApiService extends GetConnect {
     final statusCode = status['code'] as int? ?? response.statusCode ?? 500;
     final data = body['data'] as Map<String, dynamic>?;
 
+
     if (response.hasError || !(status['success'] as bool? ?? false)) {
       // Optional: Log API errors to analytics
       // try {

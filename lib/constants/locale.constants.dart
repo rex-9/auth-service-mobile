@@ -118,5 +118,7 @@ class LocaleConstants {
   String get planDescription => 'plan_description';
   String get noPlans => 'no_plans';
   String get loadPlansError => 'load_plans_error';
+  String get checkError => 'check_error';
+  String get checkout => 'checkout';
   String get retry => 'retry';
 }
