@@ -16,7 +16,7 @@ class RouteGuard extends GetMiddleware {
     const protectedRoutes = [
       AppRoutes.home,
       AppRoutes.settings,
-      AppRoutes.subscription,
+      AppRoutes.payment,
       AppRoutes.checkout,
     ];
 

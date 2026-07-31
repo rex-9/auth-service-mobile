@@ -3,15 +3,15 @@ import 'package:get/get.dart';
 import 'package:auth_service_mobile/constants/constants.dart';
 import 'package:auth_service_mobile/controllers/controllers.dart';
 import 'package:auth_service_mobile/design/design.dart';
-import 'package:auth_service_mobile/pages/subscription/components/plan_card.dart';
+import 'package:auth_service_mobile/pages/payment/components/plan_card.dart';
 
-class SubscriptionPage extends GetView<SubscriptionController> {
-  const SubscriptionPage({super.key});
+class PaymentPage extends GetView<PaymentController> {
+  const PaymentPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return AppPage(
-      title: Constants.locale.subscription.tr,
+      title: Constants.locale.payment.tr,
       showBackButton: true,
       child: Center(
         child: SizedBox(

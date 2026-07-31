@@ -18,7 +18,7 @@ class AppRoutes {
   // ===== PROTECTED ROUTES (Auth Required) =====
   static const String home = '/home';
   static const String settings = '/settings';
-  static const String subscription = '/subscription';
+  static const String payment = '/payment';
   static const String checkout = '/checkout';
 
   // ===== PUBLIC NAVIGATION =====
@@ -51,7 +51,7 @@ class AppRoutes {
   // ===== PROTECTED NAVIGATION =====
   static void toHome() => Get.offAllNamed(home);
   static void toSettings() => Get.toNamed(settings);
-  static void toSubscription() => Get.toNamed(subscription);
+  static void toPayment() => Get.toNamed(payment);
   static void toCheckout({required String checkoutUrl}) {
     Get.toNamed(checkout, arguments: {'checkout_url': checkoutUrl});
   }
@@ -85,9 +85,9 @@ class AppRoutes {
       middlewares: [RouteGuard()],
     ),
     GetPage(
-      name: subscription,
-      page: () => const SubscriptionPage(),
-      binding: SubscriptionBinding(),
+      name: payment,
+      page: () => const PaymentPage(),
+      binding: PaymentBinding(),
       middlewares: [RouteGuard()],
     ),
     GetPage(

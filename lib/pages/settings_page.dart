@@ -40,10 +40,10 @@ class SettingsPage extends GetView<SettingsController> {
           SizedBox(height: Design.spacing.xxl),
 
           //SubscriptionSection
-          _buildSectionHeader(context, Constants.locale.subscription.tr),
+          _buildSectionHeader(context, Constants.locale.payment.tr),
           _buildSubscriptionTile(context),
 
-          SizedBox(height: Design.spacing.xxl,),
+          SizedBox(height: Design.spacing.xxl),
 
           // App Info Section
           _buildSectionHeader(context, Constants.locale.appInfo.tr),
@@ -205,16 +205,13 @@ class SettingsPage extends GetView<SettingsController> {
     return Card(
       clipBehavior: Clip.antiAlias,
       child: AppListTile(
-        leading: Icon(
-          Design.icons.subscription,
-          color: context.colors.primary,
-        ),
-        title: Text(Constants.locale.subscription.tr),
+        leading: Icon(Design.icons.subscription, color: context.colors.primary),
+        title: Text(Constants.locale.payment.tr),
         trailing: Icon(
           Design.icons.chevronRight,
           color: context.colors.textSecondary,
         ),
-        onTap: () => AppRoutes.toSubscription(),
+        onTap: () => AppRoutes.toPayment(),
       ),
     );
   }

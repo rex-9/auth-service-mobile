@@ -129,7 +129,7 @@ class AppTranslations extends Translations {
       Constants.locale.exitConfirm: 'Are you sure you want to exit the app?',
       Constants.locale.exitTitle: 'Exit App',
       Constants.locale.appInfo: 'App Info',
-      Constants.locale.subscription: 'Subscription',
+      Constants.locale.payment: 'Subscription',
 
       // Subscription
       Constants.locale.choosePlan: 'Choose a Plan',
@@ -250,7 +250,7 @@ class AppTranslations extends Translations {
           '¿Estás seguro de que quieres salir de la aplicación?',
       Constants.locale.exitTitle: 'Salir de la aplicación',
       Constants.locale.appInfo: 'Información de la aplicación',
-      Constants.locale.subscription: 'Suscripción',
+      Constants.locale.payment: 'Suscripción',
 
       // Subscription
       Constants.locale.choosePlan: 'Elige un plan',
@@ -366,13 +366,14 @@ class AppTranslations extends Translations {
       Constants.locale.exitConfirm: 'ထွက်ရန် သေချာပါသလား?',
       Constants.locale.exitTitle: 'အက်ပ်မှ ထွက်ရန်',
       Constants.locale.appInfo: 'အက်ပ်အချက်အလက်',
-      Constants.locale.subscription: 'စာရင်းသွင်းမှု',
+      Constants.locale.payment: 'စာရင်းသွင်းမှု',
 
       // Subscription
       Constants.locale.choosePlan: 'အစီအစဉ်ရွေးချယ်ပါ',
       Constants.locale.subscribe: 'စာရင်းသွင်းမည်',
       Constants.locale.planSubtitle: 'သင့်အတွက် သင့်တော်သော အစီအစဉ်ကို ရွေးပါ',
-      Constants.locale.planDescription: 'ပရီမီယံ လုပ်ဆောင်ချက်များနှင့် အခြားအရာများကို ဖွင့်ပါ',
+      Constants.locale.planDescription:
+          'ပရီမီယံ လုပ်ဆောင်ချက်များနှင့် အခြားအရာများကို ဖွင့်ပါ',
       Constants.locale.noPlans: 'အစီအစဉ်များ မရှိပါ',
       Constants.locale.loadPlansError: 'အစီအစဉ်များ ဖွင့်၍မရပါ',
       Constants.locale.checkError: 'စစ်ဆေးမှု အမှား',

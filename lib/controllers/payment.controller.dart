@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:auth_service_mobile/constants/constants.dart';
 import 'package:auth_service_mobile/design/design.dart';
 import 'package:auth_service_mobile/models/models.dart';
 import 'package:auth_service_mobile/routes/routes.dart';
 import 'package:auth_service_mobile/services/services.dart';
 
-class SubscriptionController extends GetxController {
+class PaymentController extends GetxController {
   final PaymentService _payment = Get.find<PaymentService>();
 
   final plans = <ProductModel>[].obs;
@@ -63,7 +62,7 @@ class SubscriptionController extends GetxController {
           result.data!.checkoutUrl.isNotEmpty) {
         AppRoutes.toCheckout(checkoutUrl: result.data!.checkoutUrl);
       } else {
-         AppSnackbar.error( result.message, );
+        AppSnackbar.error(result.message);
       }
     } finally {
       isSubscribing.value = false;
