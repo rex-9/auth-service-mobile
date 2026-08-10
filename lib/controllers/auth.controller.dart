@@ -3,11 +3,11 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:meritbox_mobile/config/config.dart';
-import 'package:meritbox_mobile/constants/constants.dart';
-import 'package:meritbox_mobile/design/components/components.dart';
-import 'package:meritbox_mobile/models/enums.dart';
-import 'package:meritbox_mobile/models/models.dart';
+import 'package:rexone_mobile/config/config.dart';
+import 'package:rexone_mobile/constants/constants.dart';
+import 'package:rexone_mobile/design/components/components.dart';
+import 'package:rexone_mobile/models/enums.dart';
+import 'package:rexone_mobile/models/models.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import '../routes/app_routes.dart';
 import '../services/services.dart';

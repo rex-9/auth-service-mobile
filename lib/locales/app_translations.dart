@@ -1,6 +1,6 @@
 // lib/locales/app_translations.dart
 import 'package:get/get.dart';
-import 'package:meritbox_mobile/constants/constants.dart';
+import 'package:rexone_mobile/constants/constants.dart';
 
 /// Mirrors the web client's locales (en / es / my in `src/locales/*.json`).
 /// Use with `'key'.tr` or `'key'.trParams({'email': ...})`.
@@ -15,7 +15,7 @@ class AppTranslations extends Translations {
   Map<String, Map<String, String>> get keys => {
     'en_US': {
       // Auth (initial)
-      Constants.locale.welcomeTitle: '✨ Welcome to Meritbox ✨',
+      Constants.locale.welcomeTitle: '✨ Welcome to Rexone ✨',
       Constants.locale.welcomeSubtitle:
           'Support dreams or make yours come true',
       Constants.locale.continueWithGoogle: 'Continue with Google',
@@ -96,7 +96,7 @@ class AppTranslations extends Translations {
 
       // Home
       Constants.locale.home: 'Home',
-      Constants.locale.welcomeHome: 'Welcome to Meritbox!',
+      Constants.locale.welcomeHome: 'Welcome to Rexone!',
       Constants.locale.loading: 'Loading...',
       Constants.locale.signOutButton: 'Sign Out',
 
@@ -131,7 +131,7 @@ class AppTranslations extends Translations {
       Constants.locale.appInfo: 'App Info',
     },
     'es_ES': {
-      Constants.locale.welcomeTitle: '✨ Bienvenido a Meritbox ✨',
+      Constants.locale.welcomeTitle: '✨ Bienvenido a Rexone ✨',
       Constants.locale.welcomeSubtitle: 'Apoya sueños o haz realidad los tuyos',
       Constants.locale.continueWithGoogle: 'Continuar con Google',
       Constants.locale.or: 'o',
@@ -204,7 +204,7 @@ class AppTranslations extends Translations {
       Constants.locale.sending: 'Enviando...',
       Constants.locale.backToSignIn: 'Volver a iniciar sesión',
       Constants.locale.home: 'Inicio',
-      Constants.locale.welcomeHome: '¡Bienvenido a Meritbox!',
+      Constants.locale.welcomeHome: '¡Bienvenido a Rexone!',
       Constants.locale.loading: 'Cargando...',
       Constants.locale.signOutButton: 'Cerrar sesión',
       Constants.locale.signInGoogleFailure:
@@ -240,7 +240,7 @@ class AppTranslations extends Translations {
       Constants.locale.appInfo: 'Información de la aplicación',
     },
     'my_MM': {
-      Constants.locale.welcomeTitle: '✨ Meritbox မှ ကြိုဆိုပါတယ် ✨',
+      Constants.locale.welcomeTitle: '✨ Rexone မှ ကြိုဆိုပါတယ် ✨',
       Constants.locale.welcomeSubtitle:
           'အိပ်မက်များကို ပံ့ပိုးပါ သို့မဟုတ် သင့်အိပ်မက်ကို အကောင်အထည်ဖော်ပါ',
       Constants.locale.continueWithGoogle: 'Google ဖြင့် ဆက်လက်လုပ်ဆောင်ရန်',
@@ -313,7 +313,7 @@ class AppTranslations extends Translations {
       Constants.locale.sending: 'ပို့နေသည်...',
       Constants.locale.backToSignIn: 'လော့ဂ်အင်သို့ ပြန်သွားရန်',
       Constants.locale.home: 'မူလစာမျက်နှာ',
-      Constants.locale.welcomeHome: 'Meritbox မှ ကြိုဆိုပါတယ်!',
+      Constants.locale.welcomeHome: 'Rexone မှ ကြိုဆိုပါတယ်!',
       Constants.locale.loading: 'ဖွင့်နေသည်...',
       Constants.locale.signOutButton: 'ထွက်ရန်',
       Constants.locale.signInGoogleFailure: 'Google အတည်ပြုမှု မအောင်မြင်ပါ!',

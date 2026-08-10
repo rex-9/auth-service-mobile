@@ -1,6 +1,6 @@
-# Meritbox Mobile
+# Rexone Mobile
 
-A Flutter mobile application for Meritbox platform with clean GetX architecture, consistent design system, and multi-language support.
+A Flutter mobile application for Rexone platform with clean GetX architecture, consistent design system, and multi-language support.
 
 ---
 
@@ -64,8 +64,8 @@ lib/
 1. **Clone the repository**
 
 ```bash
-git clone https://github.com/yourusername/meritbox_mobile.git
-cd meritbox_mobile
+git clone https://github.com/yourusername/rexone_mobile.git
+cd rexone_mobile
 ```
 
 2. **Install dependencies**
@@ -79,7 +79,7 @@ flutter pub get
 Create `.env.dev` file in project root:
 
 ```env
-APP_NAME=Meritbox
+APP_NAME=Rexone
 APP_VERSION=1.0.0
 GOOGLE_SERVER_CLIENT_ID=your_client_id.apps.googleusercontent.com
 API_BASE_URL=http://10.0.2.2:3000
@@ -154,7 +154,7 @@ flutter run --dart-define=APP_ENV=.env.dev
 ### Config (`lib/config/`)
 
 ```dart
-import 'package:meritbox_mobile/config/config.dart';
+import 'package:rexone_mobile/config/config.dart';
 
 // App config
 AppConfig().googleServerClientIdKey
@@ -164,7 +164,7 @@ AppConfig().apiBaseUrl
 ### Constants (`lib/constants/`)
 
 ```dart
-import 'package:meritbox_mobile/constants/constants.dart';
+import 'package:rexone_mobile/constants/constants.dart';
 
 // App constants
 Constants.app.name
@@ -198,7 +198,7 @@ if (HttpStatusMap.isSuccess(response.statusCode)) {
 ### Routes (`lib/routes/`)
 
 ```dart
-import 'package:meritbox_mobile/routes/routes.dart';
+import 'package:rexone_mobile/routes/routes.dart';
 
 // Navigate
 AppRoutes.toHome()
@@ -271,4 +271,4 @@ This project is proprietary and confidential.
 
 ---
 
-**Made with ❤️ by Meritbox Team**
+**Made with ❤️ by Rex9**

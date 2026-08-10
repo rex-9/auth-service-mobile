@@ -1,7 +1,7 @@
 // lib/routes/app_routes.dart
 import 'package:get/get.dart';
-import 'package:meritbox_mobile/pages/pages.dart';
-import 'package:meritbox_mobile/routes/route_guard.dart';
+import 'package:rexone_mobile/pages/pages.dart';
+import 'package:rexone_mobile/routes/route_guard.dart';
 
 class AppRoutes {
   // ===== PUBLIC ROUTES (No Auth Required) =====
