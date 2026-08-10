@@ -1,9 +1,9 @@
 // lib/pages/splash_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:meritbox_mobile/services/services.dart';
-import 'package:meritbox_mobile/controllers/controllers.dart';
-import 'package:meritbox_mobile/routes/routes.dart';
+import 'package:rexone_mobile/services/services.dart';
+import 'package:rexone_mobile/controllers/controllers.dart';
+import 'package:rexone_mobile/routes/routes.dart';
 import '../design/design.dart';
 
 class SplashPage extends StatefulWidget {
