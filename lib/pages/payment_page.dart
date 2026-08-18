@@ -179,7 +179,7 @@ class PaymentPage extends GetView<PaymentController> {
           ),
           SizedBox(height: Design.spacing.md),
           AppButton(
-            type: ButtonType.secondary,
+            type: EButtonType.secondary,
             text: 'Cancel Subscription',
             onPressed: () async {
               final ok = await AppDialog.confirm(
@@ -213,7 +213,7 @@ class PaymentPage extends GetView<PaymentController> {
           ),
           SizedBox(height: Design.spacing.md),
           AppButton(
-            type: ButtonType.secondary,
+            type: EButtonType.secondary,
             text: 'Resume Subscription',
             onPressed: () => controller.resumeSubscription(canceledSub.id),
           ),

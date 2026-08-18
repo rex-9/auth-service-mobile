@@ -18,7 +18,7 @@ class ConfirmEmailPage extends GetView<AuthController> {
     // Auto-send code if not already sent
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (controller.resendSecondsLeft.value == 0) {
-        controller.sendConfirmationCode();
+        controller.sendConfirmationOTPCode();
       }
     });
 
@@ -45,7 +45,7 @@ class ConfirmEmailPage extends GetView<AuthController> {
           AppPasscodeField(
             pinController: controller.confirmPin,
             onCompleted: (pin) {
-              controller.confirmCode(pin);
+              controller.confirmOTPCode(pin);
             },
           ),
 
@@ -58,7 +58,7 @@ class ConfirmEmailPage extends GetView<AuthController> {
                 AppSnackbar.error(Constants.locale.enter6DigitCode.tr);
                 return;
               }
-              controller.confirmCode(controller.confirmPin.text);
+              controller.confirmOTPCode(controller.confirmPin.text);
             },
           ),
 
@@ -66,10 +66,10 @@ class ConfirmEmailPage extends GetView<AuthController> {
           Center(
             child: Obx(
               () => AppButton(
-                type: ButtonType.text,
+                type: EButtonType.text,
                 onPressed: controller.resendSecondsLeft.value > 0
                     ? null
-                    : () => controller.sendConfirmationCode(),
+                    : () => controller.sendConfirmationOTPCode(),
                 text: controller.resendSecondsLeft.value > 0
                     ? Constants.locale.resendCodeIn.trParams({
                         'seconds': '${controller.resendSecondsLeft.value}',
@@ -81,7 +81,7 @@ class ConfirmEmailPage extends GetView<AuthController> {
 
           SizedBox(height: Design.spacing.lg),
           AppButton(
-            type: ButtonType.text,
+            type: EButtonType.text,
             onPressed: () {
               // Clear everything and go back to auth page
               controller.email.value = '';

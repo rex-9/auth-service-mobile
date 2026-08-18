@@ -10,6 +10,9 @@ class AppConstants {
   String get versionKey => 'APP_VERSION';
   String get apiBaseUrlKey => 'API_BASE_URL';
   String get googleServerClientIdKey => 'GOOGLE_SERVER_CLIENT_ID';
+  String get oneSignalAppIdKey => 'ONE_SIGNAL_APP_ID';
+  String get androidAppIdKey => 'ANDROID_APP_ID';
+  String get iosAppIdKey => 'IOS_APP_ID';
 
   // ===== VERSIONS from pubspec.yaml (Runtime) =====
   Future<String> getVersion() async {

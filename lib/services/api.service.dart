@@ -20,7 +20,7 @@ class ApiService extends GetConnect {
   }
 
   void _setupHttpClient() {
-    httpClient.baseUrl = const AppConfig().apiBaseUrl;
+    httpClient.baseUrl = AppConfig.apiBaseUrl;
     httpClient.timeout = Design.timers.apiTimeout;
     httpClient.defaultContentType = 'application/json';
   }
@@ -177,6 +177,19 @@ class ApiService extends GetConnect {
     final data = body['data'];
 
     if (response.hasError || !(status['success'] as bool? ?? false)) {
+      // Optional: Log API errors to analytics
+      // try {
+      //   final analytics = Get.find<AnalyticsService>();
+      //   analytics.logError(
+      //     status['error'] as String? ??
+      //         response.statusText ??
+      //         'Unknown API error',
+      //     context: response.url?.path ?? 'api_call',
+      //   );
+      // } catch (_) {
+      //   // Analytics not initialized, ignore
+      // }
+
       return ApiResponse.error(
         message:
             status['error'] as String? ??

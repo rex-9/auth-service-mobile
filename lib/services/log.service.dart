@@ -30,8 +30,9 @@ class LogService extends GetxService {
     }
 
     try {
-      final service =
-          Get.isRegistered<LogService>() ? Get.find<LogService>() : null;
+      final service = Get.isRegistered<LogService>()
+          ? Get.find<LogService>()
+          : null;
 
       if (service == null) return;
 
@@ -58,8 +59,9 @@ class LogService extends GetxService {
     }
 
     try {
-      final service =
-          Get.isRegistered<LogService>() ? Get.find<LogService>() : null;
+      final service = Get.isRegistered<LogService>()
+          ? Get.find<LogService>()
+          : null;
 
       if (service == null) return;
 
@@ -67,9 +69,7 @@ class LogService extends GetxService {
         error.toString(),
         error: error,
         stackTrace: stackTrace,
-        context: {
-          'source': 'PlatformDispatcher.onError',
-        },
+        context: {'source': 'PlatformDispatcher.onError'},
         severity: 'error',
       );
     } catch (e) {
@@ -133,7 +133,6 @@ class LogService extends GetxService {
       }
 
       final storageKeys = _getStorageKeys();
-      final config = AppConfig();
 
       final log = LogModel(
         message: message,
@@ -141,8 +140,8 @@ class LogService extends GetxService {
         platform: GetPlatform.isIOS
             ? 'ios'
             : (GetPlatform.isAndroid ? 'android' : 'mobile'),
-        environment: config.environment,
-        appVersion: config.appVersion,
+        environment: AppConfig.environment,
+        appVersion: AppConfig.appVersion,
         os: Platform.operatingSystem,
         osVersion: Platform.operatingSystemVersion,
         device: GetPlatform.isIOS ? 'Apple Device' : 'Android Device',
@@ -153,9 +152,7 @@ class LogService extends GetxService {
         context: context ?? {},
       );
 
-      await _api.post(ServerRoutes.clientLogs, {
-        'log': log.toJson(),
-      });
+      await _api.post(ServerRoutes.clientLogs, {'log': log.toJson()});
     } catch (e) {
       // Fail silently to never impact user experience
       debugPrint('[LogService] Failed to send client log: $e');

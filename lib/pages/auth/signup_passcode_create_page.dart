@@ -59,7 +59,7 @@ class SignUpPasscodeCreatePage extends GetView<AuthController> {
 
               SizedBox(height: Design.spacing.xl),
               AppButton(
-                type: ButtonType.text,
+                type: EButtonType.text,
                 onPressed: () => Get.back(),
                 text: Constants.locale.goBack.tr,
               ),

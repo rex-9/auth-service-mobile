@@ -115,7 +115,7 @@ await Future.delayed(Design.timers.medium)
 AppButton(
   text: 'Continue',
   onPressed: () {},
-  type: ButtonType.primary,  // primary | secondary | text | google
+  type: EButtonType.primary,  // primary | secondary | text | google
 )
 
 // Input Fields

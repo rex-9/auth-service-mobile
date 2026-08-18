@@ -1,14 +1,14 @@
 export 'http_status.dart';
+export 'enums.dart';
 
-import 'app_constants.dart';
-import 'locale_constants.dart';
+import 'analytics.constants.dart';
+import 'app.constants.dart';
+import 'locale.constants.dart';
 
 class Constants {
   Constants._(); // Private constructor - never instantiate
 
-  // ===== COLORS =====
   static const app = AppConstants();
-
-  // ===== TYPOGRAPHY =====
   static const locale = LocaleConstants();
+  static const analytics = AnalyticsConstants();
 }

@@ -97,7 +97,7 @@ class SignInPasscodePage extends GetView<AuthController> {
 
               SizedBox(height: Design.spacing.lg),
               AppButton(
-                type: ButtonType.text,
+                type: EButtonType.text,
                 onPressed: () {
                   controller.passcode.value = '';
                   controller.signinPin.clear();
@@ -106,7 +106,7 @@ class SignInPasscodePage extends GetView<AuthController> {
                 text: Constants.locale.useDifferentEmail.tr,
               ),
               AppButton(
-                type: ButtonType.text,
+                type: EButtonType.text,
                 onPressed: () => AppRoutes.toForgotPasscode(),
                 text: Constants.locale.forgotPasscodeLink.tr,
               ),

@@ -94,7 +94,7 @@ class AuthService extends GetxService {
   }
 
   // 6. Send confirmation code (for email verification)
-  Future<ApiResponse<void>> sendConfirmationCode(String signinKey) async {
+  Future<ApiResponse<void>> sendConfirmationOTPCode(String signinKey) async {
     final response = await _api.post(ServerRoutes.sendConfirmationCode, {
       'signin_key': signinKey,
     });
@@ -102,7 +102,7 @@ class AuthService extends GetxService {
   }
 
   // 7. Confirm email with code
-  Future<ApiResponse<AuthResponse>> confirmCode(
+  Future<ApiResponse<AuthResponse>> confirmOTPCode(
     String signinKey,
     String confirmationCode,
   ) async {

@@ -6,16 +6,16 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rexone_mobile/config/config.dart';
 import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/design/components/components.dart';
-import 'package:rexone_mobile/models/enums.dart';
 import 'package:rexone_mobile/models/models.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import '../routes/app_routes.dart';
 import '../services/services.dart';
 
 class AuthController extends GetxController {
-  final AuthService _auth = Get.find();
-  final StorageService _storage = Get.find();
-  final AppConfig _config = AppConfig();
+  final AuthService _auth = Get.find<AuthService>();
+  final StorageService _storage = Get.find<StorageService>();
+  final AnalyticsService _analytics = Get.find<AnalyticsService>();
+  final PushNotiService _pushNotiService = Get.find<PushNotiService>();
 
   static const int maxAttempts = 3;
   // Attempts UI default — server is the source of truth, this is a display fallback.
@@ -121,7 +121,6 @@ class AuthController extends GetxController {
       'remainingAttempts': attemptsLeft.value,
       'cooldownUntilMs': cooldownUntilMs,
       'hasFailureHistory': hasFailureHistory.value,
-
     });
   }
 
@@ -209,27 +208,27 @@ class AuthController extends GetxController {
     final status = await peekUser(email.value);
 
     switch (status) {
-      case PeekedUserStatus.error:
+      case EPeekedUserStatus.error:
         AppSnackbar.error(Constants.locale.connectionFailed.tr);
         break;
 
-      case PeekedUserStatus.exists:
+      case EPeekedUserStatus.exists:
         passcode.value = '';
         signinPin.clear();
         loadRetryState();
         AppRoutes.toSignInPasscode();
         break;
 
-      case PeekedUserStatus.existsUnconfirmed:
+      case EPeekedUserStatus.existsUnconfirmed:
         passcode.value = '';
         signupPin.clear();
         signupConfirmPin.clear();
         confirmPin.clear();
-        await sendConfirmationCode();
+        await sendConfirmationOTPCode();
         AppRoutes.toConfirmEmail(email: email.value);
         break;
 
-      case PeekedUserStatus.notExists:
+      case EPeekedUserStatus.notExists:
         passcode.value = '';
         confirmPasscode.value = '';
         signupPin.clear();
@@ -266,19 +265,19 @@ class AuthController extends GetxController {
   }
 
   // Step 1: Check if user exists
-  Future<PeekedUserStatus> peekUser(String emailAddress) async {
+  Future<EPeekedUserStatus> peekUser(String emailAddress) async {
     try {
       final response = await _auth.peekUser(emailAddress);
       if (!response.success || response.data == null) {
-        return PeekedUserStatus.error;
+        return EPeekedUserStatus.error;
       }
       final data = response.data!;
-      if (!data.userExists) return PeekedUserStatus.notExists;
+      if (!data.userExists) return EPeekedUserStatus.notExists;
       return data.confirmed
-          ? PeekedUserStatus.exists
-          : PeekedUserStatus.existsUnconfirmed;
+          ? EPeekedUserStatus.exists
+          : EPeekedUserStatus.existsUnconfirmed;
     } catch (_) {
-      return PeekedUserStatus.error;
+      return EPeekedUserStatus.error;
     }
   }
 
@@ -289,8 +288,20 @@ class AuthController extends GetxController {
     currentUser.value = response.user;
     _storage.setUserData(response.user);
     isLoggedIn.value = true;
+
     if (Get.isRegistered<SocketService>()) {
       Get.find<SocketService>().connect(response.token);
+    }
+    if (Get.isRegistered<PushNotiService>()) {
+      // Sync user data with OneSignal
+      _pushNotiService.syncUser(response.user);
+    }
+    if (Get.isRegistered<AnalyticsService>()) {
+      // Set user ID and properties
+      _analytics.setUserId(response.user.id);
+      _analytics.setUserProperty('email', response.user.email);
+      _analytics.setUserProperty('provider', response.user.provider ?? 'email');
+      _analytics.logSignIn(method: response.user.provider);
     }
   }
 
@@ -312,8 +323,11 @@ class AuthController extends GetxController {
         // Check if user is confirmed (has user + token)
         if (data.user != null && data.token != null) {
           _resetRetryState();
-          _storeSession(AuthResponse(user: data.user!, token: data.token!));
-          AppRoutes.toHome();
+          _analytics.logSignIn(method: 'email');
+          // Sync noti user & Request permission after Email signin
+          await _handleSuccessfulAuth(
+            AuthResponse(user: data.user!, token: data.token!),
+          );
         } else if (data.otpSent) {
           // Unconfirmed user - OTP sent
           AppSnackbar.success(response.message);
@@ -342,9 +356,9 @@ class AuthController extends GetxController {
   }
 
   // Step 2b: Send confirmation code (for new user registration)
-  Future<void> sendConfirmationCode() async {
+  Future<void> sendConfirmationOTPCode() async {
     try {
-      final response = await _auth.sendConfirmationCode(email.value);
+      final response = await _auth.sendConfirmationOTPCode(email.value);
       if (response.success) {
         _startResendCountdown(30);
         if (Get.currentRoute != AppRoutes.confirmEmail) {
@@ -359,12 +373,14 @@ class AuthController extends GetxController {
   }
 
   // Step 3: Confirm code (for new user)
-  Future<void> confirmCode(String code) async {
+  Future<void> confirmOTPCode(String code) async {
     try {
-      final response = await _auth.confirmCode(email.value, code);
+      final response = await _auth.confirmOTPCode(email.value, code);
       if (response.success && response.data != null) {
-        _storeSession(response.data!);
-        AppRoutes.toHome();
+        _analytics.logEmailVerified();
+        _analytics.logOnboardingCompleted();
+        // Sync noti user & Request permission after Email signup
+        await _handleSuccessfulAuth(response.data!);
       } else {
         confirmPin.triggerError();
         AppSnackbar.error(response.error ?? response.message);
@@ -400,6 +416,8 @@ class AuthController extends GetxController {
 
       if (response.success) {
         _startResendCountdown(30);
+        _analytics.logSignUp(method: 'email');
+        _analytics.logOnboardingStarted();
         AppRoutes.toConfirmEmail(email: email.value);
       } else {
         AppSnackbar.error(response.error ?? response.message);
@@ -415,7 +433,7 @@ class AuthController extends GetxController {
     try {
       final signIn = GoogleSignIn.instance;
       if (!_googleInitialized) {
-        await signIn.initialize(serverClientId: _config.googleServerClientId);
+        await signIn.initialize(serverClientId: AppConfig.googleServerClientId);
         _googleInitialized = true;
       }
 
@@ -439,8 +457,12 @@ class AuthController extends GetxController {
           AppRoutes.toSignUpPasscodeCreate();
         } else if (data.user != null && data.token != null) {
           email.value = user.email;
-          _storeSession(AuthResponse(user: data.user!, token: data.token!));
-          AppRoutes.toHome();
+          _analytics.logSignIn(method: 'google');
+          _analytics.logOnboardingStarted();
+          // Sync noti user & Request permission after Google signin
+          await _handleSuccessfulAuth(
+            AuthResponse(user: data.user!, token: data.token!),
+          );
         }
       } else {
         AppSnackbar.error(response.error ?? response.message);
@@ -475,8 +497,9 @@ class AuthController extends GetxController {
 
       if (response.success && response.data != null) {
         googleChallengeToken.value = '';
-        _storeSession(response.data!);
-        AppRoutes.toHome();
+        _analytics.logSignUp(method: 'google');
+        _analytics.logOnboardingCompleted();
+        await _handleSuccessfulAuth(response.data!);
       } else if (response.statusCode == 429) {
         AppSnackbar.error(Constants.locale.googleTooManyAttempts.tr);
       } else {
@@ -558,6 +581,10 @@ class AuthController extends GetxController {
     resendSecondsLeft.value = 0;
     attemptsLeft.value = maxAttempts;
     hasFailureHistory.value = false;
+    // Clear OneSignal user data
+    if (Get.isRegistered<PushNotiService>()) {
+      _pushNotiService.clearUser();
+    }
   }
 
   // Sign out
@@ -574,6 +601,22 @@ class AuthController extends GetxController {
 
     _clearLocalSession();
     _storage.clearRouteStack();
+    if (Get.isRegistered<AnalyticsService>()) {
+      _analytics.clearUserId();
+      _analytics.logSignOut();
+    }
     AppRoutes.toAuth();
+  }
+
+  // handle push noti and redirect after successful auth
+  Future<void> _handleSuccessfulAuth(AuthResponse response) async {
+    // 1. Store session + sync user
+    _storeSession(response);
+
+    // 2. Request push permission
+    await _pushNotiService.requestPermission();
+
+    // 3. Navigate to home
+    AppRoutes.toHome();
   }
 }

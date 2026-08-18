@@ -55,7 +55,7 @@ class SignUpInfoPage extends GetView<AuthController> {
 
               SizedBox(height: Design.spacing.lg),
               AppButton(
-                type: ButtonType.text,
+                type: EButtonType.text,
                 onPressed: () {
                   controller.passcode.value = '';
                   controller.confirmPasscode.value = '';

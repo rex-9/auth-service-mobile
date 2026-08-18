@@ -16,7 +16,7 @@ class HomePage extends GetView<AuthController> {
       title: Constants.locale.home.tr,
       actions: [
         AppButton(
-          type: ButtonType.icon,
+          type: EButtonType.icon,
           icon: Design.icons.settings,
           onPressed: AppRoutes.toSettings,
           tooltip: Constants.locale.settings.tr,
@@ -71,19 +71,19 @@ class HomePage extends GetView<AuthController> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     AppButton(
-                      type: ButtonType.secondary,
+                      type: EButtonType.secondary,
                       text: '💳 View Plans & Pricing',
                       onPressed: AppRoutes.toPayment,
                     ),
                     SizedBox(height: Design.spacing.md),
                     AppButton(
-                      type: ButtonType.secondary,
+                      type: EButtonType.secondary,
                       text: '🤖 AI Assistant',
                       onPressed: AppRoutes.toAi,
                     ),
                     SizedBox(height: Design.spacing.lg),
                     AppButton(
-                      type: ButtonType.text,
+                      type: EButtonType.text,
                       text: Constants.locale.signOutButton.tr,
                       onPressed: () async {
                         final ok = await AppDialog.confirm(
@@ -119,19 +119,19 @@ class HomePage extends GetView<AuthController> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       AppButton(
-                        type: ButtonType.secondary,
+                        type: EButtonType.secondary,
                         text: '📋 Send Manual Test Log',
                         onPressed: () => _sendTestLog(),
                       ),
                       SizedBox(height: Design.spacing.sm),
                       AppButton(
-                        type: ButtonType.secondary,
+                        type: EButtonType.secondary,
                         text: '💥 Trigger Flutter Error',
                         onPressed: () => _triggerFlutterError(),
                       ),
                       SizedBox(height: Design.spacing.sm),
                       AppButton(
-                        type: ButtonType.secondary,
+                        type: EButtonType.secondary,
                         text: '⚡ Trigger Dart Async Error',
                         onPressed: () => _triggerDartError(),
                       ),
