@@ -12,18 +12,15 @@ class SocketMessage {
   final Map<String, dynamic>? data;
   final String? createdAt;
 
-  SocketMessage({
-    required this.type,
-    this.message,
-    this.data,
-    this.createdAt,
-  });
+  SocketMessage({required this.type, this.message, this.data, this.createdAt});
 
   factory SocketMessage.fromJson(Map<String, dynamic> json) {
     return SocketMessage(
       type: json['type']?.toString() ?? '',
       message: json['message']?.toString(),
-      data: json['data'] is Map ? Map<String, dynamic>.from(json['data']) : null,
+      data: json['data'] is Map
+          ? Map<String, dynamic>.from(json['data'])
+          : null,
       createdAt: json['created_at']?.toString(),
     );
   }
@@ -115,15 +112,12 @@ class SocketService extends GetxService with WidgetsBindingObserver {
     _token = cleanToken;
     _isConnecting = true;
 
-    final config = AppConfig();
-    final wsUrl = '${config.wsBaseUrl}/cable?token=$_token';
+    final wsUrl = '${AppConfig.wsBaseUrl}/cable?token=$_token';
 
     debugPrint('🔌 [SocketService] Connecting to WebSocket: $wsUrl');
 
     try {
-      _ws = await WebSocket.connect(wsUrl).timeout(
-        const Duration(seconds: 10),
-      );
+      _ws = await WebSocket.connect(wsUrl).timeout(const Duration(seconds: 10));
 
       _isConnecting = false;
       isConnected.value = true;
@@ -210,13 +204,17 @@ class SocketService extends GetxService with WidgetsBindingObserver {
 
       // Subscription confirmation
       if (frameType == 'confirm_subscription') {
-        debugPrint('✅ [SocketService] Subscription confirmed: ${data['identifier']}');
+        debugPrint(
+          '✅ [SocketService] Subscription confirmed: ${data['identifier']}',
+        );
         return;
       }
 
       // Reject (bad token / auth failure)
       if (frameType == 'reject_subscription') {
-        debugPrint('🚫 [SocketService] Subscription REJECTED: ${data['identifier']}');
+        debugPrint(
+          '🚫 [SocketService] Subscription REJECTED: ${data['identifier']}',
+        );
         return;
       }
 
@@ -238,7 +236,9 @@ class SocketService extends GetxService with WidgetsBindingObserver {
       }
 
       // Unknown frame — log it so we can debug
-      debugPrint('⚠️ [SocketService] Unhandled frame type=$frameType | raw=$raw');
+      debugPrint(
+        '⚠️ [SocketService] Unhandled frame type=$frameType | raw=$raw',
+      );
     } catch (e) {
       debugPrint('⚠️ [SocketService] JSON parse error: $e | raw=$raw');
     }
@@ -261,7 +261,9 @@ class SocketService extends GetxService with WidgetsBindingObserver {
     if (_isInBackground) {
       // WebSocket closed while app is backgrounded (e.g. Stripe checkout open).
       // Don't try to reconnect — didChangeAppLifecycleState(resumed) will do it.
-      debugPrint('🔄 [SocketService] Skipping reconnect — app is in background');
+      debugPrint(
+        '🔄 [SocketService] Skipping reconnect — app is in background',
+      );
       return;
     }
     if (_reconnectAttempts < _maxReconnectAttempts && _token != null) {

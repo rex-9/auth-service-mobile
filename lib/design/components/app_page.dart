@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/design/design.dart';
 import 'package:rexone_mobile/services/services.dart';
 
@@ -102,7 +103,7 @@ class AppPage extends StatelessWidget {
       ),
       leading: showBackButton
           ? AppButton(
-              type: ButtonType.icon,
+              type: EButtonType.icon,
               icon: Design.icons.backArrow,
               onPressed: onBackPressed ?? () => _handleBackPressed(context),
             )
@@ -133,7 +134,7 @@ class AppPage extends StatelessWidget {
       scrolledUnderElevation: 0,
       leading: showBackButton
           ? AppButton(
-              type: ButtonType.icon,
+              type: EButtonType.icon,
               icon: Design.icons.backArrow,
               onPressed: onBackPressed ?? () => _handleBackPressed(context),
             )

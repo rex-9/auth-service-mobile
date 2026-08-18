@@ -26,7 +26,7 @@ class AuthPage extends GetView<AuthController> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             AppButton(
-              type: ButtonType.icon,
+              type: EButtonType.icon,
               icon: settingsController.themeIcon,
               tooltip: settingsController.themeLabel,
               onPressed: settingsController.toggleTheme,
@@ -80,7 +80,7 @@ class AuthPage extends GetView<AuthController> {
                 AppButton(
                   text: Constants.locale.continueWithGoogle.tr,
                   onPressed: controller.signInWithGoogle,
-                  type: ButtonType.google,
+                  type: EButtonType.google,
                 ),
                 SizedBox(height: Design.spacing.xl),
                 Row(
@@ -113,7 +113,7 @@ class AuthPage extends GetView<AuthController> {
                 AppButton(
                   text: Constants.locale.continueButton.tr,
                   onPressed: controller.handleContinue,
-                  type: ButtonType.primary,
+                  type: EButtonType.primary,
                 ),
               ],
             ),

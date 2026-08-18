@@ -5,3 +5,5 @@ export 'socket.service.dart';
 export 'payment.service.dart';
 export 'ai.service.dart';
 export 'auth.service.dart';
+export 'analytics.service.dart';
+export 'push_noti.service.dart';

@@ -11,6 +11,12 @@ class InitialBinding extends Bindings {
     // Storage (no dependencies)
     Get.put(StorageService(), permanent: true);
 
+    // Analytics Service (Firebase Analytics)
+    Get.put(AnalyticsService(), permanent: true);
+
+    // Push Notification Service (OneSignal)
+    Get.put(PushNotiService(), permanent: true);
+
     // API Service (interface + implementation)
     Get.put<ApiService>(ApiService(), permanent: true);
 

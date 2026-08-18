@@ -185,13 +185,11 @@ class SettingsPage extends GetView<SettingsController> {
   }
 
   Widget _buildAppInfoTile(BuildContext context) {
-    final config = AppConfig();
-
     return Card(
       clipBehavior: Clip.antiAlias,
       child: AppListTile(
         leading: Icon(Design.icons.info, color: context.colors.textSecondary),
-        title: Text(config.appName),
+        title: Text(AppConfig.appName),
         subtitle: Obx(() => Text('v${controller.appVersion.value}')),
       ),
     );

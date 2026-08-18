@@ -1,506 +1,321 @@
-<a name="readme-top"></a>
+<a id="readme-top"></a>
 
 <div align="center">
-  <h3><b>Rexone Mobile</b></h3>
+
+# Rexone Mobile
+
+### A disciplined Flutter client, built to turn a powerful foundation into a seamless mobile product experience.
+
+A production-minded mobile foundation for authenticated applications. Identity, payments, access control, media, AI, real-time delivery, push notifications, product analytics, in-app updates, localization, client telemetry, and reusable design primitives meet here—not as disconnected demos, but as one cohesive mobile application.
+
+Built under the same creed as Rexone Core and Rexone Web: **clear in thought, exact in structure, simple in use, and strong enough to endure what comes after launch.**
+
+[![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter&logoColor=white)](https://flutter.dev/)
+[![Dart](https://img.shields.io/badge/Dart-3.x-0175C2?logo=dart&logoColor=white)](https://dart.dev/)
+[![GetX](https://img.shields.io/badge/GetX-4.7-8A2BE2)](https://pub.dev/packages/get)
+[![Firebase](https://img.shields.io/badge/Firebase_Analytics-12.4-FFCA28?logo=firebase&logoColor=black)](https://firebase.google.com/)
+[![OneSignal](https://img.shields.io/badge/OneSignal-5.6-E54B4D?logo=onesignal&logoColor=white)](https://onesignal.com/)
+
+**Typed · Modular · Localized · Observable · Push-ready · Analytics-enabled · API-driven**
+
+[Explore the foundation](#feature-map) · [Run it locally](#getting-started) · [Meet the architecture](#architecture) · [Connect the API](#configuration--environment-management)
+
 </div>
 
-<!-- TABLE OF CONTENTS -->
+---
 
-# 📗 Table of Contents
+## Why Rexone Mobile?
 
-- [📗 Table of Contents](#-table-of-contents)
-- [📖 Rexone Mobile](#-rexone-mobile)
-  - [🚀 Featuring!](#-featuring)
-    - [🌟 Modern Tech Stack](#-modern-tech-stack)
-    - [🏗️ Architecture \& Design](#️-architecture--design)
-    - [🎨 Design System](#-design-system)
-    - [🌍 Localization](#-localization)
-    - [🔐 Authentication \& Security](#-authentication--security)
-    - [⚙️ Configuration \& Environment Management](#️-configuration--environment-management)
-  - [🛠 Built With](#-built-with)
-    - [Tech Stack](#tech-stack)
-  - [💻 Getting Started](#-getting-started)
-    - [Prerequisites](#prerequisites)
-    - [Setup](#setup)
-    - [Environment Variables](#environment-variables)
-    - [Google Sign-In Configuration](#google-sign-in-configuration)
-      - [Android](#android)
-      - [iOS](#ios)
-    - [Run](#run)
-  - [📁 Project Structure](#-project-structure)
-  - [📂 Configuration \& Constants](#-configuration--constants)
-    - [Config](#config)
-    - [Constants](#constants)
-    - [HTTP Status Codes](#http-status-codes)
-    - [Routes](#routes)
-  - [🧪 Testing](#-testing)
-  - [📦 Building for Production](#-building-for-production)
-    - [Android APK](#android-apk)
-    - [Android App Bundle](#android-app-bundle)
-    - [iOS](#ios-1)
-    - [Web](#web)
-  - [📦 Dependencies](#-dependencies)
-- [☕ Support](#-support)
-  - [👤 Author](#-author)
+A capable backend and a polished web app are only parts of the whole product. The mobile application must navigate device lifecycles, volatile network conditions, push notifications, app store version migrations, real-time socket events, platform sessions, biometric/passcode verification, and structured error telemetry.
 
-# 📖 Rexone Mobile
+Rexone Mobile exists so that work does not have to be reinvented for every mobile application built on Rexone Core.
 
-**Rexone Mobile** is a Flutter mobile foundation for the Rexone platform, providing a scalable and maintainable architecture for authenticated mobile applications.
+This is not a template of screens pretending to be an architecture. Pages, controllers, services, models, bindings, design primitives, and telemetry pipelines have exact and deliberate responsibilities:
+- **Controllers** own application state, user intent, and failure feedback.
+- **Services** are thin, single-responsibility transport clients that interact directly with Rexone Core, Action Cable, Firebase, and OneSignal.
+- **Design primitives** enforce consistent spacing, typography, and theme tokens across light and dark modes.
+- **Observability listeners** automatically capture uncaught Flutter and platform errors and ship structured diagnostic payloads to Rexone Core's client log store.
 
-The project provides a clean **GetX-based MVC architecture**, centralized dependency injection, a reusable design system, environment-based configuration, multi-language support, and secure authentication workflows.
+The client is designed to **bend around the product**, never to make the product kneel before the foundation.
 
-It is designed to work as part of the **Rexone ecosystem**, sharing a common backend foundation with Rexone Web while maintaining a platform-specific mobile experience.
+---
 
-**Related Repositories:**
+## The philosophy
 
-- **Core API**: [Rexone Core](https://github.com/rex-9/rexone-core)
-- **Web Application**: [Rexone Web](https://github.com/rex-9/rexone-web)
+Rexone Mobile follows the same doctrine as the ecosystem it serves:
 
-## 🚀 Featuring!
+> **Clarity before cleverness. Precision before haste. Simplicity without weakness. Strength without spectacle.**
 
-### 🌟 Modern Tech Stack
+The difficult part of mobile engineering is rarely rendering another screen. It is preserving a codebase that remains understandable when routes multiply, background workers fire, push payloads arrive while the app is backgrounded, API contracts evolve, and multiple developers build in parallel.
 
-- **Flutter**: Cross-platform mobile application development.
-- **Dart**: Strongly typed and modern application development.
-- **GetX**: State management, navigation, and dependency injection.
-- **GetStorage**: Lightweight persistent local storage.
-- **Flutter ScreenUtil**: Responsive UI scaling across different screen sizes.
-- **Flutter Dotenv**: Environment-specific application configuration.
+So the ambition was never to build the most complex state tree possible.
 
-### 🏗️ Architecture & Design
+It was to build a **clear mobile foundation**—strong enough to carry ambitious products, flexible enough to surrender its shape to them, and disciplined enough that any developer can trace data from interaction to API and back without archaeology.
 
-- **GetX MVC Architecture**: Clear separation between Pages, Controllers, Services, and Models.
-- **Controller Layer**: Handles application and business logic while coordinating UI state.
-- **Service Layer**: Encapsulates API communication and application services.
-- **Interface + Implementation Pattern**: Services can be defined through abstractions and implemented independently.
-- **Model Layer**: Strongly typed application and API data models.
-- **Centralized Dependency Injection**: Application dependencies are registered through GetX bindings.
-- **Route Guards**: Authentication-aware navigation and protected application flows.
-- **Separation of Concerns**: Keeps presentation, business logic, networking, configuration, and persistence independently maintainable.
+---
 
-### 🎨 Design System
+## Feature map
 
-The application includes a centralized design system under `lib/design/`.
+| Foundation | What is ready | Details |
+| --- | --- | --- |
+| **Identity** | Email/passcode flow, OTP verification, recovery, Google sign-in, platform sessions | [Authentication & security](#authentication--security) |
+| **Push Notifications** | OneSignal push messaging, permission management, user tag syncing, and click routing | [Push notifications](#push-notifications) |
+| **Product Analytics** | Firebase Analytics screen tracking, auth lifecycle events, and telemetry | [Product analytics](#product-analytics) |
+| **In-App Upgrades** | Upgrader alert system supporting soft and hard store version prompts | [In-app version upgrader](#in-app-version-upgrader) |
+| **Commerce** | Products, Stripe Checkout WebView, subscriptions, and cancel/resume workflows | [Payments & entitlements](#payments--entitlements) |
+| **AI Assistant** | Non-blocking queued chat, persistent room history, and Action Cable notifications | [AI capabilities](#ai-capabilities) |
+| **Real Time** | Action Cable WebSocket client, subscription channels, and global toast dispatching | [Real-time delivery](#real-time-delivery) |
+| **Observability** | Flutter and platform error capture with automated client log delivery to Rexone Core | [Client observability & telemetry](#client-observability--telemetry) |
+| **Design System** | Centralized design tokens, theme extensions, custom components, and light/dark modes | [Design system](#design-system) |
+| **Localization** | English, Spanish, and Burmese with dynamic runtime switching and `X-Locale` backend sync | [Localization](#localization) |
+| **Quality** | Strongly typed Dart models, analyzer compliance, and automated localization test suite | [Quality & testing](#quality--testing) |
 
-- **Reusable Components**: Shared UI components for consistent application experiences.
-- **Design Elements**: Centralized design tokens and visual constants.
-- **Theme Extensions**: Theme-aware reusable styling and component behavior.
-- **Material Design 3**: Modern Material-based application interface.
-- **Light & Dark Themes**: Theme switching with persisted user preferences.
-- **Single Design Entry Point**: Shared design functionality can be accessed through `design.dart`.
+---
 
-> **Important:** When building new UI, use the existing design system instead of creating one-off components whenever possible.
+## Architecture
 
-### 🌍 Localization
+Rexone Mobile keeps framework concerns explicit, responsibilities separated, and external providers isolated.
 
-Rexone Mobile supports a multi-language application experience.
+```mermaid
+flowchart LR
+    User[User & Gestures] --> UI[Pages & Design Components]
+    UI --> Controllers[GetX Controllers]
+    Controllers --> Services[Domain Services]
+    Services --> API[GetConnect HTTP Client]
+    API --> Core[Rexone Core API]
 
-Currently supported languages include:
+    Core <-->|Action Cable| Socket[Socket Service]
+    Socket --> SocketCtrl[Socket Controller]
+    SocketCtrl --> UI
 
-- 🇬🇧 **English**
-- 🇪🇸 **Español**
-- 🇲🇲 **မြန်မာ**
+    OneSignal[OneSignal Push Service] --> Controllers
+    Controllers --> Analytics[Firebase Analytics]
+    Runtime[Flutter & Platform Errors] --> LogService[Log Service]
+    LogService --> Core
+```
 
-Localization is centralized under `lib/locales/`, with language and locale-related constants maintained under `lib/constants/`.
+### Layer Boundaries:
+- `lib/pages/` owns screen layouts and user interactions (`GetView<Controller>`).
+- `lib/controllers/` coordinates business logic, reactive state (`Rx`), navigation, and error handling.
+- `lib/services/` encapsulates HTTP communication, WebSockets, Firebase, OneSignal, and storage without synthetic error codes.
+- `lib/design/` centralizes design tokens, theme definitions, extensions, and reusable UI components.
+- `lib/bindings/` handles centralized dependency injection for services and controllers.
+- `lib/models/` contains strongly typed JSON:API models and response envelopes.
+- `lib/locales/` contains multi-language translations and runtime dictionary updates.
+- `lib/config/` and `lib/constants/` manage environment definitions and constant keys.
 
-User language preferences are persisted locally.
+---
 
-### 🔐 Authentication & Security
+## The client in detail
 
-- **Email Authentication**: Email-based authentication with a 6-digit passcode.
-- **Google Sign-In**: OAuth-based authentication through Google.
-- **Smart User Detection**: Determines whether a user already exists before authentication.
-- **JWT Authentication**: Token-based authentication through the Rexone Core API.
-- **Secure Local Storage**: Authentication and application state can be persisted locally using GetStorage.
-- **Passcode Validation**: Six-digit passcode validation and authentication flow.
-- **Attempt Limiting**: Failed passcode attempts use escalating cooldown periods.
-- **Session Control**: Platform-aware authentication using `X-Platform: mobile`.
-- **Password Recovery**: Forgot-passcode workflow with reset-link email support.
-- **Resend Protection**: Countdown-based protection for reset-link requests.
-- **Protected Navigation**: Route guards prevent unauthorized access to protected application areas.
+### Authentication & security
 
-### ⚙️ Configuration & Environment Management
+- **Smart Email Discovery**: Automatically checks user registration and confirmation state via `POST /v1/auth/peek`.
+- **6-Digit Passcode**: In-memory passcode handling for sign-in and registration (passcodes never leak to persistent storage or route URLs).
+- **Escalating Attempt Protection**: Password retry limits and cooldown counters synchronized with Redis on Rexone Core.
+- **Email Confirmation**: 6-digit email OTP verification with countdown-guarded resend capabilities.
+- **Google Sign-In**: Native Google OAuth flow with Rexone Core challenge token support for first-time signups.
+- **Active Session Enforcement**: Sends `X-Platform: mobile` to ensure single-device active session rules enforced by the backend cache.
+- **Session Replacement Handling**: Detects active session invalidation and gracefully routes the user to sign-in with localized feedback.
 
-Rexone Mobile supports environment-specific configuration.
+### Push notifications
 
-Environment configuration can be separated into:
+- Powered by **OneSignal Flutter SDK** (`onesignal_flutter`).
+- Native push notifications for Android and iOS (`remote-notification` background modes).
+- User identification and tag synchronization (`syncUser(user)` and `clearUser()`) hooked directly into authentication state changes.
+- Click listeners that route notifications and track conversion events via `AnalyticsService`.
 
-- `.env.dev`
-- `.env.uat`
-- `.env.prod`
+### Product analytics
 
-Configuration values such as API endpoints, application metadata, and Google authentication credentials are loaded through the application's configuration layer.
+- Powered by **Firebase Analytics** (`firebase_core` & `firebase_analytics`).
+- Automatic screen tracking via `FirebaseAnalyticsObserver` registered in `GetMaterialApp.navigatorObservers`.
+- Pre-defined event tracking for sign-up, sign-in, sign-out, password resets, onboarding, and error captures via `Constants.analytics`.
+- User ID tagging synchronized with authenticated sessions.
 
-This allows the same application codebase to be used across development, UAT, and production environments without hardcoding environment-specific values.
+### In-app version upgrader
 
-## 🛠 Built With
+- Powered by **Upgrader** (`upgrader`).
+- Configured in `main.dart` wrapping the root application builder.
+- Checks App Store and Play Store releases to display customizable update dialogs for outdated installations.
 
-### Tech Stack
+### Payments & entitlements
 
-| Technology             | Purpose                                                |
-| ---------------------- | ------------------------------------------------------ |
-| **Flutter**            | Cross-platform mobile application framework            |
-| **Dart**               | Application programming language                       |
-| **GetX**               | State management, navigation, and dependency injection |
-| **GetStorage**         | Local persistent storage                               |
-| **Google Sign-In**     | Google authentication                                  |
-| **Pin Code Fields**    | Six-digit passcode input                               |
-| **Flutter ScreenUtil** | Responsive screen scaling                              |
-| **Flutter Dotenv**     | Environment configuration                              |
-| **Package Info Plus**  | Application version information                        |
-| **Rexone Core API**    | Backend API and application services                   |
+- Product catalogue with one-time and recurring pricing.
+- In-app Stripe Checkout handoff via WebView (`webview_flutter`).
+- Subscription state management (Active, Scheduled for Cancellation, Expired).
+- Safe end-of-period cancellation and resumption guarded by destructive confirmation dialogs.
 
-## 💻 Getting Started
+### AI capabilities
 
-To get a local copy up and running, follow these steps.
+- Non-blocking conversational AI assistant backed by Rexone Core and DeepSeek.
+- Multi-room management with persistent chat history.
+- Real-time response completion notifications delivered via Action Cable.
+- Room deletion and chat clearing guarded by destructive confirmation prompts.
+
+### Real-time delivery
+
+- Real-time WebSocket connection to Rexone Core via Action Cable (`SolidCable`).
+- Auto-reconnect and token refresh on authentication.
+- Centralized `SocketController` dispatches notifications and manages global toast feedback.
+
+### Client observability & telemetry
+
+- Global error capture through `FlutterError.onError` and `PlatformDispatcher.instance.onError`.
+- Structured diagnostic payloads (message, stack trace, device metadata, OS version, app version, local storage keys) delivered directly to Rexone Core's `POST /v1/log/clients`.
+- Environment names validated against canonical backend schemas (`development`, `staging`, `production`).
+
+### Design system
+
+- Centralized design entry point via `import 'package:rexone_mobile/design/design.dart';`.
+- Complete design tokens: `Design.spacing`, `Design.typography`, `Design.icons`, and `Design.timers`.
+- Theme extensions for theme-aware colors and typography (`context.colors`, `context.typo`).
+- Reusable components: `AppButton`, `AppInputField`, `AppPasscodeField`, `AppDialog`, `AppLoading`, `AppPage`, and `AppSnackbar`.
+- Cohesive light and dark themes with persistent user preferences.
+
+### Localization
+
+- Fully localized into:
+  - 🇬🇧 **English (`en_US`)**
+  - 🇪🇸 **Spanish (`es_ES`)**
+  - 🇲🇲 **Burmese (`my_MM`)**
+- Complete parity across all user-facing texts with dynamic runtime GetX translation reload.
+- Automatically sends `X-Locale` and `Accept-Language` headers on all HTTP requests to ensure backend responses match the user's selected language.
+
+---
+
+## Getting started
 
 ### Prerequisites
 
-In order to run this project you need:
+- **Flutter SDK**: `>= 3.11.5`
+- **Dart SDK**: `>= 3.11.5`
+- **Android Studio** / **VS Code** with Flutter extensions
+- **Xcode** (for iOS development on macOS)
+- **CocoaPods** (for iOS dependency management)
 
-- Flutter SDK >= 3.0.0
-- Dart SDK >= 3.0.0
-- Android Studio or VS Code
-- Android Emulator or physical Android device
-- iOS Simulator or physical iOS device for iOS development
-- CocoaPods for iOS development
-
-Check your Flutter installation:
-
+Verify your environment:
 ```sh
-  flutter --version
+flutter doctor
 ```
 
-Check the available development environments:
+### Installation
 
+1. Clone the repository:
 ```sh
-  flutter doctor
+git clone git@github.com:rex-9/rexone-mobile.git
+cd rexone-mobile
 ```
 
-### Setup
-
-Clone this repository:
-
-```sh
-  git clone git@github.com:rex-9/rexone-mobile.git
-```
-
-Enter the project directory:
-
-```sh
-  cd rexone-mobile
-```
-
-Install Flutter dependencies:
-
+2. Install dependencies:
 ```sh
 flutter pub get
 ```
 
-### Environment Variables
-
-Create the required environment files in the project root.
-
-For development:
-
+3. Configure environment variables:
+Create `.env.dev`, `.env.uat`, or `.env.prod` in the project root:
 ```env
 APP_NAME=Rexone
 APP_VERSION=1.0.0
-GOOGLE_SERVER_CLIENT_ID=your_client_id.apps.googleusercontent.com
 API_BASE_URL=http://10.0.2.2:3000
+GOOGLE_SERVER_CLIENT_ID=your_google_server_client_id.apps.googleusercontent.com
+ONE_SIGNAL_APP_ID=your_onesignal_app_id
+ANDROID_APP_ID=com.rex9.auth
+IOS_APP_ID=com.rex9.auth
 ```
 
-The application supports environment-specific files such as:
+4. Configure Firebase & Google Services:
+- **Android**: Copy `android/app/google-services.json.example` to `android/app/google-services.json` and configure your Firebase project values.
+- **iOS**: Copy `ios/Runner/GoogleService-Info.plist.example` to `ios/Runner/GoogleService-Info.plist` and configure your Firebase project values.
 
-```text
-.env.dev
-.env.uat
-.env.prod
-```
+> [!NOTE]
+> `google-services.json` and `GoogleService-Info.plist` are included in `.gitignore` to prevent credential exposure.
 
-Add the environment files to `pubspec.yaml`:
+---
 
-```yaml
-flutter:
-  assets:
-    - .env.dev
-    - .env.uat
-    - .env.prod
-```
+## Running the application
 
-> Do not commit secrets, private credentials, or sensitive production configuration to the repository.
-
-### Google Sign-In Configuration
-
-#### Android
-
-Add the Google services configuration file:
-
-```text
-android/app/google-services.json
-```
-
-Configure the required:
-
-- SHA-1 fingerprint
-- SHA-256 fingerprint
-- Google OAuth client configuration
-
-#### iOS
-
-Add the Google services configuration file:
-
-```text
-ios/Runner/GoogleService-Info.plist
-```
-
-Configure the required URL schemes in:
-
-```text
-ios/Runner/Info.plist
-```
-
-### Run
-
-Run the application using the development environment:
-
+### Development:
 ```sh
 flutter run --dart-define=APP_ENV=.env.dev
 ```
 
-For UAT:
-
+### Staging (UAT):
 ```sh
 flutter run --dart-define=APP_ENV=.env.uat
 ```
 
-For production:
-
+### Production:
 ```sh
 flutter run --dart-define=APP_ENV=.env.prod
 ```
 
-The configured `API_BASE_URL` determines which Rexone Core environment the application communicates with.
+---
 
-## 📁 Project Structure
+## Quality & testing
 
-```text
-lib/
-├── bindings/             # Dependency injection
-│   └── initial_binding.dart
-├── config/               # Application configuration
-│   ├── app_config.dart
-│   └── config.dart
-├── constants/            # Application constants and keys
-│   ├── app_constants.dart
-│   ├── http_status.dart
-│   └── locale_constants.dart
-├── controllers/          # GetX controllers and business logic
-│   ├── auth_controller.dart
-│   └── settings_controller.dart
-├── design/               # 🎨 Centralized design system
-│   ├── components/       # Reusable UI components
-│   ├── elements/         # Design tokens
-│   ├── extensions/       # Theme-aware extensions
-│   └── design.dart       # Single design-system entry point
-├── helpers/              # Utility helpers
-│   └── flag_helper.dart
-├── locales/              # Internationalization
-│   └── app_translations.dart
-├── models/               # Application and API models
-│   ├── api_response.dart
-│   └── user_model.dart
-├── pages/                # Application screens
-│   ├── auth_page.dart
-│   ├── home_page.dart
-│   ├── settings_page.dart
-│   └── splash_page.dart
-├── routes/               # Navigation and route configuration
-│   ├── app_routes.dart
-│   ├── route_guard.dart
-│   └── server_routes.dart
-└── services/             # API and application services
-    ├── api_service.dart
-    ├── auth_service.dart
-    ├── auth_service_impl.dart
-    └── storage_service.dart
+Run static analysis:
+```sh
+flutter analyze lib/ test/
 ```
 
-## 📂 Configuration & Constants
-
-### Config
-
-Application configuration is centralized under:
-
-```text
-lib/config/
-```
-
-Example:
-
-```dart
-import 'package:rexone_mobile/config/config.dart';
-
-// Application configuration
-AppConfig().googleServerClientIdKey
-AppConfig().apiBaseUrl
-```
-
-This keeps environment-specific values away from application logic.
-
-### Constants
-
-Application constants are centralized under:
-
-```text
-lib/constants/
-```
-
-Example:
-
-```dart
-import 'package:rexone_mobile/constants/constants.dart';
-
-// Application constants
-Constants.app.name
-Constants.app.version
-
-// Locale keys
-Constants.locale.welcomeTitle
-Constants.locale.signIn
-Constants.locale.error
-```
-
-### HTTP Status Codes
-
-HTTP status codes are centralized to avoid magic numbers:
-
-```dart
-if (response.statusCode == HttpStatus.unauthorized) {
-  // Handle unauthorized
-}
-```
-
-Status helpers can be used when appropriate:
-
-```dart
-if (HttpStatusMap.isSuccess(response.statusCode)) {
-  // Success!
-}
-```
-
-Common status constants include:
-
-```dart
-HttpStatus.ok                 // 200
-HttpStatus.unauthorized       // 401
-HttpStatus.tooManyRequests    // 429
-```
-
-### Routes
-
-Application navigation and server endpoints are centralized under:
-
-```text
-lib/routes/
-```
-
-Application navigation:
-
-```dart
-import 'package:rexone_mobile/routes/routes.dart';
-
-AppRoutes.toHome();
-AppRoutes.toSettings();
-AppRoutes.toAuth();
-```
-
-Server endpoints:
-
-```dart
-ServerRoutes.baseUrl
-ServerRoutes.peekUser
-ServerRoutes.signIn
-```
-
-Keeping routes centralized prevents hardcoded navigation paths and API endpoints from spreading throughout the application.
-
-## 🧪 Testing
-
-Run unit and widget tests:
-
+Run unit and localization parity tests:
 ```sh
 flutter test
 ```
 
-Run integration tests:
+---
 
+## Building for production
+
+### Android APK:
 ```sh
-flutter test integration_test/
+flutter build apk --release --dart-define=APP_ENV=.env.prod
 ```
 
-Before creating a production build, ensure the complete test suite passes successfully.
-
-## 📦 Building for Production
-
-### Android APK
-
+### Android App Bundle (AAB):
 ```sh
-flutter build apk --release
+flutter build appbundle --release --dart-define=APP_ENV=.env.prod
 ```
 
-### Android App Bundle
-
+### iOS Release:
 ```sh
-flutter build appbundle --release
+flutter build ios --release --dart-define=APP_ENV=.env.prod
 ```
 
-### iOS
+---
 
-```sh
-flutter build ios --release
+## Project structure
+
+```text
+lib/
+├── bindings/             # GetX dependency injection (InitialBinding)
+├── config/               # App configuration and environment resolution
+├── constants/            # Constants, analytics event keys, locale keys, HTTP status
+├── controllers/          # GetX business logic controllers (Auth, Settings, Payment, AI, Socket)
+├── design/               # Design system (tokens, components, extensions, themes, icons)
+│   ├── components/       # Reusable atoms and molecules (Button, Input, Passcode, Dialog, Loading)
+│   ├── elements/         # Design tokens (Colors, Spacing, Typography, Icons, Timers)
+│   └── extensions/       # Theme context extensions
+├── helpers/              # Utility helpers (API JSON:API parser, flags, validators)
+├── locales/              # Multi-language translations (en_US, es_ES, my_MM)
+├── models/               # Strongly typed models and JSON:API response envelopes
+├── pages/                # Application screens and flows
+│   ├── auth/             # Auth flow (Welcome, Sign-In, Passcode, Profile, OTP, Recovery)
+│   ├── ai_page.dart      # AI Assistant chat view
+│   ├── payment_page.dart # Plans, subscriptions, and billing
+│   ├── home_page.dart    # Main dashboard
+│   └── settings_page.dart# Theme, language, and account settings
+├── routes/               # GetX route declarations and auth route guards
+└── services/             # Domain transport services (API, Auth, Payment, AI, Socket, Log, Analytics, Push)
 ```
 
-### Web
+---
 
-```sh
-flutter build web --release
-```
-
-> Production builds should use the appropriate production environment configuration and credentials.
-
-## 📦 Dependencies
-
-| Package              | Purpose                                                |
-| -------------------- | ------------------------------------------------------ |
-| `get`                | State management, navigation, and dependency injection |
-| `get_storage`        | Persistent local storage                               |
-| `google_sign_in`     | Google authentication                                  |
-| `pin_code_fields`    | Six-digit passcode input                               |
-| `flutter_screenutil` | Responsive UI scaling                                  |
-| `package_info_plus`  | Application version information                        |
-| `flutter_dotenv`     | Environment-specific configuration                     |
-
-# ☕ Support
-
-If you like this project, please consider giving it a star on GitHub and buying me a coffee to support its development: 🌟
-
-[![GitHub Stars](https://img.shields.io/github/stars/rex-9/rexone-mobile.svg?style=social&label=Star)](https://github.com/rex-9/rexone-mobile)
-
-<!-- <div align="center">
-  <a href="https://buymeacoffee.com/rex9" target="_blank">
-    <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" >
-  </a>
-</div> -->
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-## 👤 Author
+## Author
 
 **Rex (Rex9)**
-
 - GitHub: [@rex-9](https://github.com/rex-9)
 - Portfolio: [rex9.vercel.app](https://rex9.vercel.app)
-- Linkedin: [rex9](https://www.linkedin.com/in/rex9/)
+- LinkedIn: [rex9](https://www.linkedin.com/in/rex9/)
 
 _Built with ❤️ by Rex9_

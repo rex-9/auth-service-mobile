@@ -88,7 +88,7 @@ class AiPage extends GetView<AiController> {
                 children: [
                   Text('Chat Rooms', style: context.typo.headline3),
                   AppButton(
-                    type: ButtonType.text,
+                    type: EButtonType.text,
                     text: '+ New Chat',
                     onPressed: () {
                       Get.back();

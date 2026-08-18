@@ -57,7 +57,7 @@ class ForgotPasscodePage extends GetView<AuthController> {
 
               SizedBox(height: Design.spacing.lg),
               AppButton(
-                type: ButtonType.text,
+                type: EButtonType.text,
                 onPressed: () => Get.back(),
                 text: Constants.locale.backToSignIn.tr,
               ),
