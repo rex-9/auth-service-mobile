@@ -1,18 +1,13 @@
-// lib/services/auth_service_impl.dart
+// lib/services/auth.service.dart
 import 'package:get/get.dart';
 import 'package:rexone_mobile/models/models.dart';
 import 'package:rexone_mobile/routes/routes.dart';
 import 'package:rexone_mobile/services/services.dart';
 
-class AuthServiceImpl extends GetxService implements AuthService {
-  final ApiService _api = Get.find();
-
-  // ===== LIFECYCLE =====
-
-  // ===== AUTH METHODS =====
+class AuthService extends GetxService {
+  final ApiService _api = Get.find<ApiService>();
 
   // 1. Check if user exists
-  @override
   Future<ApiResponse<PeekUserResponse>> peekUser(String email) async {
     final response = await _api.get(
       ServerRoutes.peekUser,
@@ -25,7 +20,6 @@ class AuthServiceImpl extends GetxService implements AuthService {
   }
 
   // 2. Sign in with email/username and password
-  @override
   Future<ApiResponse<SignInResponse>> signIn(
     String signinKey,
     String password,
@@ -40,7 +34,6 @@ class AuthServiceImpl extends GetxService implements AuthService {
   }
 
   // 3. Sign in with token (from email confirmation)
-  @override
   Future<ApiResponse<AuthResponse>> signInWithToken(String token) async {
     final response = await _api.post(ServerRoutes.signInWithToken, {
       'token': token,
@@ -52,7 +45,6 @@ class AuthServiceImpl extends GetxService implements AuthService {
   }
 
   // 4. Sign in with Google
-  @override
   Future<ApiResponse<GoogleResponse>> signInWithGoogle(String idToken) async {
     final response = await _api.post(ServerRoutes.signInWithGoogle, {
       'token': idToken,
@@ -64,7 +56,6 @@ class AuthServiceImpl extends GetxService implements AuthService {
   }
 
   // 4b. Complete Google sign in (new Google account sets a passcode)
-  @override
   Future<ApiResponse<AuthResponse>> googleSignInComplete(
     String passcode,
     String challengeToken,
@@ -80,7 +71,6 @@ class AuthServiceImpl extends GetxService implements AuthService {
   }
 
   // 5. Sign up (register new user)
-  @override
   Future<ApiResponse<UserModel>> signUp({
     required String username,
     required String name,
@@ -104,7 +94,6 @@ class AuthServiceImpl extends GetxService implements AuthService {
   }
 
   // 6. Send confirmation code (for email verification)
-  @override
   Future<ApiResponse<void>> sendConfirmationCode(String signinKey) async {
     final response = await _api.post(ServerRoutes.sendConfirmationCode, {
       'signin_key': signinKey,
@@ -113,7 +102,6 @@ class AuthServiceImpl extends GetxService implements AuthService {
   }
 
   // 7. Confirm email with code
-  @override
   Future<ApiResponse<AuthResponse>> confirmCode(
     String signinKey,
     String confirmationCode,
@@ -129,7 +117,6 @@ class AuthServiceImpl extends GetxService implements AuthService {
   }
 
   // 8. Forgot password - send reset instructions
-  @override
   Future<ApiResponse<void>> forgotPasscode(String email) async {
     final response = await _api.post(ServerRoutes.forgotPassword, {
       'email': email,
@@ -137,25 +124,7 @@ class AuthServiceImpl extends GetxService implements AuthService {
     return _api.parseResponse<void>(response, (data) {});
   }
 
-  // 9. WEB: Reset password
-  // @override
-  // Future<ApiResponse<void>> resetPasscode({
-  //   required String resetPasswordToken,
-  //   required String password,
-  //   required String passwordConfirmation,
-  // }) async {
-  //   final response = await _api.put(ServerRoutes.resetPassword, {
-  //     'user': {
-  //       'reset_password_token': resetPasswordToken,
-  //       'password': password,
-  //       'password_confirmation': passwordConfirmation,
-  //     },
-  //   });
-  //   return _api.parseResponse<void>(response, (data) {});
-  // }
-
-  // 10. Get current user
-  @override
+  // 9. Get current user
   Future<ApiResponse<UserModel>> getCurrentUser() async {
     final response = await _api.get(ServerRoutes.currentUser);
     return _api.parseResponse<UserModel>(
@@ -164,8 +133,7 @@ class AuthServiceImpl extends GetxService implements AuthService {
     );
   }
 
-  // 11. Sign out
-  @override
+  // 10. Sign out
   Future<ApiResponse<void>> signOut() async {
     final response = await _api.delete(ServerRoutes.signOut);
     return _api.parseResponse<void>(response, (data) {});

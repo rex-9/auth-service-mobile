@@ -58,7 +58,9 @@ class SignUpInfoPage extends GetView<AuthController> {
                 type: ButtonType.text,
                 onPressed: () {
                   controller.passcode.value = '';
-                  controller.signinPin.clear();
+                  controller.confirmPasscode.value = '';
+                  controller.signupPin.clear();
+                  controller.signupConfirmPin.clear();
                   Get.back();
                 },
                 text: Constants.locale.useDifferentEmail.tr,
