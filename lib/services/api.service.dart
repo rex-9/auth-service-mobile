@@ -30,6 +30,16 @@ class ApiService extends GetConnect {
       request.headers['Accept'] = 'application/json';
       request.headers['Content-Type'] = 'application/json';
       request.headers['X-Platform'] = 'mobile';
+      String apiLocale = 'en';
+      if (Get.isRegistered<SettingsController>()) {
+        final code = Get.find<SettingsController>().localeCode.value;
+        apiLocale = code.split('_').first.toLowerCase();
+      } else if (Get.isRegistered<StorageService>()) {
+        final code = Get.find<StorageService>().getLocaleCode() ?? 'en_US';
+        apiLocale = code.split('_').first.toLowerCase();
+      }
+      request.headers['X-Locale'] = apiLocale;
+      request.headers['Accept-Language'] = apiLocale;
       String token = '';
       if (Get.isRegistered<AuthController>()) {
         token = Get.find<AuthController>().authToken.value;
