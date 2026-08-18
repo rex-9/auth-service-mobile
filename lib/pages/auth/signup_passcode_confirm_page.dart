@@ -1,9 +1,9 @@
 // lib/pages/auth/signup_passcode_confirm_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:auth_service_mobile/constants/constants.dart';
-import 'package:auth_service_mobile/controllers/controllers.dart';
-import 'package:auth_service_mobile/design/design.dart';
+import 'package:rexone_mobile/constants/constants.dart';
+import 'package:rexone_mobile/controllers/controllers.dart';
+import 'package:rexone_mobile/design/design.dart';
 
 class SignUpPasscodeConfirmPage extends GetView<AuthController> {
   const SignUpPasscodeConfirmPage({super.key});

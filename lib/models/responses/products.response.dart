@@ -1,4 +1,4 @@
-import 'package:auth_service_mobile/models/product.model.dart';
+import 'package:rexone_mobile/models/product.model.dart';
 
 class ProductsResponse {
   final List<ProductModel> products;

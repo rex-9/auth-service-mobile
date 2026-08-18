@@ -1,9 +1,9 @@
 // lib/pages/auth/signup_info_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:auth_service_mobile/constants/constants.dart';
-import 'package:auth_service_mobile/controllers/controllers.dart';
-import 'package:auth_service_mobile/design/design.dart';
+import 'package:rexone_mobile/constants/constants.dart';
+import 'package:rexone_mobile/controllers/controllers.dart';
+import 'package:rexone_mobile/design/design.dart';
 
 class SignUpInfoPage extends GetView<AuthController> {
   const SignUpInfoPage({super.key});

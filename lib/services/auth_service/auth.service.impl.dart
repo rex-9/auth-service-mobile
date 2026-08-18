@@ -1,8 +1,8 @@
 // lib/services/auth_service_impl.dart
 import 'package:get/get.dart';
-import 'package:auth_service_mobile/models/models.dart';
-import 'package:auth_service_mobile/routes/routes.dart';
-import 'package:auth_service_mobile/services/services.dart';
+import 'package:rexone_mobile/models/models.dart';
+import 'package:rexone_mobile/routes/routes.dart';
+import 'package:rexone_mobile/services/services.dart';
 
 class AuthServiceImpl extends GetxService implements AuthService {
   final ApiService _api = Get.find();

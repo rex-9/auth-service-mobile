@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:auth_service_mobile/constants/constants.dart';
-import 'package:auth_service_mobile/design/design.dart';
+import 'package:rexone_mobile/constants/constants.dart';
+import 'package:rexone_mobile/design/design.dart';
 
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage({super.key});

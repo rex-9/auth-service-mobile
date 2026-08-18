@@ -33,7 +33,11 @@ lib/design/
 #### 1. Import the Design System
 
 ```dart
-import 'package:auth_service_mobile/design/design.dart';
+<<<<<<< HEAD
+import 'package:rexone_mobile/design/design.dart';
+=======
+import 'package:rexone_mobile/design/design.dart';
+>>>>>>> de496840e524cecaf3e7f266390dfcbe4416d943
 ```
 
 #### 2. Theme-Aware Colors & Typography (Use `context.colors` & `context.typo`)

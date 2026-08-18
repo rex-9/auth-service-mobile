@@ -1,7 +1,7 @@
 // lib/config/app_config.dart
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:auth_service_mobile/constants/constants.dart';
+import 'package:rexone_mobile/constants/constants.dart';
 
 class AppConfig {
   const AppConfig();

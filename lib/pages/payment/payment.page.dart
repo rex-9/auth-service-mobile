@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:auth_service_mobile/constants/constants.dart';
-import 'package:auth_service_mobile/controllers/controllers.dart';
-import 'package:auth_service_mobile/design/design.dart';
-import 'package:auth_service_mobile/pages/payment/components/plan_card.dart';
+import 'package:rexone_mobile/constants/constants.dart';
+import 'package:rexone_mobile/controllers/controllers.dart';
+import 'package:rexone_mobile/design/design.dart';
+import 'package:rexone_mobile/pages/payment/components/plan_card.dart';
 
 class PaymentPage extends GetView<PaymentController> {
   const PaymentPage({super.key});

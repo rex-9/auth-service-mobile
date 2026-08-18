@@ -1,168 +1,199 @@
-# Auth Service Mobile
+<a name="readme-top"></a>
 
-A production-grade Flutter mobile application with enterprise-level architecture, multi-platform support, and comprehensive feature set. Built with clean GetX architecture, atomic design system, and seamless backend integration.
+<div align="center">
+  <h3><b>Rexone Mobile</b></h3>
+</div>
 
----
+<!-- TABLE OF CONTENTS -->
 
-## 🎯 Overview
+# 📗 Table of Contents
 
-**Auth Service Mobile** is the mobile companion to the Meritbox ecosystem, delivering a secure, responsive, and feature-rich authentication experience. Built with scalability and maintainability in mind, it serves as a reference implementation for modern Flutter applications with complex authentication flows, real-time updates, and robust error handling.
+- [📗 Table of Contents](#-table-of-contents)
+- [📖 Rexone Mobile](#-rexone-mobile)
+  - [🚀 Featuring!](#-featuring)
+    - [🌟 Modern Tech Stack](#-modern-tech-stack)
+    - [🏗️ Architecture \& Design](#️-architecture--design)
+    - [🎨 Design System](#-design-system)
+    - [🌍 Localization](#-localization)
+    - [🔐 Authentication \& Security](#-authentication--security)
+    - [⚙️ Configuration \& Environment Management](#️-configuration--environment-management)
+  - [🛠 Built With](#-built-with)
+    - [Tech Stack](#tech-stack)
+  - [💻 Getting Started](#-getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Setup](#setup)
+    - [Environment Variables](#environment-variables)
+    - [Google Sign-In Configuration](#google-sign-in-configuration)
+      - [Android](#android)
+      - [iOS](#ios)
+    - [Run](#run)
+  - [📁 Project Structure](#-project-structure)
+  - [📂 Configuration \& Constants](#-configuration--constants)
+    - [Config](#config)
+    - [Constants](#constants)
+    - [HTTP Status Codes](#http-status-codes)
+    - [Routes](#routes)
+  - [🧪 Testing](#-testing)
+  - [� Analytics Implementation](#-analytics-implementation)
+    - [Android APK](#android-apk)
+    - [Android App Bundle](#android-app-bundle)
+    - [iOS](#ios-1)
+    - [Web](#web)
+  - [📦 Dependencies](#-dependencies)
+- [☕ Support](#-support)
+  - [👤 Author](#-author)
 
----
+# 📖 Rexone Mobile
 
-## 🚀 Core Capabilities
+**Rexone Mobile** is a Flutter mobile foundation for the Rexone platform, providing a scalable and maintainable architecture for authenticated mobile applications.
 
-### 🏗️ Architecture & Design Patterns
+The project provides a clean **GetX-based MVC architecture**, centralized dependency injection, a reusable design system, environment-based configuration, multi-language support, and secure authentication workflows.
 
-- **GetX MVC Pattern**: Clean separation of concerns with reactive state management
-- **Interface + Implementation**: Service abstraction for easy testing and swapping
-- **Dependency Injection**: Centralized binding with GetX's built-in DI
-- **Repository Pattern**: Data layer abstraction for API and local storage
-- **Route Guard System**: Protected routes with automatic redirection
-- **Singleton Services**: Efficient resource management
+It is designed to work as part of the **Rexone ecosystem**, sharing a common backend foundation with Rexone Web while maintaining a platform-specific mobile experience.
 
-### 🔐 Advanced Authentication System
+**Related Repositories:**
 
-- **Dual-Factor Authentication**: Email + 6-digit passcode with intelligent validation
-- **Smart User Detection**: Automatic recognition of existing vs. new users
-- **Google OAuth Integration**: Seamless social authentication with platform-specific configuration
-- **Session Management**: Single active session enforcement with `X-Platform: mobile` header
-- **Adaptive Security**: Passcode attempt tracking with progressive cooldown (30s → 60s → 120s)
-- **Self-Service Account Recovery**: Forgot passcode with email reset-link and resend countdown
+- **Core API**: [Rexone Core](https://github.com/rex-9/rexone-core)
+- **Web Application**: [Rexone Web](https://github.com/rex-9/rexone-web)
 
-### 🎨 Enterprise-Grade Design System
+## 🚀 Featuring!
 
-- **Atomic Design Architecture**:
-  - **Atoms**: Design tokens (colors, typography, spacing)
-  - **Molecules**: Component combinations (form groups, cards)
-  - **Organisms**: Complex components (auth forms, headers)
-  - **Templates**: Page layouts with consistent structure
-- **Theme-Aware Components**: Automatic light/dark mode adaptation
-- **Responsive Everywhere**: ScreenUtil-powered adaptive layouts for all device sizes
-- **Consistent Design Language**: Single source of truth for all UI elements
+### 🌟 Modern Tech Stack
 
-### 📊 Analytics & Intelligence
+- **Flutter**: Cross-platform mobile application development.
+- **Dart**: Strongly typed and modern application development.
+- **GetX**: State management, navigation, and dependency injection.
+- **GetStorage**: Lightweight persistent local storage.
+- **Flutter ScreenUtil**: Responsive UI scaling across different screen sizes.
+- **Flutter Dotenv**: Environment-specific application configuration.
 
-- **Google Analytics 4 Integration**: Full GA4 implementation for comprehensive insights
-- **User Behavior Tracking**: Screen views, navigation flows, and interaction events
-- **Funnel Analysis**: Track user journey through authentication flows
-- **Conversion Metrics**: Measure success rates and drop-off points
-- **Geographic Insights**: Location-based user distribution and demographics
-- **Engagement Scoring**: Real-time user engagement metrics
-- **Custom Event Tracking**: Business-specific analytics events
-- **Crash Reporting**: Optional Firebase Crashlytics integration
+### 🏗️ Architecture & Design
 
-### 🌍 Internationalization
+- **GetX MVC Architecture**: Clear separation between Pages, Controllers, Services, and Models.
+- **Controller Layer**: Handles application and business logic while coordinating UI state.
+- **Service Layer**: Encapsulates API communication and application services.
+- **Interface + Implementation Pattern**: Services can be defined through abstractions and implemented independently.
+- **Model Layer**: Strongly typed application and API data models.
+- **Centralized Dependency Injection**: Application dependencies are registered through GetX bindings.
+- **Route Guards**: Authentication-aware navigation and protected application flows.
+- **Separation of Concerns**: Keeps presentation, business logic, networking, configuration, and persistence independently maintainable.
 
-- **Multi-Language Support**: English, Español, Myanmar (မြန်မာ) with more to come
-- **Persisted User Preferences**: Language selection survives app restarts
-- **RTL/LTR Support**: Ready for bidirectional language support
-- **Localization-First**: All UI text sourced from centralized translations
+### 🎨 Design System
 
-### 🛡️ Security Features
+The application includes a centralized design system under `lib/design/`.
 
-- **JWT Token Management**: Secure storage and automatic refresh
-- **Credential Encryption**: GetStorage for secure local data persistence
-- **Input Validation**: Client-side validation with immediate feedback
-- **Platform-Specific Configuration**: Separate client IDs for Android, iOS, Web
-- **Rate Limiting**: Built-in cooldown for failed authentication attempts
-- **Session Isolation**: One active session per platform
+- **Reusable Components**: Shared UI components for consistent application experiences.
+- **Design Elements**: Centralized design tokens and visual constants.
+- **Theme Extensions**: Theme-aware reusable styling and component behavior.
+- **Material Design 3**: Modern Material-based application interface.
+- **Light & Dark Themes**: Theme switching with persisted user preferences.
+- **Single Design Entry Point**: Shared design functionality can be accessed through `design.dart`.
 
-### 📱 Platform Support
+> **Important:** When building new UI, use the existing design system instead of creating one-off components whenever possible.
 
-- **Cross-Platform**: iOS, Android, and Web support
-- **Native Features**: Full camera, biometric, and push notification support
-- **Platform-Specific UI**: Native-looking components for each platform
-- **Responsive Web**: Desktop and mobile-optimized web experience
+### 🌍 Localization
 
-### 🚦 State Management
+Rexone Mobile supports a multi-language application experience.
 
-- **Reactive Programming**: GetX's reactive state management
-- **Controller-Based Logic**: All business logic in GetX controllers
-- **Async/Await Patterns**: Clean asynchronous code with error handling
-- **Debounced Inputs**: Reduced API calls with input debouncing
-- **Optimistic Updates**: Immediate UI feedback for better UX
+Currently supported languages include:
 
----
+- 🇬🇧 **English**
+- 🇪🇸 **Español**
+- 🇲🇲 **မြန်မာ**
 
-## 📁 Architecture Deep Dive
+Localization is centralized under `lib/locales/`, with language and locale-related constants maintained under `lib/constants/`.
 
-### Project Structure (Clean Architecture)
+User language preferences are persisted locally.
 
-```
+### 🔐 Authentication & Security
 
-lib/
-├── design/ # 🎨 Atomic Design System (Single Source of Truth)
-│ ├── atoms/ # Design tokens: colors, typography, spacing
-│ ├── molecules/ # Component combinations: form fields, cards
-│ ├── organisms/ # Complex components: auth forms, headers
-│ └── tokens/ # Design system values
-├── services/ # 🔌 Service Layer (Interfaces + Implementations)
-│ ├── auth_service.dart # Interface definition
-│ ├── auth_service_impl.dart # Implementation
-│ ├── api_service.dart # HTTP client with interceptors
-│ └── storage_service.dart # Local storage abstraction
-├── controllers/ # 🧠 Business Logic (GetX Controllers)
-│ ├── auth_controller.dart # Authentication logic
-│ └── settings_controller.dart # Theme/locale management
-├── bindings/ # 🔗 Dependency Injection
-│ └── initial_binding.dart # Service registration
-├── routes/ # 🗺️ Navigation + Route Guards
-├── pages/ # 📱 UI Screens (Templates)
-├── models/ # 📊 Data Models with serialization
-├── helpers/ # 🔧 Utility Functions
-├── config/ # ⚙️ App Configuration
-├── constants/ # 📌 App Constants (No Magic Numbers)
-└── locales/ # 🌍 Internationalization
+- **Email Authentication**: Email-based authentication with a 6-digit passcode.
+- **Google Sign-In**: OAuth-based authentication through Google.
+- **Smart User Detection**: Determines whether a user already exists before authentication.
+- **JWT Authentication**: Token-based authentication through the Rexone Core API.
+- **Secure Local Storage**: Authentication and application state can be persisted locally using GetStorage.
+- **Passcode Validation**: Six-digit passcode validation and authentication flow.
+- **Attempt Limiting**: Failed passcode attempts use escalating cooldown periods.
+- **Session Control**: Platform-aware authentication using `X-Platform: mobile`.
+- **Password Recovery**: Forgot-passcode workflow with reset-link email support.
+- **Resend Protection**: Countdown-based protection for reset-link requests.
+- **Protected Navigation**: Route guards prevent unauthorized access to protected application areas.
 
-```
+### ⚙️ Configuration & Environment Management
 
-### Design System Structure
+Rexone Mobile supports environment-specific configuration.
 
-```
+Environment configuration can be separated into:
 
-design/
-├── tokens/
-│ ├── colors.dart # Light/Dark theme colors
-│ ├── typography.dart # Text styles
-│ ├── spacing.dart # Sizing & spacing tokens
-│ └── shadows.dart # Elevation tokens
-├── atoms/
-│ ├── app_text.dart # Typography components
-│ ├── app_button.dart # Button variants
-│ └── app_icon.dart # Icon system
-├── molecules/
-│ ├── app_card.dart # Card components
-│ ├── app_form.dart # Form components
-│ └── app_input.dart # Input fields
-├── organisms/
-│ ├── auth_form.dart # Authentication form
-│ └── header.dart # Page headers
-└── templates/
-├── auth_template.dart # Authentication layout
-└── settings_template.dart # Settings layout
+- `.env.dev`
+- `.env.uat`
+- `.env.prod`
 
-```
+Configuration values such as API endpoints, application metadata, and Google authentication credentials are loaded through the application's configuration layer.
 
----
+This allows the same application codebase to be used across development, UAT, and production environments without hardcoding environment-specific values.
 
-## 🚦 Getting Started
+## 🛠 Built With
+
+### Tech Stack
+
+| Technology             | Purpose                                                |
+| ---------------------- | ------------------------------------------------------ |
+| **Flutter**            | Cross-platform mobile application framework            |
+| **Dart**               | Application programming language                       |
+| **GetX**               | State management, navigation, and dependency injection |
+| **GetStorage**         | Local persistent storage                               |
+| **Google Sign-In**     | Google authentication                                  |
+| **Pin Code Fields**    | Six-digit passcode input                               |
+| **Flutter ScreenUtil** | Responsive screen scaling                              |
+| **Flutter Dotenv**     | Environment configuration                              |
+| **Package Info Plus**  | Application version information                        |
+| **Rexone Core API**    | Backend API and application services                   |
+
+## 💻 Getting Started
+
+To get a local copy up and running, follow these steps.
 
 ### Prerequisites
 
-- Flutter SDK >=3.0.0
-- Dart >=3.0.0
-- iOS Simulator / Android Emulator
-- Firebase Account (for analytics)
+In order to run this project you need:
 
-### Installation
+- Flutter SDK >= 3.0.0
+- Dart SDK >= 3.0.0
+- Android Studio or VS Code
+- Android Emulator or physical Android device
+- iOS Simulator or physical iOS device for iOS development
+- CocoaPods for iOS development
 
-```bash
-# Clone the repository
-git clone https://github.com/rex-9/auth_service_mobile.git
-cd auth_service_mobile
+Check your Flutter installation:
 
-# Install dependencies
+```sh
+  flutter --version
+```
+
+Check the available development environments:
+
+```sh
+  flutter doctor
+```
+
+### Setup
+
+Clone this repository:
+
+```sh
+  git clone git@github.com:rex-9/rexone-mobile.git
+```
+
+Enter the project directory:
+
+```sh
+  cd rexone-mobile
+```
+
+Install Flutter dependencies:
+
+```sh
 flutter pub get
 
 # Configure Firebase (for analytics)
@@ -172,17 +203,28 @@ flutter pub get
 flutter run
 ```
 
-### Environment Configuration
+### Environment Variables
+
+Create the required environment files in the project root.
+
+For development:
 
 ```env
-# .env.dev
-APP_NAME=Auth Service
+APP_NAME=Rexone
 APP_VERSION=1.0.0
 GOOGLE_SERVER_CLIENT_ID=your_client_id.apps.googleusercontent.com
 API_BASE_URL=http://10.0.2.2:3000
 ```
 
-Add to `pubspec.yaml`:
+The application supports environment-specific files such as:
+
+```text
+.env.dev
+.env.uat
+.env.prod
+```
+
+Add the environment files to `pubspec.yaml`:
 
 ```yaml
 flutter:
@@ -192,170 +234,278 @@ flutter:
     - .env.prod
 ```
 
-4. **Configure Google Sign-In**
+> Do not commit secrets, private credentials, or sensitive production configuration to the repository.
+
+### Google Sign-In Configuration
 
 #### Android
 
-- Add `google-services.json` to `android/app/`
-- Configure SHA-1 and SHA-256 fingerprints
+Add the Google services configuration file:
+
+```text
+android/app/google-services.json
+```
+
+Configure the required:
+
+- SHA-1 fingerprint
+- SHA-256 fingerprint
+- Google OAuth client configuration
 
 #### iOS
 
-- Add `GoogleService-Info.plist` to `ios/Runner/`
-- Configure URL schemes in `Info.plist`
+Add the Google services configuration file:
 
-### Build Commands
-
-```bash
-# Development
-flutter run --dart-define=APP_ENV=.env.dev
-
-# Testing
-flutter test
-
-# Production Build
-flutter build apk --release     # Android
-flutter build ios --release     # iOS
-flutter build web --release     # Web
+```text
+ios/Runner/GoogleService-Info.plist
 ```
 
----
+Configure the required URL schemes in:
+
+```text
+ios/Runner/Info.plist
+```
+
+### Run
+
+Run the application using the development environment:
+
+````sh
+flutter run --dart-define=APP_ENV=.env.dev
+
+For UAT:
+
+```sh
+flutter run --dart-define=APP_ENV=.env.uat
+````
+
+For production:
+
+```sh
+flutter run --dart-define=APP_ENV=.env.prod
+```
+
+The configured `API_BASE_URL` determines which Rexone Core environment the application communicates with.
+
+## 📁 Project Structure
+
+```text
+lib/
+├── bindings/             # Dependency injection
+│   └── initial_binding.dart
+├── config/               # Application configuration
+│   ├── app_config.dart
+│   └── config.dart
+├── constants/            # Application constants and keys
+│   ├── app_constants.dart
+│   ├── http_status.dart
+│   └── locale_constants.dart
+├── controllers/          # GetX controllers and business logic
+│   ├── auth_controller.dart
+│   └── settings_controller.dart
+├── design/               # 🎨 Centralized design system
+│   ├── components/       # Reusable UI components
+│   ├── elements/         # Design tokens
+│   ├── extensions/       # Theme-aware extensions
+│   └── design.dart       # Single design-system entry point
+├── helpers/              # Utility helpers
+│   └── flag_helper.dart
+├── locales/              # Internationalization
+│   └── app_translations.dart
+├── models/               # Application and API models
+│   ├── api_response.dart
+│   └── user_model.dart
+├── pages/                # Application screens
+│   ├── auth_page.dart
+│   ├── home_page.dart
+│   ├── settings_page.dart
+│   └── splash_page.dart
+├── routes/               # Navigation and route configuration
+│   ├── app_routes.dart
+│   ├── route_guard.dart
+│   └── server_routes.dart
+└── services/             # API and application services
+    ├── api_service.dart
+    ├── auth_service.dart
+    ├── auth_service_impl.dart
+    └── storage_service.dart
+```
+
+## 📂 Configuration & Constants
+
+### Config
+
+Application configuration is centralized under:
+
+```text
+lib/config/
+```
+
+Example:
+
+```dart
+import 'package:rexone_mobile/config/config.dart';
+
+// Application configuration
+AppConfig().googleServerClientIdKey
+AppConfig().apiBaseUrl
+```
+
+This keeps environment-specific values away from application logic.
+
+### Constants
+
+Application constants are centralized under:
+
+```text
+lib/constants/
+```
+
+Example:
+
+```dart
+import 'package:rexone_mobile/constants/constants.dart';
+
+// Application constants
+Constants.app.name
+Constants.app.version
+
+// Locale keys
+Constants.locale.welcomeTitle
+Constants.locale.signIn
+Constants.locale.error
+```
+
+### HTTP Status Codes
+
+HTTP status codes are centralized to avoid magic numbers:
+
+```dart
+if (response.statusCode == HttpStatus.unauthorized) {
+  // Handle unauthorized
+}
+```
+
+Status helpers can be used when appropriate:
+
+```dart
+if (HttpStatusMap.isSuccess(response.statusCode)) {
+  // Success!
+}
+```
+
+Common status constants include:
+
+```dart
+HttpStatus.ok                 // 200
+HttpStatus.unauthorized       // 401
+HttpStatus.tooManyRequests    // 429
+```
+
+### Routes
+
+Application navigation and server endpoints are centralized under:
+
+```text
+lib/routes/
+```
+
+Application navigation:
+
+```dart
+import 'package:rexone_mobile/routes/routes.dart';
+
+AppRoutes.toHome();
+AppRoutes.toSettings();
+AppRoutes.toAuth();
+```
+
+Server endpoints:
+
+```dart
+ServerRoutes.baseUrl
+ServerRoutes.peekUser
+ServerRoutes.signIn
+```
+
+Keeping routes centralized prevents hardcoded navigation paths and API endpoints from spreading throughout the application.
+
+## 🧪 Testing
+
+Run unit and widget tests:
+
+```sh
+flutter test
+```
+
+Run integration tests:
+
+```sh
+flutter test integration_test/
+```
+
+Before creating a production build, ensure the complete test suite passes successfully.
 
 ## 📊 Analytics Implementation
 
-### Screen Tracking
+### Android APK
 
-- Automatic screen view tracking with GA4
-- Custom screen naming for better analysis
-- Session duration tracking
-
-### Event Tracking
-
-```dart
-// Auth events
-analytics.logAuthStart(method: 'email');
-analytics.logAuthComplete(method: 'email', success: true);
-analytics.logAuthFailed(method: 'email', error: 'Invalid passcode');
-
-// User events
-analytics.logUserRegistration(userType: 'new');
-analytics.logUserLogin(userType: 'existing');
-
-// Engagement events
-analytics.logScreenView(screenName: 'home');
-analytics.logButtonClick(buttonName: 'sign_in');
+```sh
+flutter build apk --release
 ```
 
----
+### Android App Bundle
 
-## 🔐 Security Features in Detail
+```sh
+flutter build appbundle --release
+```
 
-### Passcode Attempt Management
+### iOS
 
-- Track consecutive failed attempts per user
-- Progressive cooldown: 30s → 60s → 120s
-- Reset success counter after successful login
-- Persistent storage across app sessions
+```sh
+flutter build ios --release
+```
 
----
+### Web
 
-## 🏆 Key Achievements
+```sh
+flutter build web --release
+```
 
-1. **Atomic Design System**: Enterprise-grade UI consistency across all screens
-2. **Multi-Platform Support**: Single codebase for iOS, Android, and Web
-3. **Analytics-Ready**: Full Google Analytics 4 implementation with custom events
-4. **Security-First Architecture**: JWT, session management, rate limiting, cooldowns
-5. **Internationalization Ready**: 3+ languages with RTL support
-6. **State Management Excellence**: GetX pattern with reactive programming
-7. **Design Pattern Mastery**: Interface segregation, dependency injection, repository pattern
-8. **Performance Optimized**: Debounced inputs, optimistic updates, lazy loading
-9. **Error Handling**: Comprehensive error handling with user-friendly messages
-10. **Developer Experience**: Clean code, consistent naming, thorough documentation
+> Production builds should use the appropriate production environment configuration and credentials.
 
----
+## 📦 Dependencies
 
-## 🛠️ Technology Stack
+| Package              | Purpose                                                |
+| -------------------- | ------------------------------------------------------ |
+| `get`                | State management, navigation, and dependency injection |
+| `get_storage`        | Persistent local storage                               |
+| `google_sign_in`     | Google authentication                                  |
+| `pin_code_fields`    | Six-digit passcode input                               |
+| `flutter_screenutil` | Responsive UI scaling                                  |
+| `package_info_plus`  | Application version information                        |
+| `flutter_dotenv`     | Environment-specific configuration                     |
 
-### Core
+# ☕ Support
 
-- **Flutter**: UI framework
-- **Dart**: Programming language
-- **GetX**: State management, navigation, DI
-- **GetStorage**: Local persistence
+If you like this project, please consider giving it a star on GitHub and buying me a coffee to support its development: 🌟
 
-### Authentication
+[![GitHub Stars](https://img.shields.io/github/stars/rex-9/rexone-mobile.svg?style=social&label=Star)](https://github.com/rex-9/rexone-mobile)
 
-- **google_sign_in**: Google OAuth
-- **JWT**: Token management
+<!-- <div align="center">
+  <a href="https://buymeacoffee.com/rex9" target="_blank">
+    <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 60px !important;width: 217px !important;" >
+  </a>
+</div> -->
 
-### Analytics
-
-- **Firebase Core**: Firebase services
-- **Firebase Analytics**: Google Analytics 4
-- **Firebase Crashlytics**: Crash reporting (optional)
-
-### UI/UX
-
-- **pin_code_fields**: OTP/passcode input
-- **flutter_screenutil**: Responsive design
-- **Material Design 3**: Modern UI
-
-### Utilities
-
-- **package_info_plus**: App version info
-- **flutter_dotenv**: Environment variables
-
----
-
-## 🔗 Related Repositories
-
-- **Backend API**: [Meritbox API](https://github.com/rex-9/auth-service-api) - Rails backend with all integrated services
-- **Web Frontend**: [Meritbox Web](https://github.com/rex-9/auth-service-web) - React + TypeScript web app
-- **Mobile App**: [Auth Service Mobile](https://github.com/rex-9/auth_service_mobile) - You are here! 🎯
-
----
-
-## 🤝 Contributing
-
-This is a personal project, but feedback and suggestions are welcome! Feel free to open issues or submit PRs.
-
----
-
-## 📄 License
-
-This project is proprietary and confidential. All rights reserved.
-
----
-
-## 🙏 Acknowledgments
-
-- Flutter & Dart teams for the amazing framework
-- GetX team for excellent state management solution
-- Firebase team for analytics and infrastructure
-
----
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## 👤 Author
 
 **Rex (Rex9)**
 
-- 🌐 GitHub: [@rex-9](https://github.com/rex-9)
-- 📱 Portfolio: [rex9.vercel.app](https://rex9.vercel.app)
-- 💼 LinkedIn: [rex9](https://www.linkedin.com/in/rex9/)
+- GitHub: [@rex-9](https://github.com/rex-9)
+- Portfolio: [rex9.vercel.app](https://rex9.vercel.app)
+- Linkedin: [rex9](https://www.linkedin.com/in/rex9/)
 
----
-
-**Built with ❤️ by Rex9 | A showcase of enterprise Flutter development**
-
----
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Flutter-3.0+-blue.svg" alt="Flutter Version">
-  <img src="https://img.shields.io/badge/Dart-3.0+-blue.svg" alt="Dart Version">
-  <img src="https://img.shields.io/badge/Architecture-Clean-ff69b4.svg" alt="Architecture">
-  <img src="https://img.shields.io/badge/Design-Atomic-00b894.svg" alt="Design System">
-  <img src="https://img.shields.io/badge/Analytics-GA4-ff6b6b.svg" alt="Analytics">
-  <img src="https://img.shields.io/badge/Security-Enterprise-6c5ce7.svg" alt="Security">
-</p>
-
-<p align="right">(<a href="#top">back to top</a>)</p>
+_Built with ❤️ by Rex9_

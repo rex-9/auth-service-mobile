@@ -1,12 +1,12 @@
 // lib/pages/settings_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:auth_service_mobile/config/config.dart';
-import 'package:auth_service_mobile/constants/constants.dart';
-import 'package:auth_service_mobile/controllers/controllers.dart';
-import 'package:auth_service_mobile/design/design.dart';
-import 'package:auth_service_mobile/helpers/helpers.dart';
-import 'package:auth_service_mobile/routes/routes.dart';
+import 'package:rexone_mobile/config/config.dart';
+import 'package:rexone_mobile/constants/constants.dart';
+import 'package:rexone_mobile/controllers/controllers.dart';
+import 'package:rexone_mobile/design/design.dart';
+import 'package:rexone_mobile/helpers/helpers.dart';
+import 'package:rexone_mobile/routes/app_routes.dart';
 
 class SettingsPage extends GetView<SettingsController> {
   const SettingsPage({super.key});

@@ -1,6 +1,6 @@
 // lib/services/auth_service.dart
 import 'package:get/get.dart';
-import 'package:auth_service_mobile/models/models.dart';
+import 'package:rexone_mobile/models/models.dart';
 
 /// Abstract interface for Auth Service
 /// Allows swapping implementations (e.g., for testing)

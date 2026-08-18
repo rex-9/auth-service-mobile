@@ -1,5 +1,5 @@
 // lib/routes/server_routes.dart
-import 'package:auth_service_mobile/config/config.dart';
+import 'package:rexone_mobile/config/config.dart';
 
 class ServerRoutes {
   // Base URL - Change for production

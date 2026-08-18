@@ -2,7 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:auth_service_mobile/constants/constants.dart';
+import 'package:rexone_mobile/constants/constants.dart';
 import '../design.dart';
 
 class AppDialog {

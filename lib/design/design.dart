@@ -1,8 +1,8 @@
 // Export Components and Extensions
-export 'package:auth_service_mobile/design/extensions/extensions.dart';
-export 'package:auth_service_mobile/design/components/components.dart';
+export 'package:rexone_mobile/design/extensions/extensions.dart';
+export 'package:rexone_mobile/design/components/components.dart';
 
-import 'package:auth_service_mobile/design/elements/elements.dart';
+import 'package:rexone_mobile/design/elements/elements.dart';
 
 class Design {
   Design._();

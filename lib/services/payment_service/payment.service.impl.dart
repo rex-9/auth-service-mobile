@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
-import 'package:auth_service_mobile/models/models.dart';
-import 'package:auth_service_mobile/routes/routes.dart';
-import 'package:auth_service_mobile/services/services.dart';
+import 'package:rexone_mobile/models/models.dart';
+import 'package:rexone_mobile/routes/routes.dart';
+import 'package:rexone_mobile/services/services.dart';
 
 class PaymentServiceImpl extends PaymentService {
   final ApiService _api = Get.find();
@@ -19,10 +19,9 @@ class PaymentServiceImpl extends PaymentService {
   Future<ApiResponse<CheckoutSessionResponse>> createCheckoutSession(
     String productId,
   ) async {
-    final response = await _api.post(
-      ServerRoutes.createCheckoutSession,
-      {'product_id': productId},
-    );
+    final response = await _api.post(ServerRoutes.createCheckoutSession, {
+      'product_id': productId,
+    });
     return _api.parseResponse<CheckoutSessionResponse>(
       response,
       (data) => CheckoutSessionResponse.fromJson(data),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:auth_service_mobile/design/design.dart';
+import 'package:rexone_mobile/design/design.dart';
 
 class PlanCard extends StatelessWidget {
   const PlanCard({
@@ -45,12 +45,7 @@ class PlanCard extends StatelessWidget {
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: Text(
-                        name,
-                        style: context.typo.headline4,
-                      ),
-                    ),
+                    Expanded(child: Text(name, style: context.typo.headline4)),
                     if (isSelected)
                       Icon(
                         Design.icons.check,

@@ -1,11 +1,11 @@
 // lib/services/api_service.dart
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
-import 'package:auth_service_mobile/constants/constants.dart';
-import 'package:auth_service_mobile/controllers/controllers.dart';
-import 'package:auth_service_mobile/design/design.dart';
-import 'package:auth_service_mobile/routes/routes.dart';
-import 'package:auth_service_mobile/models/responses/api.response.dart';
+import 'package:rexone_mobile/constants/constants.dart';
+import 'package:rexone_mobile/controllers/controllers.dart';
+import 'package:rexone_mobile/design/design.dart';
+import 'package:rexone_mobile/routes/routes.dart';
+import 'package:rexone_mobile/models/responses/api.response.dart';
 
 class ApiService extends GetConnect {
   static const String sessionReplacedError = 'Active session not found';
@@ -160,7 +160,6 @@ class ApiService extends GetConnect {
     final status = body['status'] as Map<String, dynamic>? ?? {};
     final statusCode = status['code'] as int? ?? response.statusCode ?? 500;
     final data = body['data'] as Map<String, dynamic>?;
-
 
     if (response.hasError || !(status['success'] as bool? ?? false)) {
       // Optional: Log API errors to analytics

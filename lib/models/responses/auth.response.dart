@@ -1,4 +1,4 @@
-import 'package:auth_service_mobile/models/user.model.dart';
+import 'package:rexone_mobile/models/user.model.dart';
 
 class AuthResponse {
   final UserModel user;

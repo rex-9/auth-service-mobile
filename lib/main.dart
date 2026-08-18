@@ -5,12 +5,12 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:auth_service_mobile/services/services.dart';
-import 'package:auth_service_mobile/config/config.dart';
-import 'package:auth_service_mobile/design/design.dart';
-import 'package:auth_service_mobile/routes/routes.dart';
-import 'package:auth_service_mobile/controllers/controllers.dart';
-import 'bindings/initial.binding.dart';
+import 'package:rexone_mobile/bindings/initial.binding.dart';
+import 'package:rexone_mobile/config/config.dart';
+import 'package:rexone_mobile/design/design.dart';
+import 'package:rexone_mobile/routes/routes.dart';
+import 'package:rexone_mobile/controllers/controllers.dart';
+import 'package:rexone_mobile/services/services.dart';
 import 'locales/app_translations.dart';
 
 void main() async {
