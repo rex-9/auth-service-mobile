@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rexone_mobile/constants/constants.dart';
+import 'package:rexone_mobile/locales/app_translations.dart';
 import '../design.dart';
 
 class AppDialog {
@@ -102,7 +103,105 @@ class AppDialog {
     );
   }
 
+  static Future<bool> confirm({
+    required BuildContext context,
+    required String title,
+    required String message,
+    String? confirmLabel,
+  }) async {
+    Get.addTranslations(AppTranslations().keys);
+    final label = confirmLabel ?? Constants.locale.confirmDelete.tr;
+    if (isIOS) {
+      final result = await Get.dialog<bool>(
+        CupertinoAlertDialog(
+          title: Text(title, style: context.typo.headline4),
+          content: Padding(
+            padding: EdgeInsets.only(top: Design.spacing.xs),
+            child: Text(message, style: context.typo.bodyMedium),
+          ),
+          actions: [
+            CupertinoDialogAction(
+              onPressed: () => Get.back(result: false),
+              isDefaultAction: true,
+              child: Text(Constants.locale.cancel.tr),
+            ),
+            CupertinoDialogAction(
+              onPressed: () => Get.back(result: true),
+              isDestructiveAction: true,
+              child: Text(label),
+            ),
+          ],
+        ),
+      );
+      return result ?? false;
+    }
+    final result = await Get.dialog<bool>(
+      AlertDialog(
+        backgroundColor: Get.theme.colorScheme.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Design.spacing.radiusLarge),
+        ),
+        title: Text(
+          title,
+          style: context.typo.headline4.copyWith(
+            color: Get.theme.colorScheme.onSurface,
+          ),
+        ),
+        content: Text(
+          message,
+          style: context.typo.bodyMedium.copyWith(
+            color: Get.theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+        actions: [
+          AppButton(
+            type: ButtonType.text,
+            onPressed: () => Get.back(result: false),
+            text: Constants.locale.cancel.tr,
+          ),
+          AppButton(
+            type: ButtonType.text,
+            onPressed: () => Get.back(result: true),
+            text: label,
+          ),
+        ],
+      ),
+    );
+    return result ?? false;
+  }
+
   static Future<bool> exit(BuildContext context) async {
+    Get.addTranslations(AppTranslations().keys);
+    if (isIOS) {
+      final result = await Get.dialog<bool>(
+        CupertinoAlertDialog(
+          title: Text(
+            Constants.locale.exitTitle.tr,
+            style: context.typo.headline4,
+          ),
+          content: Padding(
+            padding: EdgeInsets.only(top: Design.spacing.xs),
+            child: Text(
+              Constants.locale.exitConfirm.tr,
+              style: context.typo.bodyMedium,
+            ),
+          ),
+          actions: [
+            CupertinoDialogAction(
+              onPressed: () => Get.back(result: false),
+              isDefaultAction: true,
+              child: Text(Constants.locale.cancel.tr),
+            ),
+            CupertinoDialogAction(
+              onPressed: () => Get.back(result: true),
+              isDestructiveAction: true,
+              child: Text(Constants.locale.exit.tr),
+            ),
+          ],
+        ),
+      );
+      return result ?? false;
+    }
     final result = await Get.dialog<bool>(
       AlertDialog(
         backgroundColor: Get.theme.colorScheme.surface,

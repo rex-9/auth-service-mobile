@@ -17,9 +17,9 @@ class GoogleResponse {
   factory GoogleResponse.fromJson(Map<String, dynamic> json) => GoogleResponse(
     passwordRequired: json['password_required'] as bool? ?? false,
     challengeToken: json['challenge_token'] as String?,
-    user: json['user'] != null
-        ? UserModel.fromJson(json['user'] as Map<String, dynamic>)
+    user: json['user'] is Map
+        ? UserModel.fromJson(Map<String, dynamic>.from(json['user'] as Map))
         : null,
-    token: json['token'] as String?,
+    token: json['token']?.toString(),
   );
 }

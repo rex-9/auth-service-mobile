@@ -12,16 +12,35 @@ class RouteGuard extends GetMiddleware {
     final storage = Get.find<StorageService>();
     final isLoggedIn = authController.isLoggedIn.value;
 
-    // ===== PROTECTED ROUTES (saved/restored) =====
-    const protectedRoutes = [AppRoutes.home, AppRoutes.settings];
+    // ===== AUTH-PROTECTED ROUTES =====
+    // Requires a valid session. Unauthenticated users are sent to /auth.
+    // NOTE: checkout is intentionally excluded from stackTrackedRoutes below
+    //       — it is ephemeral and must not be restored after login.
+    const authRequiredRoutes = [
+      AppRoutes.home,
+      AppRoutes.settings,
+      AppRoutes.payment,
+      AppRoutes.checkout,
+      AppRoutes.ai,
+    ];
 
-    // If not logged in and trying to access protected route
-    if (route != null && protectedRoutes.contains(route) && !isLoggedIn) {
+    // ===== STACK-TRACKED ROUTES =====
+    // Their position in the navigation history is persisted and restored after login.
+    // Transient routes like /checkout must NOT be added here.
+    const stackTrackedRoutes = [
+      AppRoutes.home,
+      AppRoutes.settings,
+      AppRoutes.payment,
+      AppRoutes.ai,
+    ];
+
+    // Redirect unauthenticated access to auth
+    if (route != null && authRequiredRoutes.contains(route) && !isLoggedIn) {
       storage.clearRouteStack();
       return const RouteSettings(name: AppRoutes.auth);
     }
 
-    // If logged in and on auth page - restore last route
+    // If already logged in and landing on auth page — restore last tracked route
     if (route == AppRoutes.auth && isLoggedIn) {
       final stack = storage.getRouteStack();
       if (stack.isNotEmpty) {
@@ -30,34 +49,26 @@ class RouteGuard extends GetMiddleware {
       return const RouteSettings(name: AppRoutes.home);
     }
 
-    // Manage route stack for protected routes
-    if (route != null && protectedRoutes.contains(route) && isLoggedIn) {
+    // Maintain the navigation stack for tracked routes only
+    if (route != null && stackTrackedRoutes.contains(route) && isLoggedIn) {
       final stack = storage.getRouteStack();
 
-      // If going to home, clear stack and add home as root
       if (route == AppRoutes.home) {
+        // Home is always the stack root
         storage.saveRouteStack([AppRoutes.home]);
         return null;
       }
 
-      // For settings (or other protected routes)
-      // Ensure home is always the first item in stack
+      // Ensure home is always the base; move route to the top
       if (stack.isEmpty) {
-        // If stack is empty, add home first, then the route
         storage.saveRouteStack([AppRoutes.home, route]);
       } else if (stack.last != route) {
-        // If route is not already the last, add it
-        // But ensure we don't have duplicates
-        if (stack.contains(route)) {
-          // Remove existing occurrence
-          stack.remove(route);
-        }
+        if (stack.contains(route)) stack.remove(route);
         stack.add(route);
         storage.saveRouteStack(stack);
       }
     }
 
-    // Don't save public/flow routes
     return null;
   }
 }

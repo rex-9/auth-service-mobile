@@ -1,9 +1,14 @@
 // lib/routes/app_routes.dart
 import 'package:get/get.dart';
+import 'package:rexone_mobile/controllers/controllers.dart';
 import 'package:rexone_mobile/pages/pages.dart';
 import 'package:rexone_mobile/routes/route_guard.dart';
+import 'package:rexone_mobile/routes/server_routes.dart';
 
 class AppRoutes {
+  // ===== SERVER ROUTES =====
+  static const server = ServerRoutes;
+
   // ===== PUBLIC ROUTES (No Auth Required) =====
   static const String splash = '/splash';
   static const String auth = '/auth';
@@ -17,6 +22,9 @@ class AppRoutes {
   // ===== PROTECTED ROUTES (Auth Required) =====
   static const String home = '/home';
   static const String settings = '/settings';
+  static const String payment = '/payment';
+  static const String checkout = '/checkout';
+  static const String ai = '/ai';
 
   // ===== PUBLIC NAVIGATION =====
   static void toSplash() => Get.offAllNamed(splash);
@@ -48,6 +56,10 @@ class AppRoutes {
   // ===== PROTECTED NAVIGATION =====
   static void toHome() => Get.offAllNamed(home);
   static void toSettings() => Get.toNamed(settings);
+  static void toPayment() => Get.toNamed(payment);
+  static void toCheckout({required String url}) =>
+      Get.toNamed(checkout, arguments: {'url': url});
+  static void toAi() => Get.toNamed(ai);
 
   static final pages = [
     // Public Pages
@@ -75,6 +87,30 @@ class AppRoutes {
     GetPage(
       name: settings,
       page: () => const SettingsPage(),
+      middlewares: [RouteGuard()],
+    ),
+    GetPage(
+      name: payment,
+      page: () => const PaymentPage(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<PaymentController>(() => PaymentController());
+      }),
+      middlewares: [RouteGuard()],
+    ),
+    GetPage(
+      name: checkout,
+      page: () => const CheckoutWebViewPage(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<CheckoutController>(() => CheckoutController());
+      }),
+      middlewares: [RouteGuard()],
+    ),
+    GetPage(
+      name: ai,
+      page: () => const AiPage(),
+      binding: BindingsBuilder(() {
+        Get.lazyPut<AiController>(() => AiController());
+      }),
       middlewares: [RouteGuard()],
     ),
   ];

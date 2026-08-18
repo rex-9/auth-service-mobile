@@ -79,6 +79,10 @@
 							<string>com.googleusercontent.apps.690728597235-gn4u93uln936upb7ohrpq2q35v92eg3e</string>
 					</array>
 			</dict>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>https</string>
+		<string>http</string>
 	</array>
 </dict>
 </plist>

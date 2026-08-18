@@ -107,4 +107,14 @@ class LocaleConstants {
   String get exitConfirm => 'exit_confirm';
   String get exitTitle => 'exit_title';
   String get appInfo => 'app_info';
+
+  // Destructive confirm dialogs
+  String get confirmDelete => 'confirm_delete';
+  String get confirmClear => 'confirm_clear';
+  String get clearHistoryTitle => 'clear_history_title';
+  String get clearHistoryConfirmMsg => 'clear_history_confirm_msg';
+  String get deleteRoomTitle => 'delete_room_title';
+  String get deleteRoomConfirmMsg => 'delete_room_confirm_msg';
+  String get cancelSubTitle => 'cancel_sub_title';
+  String get cancelSubConfirmMsg => 'cancel_sub_confirm_msg';
 }

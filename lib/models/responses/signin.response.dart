@@ -17,10 +17,10 @@ class SignInResponse {
   });
 
   factory SignInResponse.fromJson(Map<String, dynamic> json) => SignInResponse(
-    user: json['user'] != null
-        ? UserModel.fromJson(json['user'] as Map<String, dynamic>)
+    user: json['user'] is Map
+        ? UserModel.fromJson(Map<String, dynamic>.from(json['user'] as Map))
         : null,
-    token: json['token'] as String?,
+    token: json['token']?.toString(),
     otpSent: json['otp_sent'] as bool? ?? false,
     remainingAttempts: json['remaining_attempts'] as int?,
     cooldownRemaining: json['cooldown_remaining'] as int?,

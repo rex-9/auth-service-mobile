@@ -74,7 +74,7 @@ class AppListTile extends StatelessWidget {
         subtitle: subtitle,
         trailing: trailing,
         onTap: onTap,
-        backgroundColor: backgroundColor ?? CupertinoColors.white,
+        backgroundColor: backgroundColor ?? Get.theme.colorScheme.surface,
         padding: contentPadding ?? EdgeInsets.zero,
       );
     }
