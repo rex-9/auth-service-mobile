@@ -7,3 +7,6 @@ export 'app_list_tile.dart';
 export 'app_toggle.dart';
 export 'app_loading.dart';
 export 'app_page.dart';
+export 'app_card.dart';
+export 'app_badge.dart';
+

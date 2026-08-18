@@ -1,6 +1,7 @@
 // lib/design/components/app_page.dart
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rexone_mobile/design/design.dart';
 import 'package:rexone_mobile/services/services.dart';
@@ -42,23 +43,89 @@ class AppPage extends StatelessWidget {
       onPopInvokedWithResult: (bool didPop, dynamic result) async {
         if (!didPop) _handleBackPressed(context);
       },
-      child: osScaffold(
-        backgroundColor: backgroundColor ?? context.colors.background,
-        appBar: _buildAppBar(context),
-        body: SafeArea(
-          child: Padding(
-            padding: padding ?? EdgeInsets.all(Design.spacing.screenPadding),
-            child: child,
-          ),
+      child: isIOS ? _buildCupertinoPage(context) : _buildMaterialPage(context),
+    );
+  }
+
+  Widget _buildCupertinoPage(BuildContext context) {
+    return CupertinoPageScaffold(
+      navigationBar: _buildCupertinoNavBar(context),
+      backgroundColor: backgroundColor ?? context.colors.background,
+      child: SafeArea(
+        child: Stack(
+          children: [
+            Padding(
+              padding: padding ?? EdgeInsets.all(Design.spacing.screenPadding),
+              child: child,
+            ),
+            if (bottomNavigationBar != null)
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: bottomNavigationBar!,
+              ),
+            if (floatingActionButton != null)
+              Positioned(bottom: 80, right: 20, child: floatingActionButton!),
+          ],
         ),
-        bottomNavigationBar: bottomNavigationBar,
-        floatingActionButton: floatingActionButton,
-        floatingActionButtonLocation: floatingActionButtonLocation,
       ),
     );
   }
 
-  PreferredSizeWidget _buildAppBar(BuildContext context) {
+  Widget _buildMaterialPage(BuildContext context) {
+    return Scaffold(
+      appBar: _buildAppBar(context),
+      backgroundColor: backgroundColor ?? context.colors.background,
+      body: SafeArea(
+        child: Padding(
+          padding: padding ?? EdgeInsets.all(Design.spacing.screenPadding),
+          child: child,
+        ),
+      ),
+      bottomNavigationBar: bottomNavigationBar,
+      floatingActionButton: floatingActionButton,
+      floatingActionButtonLocation: floatingActionButtonLocation,
+    );
+  }
+
+  ObstructingPreferredSizeWidget? _buildCupertinoNavBar(BuildContext context) {
+    if (title == null &&
+        !showBackButton &&
+        (actions == null || actions!.isEmpty)) {
+      return null;
+    }
+    return CupertinoNavigationBar(
+      backgroundColor: context.colors.surface.withValues(alpha: 0.9),
+      border: Border(
+        bottom: BorderSide(color: context.colors.divider, width: 0.5),
+      ),
+      leading: showBackButton
+          ? AppButton(
+              type: ButtonType.icon,
+              icon: Design.icons.backArrow,
+              onPressed: onBackPressed ?? () => _handleBackPressed(context),
+            )
+          : null,
+      middle: title != null
+          ? Text(title!, style: context.typo.headline4)
+          : null,
+      trailing: actions != null && actions!.isNotEmpty
+          ? Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: actions!,
+            )
+          : null,
+    );
+  }
+
+  PreferredSizeWidget? _buildAppBar(BuildContext context) {
+    if (title == null &&
+        !showBackButton &&
+        (actions == null || actions!.isEmpty)) {
+      return null;
+    }
     return AppBar(
       backgroundColor: context.colors.surface,
       foregroundColor: context.colors.textPrimary,
@@ -76,7 +143,7 @@ class AppPage extends StatelessWidget {
     );
   }
 
-  void _handleBackPressed(BuildContext context) {
+  void _handleBackPressed(BuildContext context) async {
     if (Get.key.currentState?.canPop() ?? false) {
       Get.back();
     } else {
@@ -88,51 +155,23 @@ class AppPage extends StatelessWidget {
         storage.saveRouteStack(stack);
         Get.offAllNamed(stack.last);
       } else {
-        _showExitDialog(context);
+        final result = await _showExitDialog(context);
+        if (result == true) {
+          Get.back();
+          // Exit the app
+          if (GetPlatform.isIOS) {
+            Future.delayed(const Duration(milliseconds: 100), () {
+              SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+            });
+          } else {
+            // Android/Web/Desktop - just close the app
+            Future.delayed(const Duration(milliseconds: 100), () {
+              SystemNavigator.pop();
+            });
+          }
+        }
       }
     }
-  }
-
-  static Widget osScaffold({
-    required Widget body,
-    PreferredSizeWidget? appBar,
-    Widget? bottomNavigationBar,
-    Widget? floatingActionButton,
-    FloatingActionButtonLocation? floatingActionButtonLocation,
-    Color? backgroundColor,
-    bool resizeToAvoidBottomInset = true,
-  }) {
-    if (isIOS) {
-      return CupertinoPageScaffold(
-        navigationBar: appBar as CupertinoNavigationBar?,
-        backgroundColor: backgroundColor ?? CupertinoColors.systemBackground,
-        child: SafeArea(
-          child: Stack(
-            children: [
-              body,
-              if (bottomNavigationBar != null)
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: bottomNavigationBar,
-                ),
-              if (floatingActionButton != null)
-                Positioned(bottom: 80, right: 20, child: floatingActionButton),
-            ],
-          ),
-        ),
-      );
-    }
-    return Scaffold(
-      appBar: appBar,
-      backgroundColor: backgroundColor ?? Colors.white,
-      resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      body: body,
-      bottomNavigationBar: bottomNavigationBar,
-      floatingActionButton: floatingActionButton,
-      floatingActionButtonLocation: floatingActionButtonLocation,
-    );
   }
 }
 

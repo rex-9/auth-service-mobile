@@ -11,8 +11,22 @@ import 'package:rexone_mobile/controllers/controllers.dart';
 import 'bindings/initial_binding.dart';
 import 'locales/app_translations.dart';
 
+import 'dart:ui';
+import 'package:rexone_mobile/services/services.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Telemetry & Error Listeners ("It works on my machine" killer)
+  FlutterError.onError = (FlutterErrorDetails details) {
+    FlutterError.presentError(details);
+    LogService.reportFlutterError(details);
+  };
+
+  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
+    LogService.reportPlatformError(error, stack);
+    return true;
+  };
 
   await dotenv.load(fileName: AppConfig().appEnv);
   await GetStorage.init();
@@ -29,10 +43,13 @@ class MyApp extends StatelessWidget {
     final config = AppConfig();
 
     // DEBUG: Test ENV...
-    // print('APP_NAME: ${config.appName}');
-    // print('APP_VERSION: ${config.appVersion}');
-    // print('API_BASE_URL: ${config.apiBaseUrl}');
-    // print('GOOGLE_CLIENT_ID: ${config.googleServerClientId}');
+    // print('APP_NAME: ${AppConfig.appName}');
+    // print('APP_VERSION: ${AppConfig.appVersion}');
+    // print('API_BASE_URL: ${AppConfig.apiBaseUrl}');
+    // print('GOOGLE_CLIENT_ID: ${AppConfig.googleServerClientId}');
+    // print('ONE_SIGNAL_APP_ID: ${AppConfig.oneSignalAppId}');
+    // print('APP_STORE_APP_ID: ${AppConfig.appStoreAppId}');
+    // print('APP_STORE_BUNDLE_ID: ${AppConfig.appStoreBundleId}');
 
     return GetBuilder<SettingsController>(
       builder: (settings) => ScreenUtilInit(
@@ -48,6 +65,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           initialRoute: AppRoutes.splash,
           getPages: AppRoutes.pages,
+          builder: AppLoading.builder,
         ),
       ),
     );

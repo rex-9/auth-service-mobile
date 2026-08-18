@@ -100,10 +100,16 @@ class AppButton extends StatelessWidget {
     if (isIOS) {
       return CupertinoButton(
         onPressed: onPressed,
-        color: CupertinoColors.systemBlue,
-        borderRadius: BorderRadius.circular(8),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: child,
+        color: Get.theme.colorScheme.primary,
+        borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+        padding: EdgeInsets.symmetric(
+          horizontal: Design.spacing.xl,
+          vertical: Design.spacing.md,
+        ),
+        child: DefaultTextStyle(
+          style: Design.typo.button.copyWith(color: Colors.white),
+          child: child,
+        ),
       );
     }
     return ElevatedButton(
@@ -118,12 +124,24 @@ class AppButton extends StatelessWidget {
     required Widget child,
   }) {
     if (isIOS) {
-      return CupertinoButton(
-        onPressed: onPressed,
-        color: CupertinoColors.systemGrey5,
-        borderRadius: BorderRadius.circular(8),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: child,
+      return Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+          border: Border.all(color: Get.theme.colorScheme.primary),
+        ),
+        child: CupertinoButton(
+          onPressed: onPressed,
+          padding: EdgeInsets.symmetric(
+            horizontal: Design.spacing.xl,
+            vertical: Design.spacing.md,
+          ),
+          child: DefaultTextStyle(
+            style: Design.typo.button.copyWith(
+              color: Get.theme.colorScheme.primary,
+            ),
+            child: child,
+          ),
+        ),
       );
     }
     return OutlinedButton(
@@ -140,9 +158,16 @@ class AppButton extends StatelessWidget {
     if (isIOS) {
       return CupertinoButton(
         onPressed: onPressed,
-        borderRadius: BorderRadius.circular(8),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        child: child,
+        padding: EdgeInsets.symmetric(
+          horizontal: Design.spacing.sm,
+          vertical: Design.spacing.sm,
+        ),
+        child: DefaultTextStyle(
+          style: Design.typo.labelLarge.copyWith(
+            color: Get.theme.colorScheme.primary,
+          ),
+          child: child,
+        ),
       );
     }
     return TextButton(
@@ -161,7 +186,7 @@ class AppButton extends StatelessWidget {
       return CupertinoButton(
         onPressed: onPressed,
         padding: EdgeInsets.zero,
-        child: Icon(icon),
+        child: Icon(icon, color: Get.theme.colorScheme.onSurface),
       );
     }
     return IconButton(onPressed: onPressed, icon: Icon(icon), tooltip: tooltip);
@@ -172,12 +197,21 @@ class AppButton extends StatelessWidget {
     required Widget child,
   }) {
     if (isIOS) {
-      return CupertinoButton(
-        onPressed: onPressed,
-        color: CupertinoColors.white,
-        borderRadius: BorderRadius.circular(8),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: child,
+      return Container(
+        height: Design.spacing.buttonHeight,
+        decoration: BoxDecoration(
+          color: Get.theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+          border: Border.all(color: Get.theme.colorScheme.outline),
+        ),
+        child: CupertinoButton(
+          onPressed: onPressed,
+          padding: EdgeInsets.symmetric(
+            horizontal: Design.spacing.xl,
+            vertical: Design.spacing.md,
+          ),
+          child: child,
+        ),
       );
     }
     return SizedBox(

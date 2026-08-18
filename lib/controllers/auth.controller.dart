@@ -18,7 +18,7 @@ class AuthController extends GetxController {
   final AppConfig _config = AppConfig();
 
   static const int maxAttempts = 3;
-  static const List<int> cooldownSecondsByLevel = [30, 60, 120];
+  // Attempts UI default — server is the source of truth, this is a display fallback.
 
   // Observables
   var isLoggedIn = false.obs;
@@ -37,7 +37,7 @@ class AuthController extends GetxController {
   var attemptsLeft = maxAttempts.obs;
   var hasFailureHistory = false.obs;
   var cooldownSecondsLeft = 0.obs;
-  int _cooldownLevel = 0;
+
   Timer? _cooldownTimer;
 
   // Resend countdowns
@@ -54,7 +54,6 @@ class AuthController extends GetxController {
   final signupConfirmPin = PinInputController();
   final confirmPin = PinInputController();
 
-  var isCheckingAuth = true.obs;
   bool _googleInitialized = false;
 
   @override
@@ -75,25 +74,22 @@ class AuthController extends GetxController {
   // ---------------------------------------------------------------------
 
   Future<void> checkAuthStatus() async {
-    isCheckingAuth.value = true;
-
     final token = _storage.getToken();
     if (token != null && token.isNotEmpty) {
       authToken.value = token;
+      if (Get.isRegistered<SocketService>()) {
+        Get.find<SocketService>().connect(token);
+      }
       final storedUser = _storage.getUserData();
       if (storedUser != null) {
         currentUser.value = storedUser;
         isLoggedIn.value = true;
-        isCheckingAuth.value = false;
-        return;
       }
-      // Fallback: fetch from API
+      // Validate session with backend
       await getCurrentUser();
     } else {
       isLoggedIn.value = false;
     }
-
-    isCheckingAuth.value = false;
   }
 
   // ---------------------------------------------------------------------
@@ -104,7 +100,7 @@ class AuthController extends GetxController {
     final state = _storage.getPasscodeRetry(email.value);
     final now = DateTime.now().millisecondsSinceEpoch;
     final cooldownUntil = (state?['cooldownUntilMs'] as num?)?.toInt() ?? 0;
-    _cooldownLevel = (state?['cooldownLevel'] as num?)?.toInt() ?? 0;
+
     hasFailureHistory.value = state?['hasFailureHistory'] == true;
 
     if (cooldownUntil > now) {
@@ -125,14 +121,14 @@ class AuthController extends GetxController {
       'remainingAttempts': attemptsLeft.value,
       'cooldownUntilMs': cooldownUntilMs,
       'hasFailureHistory': hasFailureHistory.value,
-      'cooldownLevel': _cooldownLevel,
+
     });
   }
 
   void _resetRetryState() {
     attemptsLeft.value = maxAttempts;
     hasFailureHistory.value = false;
-    _cooldownLevel = 0;
+
     cooldownSecondsLeft.value = 0;
     _cooldownTimer?.cancel();
     _persistRetryState();
@@ -293,6 +289,9 @@ class AuthController extends GetxController {
     currentUser.value = response.user;
     _storage.setUserData(response.user);
     isLoggedIn.value = true;
+    if (Get.isRegistered<SocketService>()) {
+      Get.find<SocketService>().connect(response.token);
+    }
   }
 
   // Step 2a: Sign in with email and passcode (existing user)
@@ -438,14 +437,10 @@ class AuthController extends GetxController {
           signupPin.clear();
           signupConfirmPin.clear();
           AppRoutes.toSignUpPasscodeCreate();
-        } else {
+        } else if (data.user != null && data.token != null) {
           email.value = user.email;
-          // Existing user - fetch full session
-          final sessionResponse = await _auth.signInWithGoogle(accessToken);
-          if (sessionResponse.success && sessionResponse.data != null) {
-            _storeSession(AuthResponse(user: data.user!, token: data.token!));
-            AppRoutes.toHome();
-          }
+          _storeSession(AuthResponse(user: data.user!, token: data.token!));
+          AppRoutes.toHome();
         }
       } else {
         AppSnackbar.error(response.error ?? response.message);
@@ -539,6 +534,9 @@ class AuthController extends GetxController {
   }
 
   void _clearLocalSession() {
+    if (Get.isRegistered<SocketService>()) {
+      Get.find<SocketService>().disconnect();
+    }
     _storage.clearSession();
     authToken.value = '';
     isLoggedIn.value = false;

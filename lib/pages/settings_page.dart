@@ -197,9 +197,16 @@ class SettingsPage extends GetView<SettingsController> {
     );
   }
 
-  void _showLogoutDialog(BuildContext context, AuthController authController) {
-    AppDialog.exit(context).then((confirmed) {
-      if (confirmed) authController.signOut();
-    });
+  void _showLogoutDialog(
+    BuildContext context,
+    AuthController authController,
+  ) async {
+    final confirmed = await AppDialog.confirm(
+      context: context,
+      title: Constants.locale.signOutButton.tr,
+      message: Constants.locale.logoutConfirmation.tr,
+      confirmLabel: Constants.locale.signOutButton.tr,
+    );
+    if (confirmed) authController.signOut();
   }
 }

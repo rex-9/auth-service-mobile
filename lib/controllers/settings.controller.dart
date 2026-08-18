@@ -40,6 +40,7 @@ class SettingsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    Get.addTranslations(AppTranslations().keys);
     final savedTheme = _storage.getThemeName();
     isDarkMode.value = savedTheme == 'dark';
     localeCode.value = _storage.getLocaleCode() ?? 'en_US';

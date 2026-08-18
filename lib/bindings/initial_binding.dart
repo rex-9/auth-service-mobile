@@ -14,6 +14,18 @@ class InitialBinding extends Bindings {
     // API Service (interface + implementation)
     Get.put<ApiService>(ApiService(), permanent: true);
 
+    // Telemetry & Error Logging (depends on ApiService)
+    Get.put(LogService(), permanent: true);
+
+    // WebSocket / Action Cable Socket Service
+    Get.put(SocketService(), permanent: true);
+
+    // Payment Service (depends on ApiService)
+    Get.put(PaymentService(), permanent: true);
+
+    // AI Service (depends on ApiService)
+    Get.put(AiService(), permanent: true);
+
     // Auth Service (depends on ApiService)
     Get.put(AuthService(), permanent: true);
 
@@ -24,5 +36,8 @@ class InitialBinding extends Bindings {
 
     // Auth Controller (depends on AuthService and StorageService)
     Get.put(AuthController(), permanent: true);
+
+    // Global socket event router (snackbars + controller dispatch)
+    Get.put(SocketController(), permanent: true);
   }
 }

@@ -89,28 +89,77 @@ class AppInputField extends StatelessWidget {
     Widget? prefixIcon,
     Widget? suffixIcon,
   }) {
+    final theme = Get.theme;
     if (isIOS) {
-      return CupertinoTextField(
-        controller: controller,
-        focusNode: focusNode,
-        autofocus: autofocus,
-        obscureText: obscureText,
-        keyboardType: keyboardType,
-        onChanged: onChanged,
-        maxLines: maxLines,
-        minLines: minLines,
-        enabled: enabled,
-        placeholder: hint,
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: CupertinoColors.systemGrey6,
-          borderRadius: BorderRadius.circular(8),
-          border: Border.all(
-            color: error != null
-                ? CupertinoColors.systemRed
-                : CupertinoColors.systemGrey4,
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CupertinoTextField(
+            controller: controller,
+            focusNode: focusNode,
+            autofocus: autofocus,
+            obscureText: obscureText,
+            keyboardType: keyboardType,
+            onChanged: onChanged,
+            maxLines: maxLines,
+            minLines: minLines,
+            enabled: enabled,
+            placeholder: hint,
+            placeholderStyle: Design.typo.helper.copyWith(
+              color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+            ),
+            style: Design.typo.bodyMedium.copyWith(
+              color: theme.colorScheme.onSurface,
+            ),
+            padding: EdgeInsets.symmetric(
+              horizontal: Design.spacing.lg,
+              vertical: Design.spacing.md + 2,
+            ),
+            prefix: prefixIcon != null
+                ? Padding(
+                    padding: EdgeInsets.only(left: Design.spacing.md),
+                    child: prefixIcon,
+                  )
+                : null,
+            suffix: suffixIcon != null
+                ? Padding(
+                    padding: EdgeInsets.only(right: Design.spacing.md),
+                    child: suffixIcon,
+                  )
+                : null,
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surface,
+              borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+              border: Border.all(
+                color: error != null
+                    ? theme.colorScheme.error
+                    : theme.colorScheme.outline,
+                width: error != null ? 1.5 : 1.0,
+              ),
+            ),
           ),
-        ),
+          if (error != null) ...[
+            SizedBox(height: Design.spacing.xs),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: Design.spacing.xs),
+              child: Text(
+                error,
+                style: Design.typo.caption.copyWith(color: theme.colorScheme.error),
+              ),
+            ),
+          ] else if (helper != null) ...[
+            SizedBox(height: Design.spacing.xs),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: Design.spacing.xs),
+              child: Text(
+                helper,
+                style: Design.typo.caption.copyWith(
+                  color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+                ),
+              ),
+            ),
+          ],
+        ],
       );
     }
     return TextField(

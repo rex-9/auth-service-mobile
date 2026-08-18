@@ -1,15 +1,16 @@
 // lib/services/api_service.dart
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
+import 'package:rexone_mobile/config/config.dart';
 import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/controllers/controllers.dart';
 import 'package:rexone_mobile/design/design.dart';
-import 'package:rexone_mobile/routes/routes.dart';
 import 'package:rexone_mobile/models/responses/api.response.dart';
+import 'package:rexone_mobile/routes/routes.dart';
+import 'package:rexone_mobile/services/storage.service.dart';
 
 class ApiService extends GetConnect {
   static const String sessionReplacedError = 'Active session not found';
-  bool _isLoadingShown = false;
 
   @override
   void onInit() {
@@ -19,18 +20,25 @@ class ApiService extends GetConnect {
   }
 
   void _setupHttpClient() {
-    httpClient.baseUrl = ServerRoutes.baseUrl;
+    httpClient.baseUrl = const AppConfig().apiBaseUrl;
     httpClient.timeout = Design.timers.apiTimeout;
     httpClient.defaultContentType = 'application/json';
   }
 
   void _setupInterceptors() {
     httpClient.addRequestModifier<dynamic>((request) async {
+      request.headers['Accept'] = 'application/json';
+      request.headers['Content-Type'] = 'application/json';
       request.headers['X-Platform'] = 'mobile';
-      final authController = Get.find<AuthController>();
-      if (authController.authToken.value.isNotEmpty) {
-        request.headers['Authorization'] =
-            'Bearer ${authController.authToken.value}';
+      String token = '';
+      if (Get.isRegistered<AuthController>()) {
+        token = Get.find<AuthController>().authToken.value;
+      }
+      if (token.isEmpty && Get.isRegistered<StorageService>()) {
+        token = Get.find<StorageService>().getToken() ?? '';
+      }
+      if (token.isNotEmpty) {
+        request.headers['Authorization'] = 'Bearer $token';
       }
       return request;
     });
@@ -48,8 +56,9 @@ class ApiService extends GetConnect {
     Decoder<T>? decoder,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
+    bool showLoading = true,
   }) async {
-    _showLoading();
+    if (showLoading) _showLoading();
     try {
       return await super.get(
         url,
@@ -59,7 +68,7 @@ class ApiService extends GetConnect {
         query: query,
       );
     } finally {
-      _hideLoading();
+      if (showLoading) _hideLoading();
     }
   }
 
@@ -72,8 +81,9 @@ class ApiService extends GetConnect {
     Map<String, String>? headers,
     Map<String, dynamic>? query,
     Progress? uploadProgress,
+    bool showLoading = true,
   }) async {
-    _showLoading();
+    if (showLoading) _showLoading();
     try {
       return await super.post(
         url,
@@ -85,7 +95,7 @@ class ApiService extends GetConnect {
         uploadProgress: uploadProgress,
       );
     } finally {
-      _hideLoading();
+      if (showLoading) _hideLoading();
     }
   }
 
@@ -98,8 +108,9 @@ class ApiService extends GetConnect {
     Map<String, String>? headers,
     Map<String, dynamic>? query,
     Progress? uploadProgress,
+    bool showLoading = true,
   }) async {
-    _showLoading();
+    if (showLoading) _showLoading();
     try {
       return await super.put(
         url,
@@ -111,7 +122,7 @@ class ApiService extends GetConnect {
         uploadProgress: uploadProgress,
       );
     } finally {
-      _hideLoading();
+      if (showLoading) _hideLoading();
     }
   }
 
@@ -122,8 +133,9 @@ class ApiService extends GetConnect {
     Decoder<T>? decoder,
     Map<String, String>? headers,
     Map<String, dynamic>? query,
+    bool showLoading = true,
   }) async {
-    _showLoading();
+    if (showLoading) _showLoading();
     try {
       return await super.delete(
         url,
@@ -133,33 +145,26 @@ class ApiService extends GetConnect {
         query: query,
       );
     } finally {
-      _hideLoading();
+      if (showLoading) _hideLoading();
     }
   }
 
-  void _showLoading() {
-    if (!_isLoadingShown && Get.context != null) {
-      _isLoadingShown = true;
-      AppLoading.showOverlay(Get.context!);
-    }
-  }
-
-  void _hideLoading() {
-    if (_isLoadingShown && Get.context != null) {
-      _isLoadingShown = false;
-      AppLoading.hideOverlay(Get.context!);
-    }
-  }
+  void _showLoading() => AppLoading.show();
+  void _hideLoading() => AppLoading.hide();
 
   // ===== RESPONSE HANDLING =====
   ApiResponse<T> parseResponse<T>(
     Response response,
-    T? Function(Map<String, dynamic> data) fromJson,
+    T? Function(dynamic data) fromJson,
   ) {
-    final body = response.body as Map<String, dynamic>? ?? {};
-    final status = body['status'] as Map<String, dynamic>? ?? {};
+    final body = response.body is Map
+        ? Map<String, dynamic>.from(response.body as Map)
+        : <String, dynamic>{};
+    final status = body['status'] is Map
+        ? Map<String, dynamic>.from(body['status'] as Map)
+        : <String, dynamic>{};
     final statusCode = status['code'] as int? ?? response.statusCode ?? 500;
-    final data = body['data'] as Map<String, dynamic>?;
+    final data = body['data'];
 
     if (response.hasError || !(status['success'] as bool? ?? false)) {
       return ApiResponse.error(
@@ -182,18 +187,23 @@ class ApiService extends GetConnect {
   }
 
   // ===== PRIVATE HELPERS =====
+
   void _handleSessionExpiry(Request request, Response response) {
     if (response.statusCode == HttpStatus.unauthorized) {
-      final authController = Get.find<AuthController>();
-      final serverError = _bodyError(response.body);
-      final isSessionReplaced = serverError == sessionReplacedError;
-      final isSessionValidation = request.url.path.contains(
-        ServerRoutes.currentUser,
-      );
+      if (Get.isRegistered<AuthController>()) {
+        final authController = Get.find<AuthController>();
+        final serverError = _bodyError(response.body);
+        final isSessionReplaced = serverError == sessionReplacedError;
+        final isAuthRoute =
+            request.url.path.contains(ServerRoutes.signIn) ||
+            request.url.path.contains(ServerRoutes.signUp) ||
+            request.url.path.contains(ServerRoutes.peekUser);
 
-      if (authController.isLoggedIn.value &&
-          (isSessionReplaced || isSessionValidation)) {
-        authController.handleSessionExpired(replaced: isSessionReplaced);
+        if (!isAuthRoute &&
+            (authController.isLoggedIn.value ||
+                authController.authToken.value.isNotEmpty)) {
+          authController.handleSessionExpired(replaced: isSessionReplaced);
+        }
       }
     }
   }
