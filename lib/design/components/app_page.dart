@@ -38,11 +38,10 @@ class AppPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      // canPop: !showBackButton,
-      // // TODO: NOT WORKING AT ALL!!!
-      // onPopInvokedWithResult: (bool didPop, dynamic result) async {
-      //   if (!didPop) _handleBackPressed(context);
-      // },
+      canPop: false,
+      onPopInvokedWithResult: (bool didPop, dynamic result) async {
+        if (!didPop) _handleBackPressed(context);
+      },
       child: osScaffold(
         backgroundColor: backgroundColor ?? context.colors.background,
         appBar: _buildAppBar(context),
@@ -64,6 +63,7 @@ class AppPage extends StatelessWidget {
       backgroundColor: context.colors.surface,
       foregroundColor: context.colors.textPrimary,
       elevation: 0,
+      scrolledUnderElevation: 0,
       leading: showBackButton
           ? AppButton(
               type: ButtonType.icon,
@@ -77,15 +77,19 @@ class AppPage extends StatelessWidget {
   }
 
   void _handleBackPressed(BuildContext context) {
-    final storage = Get.find<StorageService>();
-    final stack = storage.getRouteStack();
-
-    if (stack.length > 1) {
-      stack.removeLast();
-      storage.saveRouteStack(stack);
-      Get.offAllNamed(stack.last);
+    if (Get.key.currentState?.canPop() ?? false) {
+      Get.back();
     } else {
-      _showExitDialog(context);
+      final storage = Get.find<StorageService>();
+      final stack = storage.getRouteStack();
+
+      if (stack.length > 1) {
+        stack.removeLast();
+        storage.saveRouteStack(stack);
+        Get.offAllNamed(stack.last);
+      } else {
+        _showExitDialog(context);
+      }
     }
   }
 
