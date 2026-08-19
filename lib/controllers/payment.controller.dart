@@ -1,6 +1,7 @@
 // lib/controllers/payment.controller.dart
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/design/design.dart';
 import 'package:rexone_mobile/models/models.dart';
 import 'package:rexone_mobile/routes/routes.dart';
@@ -36,23 +37,29 @@ class PaymentController extends GetxController {
   /// The success snackbar is shown globally by [SocketController].
   ///
   /// Subscription cancel/resume: just refresh data so the card updates.
-  Future<void> onSocketEvent(String eventType, String? message) async {
+  Future<void> onSocketEvent(EWsEventType eventType, String? message) async {
+
     switch (eventType) {
-      case 'payment_success':
-      case 'subscription_created':
-      case 'subscription_updated':
-      case 'payment_intent.succeeded':
-      case 'payment_failed':
-      case 'payment_intent.payment_failed':
+      case EWsEventType.paymentSuccess:
+      case EWsEventType.subscriptionCreated:
+      case EWsEventType.subscriptionUpdated:
+      case EWsEventType.paymentIntentSucceeded:
+      case EWsEventType.paymentFailed:
+      case EWsEventType.paymentIntentPaymentFailed:
+
+
         // Pop the checkout WebView back to the payment page.
         if (Get.currentRoute == AppRoutes.checkout) {
           Get.back();
         }
         await fetchData();
-
-      case 'subscription_canceled':
-      case 'subscription_resumed':
+        break;
+      case EWsEventType.subscriptionCanceled:
+      case EWsEventType.subscriptionResumed:
         await fetchData();
+        break;
+      default:
+        break;
     }
   }
 
