@@ -52,23 +52,26 @@ class AppPage extends StatelessWidget {
     return CupertinoPageScaffold(
       navigationBar: _buildCupertinoNavBar(context),
       backgroundColor: backgroundColor ?? context.colors.background,
-      child: SafeArea(
-        child: Stack(
-          children: [
-            Padding(
-              padding: padding ?? EdgeInsets.all(Design.spacing.screenPadding),
-              child: child,
-            ),
-            if (bottomNavigationBar != null)
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: bottomNavigationBar!,
+      child: Material(
+        type: MaterialType.transparency,
+        child: SafeArea(
+          child: Stack(
+            children: [
+              Padding(
+                padding: padding ?? EdgeInsets.all(Design.spacing.screenPadding),
+                child: child,
               ),
-            if (floatingActionButton != null)
-              Positioned(bottom: 80, right: 20, child: floatingActionButton!),
-          ],
+              if (bottomNavigationBar != null)
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: bottomNavigationBar!,
+                ),
+              if (floatingActionButton != null)
+                Positioned(bottom: 80, right: 20, child: floatingActionButton!),
+            ],
+          ),
         ),
       ),
     );

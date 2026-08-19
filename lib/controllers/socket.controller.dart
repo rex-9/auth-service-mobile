@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:rexone_mobile/constants/enums.dart';
 import 'package:rexone_mobile/design/components/components.dart';
 import 'package:rexone_mobile/services/services.dart';
 import 'controllers.dart';
@@ -37,40 +38,43 @@ class SocketController extends GetxController {
   Future<void> _handleEvent(SocketMessage event) async {
     if (event.type != 'notification') return;
 
-    final eventType = event.data?['type']?.toString() ?? '';
+   final eventType = EWsEventType.fromString(
+  event.data?['type']?.toString() ?? '',
+);
     final message = event.message ?? '';
 
     debugPrint('🔔 [SocketController] type=$eventType | message="$message"');
 
-    _showSnackbar(eventType, message);
     await _dispatch(event, eventType);
+    _showSnackbar(eventType, message);
   }
 
   // ============================================================
   // SNACKBAR — single source of truth for all socket toasts
   // ============================================================
 
-  void _showSnackbar(String eventType, String message) {
+  void _showSnackbar(EWsEventType eventType, String message) {
     if (message.isEmpty) return;
 
     switch (eventType) {
-      case 'payment_success':
-      case 'subscription_created':
-      case 'welcome':
-      case 'ai_response_ready':
+      case EWsEventType.paymentSuccess:
+      case EWsEventType.subscriptionCreated:
+      case EWsEventType.welcome:
+      case EWsEventType.aiResponseReady:
         AppSnackbar.success(message);
+        break;
 
-      case 'payment_failed':
-      case 'ai_response_failed':
+      case EWsEventType.paymentFailed:
+      case EWsEventType.aiResponseFailed:
         AppSnackbar.error(message);
+        break;
 
       // subscription_canceled / subscription_resumed:
       // PaymentController's HTTP response already shows the right snackbar
       // immediately on user action — skip here to avoid a duplicate.
-      case 'subscription_canceled':
-      case 'subscription_resumed':
+      case EWsEventType.subscriptionCanceled:
+      case EWsEventType.subscriptionResumed:
         break;
-
       default:
         AppSnackbar.info(message);
     }
@@ -80,7 +84,7 @@ class SocketController extends GetxController {
   // DISPATCH — per-controller data refresh / navigation
   // ============================================================
 
-  Future<void> _dispatch(SocketMessage event, String eventType) async {
+  Future<void> _dispatch(SocketMessage event, EWsEventType eventType) async {
     // --- Payment ---
     if (Get.isRegistered<PaymentController>()) {
       await Get.find<PaymentController>().onSocketEvent(

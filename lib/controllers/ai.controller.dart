@@ -2,6 +2,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rexone_mobile/constants/enums.dart';
 import 'package:rexone_mobile/design/design.dart';
 import 'package:rexone_mobile/models/models.dart';
 import 'package:rexone_mobile/services/services.dart';
@@ -42,8 +43,8 @@ class AiController extends GetxController {
 
   /// Called by [SocketController] when an AI-related notification arrives.
   /// Reloads history only if the event belongs to the current room.
-  Future<void> onSocketEvent(String eventType, String? roomId) async {
-    if (eventType != 'ai_response_ready' && eventType != 'ai_response_failed') {
+  Future<void> onSocketEvent(EWsEventType eventType, String? roomId) async {
+    if (eventType != EWsEventType.aiResponseReady && eventType != EWsEventType.aiResponseFailed) {
       return;
     }
     if (roomId == null || roomId.isEmpty || roomId == currentRoomId.value) {
