@@ -1,12 +1,16 @@
 // lib/bindings/initial_binding.dart
 import 'package:get/get.dart';
+import '../modules/ai/ai.dart';
+import '../modules/auth/auth.dart';
+import '../modules/payment/payment.dart';
+import '../modules/setting/setting.dart';
 import '../services/services.dart';
 import '../controllers/controllers.dart';
 
 class InitialBinding extends Bindings {
   @override
   void dependencies() {
-    // ===== Services =====
+    // ===== Services ===s==
 
     // Storage (no dependencies)
     Get.put(StorageService(), permanent: true);

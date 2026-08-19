@@ -1,8 +1,8 @@
 // lib/routes/route_guard.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rexone_mobile/controllers/controllers.dart';
 import 'package:rexone_mobile/services/services.dart';
+import '../modules/auth/auth.dart';
 import 'app_routes.dart';
 
 class RouteGuard extends GetMiddleware {

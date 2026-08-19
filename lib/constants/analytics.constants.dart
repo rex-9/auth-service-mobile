@@ -1,4 +1,4 @@
-// lib/constants/analytics_constants.dart
+// lib/constants/analytics.constants.dart
 
 class AnalyticsConstants {
   const AnalyticsConstants();

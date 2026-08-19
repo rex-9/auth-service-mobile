@@ -1,0 +1,10 @@
+// lib/modules/auth/auth.dart
+export './controllers/auth.controller.dart';
+export './services/auth.service.dart';
+export './pages/auth_page.dart';
+export './pages/confirm_email_page.dart';
+export './pages/forgot_passcode_page.dart';
+export './pages/signin_passcode_page.dart';
+export './pages/signup_info_page.dart';
+export './pages/signup_passcode_confirm_page.dart';
+export './pages/signup_passcode_create_page.dart';

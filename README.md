@@ -30,9 +30,9 @@ A capable backend and a polished web app are only parts of the whole product. Th
 
 Rexone Mobile exists so that work does not have to be reinvented for every mobile application built on Rexone Core.
 
-This is not a template of screens pretending to be an architecture. Pages, controllers, services, models, bindings, design primitives, and telemetry pipelines have exact and deliberate responsibilities:
-- **Controllers** own application state, user intent, and failure feedback.
-- **Services** are thin, single-responsibility transport clients that interact directly with Rexone Core, Action Cable, Firebase, and OneSignal.
+This is not a template of screens pretending to be an architecture. Feature modules, shared services, models, bindings, design primitives, and telemetry pipelines have exact and deliberate responsibilities:
+- **Modules** own a product feature end to end — pages, controllers, and (when needed) that feature's HTTP client — behind a single barrel export.
+- **Shared services** are thin, single-responsibility clients for transport that is not feature-owned: HTTP, Action Cable, Firebase, OneSignal, storage, and client logs.
 - **Design primitives** enforce consistent spacing, typography, and theme tokens across light and dark modes.
 - **Observability listeners** automatically capture uncaught Flutter and platform errors and ship structured diagnostic payloads to Rexone Core's client log store.
 
@@ -78,14 +78,17 @@ Rexone Mobile keeps framework concerns explicit, responsibilities separated, and
 
 ```mermaid
 flowchart LR
-    User[User & Gestures] --> UI[Pages & Design Components]
-    UI --> Controllers[GetX Controllers]
-    Controllers --> Services[Domain Services]
-    Services --> API[GetConnect HTTP Client]
+    User[User & Gestures] --> UI[Module Pages & Design Components]
+    UI --> Controllers[Module Controllers]
+    Controllers --> FeatureSvc[Feature Services]
+    Controllers --> SharedSvc[Shared Services]
+    FeatureSvc --> API[GetConnect HTTP Client]
+    SharedSvc --> API
     API --> Core[Rexone Core API]
 
     Core <-->|Action Cable| Socket[Socket Service]
     Socket --> SocketCtrl[Socket Controller]
+    SocketCtrl --> Controllers
     SocketCtrl --> UI
 
     OneSignal[OneSignal Push Service] --> Controllers
@@ -95,14 +98,29 @@ flowchart LR
 ```
 
 ### Layer Boundaries:
-- `lib/pages/` owns screen layouts and user interactions (`GetView<Controller>`).
-- `lib/controllers/` coordinates business logic, reactive state (`Rx`), navigation, and error handling.
-- `lib/services/` encapsulates HTTP communication, WebSockets, Firebase, OneSignal, and storage without synthetic error codes.
+- `lib/modules/` owns product features. Each module keeps its pages, controllers, and optional feature service together, and exposes them through a barrel file (`auth.dart`, `payment.dart`, …).
+- `lib/controllers/` holds only app-wide coordinators that do not belong to one feature — today, `SocketController`.
+- `lib/services/` holds shared infrastructure: HTTP (`ApiService`), Action Cable, Firebase Analytics, OneSignal, storage, and client logs.
 - `lib/design/` centralizes design tokens, theme definitions, extensions, and reusable UI components.
-- `lib/bindings/` handles centralized dependency injection for services and controllers.
+- `lib/bindings/` handles centralized dependency injection for shared services and permanent controllers. Feature controllers that are route-scoped (Payment, Checkout, AI) are bound on their `GetPage`.
 - `lib/models/` contains strongly typed JSON:API models and response envelopes.
 - `lib/locales/` contains multi-language translations and runtime dictionary updates.
 - `lib/config/` and `lib/constants/` manage environment definitions and constant keys.
+
+### Feature modules
+
+Each folder under `lib/modules/` is one product surface:
+
+| Module | Owns |
+| --- | --- |
+| `splash` | Session restore and first navigation |
+| `auth` | Email/passcode, OTP, recovery, Google sign-in |
+| `home` | Authenticated dashboard |
+| `payment` | Catalogue, Stripe Checkout WebView, subscriptions |
+| `setting` | Theme, locale, account |
+| `ai` | Chat rooms, history, queued assistant replies |
+
+Inside a module the usual layout is `pages/`, `controllers/` (or `controller/`), optional `services/`, and a barrel file that re-exports the public API. `GetPage` bindings stay in `lib/routes/app_routes.dart`.
 
 ---
 
@@ -288,26 +306,29 @@ flutter build ios --release --dart-define=APP_ENV=.env.prod
 
 ```text
 lib/
-├── bindings/             # GetX dependency injection (InitialBinding)
-├── config/               # App configuration and environment resolution
-├── constants/            # Constants, analytics event keys, locale keys, HTTP status
-├── controllers/          # GetX business logic controllers (Auth, Settings, Payment, AI, Socket)
-├── design/               # Design system (tokens, components, extensions, themes, icons)
-│   ├── components/       # Reusable atoms and molecules (Button, Input, Passcode, Dialog, Loading)
-│   ├── elements/         # Design tokens (Colors, Spacing, Typography, Icons, Timers)
-│   └── extensions/       # Theme context extensions
-├── helpers/              # Utility helpers (API JSON:API parser, flags, validators)
-├── locales/              # Multi-language translations (en_US, es_ES, my_MM)
-├── models/               # Strongly typed models and JSON:API response envelopes
-├── pages/                # Application screens and flows
-│   ├── auth/             # Auth flow (Welcome, Sign-In, Passcode, Profile, OTP, Recovery)
-│   ├── ai_page.dart      # AI Assistant chat view
-│   ├── payment_page.dart # Plans, subscriptions, and billing
-│   ├── home_page.dart    # Main dashboard
-│   └── settings_page.dart# Theme, language, and account settings
-├── routes/               # GetX route declarations and auth route guards
-└── services/             # Domain transport services (API, Auth, Payment, AI, Socket, Log, Analytics, Push)
+├── bindings/                 # GetX DI for shared services and permanent controllers
+├── config/                   # App configuration and environment resolution
+├── constants/                # Constants, analytics event keys, locale keys, HTTP status
+├── controllers/              # App-wide coordinators only (SocketController)
+├── design/                   # Design system (tokens, components, extensions, themes, icons)
+│   ├── components/           # Reusable atoms and molecules (Button, Input, Passcode, Dialog, Loading)
+│   ├── elements/             # Design tokens (Colors, Spacing, Typography, Icons, Timers)
+│   └── extensions/           # Theme context extensions
+├── helpers/                  # Utility helpers (API JSON:API parser, flags, validators)
+├── locales/                  # Multi-language translations (en_US, es_ES, my_MM)
+├── models/                   # Strongly typed models and JSON:API response envelopes
+├── modules/                  # Feature modules (pages + controllers + feature services)
+│   ├── splash/               # Launch / session restore
+│   ├── auth/                 # Welcome, passcode, signup, OTP, recovery
+│   ├── home/                 # Main dashboard
+│   ├── payment/              # Plans, Stripe Checkout WebView, subscriptions
+│   ├── setting/              # Theme, language, and account
+│   └── ai/                   # Assistant chat, rooms, history
+├── routes/                   # GetX route declarations and auth route guards
+└── services/                 # Shared transport (API, Socket, Log, Analytics, Push, Storage)
 ```
+
+A feature module is self-contained. Routes import the barrel (`lib/modules/auth/auth.dart`), not individual files under `pages/` or `controllers/`. Domain HTTP for auth, payment, and AI lives next to that feature; WebSocket, analytics, push, storage, and logging stay in `lib/services/` because they are used across modules.
 
 ---
 

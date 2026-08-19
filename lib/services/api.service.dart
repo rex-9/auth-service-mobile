@@ -1,13 +1,15 @@
-// lib/services/api_service.dart
+// lib/services/api.service.dart
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
 import 'package:rexone_mobile/config/config.dart';
 import 'package:rexone_mobile/constants/constants.dart';
-import 'package:rexone_mobile/controllers/controllers.dart';
 import 'package:rexone_mobile/design/design.dart';
 import 'package:rexone_mobile/models/responses/api.response.dart';
 import 'package:rexone_mobile/routes/routes.dart';
 import 'package:rexone_mobile/services/storage.service.dart';
+
+import '../modules/auth/auth.dart';
+import '../modules/setting/setting.dart';
 
 class ApiService extends GetConnect {
   static const String sessionReplacedError = 'Active session not found';

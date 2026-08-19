@@ -1,4 +1,4 @@
-// lib/helpers/flag_helper.dart
+// lib/helpers/flag.helper.dart
 class FlagHelper {
   static String getEmoji(String localeCode) {
     switch (localeCode) {

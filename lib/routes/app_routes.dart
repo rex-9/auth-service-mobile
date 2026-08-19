@@ -1,9 +1,14 @@
 // lib/routes/app_routes.dart
 import 'package:get/get.dart';
-import 'package:rexone_mobile/controllers/controllers.dart';
-import 'package:rexone_mobile/pages/pages.dart';
 import 'package:rexone_mobile/routes/route_guard.dart';
 import 'package:rexone_mobile/routes/server_routes.dart';
+
+import '../modules/ai/ai.dart';
+import '../modules/auth/auth.dart';
+import '../modules/home/home.dart';
+import '../modules/payment/payment.dart';
+import '../modules/setting/setting.dart';
+import '../modules/splash/splash.dart';
 
 class AppRoutes {
   // ===== SERVER ROUTES =====

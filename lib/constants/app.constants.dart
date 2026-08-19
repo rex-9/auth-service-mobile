@@ -1,4 +1,4 @@
-// lib/constants/app_constants.dart
+// lib/constants/app.constants.dart
 import 'package:package_info_plus/package_info_plus.dart';
 
 class AppConstants {
