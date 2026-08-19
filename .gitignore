@@ -8,6 +8,8 @@
 .svn/
 .swiftpm/
 migrate_working_dir/
+.cursor
+INSTRUCTION.md
 
 # IntelliJ related
 *.iml
