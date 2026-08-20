@@ -43,11 +43,6 @@ class AppConstants {
   String get storageKeyUserEmail => 'user_email';
   String get storageKeyUserData => 'user_data';
 
-  // Storage keys for passcode retry state
-  static const storageKeyRemainingAttempts = 'remainingAttempts';
-  static const storageKeyCooldownUntilMs = 'cooldownUntilMs';
-  static const storageKeyHasFailureHistory = 'hasFailureHistory';
-
   // HTTP Headers
   static const headerContentType = 'Content-Type';
   static const headerAccept = 'Accept';
