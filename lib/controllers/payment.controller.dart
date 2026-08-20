@@ -72,13 +72,13 @@ class PaymentController extends GetxController {
       await Future.wait([
         _fetchProductsWithRetry(),
         _payment.getSubscriptions().then((res) {
-          if (res.success && res.data != null) {
-            subscriptions.assignAll(res.data!);
+          if (res.success) {
+            subscriptions.assignAll(res.records);
           }
         }),
         _payment.getTransactions().then((res) {
-          if (res.success && res.data != null) {
-            transactions.assignAll(res.data!);
+          if (res.success) {
+            transactions.assignAll(res.records);
           }
         }),
       ]);
@@ -99,10 +99,10 @@ class PaymentController extends GetxController {
       res = await _payment.getProducts();
     }
     debugPrint(
-      '💳 [PaymentController] getProducts success=${res.success} (status ${res.statusCode}), count=${res.data?.length ?? 0}',
+      '💳 [PaymentController] getProducts success=${res.success} (status ${res.statusCode}), count=${res.records.length}',
     );
-    if (res.success && res.data != null) {
-      products.assignAll(res.data!);
+    if (res.success) {
+      products.assignAll(res.records);
     }
   }
 
@@ -114,7 +114,7 @@ class PaymentController extends GetxController {
     try {
       final response = await _payment.createCheckout(productId);
       if (response.success && response.data != null) {
-        final checkoutUrl = response.data!['checkout_url']?.toString();
+        final checkoutUrl = response.data![PaymentKeys.checkoutUrl]?.toString();
 
         if (checkoutUrl != null && checkoutUrl.isNotEmpty) {
           // Navigate to the in-app WebView — Flutter stays in foreground so

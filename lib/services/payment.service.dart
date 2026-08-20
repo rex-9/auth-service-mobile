@@ -1,6 +1,6 @@
 // lib/services/payment.service.dart
 import 'package:get/get.dart';
-import 'package:rexone_mobile/helpers/helpers.dart';
+import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/models/models.dart';
 import 'package:rexone_mobile/routes/routes.dart';
 import 'package:rexone_mobile/services/api.service.dart';
@@ -17,22 +17,37 @@ class PaymentService extends GetxService {
   // ============================================================
   // PRODUCTS
   // ============================================================
-  Future<ApiResponse<List<ProductModel>>> getProducts() async {
-    final response = await _api.get(ServerRoutes.paymentProducts);
-    return _api.parseResponse<List<ProductModel>>(
+  Future<PaginatedResponse<ProductModel>> getProducts({
+    int? page,
+    int? limit,
+  }) async {
+    final query = <String, dynamic>{};
+    if (page != null) query[JsonKeys.page] = page.toString();
+    if (limit != null) query[JsonKeys.limit] = limit.toString();
+    final response = await _api.get(ServerRoutes.paymentProducts, query: query);
+    return _api.parsePaginatedResponse<ProductModel>(
       response,
-      (data) => ApiHelper.parseList(data, ProductModel.fromJson),
+      (data) => ProductModel.fromJson(data),
     );
   }
 
   // ============================================================
   // SUBSCRIPTIONS
   // ============================================================
-  Future<ApiResponse<List<SubscriptionModel>>> getSubscriptions() async {
-    final response = await _api.get(ServerRoutes.paymentSubscriptions);
-    return _api.parseResponse<List<SubscriptionModel>>(
+  Future<PaginatedResponse<SubscriptionModel>> getSubscriptions({
+    int? page,
+    int? limit,
+  }) async {
+    final query = <String, dynamic>{};
+    if (page != null) query[JsonKeys.page] = page.toString();
+    if (limit != null) query[JsonKeys.limit] = limit.toString();
+    final response = await _api.get(
+      ServerRoutes.paymentSubscriptions,
+      query: query,
+    );
+    return _api.parsePaginatedResponse<SubscriptionModel>(
       response,
-      (data) => ApiHelper.parseList(data, SubscriptionModel.fromJson),
+      (data) => SubscriptionModel.fromJson(data),
     );
   }
 
@@ -55,11 +70,20 @@ class PaymentService extends GetxService {
   // ============================================================
   // TRANSACTIONS
   // ============================================================
-  Future<ApiResponse<List<TransactionModel>>> getTransactions() async {
-    final response = await _api.get(ServerRoutes.paymentTransactions);
-    return _api.parseResponse<List<TransactionModel>>(
+  Future<PaginatedResponse<TransactionModel>> getTransactions({
+    int? page,
+    int? limit,
+  }) async {
+    final query = <String, dynamic>{};
+    if (page != null) query[JsonKeys.page] = page.toString();
+    if (limit != null) query[JsonKeys.limit] = limit.toString();
+    final response = await _api.get(
+      ServerRoutes.paymentTransactions,
+      query: query,
+    );
+    return _api.parsePaginatedResponse<TransactionModel>(
       response,
-      (data) => ApiHelper.parseList(data, TransactionModel.fromJson),
+      (data) => TransactionModel.fromJson(data),
     );
   }
 
@@ -72,9 +96,9 @@ class PaymentService extends GetxService {
     String? cancelUrl,
   }) async {
     final response = await _api.post(ServerRoutes.paymentSession, {
-      'product_id': productId,
-      'success_url': ?successUrl,
-      'cancel_url': ?cancelUrl,
+      PaymentKeys.productId: productId,
+      PaymentKeys.successUrl: ?successUrl,
+      PaymentKeys.cancelUrl: ?cancelUrl,
     });
     return _api.parseResponse<Map<String, dynamic>>(
       response,

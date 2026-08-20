@@ -42,4 +42,20 @@ class AppConstants {
   String get storageKeyToken => 'auth_token';
   String get storageKeyUserEmail => 'user_email';
   String get storageKeyUserData => 'user_data';
+
+  // Storage keys for passcode retry state
+  static const storageKeyRemainingAttempts = 'remainingAttempts';
+  static const storageKeyCooldownUntilMs = 'cooldownUntilMs';
+  static const storageKeyHasFailureHistory = 'hasFailureHistory';
+
+  // HTTP Headers
+  static const headerContentType = 'Content-Type';
+  static const headerAccept = 'Accept';
+  static const headerAuthorization = 'Authorization';
+  static const headerXPlatform = 'X-Platform';
+  static const headerXLocale = 'X-Locale';
+  static const headerAcceptLanguage = 'Accept-Language';
+  static const contentTypeJson = 'application/json';
+  static const platformMobile = 'mobile';
+  static const bearerPrefix = 'Bearer ';
 }

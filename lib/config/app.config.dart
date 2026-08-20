@@ -3,6 +3,18 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:rexone_mobile/constants/constants.dart';
 
+class AppEnvironment {
+  const AppEnvironment._();
+
+  static const dev = '.env.dev';
+  static const uat = '.env.uat';
+  static const prod = '.env.prod';
+
+  static const development = 'development';
+  static const staging = 'staging';
+  static const production = 'production';
+}
+
 class AppConfig {
   const AppConfig();
 
@@ -13,10 +25,10 @@ class AppConfig {
 
   /// Canonical environment name expected by the backend: development | staging | production.
   static String get environment => switch (appEnv) {
-    '.env.dev' => 'development',
-    '.env.uat' => 'staging',
-    '.env.prod' => 'production',
-    _ => 'development',
+    AppEnvironment.dev => AppEnvironment.development,
+    AppEnvironment.uat => AppEnvironment.staging,
+    AppEnvironment.prod => AppEnvironment.production,
+    _ => AppEnvironment.development,
   };
   static String get appName => dotenv.env[Constants.app.nameKey] ?? 'Rexone';
   static String get appVersion =>

@@ -2,8 +2,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:rexone_mobile/constants/enums.dart';
+import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/design/design.dart';
+
 import 'package:rexone_mobile/models/models.dart';
 import 'package:rexone_mobile/services/services.dart';
 
@@ -44,7 +45,8 @@ class AiController extends GetxController {
   /// Called by [SocketController] when an AI-related notification arrives.
   /// Reloads history only if the event belongs to the current room.
   Future<void> onSocketEvent(EWsEventType eventType, String? roomId) async {
-    if (eventType != EWsEventType.aiResponseReady && eventType != EWsEventType.aiResponseFailed) {
+    if (eventType != EWsEventType.aiResponseReady &&
+        eventType != EWsEventType.aiResponseFailed) {
       return;
     }
     if (roomId == null || roomId.isEmpty || roomId == currentRoomId.value) {
@@ -57,38 +59,28 @@ class AiController extends GetxController {
   // ============================================================
   Future<void> loadHistory([String? roomId]) async {
     try {
-      final response = await _ai.getHistory(roomId: roomId);
-      if (response.success && response.data != null) {
-        final data = response.data!;
-        final rawMessages = data['messages'] as List? ?? [];
-        final processing = data['processing'] == true;
-        final roomTitle = data['room_title']?.toString();
-        final rId = data['room_id']?.toString();
-
-        if (rId != null && rId.isNotEmpty) {
-          currentRoomId.value = rId;
-        }
-        if (roomTitle != null && roomTitle.isNotEmpty) {
-          currentRoomTitle.value = roomTitle;
-        }
-
-        final parsed = _parseMessages(rawMessages);
-
-        if (parsed.isEmpty) {
+      final result = await _ai.getHistory(roomId: roomId);
+      if (result.success) {
+        if (result.records.isEmpty) {
           messages.assignAll([
             AiMessageModel(
               id: 'welcome',
-              role: 'assistant',
+              role: EChatRole.assistant.name,
               content:
                   "Hello! I'm your AI assistant. How can I help you today?",
               createdAt: DateTime.now().toIso8601String(),
             ),
           ]);
         } else {
-          messages.assignAll(parsed);
+          // Derive room context from the message data itself
+          final rId = result.records.first.roomId;
+          if (rId != null && rId.isNotEmpty) {
+            currentRoomId.value = rId;
+          }
+          messages.assignAll(result.records);
         }
 
-        isProcessing.value = processing;
+        isProcessing.value = result.records.any((m) => m.isProcessing);
       }
     } catch (e) {
       debugPrint('🤖 [AiController] Error loading history: $e');
@@ -104,7 +96,7 @@ class AiController extends GetxController {
     // Optimistic user message
     final optimisticMessage = AiMessageModel(
       id: 'optimistic_${DateTime.now().millisecondsSinceEpoch}',
-      role: 'user',
+      role: EChatRole.user.name,
       content: clean,
       createdAt: DateTime.now().toIso8601String(),
     );
@@ -116,7 +108,7 @@ class AiController extends GetxController {
     try {
       final response = await _ai.chat(clean, roomId: currentRoomId.value);
       if (response.success && response.data != null) {
-        final rId = response.data!['room_id']?.toString();
+        final rId = response.data![AiKeys.roomId]?.toString();
         if (rId != null && rId.isNotEmpty) {
           currentRoomId.value = rId;
         }
@@ -138,8 +130,8 @@ class AiController extends GetxController {
   Future<void> loadRooms() async {
     try {
       final response = await _ai.getRooms();
-      if (response.success && response.data != null) {
-        rooms.assignAll(response.data!);
+      if (response.success) {
+        rooms.assignAll(response.records);
       }
     } catch (e) {
       debugPrint('🤖 [AiController] Error loading rooms: $e');
@@ -214,28 +206,5 @@ class AiController extends GetxController {
     textController.clear();
     sendMessage(text);
     scrollToBottom();
-  }
-
-  // ============================================================
-  // PRIVATE HELPERS
-  // ============================================================
-  List<AiMessageModel> _parseMessages(dynamic raw) {
-    if (raw is! List) return [];
-    final List<AiMessageModel> list = [];
-    for (final item in raw) {
-      if (item is Map) {
-        final Map<String, dynamic> map = {};
-        if (item['attributes'] is Map) {
-          map.addAll(Map<String, dynamic>.from(item['attributes'] as Map));
-        } else {
-          map.addAll(Map<String, dynamic>.from(item));
-        }
-        if (item['id'] != null) {
-          map['id'] = item['id'].toString();
-        }
-        list.add(AiMessageModel.fromJson(map));
-      }
-    }
-    return list;
   }
 }

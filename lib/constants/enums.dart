@@ -7,6 +7,11 @@ enum EPeekedUserStatus {
 
 enum EButtonType { primary, secondary, text, icon, google }
 
+enum EAuthProvider { email, google }
+
+enum EChatRole { system, user, assistant }
+
+enum EThemePreference { light, dark }
 
 enum EWsEventType {
   paymentSuccess('payment_success'),
@@ -29,9 +34,8 @@ enum EWsEventType {
 
   factory EWsEventType.fromString(String value) {
     return EWsEventType.values.firstWhere(
-          (e) => e.value == value,
+      (e) => e.value == value,
       orElse: () => EWsEventType.unknown,
     );
   }
 }
-
