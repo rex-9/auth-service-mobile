@@ -227,8 +227,8 @@ APP_VERSION=1.0.0
 API_BASE_URL=http://10.0.2.2:3000
 GOOGLE_SERVER_CLIENT_ID=your_google_server_client_id.apps.googleusercontent.com
 ONE_SIGNAL_APP_ID=your_onesignal_app_id
-ANDROID_APP_ID=com.rex9.auth
-IOS_APP_ID=com.rex9.auth
+ANDROID_APP_ID=com.rexone.mobile
+IOS_APP_ID=com.rexone.mobile
 ```
 
 4. Configure Firebase & Google Services:
