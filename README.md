@@ -33,6 +33,7 @@ A capable backend and a polished web app are only parts of the whole product. Th
 Rexone Mobile exists so that work does not have to be reinvented for every mobile application built on Rexone Core.
 
 This is not a template of screens pretending to be an architecture. Pages, controllers, services, models, bindings, design primitives, and telemetry pipelines have exact and deliberate responsibilities:
+
 - **Controllers** own application state, user intent, and failure feedback.
 - **Services** are thin, single-responsibility transport clients that interact directly with Rexone Core, Action Cable, Firebase, and OneSignal.
 - **Design primitives** enforce consistent spacing, typography, and theme tokens across light and dark modes.
@@ -58,19 +59,19 @@ It was to build a **clear mobile foundation**—strong enough to carry ambitious
 
 ## Feature map
 
-| Foundation | What is ready | Details |
-| --- | --- | --- |
-| **Identity** | Email/passcode flow, OTP verification, recovery, Google sign-in, platform sessions | [Authentication & security](#authentication--security) |
-| **Push Notifications** | OneSignal push messaging, permission management, user tag syncing, and click routing | [Push notifications](#push-notifications) |
-| **Product Analytics** | Firebase Analytics screen tracking, auth lifecycle events, and telemetry | [Product analytics](#product-analytics) |
-| **In-App Upgrades** | Upgrader alert system supporting soft and hard store version prompts | [In-app version upgrader](#in-app-version-upgrader) |
-| **Commerce** | Products, Stripe Checkout WebView, subscriptions, and cancel/resume workflows | [Payments & entitlements](#payments--entitlements) |
-| **AI Assistant** | Non-blocking queued chat, persistent room history, and Action Cable notifications | [AI capabilities](#ai-capabilities) |
-| **Real Time** | Action Cable WebSocket client, subscription channels, and global toast dispatching | [Real-time delivery](#real-time-delivery) |
-| **Observability** | Flutter and platform error capture with automated client log delivery to Rexone Core | [Client observability & telemetry](#client-observability--telemetry) |
-| **Design System** | Centralized design tokens, theme extensions, custom components, and light/dark modes | [Design system](#design-system) |
-| **Localization** | English, Spanish, and Burmese with dynamic runtime switching and `X-Locale` backend sync | [Localization](#localization) |
-| **Quality** | Strongly typed Dart models, analyzer compliance, and automated localization test suite | [Quality & testing](#quality--testing) |
+| Foundation             | What is ready                                                                            | Details                                                              |
+| ---------------------- | ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| **Identity**           | Email/passcode flow, OTP verification, recovery, Google sign-in, platform sessions       | [Authentication & security](#authentication--security)               |
+| **Push Notifications** | OneSignal push messaging, permission management, user tag syncing, and click routing     | [Push notifications](#push-notifications)                            |
+| **Product Analytics**  | Firebase Analytics screen tracking, auth lifecycle events, and telemetry                 | [Product analytics](#product-analytics)                              |
+| **In-App Upgrades**    | Upgrader alert system supporting soft and hard store version prompts                     | [In-app version upgrader](#in-app-version-upgrader)                  |
+| **Commerce**           | Products, Stripe Checkout WebView, subscriptions, and cancel/resume workflows            | [Payments & entitlements](#payments--entitlements)                   |
+| **AI Assistant**       | Non-blocking queued chat, persistent room history, and Action Cable notifications        | [AI capabilities](#ai-capabilities)                                  |
+| **Real Time**          | Action Cable WebSocket client, subscription channels, and global toast dispatching       | [Real-time delivery](#real-time-delivery)                            |
+| **Observability**      | Flutter and platform error capture with automated client log delivery to Rexone Core     | [Client observability & telemetry](#client-observability--telemetry) |
+| **Design System**      | Centralized design tokens, theme extensions, custom components, and light/dark modes     | [Design system](#design-system)                                      |
+| **Localization**       | English, Spanish, and Burmese with dynamic runtime switching and `X-Locale` backend sync | [Localization](#localization)                                        |
+| **Quality**            | Strongly typed Dart models, analyzer compliance, and automated localization test suite   | [Quality & testing](#quality--testing)                               |
 
 ---
 
@@ -97,6 +98,7 @@ flowchart LR
 ```
 
 ### Layer Boundaries:
+
 - `lib/pages/` owns screen layouts and user interactions (`GetView<Controller>`).
 - `lib/controllers/` coordinates business logic, reactive state (`Rx`), navigation, and error handling.
 - `lib/services/` encapsulates HTTP communication, WebSockets, Firebase, OneSignal, and storage without synthetic error codes.
@@ -114,7 +116,7 @@ flowchart LR
 
 - **Smart Email Discovery**: Automatically checks user registration and confirmation state via `POST /v1/auth/peek`.
 - **6-Digit Passcode**: In-memory passcode handling for sign-in and registration (passcodes never leak to persistent storage or route URLs).
-- **Escalating Attempt Protection**: Password retry limits and cooldown counters synchronized with Redis on Rexone Core.
+- **Escalating Attempt Protection**: Reactive password retry limits and cooldown counters driven dynamically by rexone-core.
 - **Email Confirmation**: 6-digit email OTP verification with countdown-guarded resend capabilities.
 - **Google Sign-In**: Native Google OAuth flow with Rexone Core challenge token support for first-time signups.
 - **Active Session Enforcement**: Sends `X-Platform: mobile` to ensure single-device active session rules enforced by the backend cache.
@@ -196,6 +198,7 @@ flowchart LR
 - **CocoaPods** (for iOS dependency management)
 
 Verify your environment:
+
 ```sh
 flutter doctor
 ```
@@ -203,18 +206,21 @@ flutter doctor
 ### Installation
 
 1. Clone the repository:
+
 ```sh
 git clone git@github.com:rex-9/rexone-mobile.git
 cd rexone-mobile
 ```
 
 2. Install dependencies:
+
 ```sh
 flutter pub get
 ```
 
 3. Configure environment variables:
-Create `.env.dev`, `.env.uat`, or `.env.prod` in the project root:
+   Create `.env.dev`, `.env.uat`, or `.env.prod` in the project root:
+
 ```env
 APP_NAME=Rexone
 APP_VERSION=1.0.0
@@ -226,6 +232,7 @@ IOS_APP_ID=com.rex9.auth
 ```
 
 4. Configure Firebase & Google Services:
+
 - **Android**: Copy `android/app/google-services.json.example` to `android/app/google-services.json` and configure your Firebase project values.
 - **iOS**: Copy `ios/Runner/GoogleService-Info.plist.example` to `ios/Runner/GoogleService-Info.plist` and configure your Firebase project values.
 
@@ -237,16 +244,19 @@ IOS_APP_ID=com.rex9.auth
 ## Running the application
 
 ### Development:
+
 ```sh
 flutter run --dart-define=APP_ENV=.env.dev
 ```
 
 ### Staging (UAT):
+
 ```sh
 flutter run --dart-define=APP_ENV=.env.uat
 ```
 
 ### Production:
+
 ```sh
 flutter run --dart-define=APP_ENV=.env.prod
 ```
@@ -256,11 +266,13 @@ flutter run --dart-define=APP_ENV=.env.prod
 ## Quality & testing
 
 Run static analysis:
+
 ```sh
 flutter analyze lib/ test/
 ```
 
 Run unit and localization parity tests:
+
 ```sh
 flutter test
 ```
@@ -270,16 +282,19 @@ flutter test
 ## Building for production
 
 ### Android APK:
+
 ```sh
 flutter build apk --release --dart-define=APP_ENV=.env.prod
 ```
 
 ### Android App Bundle (AAB):
+
 ```sh
 flutter build appbundle --release --dart-define=APP_ENV=.env.prod
 ```
 
 ### iOS Release:
+
 ```sh
 flutter build ios --release --dart-define=APP_ENV=.env.prod
 ```
@@ -292,7 +307,7 @@ flutter build ios --release --dart-define=APP_ENV=.env.prod
 lib/
 ├── bindings/             # GetX dependency injection (InitialBinding)
 ├── config/               # App configuration and environment resolution
-├── constants/            # Constants, analytics event keys, locale keys, HTTP status
+├── constants/            # Centralized constants (app, json keys, log, analytics, enums)
 ├── controllers/          # GetX business logic controllers (Auth, Settings, Payment, AI, Socket)
 ├── design/               # Design system (tokens, components, extensions, themes, icons)
 │   ├── components/       # Reusable atoms and molecules (Button, Input, Passcode, Dialog, Loading)
@@ -300,7 +315,7 @@ lib/
 │   └── extensions/       # Theme context extensions
 ├── helpers/              # Utility helpers (API JSON:API parser, flags, validators)
 ├── locales/              # Multi-language translations (en_US, es_ES, my_MM)
-├── models/               # Strongly typed models and JSON:API response envelopes
+├── models/               # Strongly typed models, pagination metadata, and response envelopes
 ├── pages/                # Application screens and flows
 │   ├── auth/             # Auth flow (Welcome, Sign-In, Passcode, Profile, OTP, Recovery)
 │   ├── ai_page.dart      # AI Assistant chat view
@@ -316,6 +331,7 @@ lib/
 ## Author
 
 **Rex (Rex9)**
+
 - GitHub: [@rex-9](https://github.com/rex-9)
 - Portfolio: [rex9.vercel.app](https://rex9.vercel.app)
 - LinkedIn: [rex9](https://www.linkedin.com/in/rex9/)
