@@ -5,6 +5,7 @@ import 'package:rexone_mobile/design/design.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import '../services/storage.service.dart';
 import '../locales/app_translations.dart';
+import 'package:rexone_mobile/constants/constants.dart';
 
 /// Theme + locale settings, persisted with GetStorage.
 class SettingsController extends GetxController {
@@ -42,7 +43,7 @@ class SettingsController extends GetxController {
     super.onInit();
     Get.addTranslations(AppTranslations().keys);
     final savedTheme = _storage.getThemeName();
-    isDarkMode.value = savedTheme == 'dark';
+    isDarkMode.value = savedTheme == EThemePreference.dark.name;
     localeCode.value = _storage.getLocaleCode() ?? 'en_US';
     _loadAppVersion();
   }
@@ -60,14 +61,20 @@ class SettingsController extends GetxController {
   // ===== THEME METHODS =====
   void toggleTheme() {
     isDarkMode.value = !isDarkMode.value;
-    _storage.setThemeName(isDarkMode.value ? 'dark' : 'light');
+    _storage.setThemeName(
+      isDarkMode.value
+          ? EThemePreference.dark.name
+          : EThemePreference.light.name,
+    );
     Get.changeThemeMode(themeMode);
     update();
   }
 
   void setDarkMode(bool isDark) {
     isDarkMode.value = isDark;
-    _storage.setThemeName(isDark ? 'dark' : 'light');
+    _storage.setThemeName(
+      isDark ? EThemePreference.dark.name : EThemePreference.light.name,
+    );
     Get.changeThemeMode(themeMode);
   }
 
@@ -94,7 +101,11 @@ class SettingsController extends GetxController {
   // ===== RESET =====
   void resetToDefaults() {
     isDarkMode.value = Get.isDarkMode;
-    _storage.setThemeName(isDarkMode.value ? 'dark' : 'light');
+    _storage.setThemeName(
+      isDarkMode.value
+          ? EThemePreference.dark.name
+          : EThemePreference.light.name,
+    );
     Get.changeThemeMode(themeMode);
     setLocale('en_US');
   }

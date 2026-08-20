@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:rexone_mobile/config/config.dart';
+import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/models/models.dart';
 import 'package:rexone_mobile/routes/routes.dart';
 import 'package:rexone_mobile/services/api.service.dart';
@@ -41,9 +42,9 @@ class LogService extends GetxService {
         error: details.exception,
         stackTrace: details.stack,
         context: {
-          'library': details.library ?? 'flutter_framework',
-          'context': details.context?.toDescription(),
-          'summary': details.summary.toString(),
+          LogConstants.library: details.library ?? LogConstants.flutterFramework,
+          LogConstants.context: details.context?.toDescription(),
+          LogConstants.summary: details.summary.toString(),
         },
         severity: 'error',
       );
@@ -69,7 +70,7 @@ class LogService extends GetxService {
         error.toString(),
         error: error,
         stackTrace: stackTrace,
-        context: {'source': 'PlatformDispatcher.onError'},
+        context: {LogConstants.source: LogConstants.platformDispatcherError},
         severity: 'error',
       );
     } catch (e) {
@@ -91,7 +92,7 @@ class LogService extends GetxService {
     await logError(
       'Storage mismatch / corruption for key: $key',
       context: {
-        'type': 'storage_issue',
+        SocketKeys.type: LogConstants.storageIssue,
         'storageKey': key,
         'expectedValue': expected?.toString(),
         'actualValue': actual?.toString(),
@@ -138,15 +139,15 @@ class LogService extends GetxService {
         message: message,
         severity: severity,
         platform: GetPlatform.isIOS
-            ? 'ios'
-            : (GetPlatform.isAndroid ? 'android' : 'mobile'),
+            ? LogConstants.ios
+            : (GetPlatform.isAndroid ? LogConstants.android : LogConstants.mobile),
         environment: AppConfig.environment,
         appVersion: AppConfig.appVersion,
         os: Platform.operatingSystem,
         osVersion: Platform.operatingSystemVersion,
-        device: GetPlatform.isIOS ? 'Apple Device' : 'Android Device',
+        device: GetPlatform.isIOS ? LogConstants.appleDevice : LogConstants.androidDevice,
         url: Get.currentRoute.isNotEmpty ? Get.currentRoute : '/',
-        method: 'APP_EVENT',
+        method: LogConstants.appEvent,
         stackTrace: stackList,
         localStorageKeys: storageKeys,
         context: context ?? {},

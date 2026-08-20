@@ -1,32 +1,32 @@
 // lib/constants/analytics_constants.dart
 
 class AnalyticsConstants {
-  const AnalyticsConstants();
+  const AnalyticsConstants._();
 
   // ===== EVENT NAMES =====
-  String get eventSignUp => 'sign_up';
-  String get eventSignIn => 'sign_in';
-  String get eventSignOut => 'sign_out';
-  String get eventPasswordReset => 'password_reset_requested';
-  String get eventOnboardingStarted => 'onboarding_started';
-  String get eventOnboardingCompleted => 'onboarding_completed';
-  String get eventEmailVerified => 'email_verified';
-  String get eventAppOpen => 'app_open';
-  String get eventAppBackground => 'app_background';
-  String get eventAppError => 'app_error';
-  String get eventPushReceived => 'push_received';
-  String get eventPushOpened => 'push_opened';
-  String get eventPerformance => 'performance';
+  static const String eventSignUp = 'sign_up';
+  static const String eventSignIn = 'sign_in';
+  static const String eventSignOut = 'sign_out';
+  static const String eventPasswordReset = 'password_reset_requested';
+  static const String eventOnboardingStarted = 'onboarding_started';
+  static const String eventOnboardingCompleted = 'onboarding_completed';
+  static const String eventEmailVerified = 'email_verified';
+  static const String eventAppOpen = 'app_open';
+  static const String eventAppBackground = 'app_background';
+  static const String eventAppError = 'app_error';
+  static const String eventPushReceived = 'push_received';
+  static const String eventPushOpened = 'push_opened';
+  static const String eventPerformance = 'performance';
 
   // ===== PARAMETER NAMES =====
-  String get paramMethod => 'method';
-  String get paramError => 'error';
-  String get paramContext => 'context';
-  String get paramMetric => 'metric';
-  String get paramValue => 'value';
+  static const String paramMethod = 'method';
+  static const String paramError = 'error';
+  static const String paramContext = 'context';
+  static const String paramMetric = 'metric';
+  static const String paramValue = 'value';
 
   // ===== PARAMETER VALUES =====
-  String get methodEmail => 'email';
-  String get methodGoogle => 'google';
-  String get methodApple => 'apple';
+  static const String methodEmail = 'email';
+  static const String methodGoogle = 'google';
+  static const String methodApple = 'apple';
 }

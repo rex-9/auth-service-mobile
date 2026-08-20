@@ -99,15 +99,18 @@ class AuthController extends GetxController {
   void loadRetryState() {
     final state = _storage.getPasscodeRetry(email.value);
     final now = DateTime.now().millisecondsSinceEpoch;
-    final cooldownUntil = (state?['cooldownUntilMs'] as num?)?.toInt() ?? 0;
+    final cooldownUntil =
+        (state?[AppConstants.storageKeyCooldownUntilMs] as num?)?.toInt() ?? 0;
 
-    hasFailureHistory.value = state?['hasFailureHistory'] == true;
+    hasFailureHistory.value =
+        state?[AppConstants.storageKeyHasFailureHistory] == true;
 
     if (cooldownUntil > now) {
       attemptsLeft.value = 0;
       _startCooldownUntil(cooldownUntil);
     } else {
-      final remaining = (state?['remainingAttempts'] as num?)?.toInt();
+      final remaining =
+          (state?[AppConstants.storageKeyRemainingAttempts] as num?)?.toInt();
       attemptsLeft.value = (remaining == null || remaining <= 0)
           ? maxAttempts
           : remaining;
@@ -118,9 +121,9 @@ class AuthController extends GetxController {
 
   void _persistRetryState({int cooldownUntilMs = 0}) {
     _storage.setPasscodeRetry(email.value, {
-      'remainingAttempts': attemptsLeft.value,
-      'cooldownUntilMs': cooldownUntilMs,
-      'hasFailureHistory': hasFailureHistory.value,
+      AppConstants.storageKeyRemainingAttempts: attemptsLeft.value,
+      AppConstants.storageKeyCooldownUntilMs: cooldownUntilMs,
+      AppConstants.storageKeyHasFailureHistory: hasFailureHistory.value,
     });
   }
 
@@ -300,7 +303,10 @@ class AuthController extends GetxController {
       // Set user ID and properties
       _analytics.setUserId(response.user.id);
       _analytics.setUserProperty('email', response.user.email);
-      _analytics.setUserProperty('provider', response.user.provider ?? 'email');
+      _analytics.setUserProperty(
+        'provider',
+        response.user.provider ?? EAuthProvider.email.name,
+      );
       _analytics.logSignIn(method: response.user.provider);
     }
   }
@@ -323,7 +329,7 @@ class AuthController extends GetxController {
         // Check if user is confirmed (has user + token)
         if (data.user != null && data.token != null) {
           _resetRetryState();
-          _analytics.logSignIn(method: 'email');
+          _analytics.logSignIn(method: EAuthProvider.email.name);
           // Sync noti user & Request permission after Email signin
           await _handleSuccessfulAuth(
             AuthResponse(user: data.user!, token: data.token!),
@@ -416,7 +422,7 @@ class AuthController extends GetxController {
 
       if (response.success) {
         _startResendCountdown(30);
-        _analytics.logSignUp(method: 'email');
+        _analytics.logSignUp(method: EAuthProvider.email.name);
         _analytics.logOnboardingStarted();
         AppRoutes.toConfirmEmail(email: email.value);
       } else {
@@ -457,7 +463,7 @@ class AuthController extends GetxController {
           AppRoutes.toSignUpPasscodeCreate();
         } else if (data.user != null && data.token != null) {
           email.value = user.email;
-          _analytics.logSignIn(method: 'google');
+          _analytics.logSignIn(method: EAuthProvider.google.name);
           _analytics.logOnboardingStarted();
           // Sync noti user & Request permission after Google signin
           await _handleSuccessfulAuth(
@@ -497,7 +503,7 @@ class AuthController extends GetxController {
 
       if (response.success && response.data != null) {
         googleChallengeToken.value = '';
-        _analytics.logSignUp(method: 'google');
+        _analytics.logSignUp(method: EAuthProvider.google.name);
         _analytics.logOnboardingCompleted();
         await _handleSuccessfulAuth(response.data!);
       } else if (response.statusCode == 429) {
@@ -593,7 +599,7 @@ class AuthController extends GetxController {
       await _auth.signOut();
     } catch (_) {}
 
-    if (currentUser.value?.provider == 'google') {
+    if (currentUser.value?.provider == EAuthProvider.google.name) {
       try {
         await GoogleSignIn.instance.signOut();
       } catch (_) {}
