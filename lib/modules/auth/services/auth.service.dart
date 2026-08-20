@@ -1,5 +1,6 @@
 // lib/modules/auth/services/auth.service.dart
 import 'package:get/get.dart';
+import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/models/models.dart';
 import 'package:rexone_mobile/routes/routes.dart';
 import 'package:rexone_mobile/services/services.dart';
@@ -25,7 +26,7 @@ class AuthService extends GetxService {
     String password,
   ) async {
     final response = await _api.post(ServerRoutes.signIn, {
-      'user': {'signin_key': signinKey, 'password': password},
+      AuthKeys.user: {AuthKeys.signinKey: signinKey, AuthKeys.password: password},
     });
     return _api.parseResponse<SignInResponse>(
       response,
@@ -36,7 +37,7 @@ class AuthService extends GetxService {
   // 3. Sign in with token (from email confirmation)
   Future<ApiResponse<AuthResponse>> signInWithToken(String token) async {
     final response = await _api.post(ServerRoutes.signInWithToken, {
-      'token': token,
+      AuthKeys.token: token,
     });
     return _api.parseResponse<AuthResponse>(
       response,
@@ -47,7 +48,7 @@ class AuthService extends GetxService {
   // 4. Sign in with Google
   Future<ApiResponse<GoogleResponse>> signInWithGoogle(String idToken) async {
     final response = await _api.post(ServerRoutes.signInWithGoogle, {
-      'token': idToken,
+      AuthKeys.token: idToken,
     });
     return _api.parseResponse<GoogleResponse>(
       response,
@@ -61,8 +62,8 @@ class AuthService extends GetxService {
     String challengeToken,
   ) async {
     final response = await _api.post(ServerRoutes.signInGoogleComplete, {
-      'password': passcode,
-      'challenge_token': challengeToken,
+      AuthKeys.password: passcode,
+      AuthKeys.challengeToken: challengeToken,
     });
     return _api.parseResponse<AuthResponse>(
       response,
@@ -79,12 +80,12 @@ class AuthService extends GetxService {
     required String passwordConfirmation,
   }) async {
     final response = await _api.post(ServerRoutes.signUp, {
-      'user': {
-        'username': username,
-        'name': name,
-        'email': email,
-        'password': password,
-        'password_confirmation': passwordConfirmation,
+      AuthKeys.user: {
+        AuthKeys.username: username,
+        AuthKeys.name: name,
+        AuthKeys.email: email,
+        AuthKeys.password: password,
+        AuthKeys.passwordConfirmation: passwordConfirmation,
       },
     });
     return _api.parseResponse<UserModel>(
@@ -96,7 +97,7 @@ class AuthService extends GetxService {
   // 6. Send confirmation code (for email verification)
   Future<ApiResponse<void>> sendConfirmationOTPCode(String signinKey) async {
     final response = await _api.post(ServerRoutes.sendConfirmationCode, {
-      'signin_key': signinKey,
+      AuthKeys.signinKey: signinKey,
     });
     return _api.parseResponse<void>(response, (data) {});
   }
@@ -107,8 +108,8 @@ class AuthService extends GetxService {
     String confirmationCode,
   ) async {
     final response = await _api.post(ServerRoutes.confirmCode, {
-      'signin_key': signinKey,
-      'confirmation_code': confirmationCode,
+      AuthKeys.signinKey: signinKey,
+      AuthKeys.confirmationCode: confirmationCode,
     });
     return _api.parseResponse<AuthResponse>(
       response,
@@ -119,7 +120,7 @@ class AuthService extends GetxService {
   // 8. Forgot password - send reset instructions
   Future<ApiResponse<void>> forgotPasscode(String email) async {
     final response = await _api.post(ServerRoutes.forgotPassword, {
-      'email': email,
+      AuthKeys.email: email,
     });
     return _api.parseResponse<void>(response, (data) {});
   }

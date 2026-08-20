@@ -33,7 +33,7 @@ class AuthPage extends GetView<AuthController> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Padding(
-              padding: EdgeInsets.only(top: isIOS? 8:0),
+              padding: EdgeInsets.only(top: isIOS? Design.spacing.sm:0),
               child: AppButton(
 
                 type: EButtonType.icon,

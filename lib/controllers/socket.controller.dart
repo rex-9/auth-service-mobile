@@ -2,7 +2,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-import 'package:rexone_mobile/constants/enums.dart';
+import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/design/components/components.dart';
 import 'package:rexone_mobile/services/services.dart';
 import '../modules/ai/ai.dart';
@@ -39,9 +39,9 @@ class SocketController extends GetxController {
   Future<void> _handleEvent(SocketMessage event) async {
     if (event.type != 'notification') return;
 
-   final eventType = EWsEventType.fromString(
-  event.data?['type']?.toString() ?? '',
-);
+    final eventType = EWsEventType.fromString(
+      event.data?[SocketKeys.type]?.toString() ?? '',
+    );
     final message = event.message ?? '';
 
     debugPrint('🔔 [SocketController] type=$eventType | message="$message"');
@@ -96,7 +96,7 @@ class SocketController extends GetxController {
 
     // --- AI ---
     if (Get.isRegistered<AiController>()) {
-      final roomId = event.data?['room_id']?.toString();
+      final roomId = event.data?[AiKeys.roomId]?.toString();
       await Get.find<AiController>().onSocketEvent(eventType, roomId);
     }
   }

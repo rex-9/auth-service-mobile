@@ -18,11 +18,13 @@ Built under the same creed as Rexone Core and Rexone Web: **clear in thought, ex
 
 **Typed · Modular · Localized · Observable · Push-ready · Analytics-enabled · API-driven**
 
-[Explore the foundation](#feature-map) · [Run it locally](#getting-started) · [Meet the architecture](#architecture) · [Connect the API](#configuration--environment-management)
+[Explore the foundation](#feature-map) · [Ecosystem Architecture](ECOSYSTEM.md) · [Run it locally](#getting-started) · [Meet the architecture](#architecture) · [Connect the API](#configuration--environment-management)
 
 </div>
 
 ---
+
+> 🏛️ **Unified Ecosystem**: For the complete cross-platform architecture, 100% feature parity matrix, and communication protocols between Core, Web, and Mobile, see **[ECOSYSTEM.md](ECOSYSTEM.md)**.
 
 ## Why Rexone Mobile?
 

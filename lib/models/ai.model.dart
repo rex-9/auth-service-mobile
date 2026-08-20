@@ -4,6 +4,7 @@ class AiMessageModel {
   final String id;
   final String role; // "user" | "assistant"
   final String content;
+  final String? roomId;
   final String? status; // "queued" | "processing" | "completed" | "failed"
   final String createdAt;
 
@@ -11,6 +12,7 @@ class AiMessageModel {
     required this.id,
     required this.role,
     required this.content,
+    this.roomId,
     this.status,
     required this.createdAt,
   });
@@ -24,6 +26,7 @@ class AiMessageModel {
       id: json['id']?.toString() ?? '',
       role: json['role']?.toString() ?? 'user',
       content: json['content']?.toString() ?? '',
+      roomId: json['room_id']?.toString(),
       status: metadata?['status']?.toString() ?? json['status']?.toString(),
       createdAt: json['created_at']?.toString() ??
           DateTime.now().toIso8601String(),

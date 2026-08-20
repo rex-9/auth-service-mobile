@@ -77,72 +77,72 @@ class AnalyticsService extends GetxService {
   // ===== AUTH EVENTS =====
   void logSignUp({String? method}) {
     logEvent(
-      Constants.analytics.eventSignUp,
+      AnalyticsConstants.eventSignUp,
       parameters: {
-        Constants.analytics.paramMethod:
-            method ?? Constants.analytics.methodEmail,
+        AnalyticsConstants.paramMethod:
+            method ?? AnalyticsConstants.methodEmail,
       },
     );
   }
 
   void logSignIn({String? method}) {
     logEvent(
-      Constants.analytics.eventSignIn,
+      AnalyticsConstants.eventSignIn,
       parameters: {
-        Constants.analytics.paramMethod:
-            method ?? Constants.analytics.methodEmail,
+        AnalyticsConstants.paramMethod:
+            method ?? AnalyticsConstants.methodEmail,
       },
     );
   }
 
   void logSignOut() {
-    logEvent(Constants.analytics.eventSignOut);
+    logEvent(AnalyticsConstants.eventSignOut);
   }
 
   void logPasswordResetRequested() {
-    logEvent(Constants.analytics.eventPasswordReset);
+    logEvent(AnalyticsConstants.eventPasswordReset);
   }
 
   // ===== ONBOARDING EVENTS =====
   void logOnboardingStarted() {
-    logEvent(Constants.analytics.eventOnboardingStarted);
+    logEvent(AnalyticsConstants.eventOnboardingStarted);
   }
 
   void logOnboardingCompleted() {
-    logEvent(Constants.analytics.eventOnboardingCompleted);
+    logEvent(AnalyticsConstants.eventOnboardingCompleted);
   }
 
   void logEmailVerified() {
-    logEvent(Constants.analytics.eventEmailVerified);
+    logEvent(AnalyticsConstants.eventEmailVerified);
   }
 
   // ===== APP EVENTS =====
   void logAppOpen() {
-    logEvent(Constants.analytics.eventAppOpen);
+    logEvent(AnalyticsConstants.eventAppOpen);
   }
 
   void logAppBackground() {
-    logEvent(Constants.analytics.eventAppBackground);
+    logEvent(AnalyticsConstants.eventAppBackground);
   }
 
   void logError(String error, {String? context}) {
     logEvent(
-      Constants.analytics.eventAppError,
+      AnalyticsConstants.eventAppError,
       parameters: {
-        Constants.analytics.paramError: error,
-        Constants.analytics.paramContext: context ?? 'unknown',
+        AnalyticsConstants.paramError: error,
+        AnalyticsConstants.paramContext: context ?? 'unknown',
       },
     );
   }
 
   // ===== PUSH NOTIFICATION =====
   void logPushReceived(Map<String, Object> data) {
-    logEvent(Constants.analytics.eventPushReceived, parameters: data);
+    logEvent(AnalyticsConstants.eventPushReceived, parameters: data);
   }
 
   void logPushOpened(Map<String, dynamic> data) {
     logEvent(
-      Constants.analytics.eventPushOpened,
+      AnalyticsConstants.eventPushOpened,
       parameters: data.cast<String, Object>(),
     );
   }
@@ -150,10 +150,10 @@ class AnalyticsService extends GetxService {
   // ===== PERFORMANCE =====
   void logPerformance(String metric, {Object? value}) {
     logEvent(
-      Constants.analytics.eventPerformance,
+      AnalyticsConstants.eventPerformance,
       parameters: {
-        Constants.analytics.paramMetric: metric,
-        Constants.analytics.paramValue: value ?? '',
+        AnalyticsConstants.paramMetric: metric,
+        AnalyticsConstants.paramValue: value ?? '',
       },
     );
   }

@@ -1,4 +1,5 @@
 // lib/modules/home/pages/home_page.dart
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rexone_mobile/constants/constants.dart';
@@ -103,8 +104,8 @@ class HomePage extends GetView<AuthController> {
               SizedBox(height: Design.spacing.xxxl),
 
               // ── Dev: Log Service Triggers ──────────────────
-              // DELETE or hide behind a debug flag before production.
-              if (true) ...[
+              // Hide behind a debug flag before production.
+              if (kDebugMode) ...[
                 Divider(color: context.colors.divider),
                 SizedBox(height: Design.spacing.md),
                 Text(
