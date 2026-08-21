@@ -98,43 +98,17 @@ class AuthController extends GetxController {
   // ---------------------------------------------------------------------
 
   void loadRetryState() {
-    final state = _storage.getPasscodeRetry(email.value);
-    final now = DateTime.now().millisecondsSinceEpoch;
-    final cooldownUntil =
-        (state?[AppConstants.storageKeyCooldownUntilMs] as num?)?.toInt() ?? 0;
-
-    hasFailureHistory.value =
-        state?[AppConstants.storageKeyHasFailureHistory] == true;
-
-    if (cooldownUntil > now) {
-      attemptsLeft.value = 0;
-      _startCooldownUntil(cooldownUntil);
-    } else {
-      final remaining =
-          (state?[AppConstants.storageKeyRemainingAttempts] as num?)?.toInt();
-      attemptsLeft.value = (remaining == null || remaining <= 0)
-          ? maxAttempts
-          : remaining;
-      cooldownSecondsLeft.value = 0;
-      _cooldownTimer?.cancel();
-    }
-  }
-
-  void _persistRetryState({int cooldownUntilMs = 0}) {
-    _storage.setPasscodeRetry(email.value, {
-      AppConstants.storageKeyRemainingAttempts: attemptsLeft.value,
-      AppConstants.storageKeyCooldownUntilMs: cooldownUntilMs,
-      AppConstants.storageKeyHasFailureHistory: hasFailureHistory.value,
-    });
+    attemptsLeft.value = maxAttempts;
+    hasFailureHistory.value = false;
+    cooldownSecondsLeft.value = 0;
+    _cooldownTimer?.cancel();
   }
 
   void _resetRetryState() {
     attemptsLeft.value = maxAttempts;
     hasFailureHistory.value = false;
-
     cooldownSecondsLeft.value = 0;
     _cooldownTimer?.cancel();
-    _persistRetryState();
   }
 
   void _applySignInFailure({
@@ -151,9 +125,6 @@ class AuthController extends GetxController {
       final until =
           DateTime.now().millisecondsSinceEpoch + cooldownRemaining * 1000;
       _startCooldownUntil(until);
-      _persistRetryState(cooldownUntilMs: until);
-    } else {
-      _persistRetryState();
     }
   }
 
@@ -168,7 +139,6 @@ class AuthController extends GetxController {
         attemptsLeft.value = maxAttempts;
         passcode.value = '';
         signinPin.clear();
-        _persistRetryState();
       } else {
         cooldownSecondsLeft.value = left;
       }

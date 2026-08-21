@@ -63,20 +63,6 @@ class StorageService extends GetxService {
   String? getLocaleCode() => _box.read('locale');
 
   // ============================================================
-  // PASSCODE RETRY (Per email)
-  // ============================================================
-  String _retryKey(String email) =>
-      'passcode-retry:${email.trim().toLowerCase()}';
-
-  void setPasscodeRetry(String email, Map<String, dynamic> state) =>
-      _box.write(_retryKey(email), state);
-
-  Map<String, dynamic>? getPasscodeRetry(String email) {
-    final raw = _box.read(_retryKey(email));
-    return raw is Map ? Map<String, dynamic>.from(raw) : null;
-  }
-
-  // ============================================================
   // UTILITY
   // ============================================================
   void clearAll() => _box.erase();
