@@ -10,7 +10,7 @@ import '../controllers/controllers.dart';
 class InitialBinding extends Bindings {
   @override
   void dependencies() {
-    // ===== Services ===s==
+    // ===== Services =====
 
     // Storage (no dependencies)
     Get.put(StorageService(), permanent: true);

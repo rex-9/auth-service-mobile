@@ -11,7 +11,7 @@ import 'package:rexone_mobile/design/design.dart';
 import 'package:rexone_mobile/routes/routes.dart';
 import 'package:rexone_mobile/services/services.dart';
 import 'package:upgrader/upgrader.dart';
-import 'bindings/initial_binding.dart';
+import 'bindings/initial.binding.dart';
 import 'locales/app_translations.dart';
 import 'modules/setting/setting.dart';
 
