@@ -15,7 +15,7 @@ class AppSnackbar {
       title: Constants.locale.error.tr,
       message: message,
       background: Design.colors.error.withValues(alpha: 0.12),
-      foreground: Design.colors.errorDark,
+      foreground: Design.colors.error,
       icon: Design.icons.error,
     );
   }
@@ -25,7 +25,7 @@ class AppSnackbar {
       title: Constants.locale.success.tr,
       message: message,
       background: Design.colors.success.withValues(alpha: 0.12),
-      foreground: Design.colors.successDark,
+      foreground: Design.colors.success,
       icon: Design.icons.check,
     );
   }
@@ -35,7 +35,7 @@ class AppSnackbar {
       title: Constants.locale.warning.tr,
       message: message,
       background: Design.colors.warning.withValues(alpha: 0.12),
-      foreground: Design.colors.warningDark,
+      foreground: Design.colors.warning,
       icon: Design.icons.warning,
     );
   }
@@ -45,7 +45,7 @@ class AppSnackbar {
       title: Constants.locale.info.tr,
       message: message,
       background: Design.colors.primary.withValues(alpha: 0.12),
-      foreground: Design.colors.primaryDark,
+      foreground: Design.colors.primary,
       icon: Design.icons.info,
     );
   }

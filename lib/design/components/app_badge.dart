@@ -25,15 +25,15 @@ class AppBadge extends StatelessWidget {
     switch (type) {
       case BadgeType.success:
         bg = Design.colors.success.withValues(alpha: 0.15);
-        fg = Design.colors.successDark;
+        fg = Design.colors.success;
         break;
       case BadgeType.warning:
         bg = Design.colors.warning.withValues(alpha: 0.15);
-        fg = Design.colors.warningDark;
+        fg = Design.colors.warning;
         break;
       case BadgeType.error:
         bg = Design.colors.error.withValues(alpha: 0.15);
-        fg = Design.colors.errorDark;
+        fg = Design.colors.error;
         break;
       case BadgeType.info:
         bg = colors.primary.withValues(alpha: 0.15);

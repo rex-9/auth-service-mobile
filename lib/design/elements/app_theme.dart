@@ -10,24 +10,27 @@ class AppTheme {
   ThemeData get light => _buildLightTheme();
   ThemeData get dark => _buildDarkTheme();
 
-  // ===== THEME-AWARE COLORS =====
+  // ===== THEME-AWARE DYNAMIC GETTERS =====
   AppThemeColors get colors => const AppThemeColors();
 }
 
-// lib/design/elements/app_theme.dart
+/// Theme-aware dynamic colors resolved from current GetX theme.
 class AppThemeColors {
   const AppThemeColors();
 
   Color get primary => Get.theme.colorScheme.primary;
+  Color get secondary => Get.theme.colorScheme.secondary;
   Color get error => Get.theme.colorScheme.error;
   Color get background => Get.theme.scaffoldBackgroundColor;
   Color get surface => Get.theme.colorScheme.surface;
+  Color get card => Get.theme.cardTheme.color ?? Get.theme.colorScheme.surface;
   Color get divider => Get.theme.dividerColor;
   Color get border => Get.theme.colorScheme.outline;
   Color get textPrimary => Get.theme.colorScheme.onSurface;
   Color get textSecondary => Get.theme.colorScheme.onSurfaceVariant;
-  Color get textTertiary =>
+  Color get textMuted =>
       Get.theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6);
+  Color get textTertiary => textMuted;
 }
 
 // ===== THEME BUILDERS =====
@@ -35,14 +38,15 @@ ThemeData _buildLightTheme() {
   return ThemeData(
     brightness: Brightness.light,
     primaryColor: Design.colors.primary,
-    scaffoldBackgroundColor: Design.colors.background,
+    scaffoldBackgroundColor: Design.colors.day.background,
     colorScheme: ColorScheme.light(
       primary: Design.colors.primary,
       secondary: Design.colors.secondary,
       error: Design.colors.error,
-      surface: Design.colors.surface,
-      onSurface: Design.colors.textPrimary,
-      onSurfaceVariant: Design.colors.textSecondary,
+      surface: Design.colors.day.surface,
+      onSurface: Design.colors.day.textPrimary,
+      onSurfaceVariant: Design.colors.day.textSecondary,
+      outline: Design.colors.day.border,
     ),
     fontFamily: Design.typo.fontFamily,
     textTheme: TextTheme(
@@ -57,8 +61,8 @@ ThemeData _buildLightTheme() {
       labelSmall: Design.typo.labelSmall,
     ),
     appBarTheme: AppBarTheme(
-      backgroundColor: Design.colors.surface,
-      foregroundColor: Design.colors.textPrimary,
+      backgroundColor: Design.colors.day.surface,
+      foregroundColor: Design.colors.day.textPrimary,
       elevation: 0,
       centerTitle: false,
       titleTextStyle: Design.typo.headline4,
@@ -102,14 +106,14 @@ ThemeData _buildLightTheme() {
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: Design.colors.surface,
+      fillColor: Design.colors.day.surface,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
-        borderSide: BorderSide(color: Design.colors.border),
+        borderSide: BorderSide(color: Design.colors.day.border),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
-        borderSide: BorderSide(color: Design.colors.border),
+        borderSide: BorderSide(color: Design.colors.day.border),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
@@ -128,7 +132,7 @@ ThemeData _buildLightTheme() {
       errorStyle: Design.typo.caption.copyWith(color: Design.colors.error),
     ),
     cardTheme: CardThemeData(
-      color: Design.colors.surface,
+      color: Design.colors.day.card,
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(Design.spacing.radiusLarge),
@@ -136,12 +140,12 @@ ThemeData _buildLightTheme() {
       margin: EdgeInsets.zero,
     ),
     dividerTheme: DividerThemeData(
-      color: Design.colors.divider,
+      color: Design.colors.day.divider,
       thickness: 1,
       space: Design.spacing.lg,
     ),
     dialogTheme: DialogThemeData(
-      backgroundColor: Design.colors.surface,
+      backgroundColor: Design.colors.day.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(Design.spacing.radiusLarge),
       ),
@@ -151,7 +155,7 @@ ThemeData _buildLightTheme() {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
       ),
-      backgroundColor: Design.colors.textPrimary,
+      backgroundColor: Design.colors.day.textPrimary,
       contentTextStyle: Design.typo.bodyMedium.copyWith(color: Colors.white),
     ),
   );
@@ -161,52 +165,53 @@ ThemeData _buildDarkTheme() {
   return ThemeData(
     brightness: Brightness.dark,
     primaryColor: Design.colors.primary,
-    scaffoldBackgroundColor: Design.colors.backgroundDark,
+    scaffoldBackgroundColor: Design.colors.night.background,
     colorScheme: ColorScheme.dark(
       primary: Design.colors.primary,
       secondary: Design.colors.secondary,
       error: Design.colors.error,
-      surface: Design.colors.surfaceDark,
-      onSurface: Design.colors.textPrimaryDark,
-      onSurfaceVariant: Design.colors.textSecondaryDark,
+      surface: Design.colors.night.surface,
+      onSurface: Design.colors.night.textPrimary,
+      onSurfaceVariant: Design.colors.night.textSecondary,
+      outline: Design.colors.night.border,
     ),
     fontFamily: Design.typo.fontFamily,
     textTheme: TextTheme(
       displayLarge: Design.typo.headline1.copyWith(
-        color: Design.colors.textPrimaryDark,
+        color: Design.colors.night.textPrimary,
       ),
       displayMedium: Design.typo.headline2.copyWith(
-        color: Design.colors.textPrimaryDark,
+        color: Design.colors.night.textPrimary,
       ),
       displaySmall: Design.typo.headline3.copyWith(
-        color: Design.colors.textPrimaryDark,
+        color: Design.colors.night.textPrimary,
       ),
       bodyLarge: Design.typo.bodyLarge.copyWith(
-        color: Design.colors.textPrimaryDark,
+        color: Design.colors.night.textPrimary,
       ),
       bodyMedium: Design.typo.bodyMedium.copyWith(
-        color: Design.colors.textSecondaryDark,
+        color: Design.colors.night.textSecondary,
       ),
       bodySmall: Design.typo.bodySmall.copyWith(
-        color: Design.colors.textTertiaryDark,
+        color: Design.colors.night.textMuted,
       ),
       labelLarge: Design.typo.labelLarge.copyWith(
-        color: Design.colors.textPrimaryDark,
+        color: Design.colors.night.textPrimary,
       ),
       labelMedium: Design.typo.labelMedium.copyWith(
-        color: Design.colors.textSecondaryDark,
+        color: Design.colors.night.textSecondary,
       ),
       labelSmall: Design.typo.labelSmall.copyWith(
-        color: Design.colors.textTertiaryDark,
+        color: Design.colors.night.textMuted,
       ),
     ),
     appBarTheme: AppBarTheme(
-      backgroundColor: Design.colors.surfaceDark,
-      foregroundColor: Design.colors.textPrimaryDark,
+      backgroundColor: Design.colors.night.surface,
+      foregroundColor: Design.colors.night.textPrimary,
       elevation: 0,
       centerTitle: false,
       titleTextStyle: Design.typo.headline4.copyWith(
-        color: Design.colors.textPrimaryDark,
+        color: Design.colors.night.textPrimary,
       ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
@@ -248,14 +253,14 @@ ThemeData _buildDarkTheme() {
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: Design.colors.surfaceDark,
+      fillColor: Design.colors.night.surface,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
-        borderSide: BorderSide(color: Design.colors.borderDark),
+        borderSide: BorderSide(color: Design.colors.night.border),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
-        borderSide: BorderSide(color: Design.colors.borderDark),
+        borderSide: BorderSide(color: Design.colors.night.border),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
@@ -270,15 +275,15 @@ ThemeData _buildDarkTheme() {
         vertical: Design.spacing.inputVertical,
       ),
       labelStyle: Design.typo.labelMedium.copyWith(
-        color: Design.colors.textSecondaryDark,
+        color: Design.colors.night.textSecondary,
       ),
       hintStyle: Design.typo.helper.copyWith(
-        color: Design.colors.textTertiaryDark,
+        color: Design.colors.night.textMuted,
       ),
       errorStyle: Design.typo.caption.copyWith(color: Design.colors.error),
     ),
     cardTheme: CardThemeData(
-      color: Design.colors.surfaceDark,
+      color: Design.colors.night.card,
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(Design.spacing.radiusLarge),
@@ -286,12 +291,12 @@ ThemeData _buildDarkTheme() {
       margin: EdgeInsets.zero,
     ),
     dividerTheme: DividerThemeData(
-      color: Design.colors.dividerDark,
+      color: Design.colors.night.divider,
       thickness: 1,
       space: Design.spacing.lg,
     ),
     dialogTheme: DialogThemeData(
-      backgroundColor: Design.colors.surfaceDark,
+      backgroundColor: Design.colors.night.surface,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(Design.spacing.radiusLarge),
       ),
@@ -301,7 +306,7 @@ ThemeData _buildDarkTheme() {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
       ),
-      backgroundColor: Design.colors.textPrimaryDark,
+      backgroundColor: Design.colors.night.textPrimary,
       contentTextStyle: Design.typo.bodyMedium.copyWith(color: Colors.white),
     ),
   );

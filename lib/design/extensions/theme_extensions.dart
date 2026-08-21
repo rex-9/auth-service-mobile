@@ -7,33 +7,37 @@ extension ThemeContext on BuildContext {
 }
 
 extension ThemeColors on BuildContext {
-  _ThemeColors get colors => _ThemeColors(this);
+  AppThemeContextColors get colors => AppThemeContextColors(this);
 }
 
-class _ThemeColors {
-  const _ThemeColors(this._context);
+class AppThemeContextColors {
+  const AppThemeContextColors(this._context);
   final BuildContext _context;
 
   ColorScheme get colorScheme => _context.theme.colorScheme;
 
   Color get primary => _context.theme.colorScheme.primary;
+  Color get secondary => _context.theme.colorScheme.secondary;
   Color get error => _context.theme.colorScheme.error;
   Color get background => _context.theme.scaffoldBackgroundColor;
   Color get surface => _context.theme.colorScheme.surface;
+  Color get card =>
+      _context.theme.cardTheme.color ?? _context.theme.colorScheme.surface;
   Color get divider => _context.theme.dividerColor;
   Color get border => _context.theme.colorScheme.outline;
   Color get textPrimary => _context.theme.colorScheme.onSurface;
   Color get textSecondary => _context.theme.colorScheme.onSurfaceVariant;
-  Color get textTertiary =>
+  Color get textMuted =>
       _context.theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6);
+  Color get textTertiary => textMuted;
 }
 
 extension ThemeTypography on BuildContext {
-  _ThemeTypography get typo => _ThemeTypography(this);
+  AppThemeContextTypography get typo => AppThemeContextTypography(this);
 }
 
-class _ThemeTypography {
-  const _ThemeTypography(this._context);
+class AppThemeContextTypography {
+  const AppThemeContextTypography(this._context);
   final BuildContext _context;
 
   // Headlines

@@ -207,7 +207,7 @@ class PaymentPage extends GetView<PaymentController> {
           Text(
             'Access remains active until $periodEnd',
             style: context.typo.caption.copyWith(
-              color: Design.colors.warningDark,
+              color: Design.colors.warning,
             ),
             textAlign: TextAlign.center,
           ),

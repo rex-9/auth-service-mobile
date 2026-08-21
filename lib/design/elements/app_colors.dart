@@ -1,58 +1,68 @@
 // lib/design/elements/app_colors.dart
 import 'package:flutter/material.dart';
 
+/// RexOne Design System Colors — Unified with Rex9 Design System.
+/// Provides pure brand, semantic, day (light), night (dark), and glassmorphic tokens.
 class AppColors {
   const AppColors();
 
-  // ===== BASE COLORS =====
-  // Primary Colors
-  Color get primary => const Color(0xFF6366F1);
-  Color get primaryLight => const Color(0xFF818CF8);
-  Color get primaryDark => const Color(0xFF4F46E5);
+  // ===== BRAND (Unified across Light & Dark) =====
+  Color get primary => const Color(0xFFFF5E62);
+  Color get secondary => const Color(0xFFFF7556);
+  Color get accent => const Color(0xFFFF2A4B);
 
-  // Secondary Colors
-  Color get secondary => const Color(0xFF8B5CF6);
-  Color get secondaryLight => const Color(0xFFA78BFA);
-  Color get secondaryDark => const Color(0xFF7C3AED);
-
-  // Success Colors
+  // ===== SEMANTIC (Unified across Light & Dark) =====
   Color get success => const Color(0xFF10B981);
-  Color get successLight => const Color(0xFF34D399);
-  Color get successDark => const Color(0xFF059669);
-
-  // Error Colors
-  Color get error => const Color(0xFFEF4444);
-  Color get errorLight => const Color(0xFFF87171);
-  Color get errorDark => const Color(0xFFDC2626);
-
-  // Warning Colors
   Color get warning => const Color(0xFFF59E0B);
-  Color get warningLight => const Color(0xFFFBBF24);
-  Color get warningDark => const Color(0xFFD97706);
+  Color get error => const Color(0xFFEF4444);
+  Color get info => const Color(0xFF38BDF8);
 
-  // Neutral Colors (Light Mode)
-  Color get background => const Color(0xFFF9FAFB);
+  // ===== DAY THEME (Light Mode) =====
+  AppDayColors get day => const AppDayColors();
+
+  // ===== NIGHT THEME (Dark Mode - Rex9 Cyber Aesthetic) =====
+  AppNightColors get night => const AppNightColors();
+
+  // ===== GLASSMORPHISM =====
+  AppGlassColors get glass => const AppGlassColors();
+
+  // ===== GRADIENTS & SHADOWS =====
+  GradientColors get gradient => const GradientColors();
+  Shadows get shadows => const Shadows();
+}
+
+class AppDayColors {
+  const AppDayColors();
+
+  Color get background => const Color(0xFFFAFAF8);
   Color get surface => const Color(0xFFFFFFFF);
-  Color get textPrimary => const Color(0xFF111827);
-  Color get textSecondary => const Color(0xFF6B7280);
-  Color get textTertiary => const Color(0xFF9CA3AF);
+  Color get card => const Color(0xFFF5F5F3);
   Color get border => const Color(0xFFE5E7EB);
   Color get divider => const Color(0xFFF3F4F6);
+  Color get textPrimary => const Color(0xFF111827);
+  Color get textSecondary => const Color(0xFF4B5563);
+  Color get textMuted => const Color(0xFF9CA3AF);
+}
 
-  // Dark Mode Colors
-  Color get backgroundDark => const Color(0xFF111827);
-  Color get surfaceDark => const Color(0xFF1F2937);
-  Color get textPrimaryDark => const Color(0xFFF9FAFB);
-  Color get textSecondaryDark => const Color(0xFF9CA3AF);
-  Color get textTertiaryDark => const Color(0xFF6B7280);
-  Color get borderDark => const Color(0xFF374151);
-  Color get dividerDark => const Color(0xFF1F2937);
+class AppNightColors {
+  const AppNightColors();
 
-  // ===== GRADIENT COLORS =====
-  GradientColors get gradient => const GradientColors();
+  Color get background => const Color(0xFF080808);
+  Color get surface => const Color(0xFF12060A);
+  Color get card => const Color(0xFF16080E);
+  Color get border => const Color(0xFF2A1018);
+  Color get divider => const Color(0xFF1F0B13);
+  Color get textPrimary => const Color(0xFFFFFFFF);
+  Color get textSecondary => const Color(0xFFE2D4D8);
+  Color get textMuted => const Color(0xFF8E7E84);
+}
 
-  // ===== SHADOWS =====
-  Shadows get shadows => const Shadows();
+class AppGlassColors {
+  const AppGlassColors();
+
+  Color get nav => const Color(0xCC12060A);
+  Color get card => const Color(0x9916080E);
+  Color get border => const Color(0x38FF5E62);
 }
 
 class GradientColors {
@@ -68,13 +78,13 @@ class GradientColors {
   LinearGradient get success => LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [_colors.success, _colors.successLight],
+    colors: [_colors.success, const Color(0xFF34D399)],
   );
 
   LinearGradient get error => LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
-    colors: [_colors.error, _colors.errorLight],
+    colors: [_colors.error, const Color(0xFFF87171)],
   );
 }
 
