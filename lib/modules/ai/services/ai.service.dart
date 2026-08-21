@@ -18,16 +18,10 @@ class AiService extends GetxService {
   // ============================================================
   // CHAT
   // ============================================================
-  Future<ApiResponse<Map<String, dynamic>>> chat(
-    String message, {
-    String? roomId,
-  }) async {
+  Future<ApiResponse<Map<String, dynamic>>> chat(AiChatRequest request) async {
     final response = await _api.post(
       ServerRoutes.aiChat,
-      {
-        JsonKeys.message: message,
-        if (roomId != null && roomId.isNotEmpty) AiKeys.roomId: roomId,
-      },
+      request.toJson(),
       showLoading: false,
     );
     return _api.parseResponse<Map<String, dynamic>>(
@@ -63,8 +57,8 @@ class AiService extends GetxService {
   // ============================================================
   Future<PaginatedResponse<AiRoomModel>> getRooms({int? page, int? limit}) async {
     final query = <String, dynamic>{};
-    if (page != null) query['page'] = page.toString();
-    if (limit != null) query['limit'] = limit.toString();
+    if (page != null) query[ApiKeys.page] = page.toString();
+    if (limit != null) query[ApiKeys.limit] = limit.toString();
     final response = await _api.get(ServerRoutes.aiRooms, query: query);
     return _api.parsePaginatedResponse<AiRoomModel>(
       response,
@@ -72,12 +66,14 @@ class AiService extends GetxService {
     );
   }
 
-  Future<ApiResponse<AiRoomModel>> createRoom(String title) async {
-    final response = await _api.post(ServerRoutes.aiRooms, {AiKeys.title: title});
+  Future<ApiResponse<AiRoomModel>> createRoom(CreateRoomRequest request) async {
+    final response = await _api.post(ServerRoutes.aiRooms, request.toJson());
     return _api.parseResponse<AiRoomModel>(response, (data) {
-      final record = data is Map && data[AiKeys.room] is Map ? data[AiKeys.room] : data;
-      return ApiHelper.parseRecord<AiRoomModel>(record, AiRoomModel.fromJson)
-          ?? AiRoomModel.fromJson(const {});
+      final record = data is Map && data[AiKeys.room] is Map
+          ? data[AiKeys.room]
+          : data;
+      return ApiHelper.parseRecord<AiRoomModel>(record, AiRoomModel.fromJson) ??
+          AiRoomModel.fromJson(const {});
     });
   }
 

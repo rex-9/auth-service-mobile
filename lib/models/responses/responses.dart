@@ -1,5 +1,5 @@
 export 'api.response.dart';
-export 'user.response.dart';
-export 'auth.response.dart';
-export 'signin.response.dart';
-export 'google.response.dart';
+export 'auth/user.response.dart';
+export 'auth/auth.response.dart';
+export 'auth/signin.response.dart';
+export 'auth/google.response.dart';

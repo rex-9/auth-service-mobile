@@ -1,0 +1,36 @@
+/// Request/response keys for payment, product, subscription, and transaction payloads.
+class PaymentKeys {
+  const PaymentKeys._();
+
+  // ===== Checkout session =====
+  static const checkoutUrl = 'checkout_url';
+  static const productId = 'product_id';
+  static const successUrl = 'success_url';
+  static const cancelUrl = 'cancel_url';
+
+  // ===== Product =====
+  static const name = 'name';
+  static const description = 'description';
+  static const price = 'price';
+  static const priceUnitAmount = 'price_unit_amount';
+  static const currency = 'currency';
+  static const cycle = 'cycle';
+  static const periodLabel = 'period_label';
+  static const recurring = 'recurring';
+  static const active = 'active';
+
+  // ===== Subscription =====
+  static const status = 'status';
+  static const currentPeriodStart = 'current_period_start';
+  static const currentPeriodEnd = 'current_period_end';
+  static const startedAt = 'started_at';
+  static const endedAt = 'ended_at';
+  static const canceledAt = 'canceled_at';
+  static const canceled = 'canceled';
+  static const scheduledForCancellation = 'scheduled_for_cancellation';
+  static const productName = 'product_name';
+
+  // ===== Transaction =====
+  static const paid = 'paid';
+  static const createdAt = 'created_at';
+}

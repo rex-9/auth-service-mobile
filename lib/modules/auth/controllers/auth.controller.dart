@@ -322,7 +322,9 @@ class AuthController extends GetxController {
     }
 
     try {
-      final response = await _auth.signIn(email.value, passcode.value);
+      final response = await _auth.signIn(
+        SignInRequest(signinKey: email.value, password: passcode.value),
+      );
 
       if (response.success && response.data != null) {
         final data = response.data!;
@@ -365,7 +367,9 @@ class AuthController extends GetxController {
   // Step 2b: Send confirmation code (for new user registration)
   Future<void> sendConfirmationOTPCode() async {
     try {
-      final response = await _auth.sendConfirmationOTPCode(email.value);
+      final response = await _auth.sendConfirmationOTPCode(
+        SendConfirmationOtpRequest(signinKey: email.value),
+      );
       if (response.success) {
         _startResendCountdown(30);
         if (Get.currentRoute != AppRoutes.confirmEmail) {
@@ -382,7 +386,9 @@ class AuthController extends GetxController {
   // Step 3: Confirm code (for new user)
   Future<void> confirmOTPCode(String code) async {
     try {
-      final response = await _auth.confirmOTPCode(email.value, code);
+      final response = await _auth.confirmOTPCode(
+        ConfirmOtpRequest(signinKey: email.value, confirmationCode: code),
+      );
       if (response.success && response.data != null) {
         _analytics.logEmailVerified();
         _analytics.logOnboardingCompleted();
@@ -414,11 +420,13 @@ class AuthController extends GetxController {
 
     try {
       final response = await _auth.signUp(
-        username: username.value,
-        name: fullName.value,
-        email: email.value,
-        password: passcode.value,
-        passwordConfirmation: confirmPasscode.value,
+        SignUpRequest(
+          username: username.value,
+          name: fullName.value,
+          email: email.value,
+          password: passcode.value,
+          passwordConfirmation: confirmPasscode.value,
+        ),
       );
 
       if (response.success) {
@@ -449,7 +457,9 @@ class AuthController extends GetxController {
       final auth = await user.authorizationClient.authorizeScopes(scopes);
       final accessToken = auth.accessToken;
 
-      final response = await _auth.signInWithGoogle(accessToken);
+      final response = await _auth.signInWithGoogle(
+        SignInGoogleRequest(idToken: accessToken),
+      );
 
       if (response.success && response.data != null) {
         // New Google account: set a passcode to complete account creation.
@@ -498,8 +508,10 @@ class AuthController extends GetxController {
 
     try {
       final response = await _auth.googleSignInComplete(
-        passcode.value,
-        googleChallengeToken.value,
+        GoogleSignInCompleteRequest(
+          passcode: passcode.value,
+          challengeToken: googleChallengeToken.value,
+        ),
       );
 
       if (response.success && response.data != null) {
@@ -540,7 +552,9 @@ class AuthController extends GetxController {
   Future<void> forgotPassword() async {
     if (!validateEmail()) return;
     try {
-      final response = await _auth.forgotPasscode(email.value);
+      final response = await _auth.forgotPasscode(
+        ForgotPasscodeRequest(email: email.value),
+      );
       if (response.success) {
         _startResendCountdown(60);
         AppSnackbar.success(response.message);

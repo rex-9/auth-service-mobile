@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:rexone_mobile/config/config.dart';
+import 'package:rexone_mobile/constants/constants.dart';
 
 class SocketMessage {
   final String type;
@@ -16,12 +17,12 @@ class SocketMessage {
 
   factory SocketMessage.fromJson(Map<String, dynamic> json) {
     return SocketMessage(
-      type: json['type']?.toString() ?? '',
-      message: json['message']?.toString(),
-      data: json['data'] is Map
-          ? Map<String, dynamic>.from(json['data'])
+      type: json[SocketKeys.type]?.toString() ?? '',
+      message: json[SocketKeys.message]?.toString(),
+      data: json[SocketKeys.data] is Map
+          ? Map<String, dynamic>.from(json[SocketKeys.data] as Map)
           : null,
-      createdAt: json['created_at']?.toString(),
+      createdAt: json[SocketKeys.createdAt]?.toString(),
     );
   }
 }

@@ -106,7 +106,9 @@ class AiController extends GetxController {
     isProcessing.value = true;
 
     try {
-      final response = await _ai.chat(clean, roomId: currentRoomId.value);
+      final response = await _ai.chat(
+        AiChatRequest(message: clean, roomId: currentRoomId.value),
+      );
       if (response.success && response.data != null) {
         final rId = response.data![AiKeys.roomId]?.toString();
         if (rId != null && rId.isNotEmpty) {
@@ -146,7 +148,7 @@ class AiController extends GetxController {
 
   Future<void> createNewRoom([String title = 'New Chat']) async {
     try {
-      final response = await _ai.createRoom(title);
+      final response = await _ai.createRoom(CreateRoomRequest(title: title));
       if (response.success && response.data != null) {
         final newRoom = response.data!;
         rooms.insert(0, newRoom);

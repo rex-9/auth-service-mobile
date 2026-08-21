@@ -22,8 +22,8 @@ class PaymentService extends GetxService {
     int? limit,
   }) async {
     final query = <String, dynamic>{};
-    if (page != null) query[JsonKeys.page] = page.toString();
-    if (limit != null) query[JsonKeys.limit] = limit.toString();
+    if (page != null) query[ApiKeys.page] = page.toString();
+    if (limit != null) query[ApiKeys.limit] = limit.toString();
     final response = await _api.get(ServerRoutes.paymentProducts, query: query);
     return _api.parsePaginatedResponse<ProductModel>(
       response,
@@ -39,8 +39,8 @@ class PaymentService extends GetxService {
     int? limit,
   }) async {
     final query = <String, dynamic>{};
-    if (page != null) query[JsonKeys.page] = page.toString();
-    if (limit != null) query[JsonKeys.limit] = limit.toString();
+    if (page != null) query[ApiKeys.page] = page.toString();
+    if (limit != null) query[ApiKeys.limit] = limit.toString();
     final response = await _api.get(
       ServerRoutes.paymentSubscriptions,
       query: query,
@@ -75,8 +75,8 @@ class PaymentService extends GetxService {
     int? limit,
   }) async {
     final query = <String, dynamic>{};
-    if (page != null) query[JsonKeys.page] = page.toString();
-    if (limit != null) query[JsonKeys.limit] = limit.toString();
+    if (page != null) query[ApiKeys.page] = page.toString();
+    if (limit != null) query[ApiKeys.limit] = limit.toString();
     final response = await _api.get(
       ServerRoutes.paymentTransactions,
       query: query,
@@ -91,15 +91,12 @@ class PaymentService extends GetxService {
   // CHECKOUT SESSION
   // ============================================================
   Future<ApiResponse<Map<String, dynamic>>> createCheckout(
-    String productId, {
-    String? successUrl,
-    String? cancelUrl,
-  }) async {
-    final response = await _api.post(ServerRoutes.paymentSession, {
-      PaymentKeys.productId: productId,
-      PaymentKeys.successUrl: ?successUrl,
-      PaymentKeys.cancelUrl: ?cancelUrl,
-    });
+    CreateCheckoutRequest request,
+  ) async {
+    final response = await _api.post(
+      ServerRoutes.paymentSession,
+      request.toJson(),
+    );
     return _api.parseResponse<Map<String, dynamic>>(
       response,
       (data) => data is Map ? Map<String, dynamic>.from(data) : {},

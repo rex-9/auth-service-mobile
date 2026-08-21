@@ -118,7 +118,9 @@ class PaymentController extends GetxController {
 
   Future<void> startCheckout(String productId) async {
     try {
-      final response = await _payment.createCheckout(productId);
+      final response = await _payment.createCheckout(
+        CreateCheckoutRequest(productId: productId),
+      );
       if (response.success && response.data != null) {
         final checkoutUrl = response.data![PaymentKeys.checkoutUrl]?.toString();
 

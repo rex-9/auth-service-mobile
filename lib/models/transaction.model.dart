@@ -1,3 +1,5 @@
+import 'package:rexone_mobile/constants/constants.dart';
+
 class TransactionModel {
   final String id;
   final String? productId;
@@ -21,16 +23,21 @@ class TransactionModel {
 
   factory TransactionModel.fromJson(Map<String, dynamic> json) {
     return TransactionModel(
-      id: json['id']?.toString() ?? '',
-      productId: json['product_id']?.toString(),
-      priceUnitAmount: json['price_unit_amount'] is int
-          ? json['price_unit_amount']
-          : int.tryParse(json['price_unit_amount']?.toString() ?? '0') ?? 0,
-      currency: json['currency']?.toString() ?? 'usd',
-      paid: json['paid'] == true || json['status'] == 'succeeded',
-      status: json['status']?.toString() ?? '',
-      productName: json['product_name']?.toString(),
-      createdAt: json['created_at']?.toString(),
+      id: json[ApiKeys.id]?.toString() ?? '',
+      productId: json[PaymentKeys.productId]?.toString(),
+      priceUnitAmount: json[PaymentKeys.priceUnitAmount] is int
+          ? json[PaymentKeys.priceUnitAmount] as int
+          : int.tryParse(
+                  json[PaymentKeys.priceUnitAmount]?.toString() ?? '0',
+                ) ??
+                0,
+      currency: json[PaymentKeys.currency]?.toString() ?? 'usd',
+      paid:
+          json[PaymentKeys.paid] == true ||
+          json[PaymentKeys.status] == 'succeeded',
+      status: json[PaymentKeys.status]?.toString() ?? '',
+      productName: json[PaymentKeys.productName]?.toString(),
+      createdAt: json[PaymentKeys.createdAt]?.toString(),
     );
   }
 }

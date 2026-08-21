@@ -1,4 +1,4 @@
-package com.meritmoon.app
+package com.rexone.mobile
 
 import io.flutter.embedding.android.FlutterActivity
 

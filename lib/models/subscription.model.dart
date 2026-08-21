@@ -1,3 +1,5 @@
+import 'package:rexone_mobile/constants/constants.dart';
+
 class SubscriptionModel {
   final String id;
   final String status;
@@ -32,28 +34,28 @@ class SubscriptionModel {
   });
 
   factory SubscriptionModel.fromJson(Map<String, dynamic> json) {
-    final status = json['status']?.toString() ?? '';
-    final canceledAt = json['canceled_at']?.toString();
-    final endedAt = json['ended_at']?.toString();
-    final active = json['active'] == true || status == 'active';
+    final status = json[PaymentKeys.status]?.toString() ?? '';
+    final canceledAt = json[PaymentKeys.canceledAt]?.toString();
+    final endedAt = json[PaymentKeys.endedAt]?.toString();
+    final active = json[PaymentKeys.active] == true || status == 'active';
     final scheduled = canceledAt != null && endedAt == null && active;
 
     return SubscriptionModel(
-      id: json['id']?.toString() ?? '',
+      id: json[ApiKeys.id]?.toString() ?? '',
       status: status,
-      productId: json['product_id']?.toString() ?? '',
-      currentPeriodStart: json['current_period_start']?.toString(),
-      currentPeriodEnd: json['current_period_end']?.toString(),
-      startedAt: json['started_at']?.toString(),
+      productId: json[PaymentKeys.productId]?.toString() ?? '',
+      currentPeriodStart: json[PaymentKeys.currentPeriodStart]?.toString(),
+      currentPeriodEnd: json[PaymentKeys.currentPeriodEnd]?.toString(),
+      startedAt: json[PaymentKeys.startedAt]?.toString(),
       endedAt: endedAt,
       canceledAt: canceledAt,
       active: active,
-      canceled: json['canceled'] == true || status == 'canceled',
+      canceled: json[PaymentKeys.canceled] == true || status == 'canceled',
       scheduledForCancellation:
-          json['scheduled_for_cancellation'] == true || scheduled,
-      productName: json['product_name']?.toString(),
-      price: json['price']?.toString(),
-      periodLabel: json['period_label']?.toString(),
+          json[PaymentKeys.scheduledForCancellation] == true || scheduled,
+      productName: json[PaymentKeys.productName]?.toString(),
+      price: json[PaymentKeys.price]?.toString(),
+      periodLabel: json[PaymentKeys.periodLabel]?.toString(),
     );
   }
 

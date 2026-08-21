@@ -3,7 +3,7 @@ import 'locale.constants.dart';
 
 export 'http_status.dart';
 export 'enums.dart';
-export 'json_keys.dart';
+export 'json_keys/json_keys.dart';
 export 'log.constants.dart';
 export 'analytics.constants.dart';
 export 'app.constants.dart';

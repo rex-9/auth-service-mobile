@@ -3,6 +3,7 @@ export 'log.model.dart';
 export 'payment.model.dart';
 export 'ai.model.dart';
 export 'responses/responses.dart';
+export 'requests/requests.dart';
 export 'transaction.model.dart';
 export 'subscription.model.dart';
 export 'pagination_model.dart';
