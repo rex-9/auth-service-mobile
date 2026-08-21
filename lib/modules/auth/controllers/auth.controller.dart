@@ -8,7 +8,7 @@ import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/design/components/components.dart';
 import 'package:rexone_mobile/models/models.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import '../../../routes/app_routes.dart';
+import '../../../routes/app.routes.dart';
 import '../../../services/services.dart';
 import '../auth.dart';
 

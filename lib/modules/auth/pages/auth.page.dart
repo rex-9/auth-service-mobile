@@ -11,14 +11,10 @@ import '../auth.dart';
 class AuthPage extends GetView<AuthController> {
   const AuthPage({super.key});
 
-
   static bool get isIOS => GetPlatform.isIOS;
   @override
   Widget build(BuildContext context) {
-
-
-
-    final settingsController = Get.find<SettingsController>();
+    final settingsController = Get.find<SettingController>();
     Widget buildFlagIcon(BuildContext context, {String? locale}) {
       final String code = locale ?? settingsController.localeCode.value;
       return Text(
@@ -33,9 +29,8 @@ class AuthPage extends GetView<AuthController> {
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             Padding(
-              padding: EdgeInsets.only(top: isIOS? Design.spacing.sm:0),
+              padding: EdgeInsets.only(top: isIOS ? Design.spacing.sm : 0),
               child: AppButton(
-
                 type: EButtonType.icon,
                 icon: settingsController.themeIcon,
                 tooltip: settingsController.themeLabel,

@@ -4,5 +4,5 @@ export './data/models/models.dart';
 export './controllers/payment.controller.dart';
 export './controllers/checkout.controller.dart';
 export './services/payment.service.dart';
-export './pages/payment_page.dart';
-export './pages/checkout_webview_page.dart';
+export 'pages/payment.page.dart';
+export 'pages/checkout_webview.page.dart';

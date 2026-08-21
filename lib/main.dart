@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
     // print('APP_STORE_APP_ID: ${AppConfig.appStoreAppId}');
     // print('APP_STORE_BUNDLE_ID: ${AppConfig.appStoreBundleId}');
 
-    return GetBuilder<SettingsController>(
+    return GetBuilder<SettingController>(
       builder: (settings) => ScreenUtilInit(
         designSize: const Size(375, 812),
         builder: (context, child) => GetMaterialApp(

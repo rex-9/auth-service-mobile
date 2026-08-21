@@ -1,3 +1,3 @@
-export 'app_routes.dart';
-export 'server_routes.dart';
-export 'route_guard.dart';
+export 'app.routes.dart';
+export 'server.routes.dart';
+export 'guard.routes.dart';

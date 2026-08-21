@@ -9,8 +9,8 @@ import 'package:rexone_mobile/helpers/helpers.dart';
 import '../../auth/auth.dart';
 import '../setting.dart';
 
-class SettingsPage extends GetView<SettingsController> {
-  const SettingsPage({super.key});
+class SettingPage extends GetView<SettingController> {
+  const SettingPage({super.key});
 
   @override
   Widget build(BuildContext context) {

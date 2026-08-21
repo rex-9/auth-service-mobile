@@ -5,7 +5,7 @@ import 'package:rexone_mobile/config/config.dart';
 import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/design/design.dart';
 import 'package:rexone_mobile/models/responses/api.response.dart';
-import 'package:rexone_mobile/models/pagination_model.dart';
+import 'package:rexone_mobile/models/pagination.model.dart';
 import 'package:rexone_mobile/routes/routes.dart';
 import 'package:rexone_mobile/helpers/api.helper.dart';
 import 'package:rexone_mobile/services/storage.service.dart';
@@ -37,8 +37,8 @@ class ApiService extends GetConnect {
       request.headers[AppConstants.headerXPlatform] =
           AppConstants.platformMobile;
       String apiLocale = 'en';
-      if (Get.isRegistered<SettingsController>()) {
-        final code = Get.find<SettingsController>().localeCode.value;
+      if (Get.isRegistered<SettingController>()) {
+        final code = Get.find<SettingController>().localeCode.value;
         apiLocale = code.split('_').first.toLowerCase();
       } else if (Get.isRegistered<StorageService>()) {
         final code = Get.find<StorageService>().getLocaleCode() ?? 'en_US';

@@ -8,7 +8,7 @@ import '../../../locales/app_translations.dart';
 import 'package:rexone_mobile/constants/constants.dart';
 
 /// Theme + locale settings, persisted with GetStorage.
-class SettingsController extends GetxController {
+class SettingController extends GetxController {
   final StorageService _storage = Get.find();
 
   // ===== OBSERVABLES =====

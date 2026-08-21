@@ -42,7 +42,7 @@ class InitialBinding extends Bindings {
     // ===== Controllers =====
 
     // Settings: theme + locale (depends on StorageService)
-    Get.put(SettingsController(), permanent: true);
+    Get.put(SettingController(), permanent: true);
 
     // Auth Controller (depends on AuthService and StorageService)
     Get.put(AuthController(), permanent: true);

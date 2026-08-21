@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/design/design.dart';
-import 'package:rexone_mobile/routes/app_routes.dart';
+import 'package:rexone_mobile/routes/app.routes.dart';
 import 'package:rexone_mobile/services/services.dart';
 
 import '../../auth/auth.dart';

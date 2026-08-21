@@ -1,7 +1,7 @@
 // lib/routes/app_routes.dart
 import 'package:get/get.dart';
-import 'package:rexone_mobile/routes/route_guard.dart';
-import 'package:rexone_mobile/routes/server_routes.dart';
+import 'package:rexone_mobile/routes/guard.routes.dart';
+import 'package:rexone_mobile/routes/server.routes.dart';
 
 import '../modules/ai/ai.dart';
 import '../modules/auth/auth.dart';
@@ -87,12 +87,12 @@ class AppRoutes {
     GetPage(
       name: home,
       page: () => const HomePage(),
-      middlewares: [RouteGuard()],
+      middlewares: [GuardRoutes()],
     ),
     GetPage(
       name: settings,
-      page: () => const SettingsPage(),
-      middlewares: [RouteGuard()],
+      page: () => const SettingPage(),
+      middlewares: [GuardRoutes()],
     ),
     GetPage(
       name: payment,
@@ -100,7 +100,7 @@ class AppRoutes {
       binding: BindingsBuilder(() {
         Get.lazyPut<PaymentController>(() => PaymentController());
       }),
-      middlewares: [RouteGuard()],
+      middlewares: [GuardRoutes()],
     ),
     GetPage(
       name: checkout,
@@ -108,7 +108,7 @@ class AppRoutes {
       binding: BindingsBuilder(() {
         Get.lazyPut<CheckoutController>(() => CheckoutController());
       }),
-      middlewares: [RouteGuard()],
+      middlewares: [GuardRoutes()],
     ),
     GetPage(
       name: ai,
@@ -116,7 +116,7 @@ class AppRoutes {
       binding: BindingsBuilder(() {
         Get.lazyPut<AiController>(() => AiController());
       }),
-      middlewares: [RouteGuard()],
+      middlewares: [GuardRoutes()],
     ),
   ];
 }
