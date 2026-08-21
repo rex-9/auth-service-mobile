@@ -1,4 +1,4 @@
-// lib/models/ai.model.dart
+// lib/modules/ai/data/models/ai.model.dart
 import 'package:rexone_mobile/constants/constants.dart';
 
 class AiMessageModel {

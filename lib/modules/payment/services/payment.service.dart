@@ -5,6 +5,9 @@ import 'package:rexone_mobile/models/models.dart';
 import 'package:rexone_mobile/routes/routes.dart';
 import 'package:rexone_mobile/services/api.service.dart';
 
+import '../data/requests/requests.dart';
+import '../data/models/models.dart';
+
 class PaymentService extends GetxService {
   late final ApiService _api;
 

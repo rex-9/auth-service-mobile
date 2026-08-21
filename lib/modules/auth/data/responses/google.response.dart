@@ -1,4 +1,4 @@
-// lib/models/responses/auth/google.response.dart
+// lib/modules/auth/responses/google.response.dart
 import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/models/models.dart';
 

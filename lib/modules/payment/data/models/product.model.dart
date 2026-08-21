@@ -1,4 +1,4 @@
-// lib/models/payment.model.dart
+// lib/modules/payment/data/models/product.model.dart
 import 'package:rexone_mobile/constants/constants.dart';
 
 class ProductModel {

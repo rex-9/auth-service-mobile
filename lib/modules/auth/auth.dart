@@ -1,4 +1,6 @@
 // lib/modules/auth/auth.dart
+export './data/requests/requests.dart';
+export './data/responses/responses.dart';
 export './controllers/auth.controller.dart';
 export './services/auth.service.dart';
 export './pages/auth_page.dart';
