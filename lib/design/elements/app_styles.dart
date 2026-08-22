@@ -114,33 +114,33 @@ class AppStyles {
 
   // ===== CARD STYLES =====
   BoxDecoration get card => BoxDecoration(
-    color: Design.colors.surface,
+    color: Design.theme.colors.card,
     borderRadius: BorderRadius.circular(Design.spacing.radiusLarge),
     boxShadow: Design.colors.shadows.sm,
   );
 
   BoxDecoration get cardElevated => BoxDecoration(
-    color: Design.colors.surface,
+    color: Design.theme.colors.surface,
     borderRadius: BorderRadius.circular(Design.spacing.radiusLarge),
     boxShadow: Design.colors.shadows.md,
   );
 
   // ===== CONTAINER STYLES =====
   BoxDecoration get container => BoxDecoration(
-    color: Design.colors.surface,
+    color: Design.theme.colors.surface,
     borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
-    border: Border.all(color: Design.colors.border),
+    border: Border.all(color: Design.theme.colors.border),
   );
 
   BoxDecoration get containerBordered => BoxDecoration(
-    color: Design.colors.surface,
+    color: Design.theme.colors.surface,
     borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
     border: Border.all(color: Design.colors.primary, width: 2),
   );
 
   // ===== DIALOG STYLES =====
   BoxDecoration get dialog => BoxDecoration(
-    color: Design.colors.surface,
+    color: Design.theme.colors.surface,
     borderRadius: BorderRadius.circular(Design.spacing.radiusXLarge),
     boxShadow: Design.colors.shadows.lg,
   );

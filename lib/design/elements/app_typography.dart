@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 class AppTypography {
   const AppTypography();
 
-  String get fontFamily => 'Poppins'; // TODO: locale font family
+  String get primary => 'Poppins'; // 👈 1. Change Body / UI font here
+  String get display => 'Poppins'; // 👈 2. Change Headings / Display font here
+
+  String get fontFamily => primary;
 
   TextStyle get headline1 => TextStyle(
     fontSize: 32,
