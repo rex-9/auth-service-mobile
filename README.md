@@ -32,16 +32,9 @@ A capable backend and a polished web app are only parts of the whole product. Th
 
 Rexone Mobile exists so that work does not have to be reinvented for every mobile application built on Rexone Core.
 
-<<<<<<< HEAD
 This is not a template of screens pretending to be an architecture. Feature modules, shared services, models, bindings, design primitives, and telemetry pipelines have exact and deliberate responsibilities:
 - **Modules** own a product feature end to end — pages, controllers, and (when needed) that feature's HTTP client — behind a single barrel export.
 - **Shared services** are thin, single-responsibility clients for transport that is not feature-owned: HTTP, Action Cable, Firebase, OneSignal, storage, and client logs.
-=======
-This is not a template of screens pretending to be an architecture. Pages, controllers, services, models, bindings, design primitives, and telemetry pipelines have exact and deliberate responsibilities:
-
-- **Controllers** own application state, user intent, and failure feedback.
-- **Services** are thin, single-responsibility transport clients that interact directly with Rexone Core, Action Cable, Firebase, and OneSignal.
->>>>>>> 2037182190734751b2106604c394083421211d18
 - **Design primitives** enforce consistent spacing, typography, and theme tokens across light and dark modes.
 - **Observability listeners** automatically capture uncaught Flutter and platform errors and ship structured diagnostic payloads to Rexone Core's client log store.
 
@@ -107,16 +100,9 @@ flowchart LR
 ```
 
 ### Layer Boundaries:
-<<<<<<< HEAD
 - `lib/modules/` owns product features. Each module keeps its pages, controllers, and optional feature service together, and exposes them through a barrel file (`auth.dart`, `payment.dart`, …).
 - `lib/controllers/` holds only app-wide coordinators that do not belong to one feature — today, `SocketController`.
 - `lib/services/` holds shared infrastructure: HTTP (`ApiService`), Action Cable, Firebase Analytics, OneSignal, storage, and client logs.
-=======
-
-- `lib/pages/` owns screen layouts and user interactions (`GetView<Controller>`).
-- `lib/controllers/` coordinates business logic, reactive state (`Rx`), navigation, and error handling.
-- `lib/services/` encapsulates HTTP communication, WebSockets, Firebase, OneSignal, and storage without synthetic error codes.
->>>>>>> 2037182190734751b2106604c394083421211d18
 - `lib/design/` centralizes design tokens, theme definitions, extensions, and reusable UI components.
 - `lib/bindings/` handles centralized dependency injection for shared services and permanent controllers. Feature controllers that are route-scoped (Payment, Checkout, AI) are bound on their `GetPage`.
 - `lib/models/` contains strongly typed JSON:API models and response envelopes.
