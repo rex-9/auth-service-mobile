@@ -1,10 +1,15 @@
 // lib/services/api.service.dart
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
+import 'package:get/get_connect/http/src/response/client_response.dart';
 import 'package:rexone_mobile/config/config.dart';
 import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/design/design.dart';
 import 'package:rexone_mobile/models/responses/api.response.dart';
+import 'package:rexone_mobile/models/responses/binary.response.dart';
 import 'package:rexone_mobile/models/pagination.model.dart';
 import 'package:rexone_mobile/routes/routes.dart';
 import 'package:rexone_mobile/helpers/api.helper.dart';
@@ -15,6 +20,7 @@ import '../modules/setting/setting.dart';
 
 class ApiService extends GetConnect {
   static const String sessionReplacedError = 'Active session not found';
+  static const String _multipartHeader = 'X-Multipart';
 
   @override
   void onInit() {
@@ -32,8 +38,13 @@ class ApiService extends GetConnect {
   void _setupInterceptors() {
     httpClient.addRequestModifier<dynamic>((request) async {
       request.headers[AppConstants.headerAccept] = AppConstants.contentTypeJson;
-      request.headers[AppConstants.headerContentType] =
-          AppConstants.contentTypeJson;
+      final isMultipart = request.headers[_multipartHeader] == 'true';
+      if (!isMultipart) {
+        request.headers[AppConstants.headerContentType] =
+            AppConstants.contentTypeJson;
+      } else {
+        request.headers.remove(AppConstants.headerContentType);
+      }
       request.headers[AppConstants.headerXPlatform] =
           AppConstants.platformMobile;
       String apiLocale = 'en';
@@ -121,6 +132,81 @@ class ApiService extends GetConnect {
         uploadProgress: uploadProgress,
       ),
       showLoading,
+    );
+  }
+
+  Future<Response<T>> postMultipart<T>(
+    String url,
+    FormData form, {
+    bool showLoading = false,
+    Progress? uploadProgress,
+  }) async {
+    return _withLoading(
+      () => super.post(
+        url,
+        form,
+        headers: {_multipartHeader: 'true'},
+        uploadProgress: uploadProgress,
+      ),
+      showLoading,
+    );
+  }
+
+  Future<BinaryResponse> postBinary(
+    String url,
+    Map<String, dynamic> body, {
+    bool showLoading = false,
+  }) async {
+    final response = await _withLoading(
+      () => httpClient.post<dynamic>(
+        url,
+        body: body,
+        responseInterceptor: _interceptBinaryResponse,
+      ),
+      showLoading,
+    );
+    return parseBinaryResponse(response);
+  }
+
+  /// GetConnect always UTF-8-decodes responses before [decoder] runs.
+  /// TTS returns raw MP3 bytes, so read the stream here and skip string decode.
+  Future<Response<T>?> _interceptBinaryResponse<T>(
+    Request<T> request,
+    Type targetType,
+    HttpClientResponse response,
+  ) async {
+    final headers = <String, String>{};
+    response.headers.forEach((key, values) {
+      headers[key] = values.join(',');
+    });
+
+    final byteList = await response.fold<List<int>>(
+      <int>[],
+      (previous, element) => previous..addAll(element),
+    );
+    final bytes = Uint8List.fromList(byteList);
+
+    final contentType = headers['content-type'] ?? '';
+    dynamic body;
+    String? bodyString;
+
+    if (byteList.isEmpty) {
+      body = null;
+    } else if (contentType.contains('json')) {
+      bodyString = utf8.decode(byteList);
+      body = jsonDecode(bodyString);
+    } else {
+      body = bytes;
+    }
+
+    return Response<T>(
+      request: request,
+      statusCode: response.statusCode,
+      statusText: response.reasonPhrase,
+      headers: headers,
+      body: body as T?,
+      bodyString: bodyString,
+      bodyBytes: Stream<List<int>>.fromIterable([bytes]),
     );
   }
 
@@ -259,6 +345,66 @@ class ApiService extends GetConnect {
       statusCode: statusCode,
       success: isSuccess && !response.hasError,
     );
+  }
+
+  Future<BinaryResponse> parseBinaryResponse(Response response) async {
+    final statusCode = response.statusCode ?? 500;
+
+    if (_isJsonEnvelope(response)) {
+      final parsed = parseResponse<dynamic>(response, (data) => data);
+      if (!parsed.success) {
+        return BinaryResponse.error(
+          statusCode: parsed.statusCode,
+          error: parsed.error ?? parsed.message,
+        );
+      }
+    }
+
+    final bytes = await _extractBytes(response);
+    if (statusCode >= 200 &&
+        statusCode < 300 &&
+        bytes != null &&
+        bytes.isNotEmpty) {
+      return BinaryResponse.success(statusCode: statusCode, bytes: bytes);
+    }
+
+    if (response.hasError) {
+      return BinaryResponse.error(
+        statusCode: statusCode,
+        error: response.statusText ?? HttpStatusMap.getMessage(statusCode),
+      );
+    }
+
+    return BinaryResponse.error(
+      statusCode: statusCode,
+      error: response.statusText ?? HttpStatusMap.getMessage(statusCode),
+    );
+  }
+
+  bool _isJsonEnvelope(Response response) {
+    if (response.body is Map &&
+        (response.body as Map).containsKey(ApiKeys.status)) {
+      return true;
+    }
+
+    final contentType = response.headers?['content-type'] ?? '';
+    return response.hasError && contentType.contains('json');
+  }
+
+  Future<Uint8List?> _extractBytes(Response response) async {
+    final body = response.body;
+    if (body is Uint8List) return body;
+    if (body is List<int>) return Uint8List.fromList(body);
+
+    final stream = response.bodyBytes;
+    if (stream != null) {
+      final chunks = await stream.toList();
+      if (chunks.isNotEmpty) {
+        return Uint8List.fromList(chunks.expand((chunk) => chunk).toList());
+      }
+    }
+
+    return null;
   }
 
   // ===== PRIVATE HELPERS =====

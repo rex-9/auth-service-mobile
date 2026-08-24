@@ -117,4 +117,22 @@ class LocaleConstants {
   String get deleteRoomConfirmMsg => 'delete_room_confirm_msg';
   String get cancelSubTitle => 'cancel_sub_title';
   String get cancelSubConfirmMsg => 'cancel_sub_confirm_msg';
+
+  // Voice / microphone
+  String get micPermissionTitle => 'mic_permission_title';
+  String get micPermissionMessage => 'mic_permission_message';
+  String get openSettings => 'open_settings';
+
+  // AI chat
+  String get aiSendMessageFailed => 'ai_send_message_failed';
+  String get aiResponseFailed => 'ai_response_failed';
+  String get aiHistoryCleared => 'ai_history_cleared';
+  String get aiClearHistoryFailed => 'ai_clear_history_failed';
+  String get aiStartRecordingFailed => 'ai_start_recording_failed';
+  String get aiSaveRecordingFailed => 'ai_save_recording_failed';
+  String get aiTranscriptionFailed => 'ai_transcription_failed';
+  String get aiTranscriptionEmpty => 'ai_transcription_empty';
+  String get aiTranscribing => 'ai_transcribing';
+  String get aiTtsFailed => 'ai_tts_failed';
+  String get aiTtsEmpty => 'ai_tts_empty';
 }

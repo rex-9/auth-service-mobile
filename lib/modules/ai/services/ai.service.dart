@@ -84,4 +84,34 @@ class AiService extends GetxService {
     final response = await _api.delete(ServerRoutes.aiDeleteRoom(roomId));
     return _api.parseResponse(response, (data) => data);
   }
+
+  // ============================================================
+  // SPEECH
+  // ============================================================
+  Future<ApiResponse<SttModel>> speechToText(String filePath) async {
+    final form = FormData({
+      SpeechKeys.audio: MultipartFile(
+        filePath,
+        filename: SpeechKeys.sttRecordingFilename,
+        contentType: SpeechKeys.sttRecordingContentType,
+      ),
+    });
+    final response = await _api.postMultipart(
+      ServerRoutes.speechToText,
+      form,
+      showLoading: false,
+    );
+    return _api.parseResponse(
+      response,
+      (data) => SttModel.fromJson(data),
+    );
+  }
+
+  Future<BinaryResponse> textToSpeech(String text) async {
+    return _api.postBinary(
+      ServerRoutes.textToSpeech,
+      TtsRequest(text: text).toJson(),
+      showLoading: false,
+    );
+  }
 }

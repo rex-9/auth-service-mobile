@@ -1,7 +1,14 @@
 // lib/modules/ai/controllers/ai.controller.dart
 import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:record/record.dart';
 import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/design/design.dart';
 
@@ -9,6 +16,8 @@ import '../ai.dart';
 
 class AiController extends GetxController {
   final AiService _ai = Get.find<AiService>();
+  final AudioRecorder _recorder = AudioRecorder();
+  final AudioPlayer _ttsPlayer = AudioPlayer();
 
   final RxList<AiMessageModel> messages = <AiMessageModel>[].obs;
   final RxList<AiRoomModel> rooms = <AiRoomModel>[].obs;
@@ -17,7 +26,21 @@ class AiController extends GetxController {
   final RxString currentRoomTitle = 'AI Assistant'.obs;
 
   final RxBool isProcessing = false.obs;
+  final RxBool isRecording = false.obs;
+  final RxBool isTranscribing = false.obs;
+  final RxInt recordingSeconds = 0.obs;
+  final RxDouble voiceLevel = 0.0.obs;
+  final RxnString lastRecordingPath = RxnString();
+  final RxnString activeTtsMessageId = RxnString();
+  final RxBool isTtsLoading = false.obs;
+
   bool _isSubmitting = false;
+  Timer? _recordingTimer;
+  StreamSubscription<Amplitude>? _amplitudeSub;
+  StreamSubscription<PlayerState>? _ttsStateSub;
+  String? _activeRecordingPath;
+  String? _cachedTtsMessageId;
+  String? _cachedTtsFilePath;
 
   // UI controllers — owned here so no StatefulWidget is needed in AiPage.
   final textController = TextEditingController();
@@ -32,6 +55,15 @@ class AiController extends GetxController {
 
   @override
   void onClose() {
+    _recordingTimer?.cancel();
+    _amplitudeSub?.cancel();
+    if (isRecording.value) {
+      unawaited(_recorder.stop());
+    }
+    unawaited(_recorder.dispose());
+    unawaited(_stopTtsPlayback());
+    unawaited(_clearTtsCache());
+    unawaited(_ttsPlayer.dispose());
     textController.dispose();
     scrollController.dispose();
     super.onClose();
@@ -114,11 +146,13 @@ class AiController extends GetxController {
           currentRoomId.value = rId;
         }
       } else {
-        AppSnackbar.error(response.error ?? 'Failed to send message');
+        AppSnackbar.error(
+          response.error ?? Constants.locale.aiSendMessageFailed.tr,
+        );
         isProcessing.value = false;
       }
     } catch (e) {
-      AppSnackbar.error('Failed to get AI response');
+      AppSnackbar.error(Constants.locale.aiResponseFailed.tr);
       isProcessing.value = false;
     } finally {
       _isSubmitting = false;
@@ -179,10 +213,10 @@ class AiController extends GetxController {
       final response = await _ai.clearHistory(roomId: currentRoomId.value);
       if (response.success) {
         loadHistory(currentRoomId.value);
-        AppSnackbar.success('Chat history cleared');
+        AppSnackbar.success(Constants.locale.aiHistoryCleared.tr);
       }
     } catch (e) {
-      AppSnackbar.error('Failed to clear history');
+      AppSnackbar.error(Constants.locale.aiClearHistoryFailed.tr);
     }
   }
 
@@ -202,10 +236,280 @@ class AiController extends GetxController {
   }
 
   void handleSend() {
+    if (isTranscribing.value || activeTtsMessageId.value != null) return;
     final text = textController.text.trim();
     if (text.isEmpty) return;
     textController.clear();
     sendMessage(text);
     scrollToBottom();
+  }
+
+  // ============================================================
+  // VOICE RECORDING
+  // ============================================================
+  String get formattedRecordingDuration {
+    final minutes = recordingSeconds.value ~/ 60;
+    final seconds = recordingSeconds.value % 60;
+    return '$minutes:${seconds.toString().padLeft(2, '0')}';
+  }
+
+  Future<void> startRecording() async {
+    if (isRecording.value ||
+        isProcessing.value ||
+        isTranscribing.value ||
+        activeTtsMessageId.value != null) {
+      return;
+    }
+
+    var permission = await Permission.microphone.status;
+    if (!permission.isGranted) {
+      permission = await Permission.microphone.request();
+    }
+    if (!permission.isGranted) {
+      await _promptMicPermission();
+      return;
+    }
+
+    if (!await _recorder.hasPermission()) {
+      await _promptMicPermission();
+      return;
+    }
+
+    try {
+      final dir = await getTemporaryDirectory();
+      _activeRecordingPath =
+          '${dir.path}/ai_voice_${DateTime.now().millisecondsSinceEpoch}.m4a';
+
+      await _recorder.start(
+        const RecordConfig(encoder: AudioEncoder.aacLc),
+        path: _activeRecordingPath!,
+      );
+
+      recordingSeconds.value = 0;
+      voiceLevel.value = 0;
+      isRecording.value = true;
+
+      _recordingTimer?.cancel();
+      _recordingTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+        recordingSeconds.value++;
+      });
+
+      await _amplitudeSub?.cancel();
+      _amplitudeSub = _recorder
+          .onAmplitudeChanged(const Duration(milliseconds: 100))
+          .listen((amplitude) {
+        voiceLevel.value = _normalizeAmplitude(amplitude.current);
+      });
+    } catch (e) {
+      debugPrint('🤖 [AiController] Error starting recording: $e');
+      AppSnackbar.error(Constants.locale.aiStartRecordingFailed.tr);
+      await _cleanupRecording(discardFile: true);
+    }
+  }
+
+  Future<void> cancelRecording() async {
+    if (!isRecording.value) return;
+    await _cleanupRecording(discardFile: true);
+  }
+
+  Future<void> finishRecording() async {
+    if (!isRecording.value || isTranscribing.value) return;
+
+    String? savedPath;
+    try {
+      final path = await _recorder.stop();
+      _recordingTimer?.cancel();
+      await _amplitudeSub?.cancel();
+      _amplitudeSub = null;
+
+      savedPath = path ?? _activeRecordingPath;
+      _activeRecordingPath = null;
+      _resetRecordingUiState();
+
+      if (savedPath == null || savedPath.isEmpty) {
+        AppSnackbar.error(Constants.locale.aiSaveRecordingFailed.tr);
+        return;
+      }
+
+      isTranscribing.value = true;
+      final response = await _ai.speechToText(savedPath);
+
+      if (response.success && response.data != null) {
+        final text = response.data!.text.trim();
+        if (text.isEmpty) {
+          AppSnackbar.error(Constants.locale.aiTranscriptionEmpty.tr);
+        } else {
+          textController.text = text;
+        }
+      } else {
+        AppSnackbar.error(
+          response.error ?? Constants.locale.aiTranscriptionFailed.tr,
+        );
+      }
+    } catch (e) {
+      debugPrint('🤖 [AiController] Error finishing recording: $e');
+      AppSnackbar.error(Constants.locale.aiTranscriptionFailed.tr);
+    } finally {
+      isTranscribing.value = false;
+      if (savedPath != null) {
+        await _deleteRecordingFile(savedPath);
+      }
+      lastRecordingPath.value = null;
+    }
+  }
+
+  double _normalizeAmplitude(double db) {
+    return ((db + 50) / 50).clamp(0.0, 1.0);
+  }
+
+  Future<void> _promptMicPermission() async {
+    final context = Get.context;
+    if (context == null || !context.mounted) return;
+
+    final openSettings = await AppDialog.confirm(
+      context: context,
+      title: Constants.locale.micPermissionTitle.tr,
+      message: Constants.locale.micPermissionMessage.tr,
+      confirmLabel: Constants.locale.openSettings.tr,
+    );
+
+    if (openSettings) {
+      await openAppSettings();
+    }
+  }
+
+  void _resetRecordingUiState() {
+    isRecording.value = false;
+    recordingSeconds.value = 0;
+    voiceLevel.value = 0;
+  }
+
+  Future<void> _cleanupRecording({required bool discardFile}) async {
+    _recordingTimer?.cancel();
+    await _amplitudeSub?.cancel();
+    _amplitudeSub = null;
+
+    try {
+      if (await _recorder.isRecording()) {
+        await _recorder.stop();
+      }
+    } catch (_) {}
+
+    if (discardFile && _activeRecordingPath != null) {
+      await _deleteRecordingFile(_activeRecordingPath!);
+    }
+
+    _activeRecordingPath = null;
+    _resetRecordingUiState();
+  }
+
+  Future<void> _deleteRecordingFile(String path) async {
+    try {
+      final file = File(path);
+      if (await file.exists()) {
+        await file.delete();
+      }
+    } catch (e) {
+      debugPrint('🤖 [AiController] Error deleting recording file: $e');
+    }
+  }
+
+  // ============================================================
+  // TEXT-TO-SPEECH
+  // ============================================================
+  Future<void> speakMessage(AiMessageModel msg) async {
+    final text = msg.content.trim();
+    if (text.isEmpty) {
+      AppSnackbar.error(Constants.locale.aiTtsEmpty.tr);
+      return;
+    }
+
+    if (activeTtsMessageId.value == msg.id && _ttsPlayer.playing) {
+      await _stopTtsPlayback();
+      return;
+    }
+
+    await _stopTtsPlayback();
+
+    if (_cachedTtsMessageId != null && _cachedTtsMessageId != msg.id) {
+      await _clearTtsCache();
+    }
+
+    activeTtsMessageId.value = msg.id;
+
+    if (_cachedTtsMessageId == msg.id && _cachedTtsFilePath != null) {
+      final file = File(_cachedTtsFilePath!);
+      if (await file.exists()) {
+        await _playTtsFile(_cachedTtsFilePath!);
+        return;
+      }
+      await _clearTtsCache();
+    }
+
+    isTtsLoading.value = true;
+
+    try {
+      final response = await _ai.textToSpeech(text);
+      if (!response.success || response.bytes == null) {
+        AppSnackbar.error(response.error ?? Constants.locale.aiTtsFailed.tr);
+        activeTtsMessageId.value = null;
+        isTtsLoading.value = false;
+        return;
+      }
+
+      if (activeTtsMessageId.value != msg.id) {
+        isTtsLoading.value = false;
+        return;
+      }
+
+      isTtsLoading.value = false;
+      await _cacheAndPlayTts(msg.id, response.bytes!);
+    } catch (e) {
+      debugPrint('🤖 [AiController] Error playing TTS: $e');
+      AppSnackbar.error(Constants.locale.aiTtsFailed.tr);
+      activeTtsMessageId.value = null;
+      isTtsLoading.value = false;
+    }
+  }
+
+  Future<void> stopSpeaking() async {
+    await _stopTtsPlayback();
+  }
+
+  Future<void> _stopTtsPlayback() async {
+    _ttsStateSub?.cancel();
+    _ttsStateSub = null;
+    await _ttsPlayer.stop();
+    activeTtsMessageId.value = null;
+    isTtsLoading.value = false;
+  }
+
+  Future<void> _clearTtsCache() async {
+    if (_cachedTtsFilePath != null) {
+      await _deleteRecordingFile(_cachedTtsFilePath!);
+    }
+    _cachedTtsMessageId = null;
+    _cachedTtsFilePath = null;
+  }
+
+  Future<void> _cacheAndPlayTts(String messageId, Uint8List bytes) async {
+    final dir = await getTemporaryDirectory();
+    final path = '${dir.path}/tts_$messageId.mp3';
+    final file = File(path);
+    await file.writeAsBytes(bytes, flush: true);
+    _cachedTtsMessageId = messageId;
+    _cachedTtsFilePath = path;
+    await _playTtsFile(path);
+  }
+
+  Future<void> _playTtsFile(String path) async {
+    await _ttsPlayer.setFilePath(path);
+    _ttsStateSub?.cancel();
+    _ttsStateSub = _ttsPlayer.playerStateStream.listen((state) {
+      if (state.processingState == ProcessingState.completed) {
+        unawaited(_stopTtsPlayback());
+      }
+    });
+    await _ttsPlayer.play();
   }
 }

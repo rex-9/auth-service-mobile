@@ -53,4 +53,8 @@ class AppConstants {
   static const contentTypeJson = 'application/json';
   static const platformMobile = 'mobile';
   static const bearerPrefix = 'Bearer ';
+
+
+  // Chat voice
+  static const chatVoiceLevelBarCount = 12;
 }
