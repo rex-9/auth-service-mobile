@@ -1,4 +1,4 @@
-// lib/design/components/passcode_field.dart
+// lib/design/components/app_passcode_field.dart
 import 'package:flutter/material.dart';
 import 'package:rexone_mobile/design/design.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';

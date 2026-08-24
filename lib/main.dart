@@ -7,13 +7,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:rexone_mobile/config/config.dart';
-import 'package:rexone_mobile/controllers/controllers.dart';
 import 'package:rexone_mobile/design/design.dart';
 import 'package:rexone_mobile/routes/routes.dart';
 import 'package:rexone_mobile/services/services.dart';
 import 'package:upgrader/upgrader.dart';
-import 'bindings/initial_binding.dart';
+import 'bindings/initial.binding.dart';
 import 'locales/app_translations.dart';
+import 'modules/setting/setting.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
     // print('APP_STORE_APP_ID: ${AppConfig.appStoreAppId}');
     // print('APP_STORE_BUNDLE_ID: ${AppConfig.appStoreBundleId}');
 
-    return GetBuilder<SettingsController>(
+    return GetBuilder<SettingController>(
       builder: (settings) => ScreenUtilInit(
         designSize: const Size(375, 812),
         builder: (context, child) => GetMaterialApp(

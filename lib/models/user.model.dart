@@ -1,4 +1,6 @@
 // lib/models/user.model.dart
+import 'package:rexone_mobile/constants/constants.dart';
+
 class UserModel {
   final String id;
   final String email;
@@ -18,23 +20,23 @@ class UserModel {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['id']?.toString() ?? '',
-      email: json['email'] ?? '',
-      username: json['username'],
-      name: json['name'],
-      provider: json['provider'],
-      photo: json['profile_pic_url'] ?? json['photo'],
+      id: json[ApiKeys.id]?.toString() ?? '',
+      email: json[AuthKeys.email] ?? '',
+      username: json[AuthKeys.username],
+      name: json[AuthKeys.name],
+      provider: json[AuthKeys.provider],
+      photo: json[AuthKeys.profilePicUrl] ?? json[AuthKeys.photo],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'email': email,
-      'username': username,
-      'name': name,
-      'provider': provider,
-      'profile_pic_url': photo,
+      ApiKeys.id: id,
+      AuthKeys.email: email,
+      AuthKeys.username: username,
+      AuthKeys.name: name,
+      AuthKeys.provider: provider,
+      AuthKeys.profilePicUrl: photo,
     };
   }
 }

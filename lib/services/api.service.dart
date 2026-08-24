@@ -1,15 +1,17 @@
-// lib/services/api_service.dart
+// lib/services/api.service.dart
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
 import 'package:rexone_mobile/config/config.dart';
 import 'package:rexone_mobile/constants/constants.dart';
-import 'package:rexone_mobile/controllers/controllers.dart';
 import 'package:rexone_mobile/design/design.dart';
 import 'package:rexone_mobile/models/responses/api.response.dart';
-import 'package:rexone_mobile/models/pagination_model.dart';
+import 'package:rexone_mobile/models/pagination.model.dart';
 import 'package:rexone_mobile/routes/routes.dart';
 import 'package:rexone_mobile/helpers/api.helper.dart';
 import 'package:rexone_mobile/services/storage.service.dart';
+
+import '../modules/auth/auth.dart';
+import '../modules/setting/setting.dart';
 
 class ApiService extends GetConnect {
   static const String sessionReplacedError = 'Active session not found';
@@ -35,8 +37,8 @@ class ApiService extends GetConnect {
       request.headers[AppConstants.headerXPlatform] =
           AppConstants.platformMobile;
       String apiLocale = 'en';
-      if (Get.isRegistered<SettingsController>()) {
-        final code = Get.find<SettingsController>().localeCode.value;
+      if (Get.isRegistered<SettingController>()) {
+        final code = Get.find<SettingController>().localeCode.value;
         apiLocale = code.split('_').first.toLowerCase();
       } else if (Get.isRegistered<StorageService>()) {
         final code = Get.find<StorageService>().getLocaleCode() ?? 'en_US';
@@ -179,14 +181,14 @@ class ApiService extends GetConnect {
     final body = response.body is Map
         ? Map<String, dynamic>.from(response.body as Map)
         : <String, dynamic>{};
-    final status = body[JsonKeys.status] is Map
-        ? Map<String, dynamic>.from(body[JsonKeys.status] as Map)
+    final status = body[ApiKeys.status] is Map
+        ? Map<String, dynamic>.from(body[ApiKeys.status] as Map)
         : <String, dynamic>{};
     final statusCode =
-        status[JsonKeys.code] as int? ?? response.statusCode ?? 500;
-    final data = body[JsonKeys.data];
+        status[ApiKeys.code] as int? ?? response.statusCode ?? 500;
+    final data = body[ApiKeys.data];
 
-    if (response.hasError || !(status[JsonKeys.success] as bool? ?? false)) {
+    if (response.hasError || !(status[ApiKeys.success] as bool? ?? false)) {
       // Optional: Log API errors to analytics
       // try {
       //   final analytics = Get.find<AnalyticsService>();
@@ -201,8 +203,8 @@ class ApiService extends GetConnect {
       // }
       return ApiResponse.error(
         message:
-            status[JsonKeys.error] as String? ??
-            status[JsonKeys.message] as String? ??
+            status[ApiKeys.error] as String? ??
+            status[ApiKeys.message] as String? ??
             response.statusText ??
             HttpStatusMap.getMessage(statusCode),
         statusCode: statusCode,
@@ -212,7 +214,7 @@ class ApiService extends GetConnect {
 
     return ApiResponse.success(
       message:
-          status[JsonKeys.message] as String? ??
+          status[ApiKeys.message] as String? ??
           HttpStatusMap.getMessage(statusCode),
       statusCode: statusCode,
       data: data != null ? fromJson(data) : null,
@@ -226,27 +228,27 @@ class ApiService extends GetConnect {
     final body = response.body is Map
         ? Map<String, dynamic>.from(response.body as Map)
         : <String, dynamic>{};
-    final status = body[JsonKeys.status] is Map
-        ? Map<String, dynamic>.from(body[JsonKeys.status] as Map)
+    final status = body[ApiKeys.status] is Map
+        ? Map<String, dynamic>.from(body[ApiKeys.status] as Map)
         : <String, dynamic>{};
     final statusCode =
-        status[JsonKeys.code] as int? ?? response.statusCode ?? 500;
-    final data = body[JsonKeys.data];
-    final meta = body[JsonKeys.meta];
+        status[ApiKeys.code] as int? ?? response.statusCode ?? 500;
+    final data = body[ApiKeys.data];
+    final meta = body[ApiKeys.meta];
 
-    final isSuccess = status[JsonKeys.success] as bool? ?? false;
+    final isSuccess = status[ApiKeys.success] as bool? ?? false;
     final msg =
-        status[JsonKeys.message] as String? ??
-        status[JsonKeys.error] as String? ??
+        status[ApiKeys.message] as String? ??
+        status[ApiKeys.error] as String? ??
         response.statusText ??
         HttpStatusMap.getMessage(statusCode);
 
     final List<T> records = ApiHelper.parseList(data, fromJson);
 
     PaginationMeta? pagination;
-    if (meta is Map && meta[JsonKeys.pagination] is Map) {
+    if (meta is Map && meta[ApiKeys.pagination] is Map) {
       pagination = PaginationMeta.fromJson(
-        Map<String, dynamic>.from(meta[JsonKeys.pagination] as Map),
+        Map<String, dynamic>.from(meta[ApiKeys.pagination] as Map),
       );
     }
 

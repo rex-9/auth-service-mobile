@@ -87,7 +87,7 @@ class AppListTile extends StatelessWidget {
       tileColor: backgroundColor,
       contentPadding:
           contentPadding ??
-          const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+           EdgeInsets.symmetric(horizontal: Design.spacing.lg, vertical: Design.spacing.sm),
       visualDensity: VisualDensity.compact,
     );
   }

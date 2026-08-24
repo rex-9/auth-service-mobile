@@ -5,7 +5,8 @@ import 'package:get/get.dart';
 import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/design/components/components.dart';
 import 'package:rexone_mobile/services/services.dart';
-import 'controllers.dart';
+import '../modules/ai/ai.dart';
+import '../modules/payment/payment.dart';
 
 /// Single, permanent socket event router.
 ///

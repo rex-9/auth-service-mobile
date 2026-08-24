@@ -1,4 +1,5 @@
 // lib/models/log.model.dart
+import 'package:rexone_mobile/constants/constants.dart';
 
 class LogModel {
   final String message;
@@ -32,18 +33,18 @@ class LogModel {
   });
 
   Map<String, dynamic> toJson() => {
-        'message': message,
-        'severity': severity,
-        'platform': platform,
-        'environment': environment,
-        'app_version': appVersion,
-        'os': os,
-        'os_version': osVersion,
-        'device': device,
-        'url': url,
-        'method': method,
-        'stack_trace': stackTrace,
-        'local_storage_keys': localStorageKeys,
-        'context': context,
+        LogKeys.message: message,
+        LogKeys.severity: severity,
+        LogKeys.platform: platform,
+        LogKeys.environment: environment,
+        LogKeys.appVersion: appVersion,
+        LogKeys.os: os,
+        LogKeys.osVersion: osVersion,
+        LogKeys.device: device,
+        LogKeys.url: url,
+        LogKeys.method: method,
+        LogKeys.stackTrace: stackTrace,
+        LogKeys.localStorageKeys: localStorageKeys,
+        LogKeys.context: context,
       };
 }

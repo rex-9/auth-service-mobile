@@ -1,4 +1,4 @@
-// lib/constants/locale_constants.dart
+// lib/constants/locale.constants.dart
 class LocaleConstants {
   const LocaleConstants();
 
