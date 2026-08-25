@@ -604,8 +604,8 @@ class AuthController extends GetxController {
     // 1. Store session + sync user
     _storeSession(response);
 
-    // 2. Request push permission
-    await _pushNotiService.requestPermission();
+    // 2. Request push permission (non-blocking)
+    unawaited(_pushNotiService.requestPermission());
 
     // 3. Navigate to home
     AppRoutes.toHome();

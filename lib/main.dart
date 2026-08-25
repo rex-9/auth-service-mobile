@@ -19,8 +19,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Telemetry & Error Listeners ("It works on my machine" killer)
+  final originalOnError = FlutterError.onError;
   FlutterError.onError = (FlutterErrorDetails details) {
-    FlutterError.presentError(details);
+    if (originalOnError != null) {
+      originalOnError(details);
+    } else {
+      FlutterError.presentError(details);
+    }
     LogService.reportFlutterError(details);
   };
 

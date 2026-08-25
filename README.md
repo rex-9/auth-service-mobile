@@ -16,9 +16,9 @@ Built under the same creed as Rexone Core and Rexone Web: **clear in thought, ex
 [![Firebase](https://img.shields.io/badge/Firebase_Analytics-12.4-FFCA28?logo=firebase&logoColor=black)](https://firebase.google.com/)
 [![OneSignal](https://img.shields.io/badge/OneSignal-5.6-E54B4D?logo=onesignal&logoColor=white)](https://onesignal.com/)
 
-**Typed · Modular · Localized · Observable · Push-ready · Analytics-enabled · API-driven**
+**Typed · Modular · Localized · Observable · Push-ready · Analytics-enabled · API-driven · Fully Tested**
 
-[Explore the foundation](#feature-map) · [Ecosystem Architecture](ECOSYSTEM.md) · [Run it locally](#getting-started) · [Meet the architecture](#architecture) · [Connect the API](#configuration--environment-management)
+[Explore the foundation](#feature-map) · [Ecosystem Architecture](ECOSYSTEM.md) · [Run it locally](#getting-started) · [Meet the architecture](#architecture) · [E2E Testing](#end-to-end-testing-flutter-driver) · [Connect the API](#configuration--environment-management)
 
 </div>
 
@@ -33,6 +33,7 @@ A capable backend and a polished web app are only parts of the whole product. Th
 Rexone Mobile exists so that work does not have to be reinvented for every mobile application built on Rexone Core.
 
 This is not a template of screens pretending to be an architecture. Feature modules, shared services, models, bindings, design primitives, and telemetry pipelines have exact and deliberate responsibilities:
+
 - **Modules** own a product feature end to end — pages, controllers, and (when needed) that feature's HTTP client — behind a single barrel export.
 - **Shared services** are thin, single-responsibility clients for transport that is not feature-owned: HTTP, Action Cable, Firebase, OneSignal, storage, and client logs.
 - **Design primitives** enforce consistent spacing, typography, and theme tokens across light and dark modes.
@@ -70,7 +71,8 @@ It was to build a **clear mobile foundation**—strong enough to carry ambitious
 | **Observability**      | Flutter and platform error capture with automated client log delivery to Rexone Core     | [Client observability & telemetry](#client-observability--telemetry) |
 | **Design System**      | Centralized design tokens, theme extensions, custom components, and light/dark modes     | [Design system](#design-system)                                      |
 | **Localization**       | English, Spanish, and Burmese with dynamic runtime switching and `X-Locale` backend sync | [Localization](#localization)                                        |
-| **Quality**            | Strongly typed Dart models, analyzer compliance, and automated localization test suite   | [Quality & testing](#quality--testing)                               |
+| **Testing (E2E)**      | Real on-device automated user journey specs via Flutter Integration Test Driver          | [End-to-End Testing](#end-to-end-testing-flutter-driver)             |
+| **Quality**            | Strongly typed Dart models, analyzer compliance, and automated test suite                | [Quality & testing](#quality--testing)                               |
 
 ---
 
@@ -100,6 +102,7 @@ flowchart LR
 ```
 
 ### Layer Boundaries:
+
 - `lib/modules/` owns product features. Each module keeps its pages, controllers, and optional feature service together, and exposes them through a barrel file (`auth.dart`, `payment.dart`, …).
 - `lib/controllers/` holds only app-wide coordinators that do not belong to one feature — today, `SocketController`.
 - `lib/services/` holds shared infrastructure: HTTP (`ApiService`), Action Cable, Firebase Analytics, OneSignal, storage, and client logs.
@@ -108,21 +111,8 @@ flowchart LR
 - `lib/models/` contains strongly typed JSON:API models and response envelopes.
 - `lib/locales/` contains multi-language translations and runtime dictionary updates.
 - `lib/config/` and `lib/constants/` manage environment definitions and constant keys.
-
-### Feature modules
-
-Each folder under `lib/modules/` is one product surface:
-
-| Module | Owns |
-| --- | --- |
-| `splash` | Session restore and first navigation |
-| `auth` | Email/passcode, OTP, recovery, Google sign-in |
-| `home` | Authenticated dashboard |
-| `payment` | Catalogue, Stripe Checkout WebView, subscriptions |
-| `setting` | Theme, locale, account |
-| `ai` | Chat rooms, history, queued assistant replies |
-
-Inside a module the usual layout is `pages/`, `controllers/` (or `controller/`), optional `services/`, and a barrel file that re-exports the public API. `GetPage` bindings stay in `lib/routes/app_routes.dart`.
+- `integration_test/` houses end-to-end integration specifications, test robots, and test data factories.
+- `test_driver/` houses the Flutter driver entrypoint bridging device execution with test reporting.
 
 ---
 
@@ -200,6 +190,62 @@ Inside a module the usual layout is `pages/`, `controllers/` (or `controller/`),
   - 🇲🇲 **Burmese (`my_MM`)**
 - Complete parity across all user-facing texts with dynamic runtime GetX translation reload.
 - Automatically sends `X-Locale` and `Accept-Language` headers on all HTTP requests to ensure backend responses match the user's selected language.
+
+---
+
+## End-to-End Testing (Flutter Driver)
+
+Rexone Mobile includes on-device E2E tests built with **`package:integration_test`** and Flutter Driver. Tests exercise real user flows on active iOS Simulators or Android Emulators without mocking UI behavior.
+
+### Test Structure
+
+```text
+rexone_mobile/
+├── integration_test/
+│   ├── auth/
+│   │   ├── passcode_test.dart       # Passcode acceptance, rejection, and retries
+│   │   ├── password_reset_test.dart # Forgot passcode request flow
+│   │   ├── sign_in_test.dart        # End-to-end sign-in & home navigation
+│   │   ├── sign_out_test.dart       # Sign out & session termination
+│   │   ├── sign_up_test.dart        # Full registration & email confirmation
+│   │   └── sso_test.dart            # Google SSO button presence & interaction
+│   ├── data/
+│   │   └── users.dart               # Test user definitions & dynamic factory
+│   └── robots/                      # Test Robot helper classes
+├── test_driver/
+│   └── integration_test.dart        # Flutter Driver bridge entrypoint
+└── scripts/
+    └── run_e2e.sh                   # Mobile E2E runner CLI
+```
+
+### Running Mobile E2E Tests
+
+Use the unified runner script:
+
+```bash
+# Run all mobile flows on a specific device/emulator:
+./scripts/run_e2e.sh all -d emulator-5554
+
+# Run an individual flow:
+./scripts/run_e2e.sh sign-in -d emulator-5554
+./scripts/run_e2e.sh sign-up -d emulator-5554
+./scripts/run_e2e.sh passcode -d emulator-5554
+./scripts/run_e2e.sh password-reset -d emulator-5554
+./scripts/run_e2e.sh sign-out -d emulator-5554
+./scripts/run_e2e.sh sso -d emulator-5554
+
+# Or run on iOS Simulator:
+./scripts/run_e2e.sh sign-in -d "iPhone 16 Pro"
+```
+
+Or run via Flutter Driver directly:
+
+```bash
+flutter drive \
+  --driver=test_driver/integration_test.dart \
+  --target=integration_test/auth/sign_in_test.dart \
+  -d emulator-5554
+```
 
 ---
 
@@ -284,13 +330,19 @@ flutter run --dart-define=APP_ENV=.env.prod
 Run static analysis:
 
 ```sh
-flutter analyze lib/ test/
+flutter analyze lib/ test/ integration_test/
 ```
 
-Run unit and localization parity tests:
+Run unit and widget tests:
 
 ```sh
-flutter test
+flutter test test/
+```
+
+Run on-device integration tests:
+
+```sh
+./scripts/run_e2e.sh all -d emulator-5554
 ```
 
 ---
@@ -320,30 +372,38 @@ flutter build ios --release --dart-define=APP_ENV=.env.prod
 ## Project structure
 
 ```text
-lib/
-├── bindings/                 # GetX DI for shared services and permanent controllers
-├── config/                   # App configuration and environment resolution
-├── constants/                # Constants, analytics event keys, locale keys, HTTP status
-├── controllers/              # App-wide coordinators only (SocketController)
-├── design/                   # Design system (tokens, components, extensions, themes, icons)
-│   ├── components/           # Reusable atoms and molecules (Button, Input, Passcode, Dialog, Loading)
-│   ├── elements/             # Design tokens (Colors, Spacing, Typography, Icons, Timers)
-│   └── extensions/           # Theme context extensions
-├── helpers/                  # Utility helpers (API JSON:API parser, flags, validators)
-├── locales/                  # Multi-language translations (en_US, es_ES, my_MM)
-├── models/                   # Strongly typed models and JSON:API response envelopes
-├── modules/                  # Feature modules (pages + controllers + feature services)
-│   ├── splash/               # Launch / session restore
-│   ├── auth/                 # Welcome, passcode, signup, OTP, recovery
-│   ├── home/                 # Main dashboard
-│   ├── payment/              # Plans, Stripe Checkout WebView, subscriptions
-│   ├── setting/              # Theme, language, and account
-│   └── ai/                   # Assistant chat, rooms, history
-├── routes/                   # GetX route declarations and auth route guards
-└── services/                 # Shared transport (API, Socket, Log, Analytics, Push, Storage)
+rexone_mobile/
+├── android/                  # Android native project & Gradle config
+├── ios/                      # iOS native project & CocoaPods config
+├── integration_test/         # On-device integration tests & test robots
+├── lib/
+│   ├── bindings/             # GetX DI for shared services and permanent controllers
+│   ├── config/               # App configuration and environment resolution
+│   ├── constants/            # Constants, analytics event keys, locale keys, HTTP status
+│   ├── controllers/          # App-wide coordinators only (SocketController)
+│   ├── design/               # Design system (tokens, components, extensions, themes, icons)
+│   │   ├── components/       # Reusable atoms and molecules (Button, Input, Passcode, Dialog, Loading)
+│   │   ├── elements/         # Design tokens (Colors, Spacing, Typography, Icons, Timers)
+│   │   └── extensions/       # Theme context extensions
+│   ├── helpers/              # Utility helpers (API JSON:API parser, flags, validators)
+│   ├── locales/              # Multi-language translations (en_US, es_ES, my_MM)
+│   ├── models/               # Strongly typed models and JSON:API response envelopes
+│   ├── modules/              # Feature modules (pages + controllers + feature services)
+│   │   ├── splash/           # Launch / session restore
+│   │   ├── auth/             # Welcome, passcode, signup, OTP, recovery
+│   │   ├── home/             # Main dashboard
+│   │   ├── payment/          # Plans, Stripe Checkout WebView, subscriptions
+│   │   ├── setting/          # Theme, language, and account
+│   │   └── ai/               # Assistant chat, rooms, history
+│   ├── routes/               # GetX route declarations and auth route guards
+│   └── services/             # Shared transport (API, Socket, Log, Analytics, Push, Storage)
+├── scripts/
+│   └── run_e2e.sh            # E2E integration test CLI runner
+├── test/                     # Unit and localization tests
+├── test_driver/
+│   └── integration_test.dart # Flutter Driver test bridge
+└── pubspec.yaml
 ```
-
-A feature module is self-contained. Routes import the barrel (`lib/modules/auth/auth.dart`), not individual files under `pages/` or `controllers/`. Domain HTTP for auth, payment, and AI lives next to that feature; WebSocket, analytics, push, storage, and logging stay in `lib/services/` because they are used across modules.
 
 ---
 

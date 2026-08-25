@@ -50,6 +50,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  integration_test:
+    sdk: flutter
+  patrol_finders: ^3.6.0
   # Test-only: lets tests point path_provider (used by get_storage) at a
   # temp directory, since platform channels are unavailable in flutter test.
   path_provider_platform_interface: ^2.1.2
@@ -63,6 +66,7 @@ dev_dependencies:
 
   flutter_launcher_icons: ^0.14.4
   change_app_package_name: ^1.5.0
+  patrol: ^4.9.0
 
 flutter_launcher_icons:
   android: true
@@ -116,3 +120,10 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+
+patrol:
+  app_name: RexOne
+  android:
+    package_name: com.rexone.mobile
+  ios:
+    bundle_id: com.rexone.mobile
