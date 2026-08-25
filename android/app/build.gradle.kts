@@ -7,20 +7,21 @@ plugins {
     id("com.google.gms.google-services")
 }
 
-// Firebase
-dependencies {
-  // Import the Firebase BoM
-  implementation(platform("com.google.firebase:firebase-bom:34.18.0"))
+// Firebase dependencies are managed by flutter plugins (firebase_core & firebase_analytics)
+// Somehow no need
+// dependencies {
+//   // Import the Firebase BoM
+//   implementation(platform("com.google.firebase:firebase-bom:34.18.0"))
 
 
-  // TODO: Add the dependencies for Firebase products you want to use
-  // When using the BoM, don't specify versions in Firebase dependencies
-  implementation("com.google.firebase:firebase-analytics")
+//   // TODO: Add the dependencies for Firebase products you want to use
+//   // When using the BoM, don't specify versions in Firebase dependencies
+//   implementation("com.google.firebase:firebase-analytics")
 
 
-  // Add the dependencies for any other desired Firebase products
-  // https://firebase.google.com/docs/android/setup#available-libraries
-}
+//   // Add the dependencies for any other desired Firebase products
+//   // https://firebase.google.com/docs/android/setup#available-libraries
+// }
 
 android {
     namespace = "com.rexone.mobile" // $APPLICATION_ID
@@ -45,6 +46,7 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        testInstrumentationRunner = "pl.leancode.patrol.PatrolJUnitRunner"
     }
 
     buildTypes {
