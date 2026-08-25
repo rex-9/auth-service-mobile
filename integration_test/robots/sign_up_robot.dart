@@ -7,23 +7,15 @@ class SignUpRobot {
 
   final PatrolTester $;
 
-  Future<void> enterPasscodeCreate(String passcode) async {
-    await $(EditableText).at(0).enterText(passcode);
+  Future<void> enterPasswordCreate(String password) async {
+    await $(EditableText).at(0).enterText(password);
   }
 
-  Future<void> enterPasscodeConfirm(String passcode) async {
-    await $(EditableText).at(0).enterText(passcode);
+  Future<void> enterPasswordConfirm(String password) async {
+    await $(EditableText).at(0).enterText(password);
   }
 
-  Future<void> enterCreatePasscode(String passcode) async {
-    await enterPasscodeCreate(passcode);
-  }
-
-  Future<void> enterConfirmPasscode(String passcode) async {
-    await enterPasscodeConfirm(passcode);
-  }
-
-  Future<void> tapConfirmPasscode() async {
+  Future<void> tapConfirmPassword() async {
     await $(AppButton).containing('Confirm').tap();
   }
 
@@ -31,9 +23,7 @@ class SignUpRobot {
     await $(TextField).at(0).enterText(name);
   }
 
-  Future<void> enterFullName(String name) async {
-    await enterName(name);
-  }
+  Future<void> enterFullName(String name) => enterName(name);
 
   Future<void> enterUsername(String username) async {
     await $(TextField).at(1).enterText(username);

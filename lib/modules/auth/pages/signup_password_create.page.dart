@@ -1,4 +1,4 @@
-// lib/modules/auth/pages/signup_passcode_create_page.dart
+// lib/modules/auth/pages/signup_password_create_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rexone_mobile/constants/constants.dart';
@@ -7,12 +7,12 @@ import 'package:rexone_mobile/routes/routes.dart';
 
 import '../auth.dart';
 
-class SignUpPasscodeCreatePage extends GetView<AuthController> {
-  const SignUpPasscodeCreatePage({super.key});
+class SignUpPasswordCreatePage extends GetView<AuthController> {
+  const SignUpPasswordCreatePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final isGoogle = controller.isGooglePasscodeSetup;
+    final isGoogle = controller.isGooglePasswordSetup;
 
     return AppPage(
       title: Constants.locale.signupTitle.tr,
@@ -45,15 +45,15 @@ class SignUpPasscodeCreatePage extends GetView<AuthController> {
                 style: context.typo.labelMedium,
               ),
               SizedBox(height: Design.spacing.sm),
-              AppPasscodeField(
+              AppPasswordField(
                 pinController: controller.signupPin,
-                onChanged: (value) => controller.passcode.value = value,
+                onChanged: (value) => controller.password.value = value,
                 onCompleted: (_) {
                   // Auto-move to confirm page when 6 digits entered
-                  if (controller.passcode.value.length == 6) {
+                  if (controller.password.value.length == 6) {
                     controller.signupConfirmPin.clear();
-                    controller.confirmPasscode.value = '';
-                    AppRoutes.toSignUpPasscodeConfirm();
+                    controller.confirmPassword.value = '';
+                    AppRoutes.toSignUpPasswordConfirm();
                   }
                 },
               ),
@@ -71,3 +71,5 @@ class SignUpPasscodeCreatePage extends GetView<AuthController> {
     );
   }
 }
+
+

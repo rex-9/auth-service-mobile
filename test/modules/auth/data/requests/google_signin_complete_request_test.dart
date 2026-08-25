@@ -5,7 +5,7 @@ void main() {
   group('GoogleSignInCompleteRequest', () {
     test('toJson() maps fields correctly', () {
       final request = GoogleSignInCompleteRequest(
-        passcode: 'pass123',
+        password: 'pass123',
         challengeToken: 'token123',
       );
 

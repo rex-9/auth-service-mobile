@@ -4,18 +4,18 @@
 # Rexone Mobile — E2E Test Runner with Clean Summary Reporter
 #
 # Usage:
-#   ./scripts/run_e2e.sh [flow|file] [-d device] [options]
+#   ./scripts/test.sh [flow|file] [-d device] [options]
 #
 # Examples:
-#   ./scripts/run_e2e.sh                                  # Run all auth flows
-#   ./scripts/run_e2e.sh sign-in                          # Run Sign In flow
-#   ./scripts/run_e2e.sh sign-up                          # Run Sign Up flow
-#   ./scripts/run_e2e.sh passcode                         # Run Passcode flow
-#   ./scripts/run_e2e.sh password-reset                   # Run Password Reset flow
-#   ./scripts/run_e2e.sh sign-out                         # Run Sign Out flow
-#   ./scripts/run_e2e.sh -d "emulator-5554"               # Run on specific device
-#   ./scripts/run_e2e.sh sign-in -d "emulator-5554"       # Specific flow on device
-#   ./scripts/run_e2e.sh integration_test/auth/sign_in_test.dart
+#   ./scripts/test.sh                                  # Run all auth flows
+#   ./scripts/test.sh sign-in                          # Run Sign In flow
+#   ./scripts/test.sh sign-up                          # Run Sign Up flow
+#   ./scripts/test.sh passcode                         # Run Passcode flow
+#   ./scripts/test.sh password-reset                   # Run Password Reset flow
+#   ./scripts/test.sh sign-out                         # Run Sign Out flow
+#   ./scripts/test.sh -d "emulator-5554"               # Run on specific device
+#   ./scripts/test.sh sign-in -d "emulator-5554"       # Specific flow on device
+#   ./scripts/test.sh integration_test/auth/sign_in_test.dart
 # ==============================================================================
 
 # Add Dart global pub cache to PATH if present
@@ -35,7 +35,7 @@ while [[ $# -gt 0 ]]; do
     --help)
       echo "Rexone Mobile — E2E Test Runner"
       echo ""
-      echo "Usage: ./scripts/run_e2e.sh [flow|file] [-d device] [--flutter|--patrol]"
+      echo "Usage: ./scripts/test.sh [flow|file] [-d device] [--flutter|--patrol]"
       echo ""
       echo "Available Flows:"
       echo "  all             Run all E2E test suites (6 suites, 7 tests)"
@@ -82,11 +82,11 @@ while [[ $# -gt 0 ]]; do
       TARGET="integration_test/auth/sign_up_test.dart"
       shift
       ;;
-    passcode|pin)
-      TARGET="integration_test/auth/passcode_test.dart"
+    password|passcode|pin)
+      TARGET="integration_test/auth/password_test.dart"
       shift
       ;;
-    password-reset|reset-password|forgot|forgot-passcode)
+    password-reset|reset-password|forgot|forgot-password|forgot-passcode)
       TARGET="integration_test/auth/password_reset_test.dart"
       shift
       ;;
@@ -125,7 +125,7 @@ if [ "$TARGET" = "all" ]; then
   TEST_FILES=(
     "integration_test/auth/sign_in_test.dart"
     "integration_test/auth/sign_up_test.dart"
-    "integration_test/auth/passcode_test.dart"
+    "integration_test/auth/password_test.dart"
     "integration_test/auth/password_reset_test.dart"
     "integration_test/auth/sign_out_test.dart"
     "integration_test/auth/sso_test.dart"
@@ -138,6 +138,13 @@ echo "===================================================="
 echo " 🌕 Rexone Mobile E2E Test Runner"
 echo " Suites: ${#TEST_FILES[@]} | Device: ${DEVICE:-default}"
 echo "===================================================="
+
+cleanup_test_data() {
+  echo ""
+  echo "🧹 Cleaning up test users from database..."
+  docker exec dev-rexone-core-api bin/rails runner "User.where('email LIKE ? OR email LIKE ?', 'e2e-%', '%@rexone.test').destroy_all" 2>/dev/null || true
+}
+trap cleanup_test_data EXIT
 
 PASSED_COUNT=0
 FAILED_COUNT=0
@@ -153,6 +160,14 @@ for file in "${TEST_FILES[@]}"; do
   echo "----------------------------------------------------"
 
   START_TIME=$(date +%s)
+  
+  # Pre-grant notification permissions to prevent system dialog interruption
+  if [ -n "$DEVICE" ]; then
+    adb -s "$DEVICE" shell pm grant com.rexone.mobile android.permission.POST_NOTIFICATIONS 2>/dev/null || true
+  else
+    adb shell pm grant com.rexone.mobile android.permission.POST_NOTIFICATIONS 2>/dev/null || true
+  fi
+
   CMD=("flutter" "drive" "--driver=test_driver/integration_test.dart" "--target=$file")
   if [ -n "$DEVICE" ]; then
     CMD+=("-d" "$DEVICE")

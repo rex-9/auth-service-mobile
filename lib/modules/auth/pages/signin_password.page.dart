@@ -1,4 +1,4 @@
-// lib/modules/auth/pages/signin_passcode_page.dart
+// lib/modules/auth/pages/signin_password_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rexone_mobile/constants/constants.dart';
@@ -7,8 +7,8 @@ import 'package:rexone_mobile/routes/routes.dart';
 
 import '../auth.dart';
 
-class SignInPasscodePage extends GetView<AuthController> {
-  const SignInPasscodePage({super.key});
+class SignInPasswordPage extends GetView<AuthController> {
+  const SignInPasswordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +39,12 @@ class SignInPasscodePage extends GetView<AuthController> {
               SizedBox(height: Design.spacing.xxxl),
 
               Obx(
-                () => AppPasscodeField(
+                () => AppPasswordField(
                   pinController: controller.signinPin,
                   enabled: controller.cooldownSecondsLeft.value == 0,
-                  onChanged: (value) => controller.passcode.value = value,
+                  onChanged: (value) => controller.password.value = value,
                   onCompleted: (pin) {
-                    controller.passcode.value = pin;
+                    controller.password.value = pin;
                     controller.signIn();
                   },
                 ),
@@ -100,7 +100,7 @@ class SignInPasscodePage extends GetView<AuthController> {
               AppButton(
                 type: EButtonType.text,
                 onPressed: () {
-                  controller.passcode.value = '';
+                  controller.password.value = '';
                   controller.signinPin.clear();
                   Get.back();
                 },
@@ -108,7 +108,7 @@ class SignInPasscodePage extends GetView<AuthController> {
               ),
               AppButton(
                 type: EButtonType.text,
-                onPressed: () => AppRoutes.toForgotPasscode(),
+                onPressed: () => AppRoutes.toForgotPassword(),
                 text: Constants.locale.forgotPasscodeLink.tr,
               ),
             ],
@@ -118,3 +118,5 @@ class SignInPasscodePage extends GetView<AuthController> {
     );
   }
 }
+
+

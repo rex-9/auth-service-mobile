@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:patrol_finders/patrol_finders.dart';
 import 'package:rexone_mobile/design/components/app_button.dart';
 
-class ForgotPasscodeRobot {
-  const ForgotPasscodeRobot(this.$);
+class ForgotPasswordRobot {
+  const ForgotPasswordRobot(this.$);
 
   final PatrolTester $;
 
@@ -19,3 +19,4 @@ class ForgotPasscodeRobot {
     await tapSendReset();
   }
 }
+

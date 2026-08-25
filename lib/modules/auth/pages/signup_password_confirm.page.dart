@@ -1,4 +1,4 @@
-// lib/modules/auth/pages/signup_passcode_confirm_page.dart
+// lib/modules/auth/pages/signup_password_confirm_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rexone_mobile/constants/constants.dart';
@@ -6,8 +6,8 @@ import 'package:rexone_mobile/design/design.dart';
 
 import '../auth.dart';
 
-class SignUpPasscodeConfirmPage extends GetView<AuthController> {
-  const SignUpPasscodeConfirmPage({super.key});
+class SignUpPasswordConfirmPage extends GetView<AuthController> {
+  const SignUpPasswordConfirmPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -38,25 +38,25 @@ class SignUpPasscodeConfirmPage extends GetView<AuthController> {
                 style: context.typo.labelMedium,
               ),
               SizedBox(height: Design.spacing.sm),
-              AppPasscodeField(
+              AppPasswordField(
                 pinController: controller.signupConfirmPin,
-                onChanged: (value) => controller.confirmPasscode.value = value,
-                onCompleted: (_) => controller.handleConfirmPasscode(),
+                onChanged: (value) => controller.confirmPassword.value = value,
+                onCompleted: (_) => controller.handleConfirmPassword(),
               ),
 
               SizedBox(height: Design.spacing.xxxl),
               AppButton(
                 text: Constants.locale.confirm.tr,
-                onPressed: controller.handleConfirmPasscode,
+                onPressed: controller.handleConfirmPassword,
               ),
 
               SizedBox(height: Design.spacing.lg),
               AppButton(
                 type: EButtonType.text,
                 onPressed: () {
-                  controller.confirmPasscode.value = '';
+                  controller.confirmPassword.value = '';
                   controller.signupConfirmPin.clear();
-                  controller.passcode.value = '';
+                  controller.password.value = '';
                   controller.signupPin.clear();
                   Get.back();
                 },
@@ -69,3 +69,4 @@ class SignUpPasscodeConfirmPage extends GetView<AuthController> {
     );
   }
 }
+

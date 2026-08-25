@@ -1,4 +1,4 @@
-// lib/modules/auth/pages/forgot_passcode_page.dart
+// lib/modules/auth/pages/forgot_password_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rexone_mobile/constants/constants.dart';
@@ -6,8 +6,8 @@ import 'package:rexone_mobile/design/design.dart';
 
 import '../auth.dart';
 
-class ForgotPasscodePage extends GetView<AuthController> {
-  const ForgotPasscodePage({super.key});
+class ForgotPasswordPage extends GetView<AuthController> {
+  const ForgotPasswordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -69,3 +69,4 @@ class ForgotPasscodePage extends GetView<AuthController> {
     );
   }
 }
+

@@ -7,15 +7,15 @@ class SignInRobot {
 
   final PatrolTester $;
 
-  Future<void> enterPasscode(String passcode) async {
-    await $(EditableText).enterText(passcode);
+  Future<void> enterPassword(String password) async {
+    await $(EditableText).enterText(password);
   }
 
   Future<void> tapSignIn() async {
     await $(AppButton).containing('Sign In').tap();
   }
 
-  Future<void> tapForgotPasscode() async {
+  Future<void> tapForgotPassword() async {
     await $(AppButton).containing('Forgot passcode?').tap();
   }
 }

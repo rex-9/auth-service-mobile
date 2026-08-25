@@ -13,10 +13,10 @@ class SignUpInfoPage extends GetView<AuthController> {
   Widget build(BuildContext context) {
     final arguments = Get.arguments as Map<String, dynamic>;
 
-    controller.email.value = arguments['email'];
-    controller.passcode.value = arguments['passcode'];
-    controller.confirmPasscode.value =
-        arguments['confirm_passcode'] ?? arguments['passcode'];
+    controller.email.value = arguments['email'] ?? '';
+    controller.password.value = arguments['password'] ?? '';
+    controller.confirmPassword.value =
+        arguments['confirm_password'] ?? arguments['password'] ?? '';
 
     return AppPage(
       title: Constants.locale.signupInfoTitle.tr,
@@ -58,8 +58,8 @@ class SignUpInfoPage extends GetView<AuthController> {
               AppButton(
                 type: EButtonType.text,
                 onPressed: () {
-                  controller.passcode.value = '';
-                  controller.confirmPasscode.value = '';
+                  controller.password.value = '';
+                  controller.confirmPassword.value = '';
                   controller.signupPin.clear();
                   controller.signupConfirmPin.clear();
                   Get.back();

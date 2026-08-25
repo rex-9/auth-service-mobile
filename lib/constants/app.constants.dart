@@ -31,8 +31,8 @@ class AppConstants {
   }
 
   // Validation Rules
-  int get minPasscodeLength => 6;
-  int get maxPasscodeLength => 6;
+  int get minPasswordLength => 6;
+  int get maxPasswordLength => 6;
   int get minUsernameLength => 3;
   int get maxUsernameLength => 20;
   int get minNameLength => 2;

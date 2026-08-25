@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:rexone_mobile/main.dart' as app;
-import 'package:rexone_mobile/modules/auth/pages/signin_passcode.page.dart';
+import 'package:rexone_mobile/modules/auth/pages/signin_password.page.dart';
 import 'package:rexone_mobile/modules/home/pages/home.page.dart';
 import 'package:rexone_mobile/services/storage.service.dart';
 
@@ -20,8 +20,8 @@ void main() {
     }
   });
 
-  group('Authentication > Passcode', () {
-    testWidgets('rejects incorrect passcode and remains on passcode step', (tester) async {
+  group('Authentication > Password', () {
+    testWidgets('rejects incorrect password and remains on password step', (tester) async {
       app.main();
 
       // Wait for app to boot and navigate past splash to Auth screen
@@ -44,17 +44,17 @@ void main() {
       }
       await tester.pumpAndSettle(const Duration(seconds: 2));
 
-      // Enter wrong passcode
+      // Enter wrong password
       final pinFinder = find.byType(EditableText);
       expect(pinFinder, findsWidgets);
       await tester.enterText(pinFinder.first, '000000');
       await tester.pumpAndSettle(const Duration(seconds: 2));
 
-      // Verify remains on SignInPasscodePage
-      expect(find.byType(SignInPasscodePage), findsOneWidget);
+      // Verify remains on SignInPasswordPage
+      expect(find.byType(SignInPasswordPage), findsOneWidget);
     });
 
-    testWidgets('accepts correct passcode and advances to home', (tester) async {
+    testWidgets('accepts correct password and advances to home', (tester) async {
       app.main();
 
       for (int i = 0; i < 30; i++) {

@@ -43,7 +43,7 @@ class ConfirmEmailPage extends GetView<AuthController> {
           ),
           SizedBox(height: Design.spacing.xxxl),
 
-          AppPasscodeField(
+          AppPasswordField(
             pinController: controller.confirmPin,
             onCompleted: (pin) {
               controller.confirmOTPCode(pin);

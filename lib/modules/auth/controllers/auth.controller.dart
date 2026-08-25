@@ -29,12 +29,12 @@ class AuthController extends GetxController {
   // Form data
   var email = ''.obs;
   var emailError = RxnString();
-  var passcode = ''.obs;
-  var confirmPasscode = ''.obs;
+  var password = ''.obs;
+  var confirmPassword = ''.obs;
   var fullName = ''.obs;
   var username = ''.obs;
 
-  // Passcode attempt limiting
+  // Password attempt limiting
   var attemptsLeft = maxAttempts.obs;
   var hasFailureHistory = false.obs;
   var cooldownSecondsLeft = 0.obs;
@@ -47,7 +47,7 @@ class AuthController extends GetxController {
 
   // Google sign up challenge
   var googleChallengeToken = ''.obs;
-  bool get isGooglePasscodeSetup => googleChallengeToken.value.isNotEmpty;
+  bool get isGooglePasswordSetup => googleChallengeToken.value.isNotEmpty;
 
   // Pin controllers
   final signinPin = PinInputController();
@@ -137,7 +137,7 @@ class AuthController extends GetxController {
         cooldownSecondsLeft.value = 0;
         _cooldownTimer?.cancel();
         attemptsLeft.value = maxAttempts;
-        passcode.value = '';
+        password.value = '';
         signinPin.clear();
       } else {
         cooldownSecondsLeft.value = left;
@@ -187,14 +187,14 @@ class AuthController extends GetxController {
         break;
 
       case EPeekedUserStatus.exists:
-        passcode.value = '';
+        password.value = '';
         signinPin.clear();
         loadRetryState();
-        AppRoutes.toSignInPasscode();
+        AppRoutes.toSignInPassword();
         break;
 
       case EPeekedUserStatus.existsUnconfirmed:
-        passcode.value = '';
+        password.value = '';
         signupPin.clear();
         signupConfirmPin.clear();
         confirmPin.clear();
@@ -203,38 +203,38 @@ class AuthController extends GetxController {
         break;
 
       case EPeekedUserStatus.notExists:
-        passcode.value = '';
-        confirmPasscode.value = '';
+        password.value = '';
+        confirmPassword.value = '';
         signupPin.clear();
         signupConfirmPin.clear();
-        AppRoutes.toSignUpPasscodeCreate();
+        AppRoutes.toSignUpPasswordCreate();
         break;
     }
   }
 
-  // Handle confirm passcode
-  Future<void> handleConfirmPasscode() async {
-    if (confirmPasscode.value.length != 6) {
+  // Handle confirm password
+  Future<void> handleConfirmPassword() async {
+    if (confirmPassword.value.length != 6) {
       signupConfirmPin.triggerError();
       AppSnackbar.error(Constants.locale.passcode6Digits.tr);
       return;
     }
 
-    if (passcode.value != confirmPasscode.value) {
+    if (password.value != confirmPassword.value) {
       signupConfirmPin.triggerError();
       AppSnackbar.error(Constants.locale.passcodesDoNotMatch.tr);
       return;
     }
 
-    if (isGooglePasscodeSetup) {
+    if (isGooglePasswordSetup) {
       await completeGoogleSignIn();
       return;
     }
 
     AppRoutes.toSignUpInfo(
       email: email.value,
-      passcode: passcode.value,
-      confirmPasscode: confirmPasscode.value,
+      password: password.value,
+      confirmPassword: confirmPassword.value,
     );
   }
 
@@ -282,10 +282,10 @@ class AuthController extends GetxController {
     }
   }
 
-  // Step 2a: Sign in with email and passcode (existing user)
+  // Step 2a: Sign in with email and password (existing user)
   Future<void> signIn() async {
     if (cooldownSecondsLeft.value > 0) return;
-    if (passcode.value.length != 6) {
+    if (password.value.length != 6) {
       signinPin.triggerError();
       AppSnackbar.error(Constants.locale.passcode6Digits.tr);
       return;
@@ -293,7 +293,7 @@ class AuthController extends GetxController {
 
     try {
       final response = await _auth.signIn(
-        SignInRequest(signinKey: email.value, password: passcode.value),
+        SignInRequest(signinKey: email.value, password: password.value),
       );
 
       if (response.success && response.data != null) {
@@ -394,8 +394,8 @@ class AuthController extends GetxController {
           username: username.value,
           name: fullName.value,
           email: email.value,
-          password: passcode.value,
-          passwordConfirmation: confirmPasscode.value,
+          password: password.value,
+          passwordConfirmation: confirmPassword.value,
         ),
       );
 
@@ -413,7 +413,7 @@ class AuthController extends GetxController {
   }
 
   // Google Sign In (existing account signs straight in; a new account
-  // gets a challenge token and must set a passcode to finish sign up).
+  // gets a challenge token and must set a password to finish sign up).
   Future<void> signInWithGoogle() async {
     try {
       final signIn = GoogleSignIn.instance;
@@ -432,16 +432,16 @@ class AuthController extends GetxController {
       );
 
       if (response.success && response.data != null) {
-        // New Google account: set a passcode to complete account creation.
+        // New Google account: set a password to complete account creation.
         final data = response.data!;
         if (data.passwordRequired && data.challengeToken != null) {
           googleChallengeToken.value = data.challengeToken!;
           email.value = user.email;
-          passcode.value = '';
-          confirmPasscode.value = '';
+          password.value = '';
+          confirmPassword.value = '';
           signupPin.clear();
           signupConfirmPin.clear();
-          AppRoutes.toSignUpPasscodeCreate();
+          AppRoutes.toSignUpPasswordCreate();
         } else if (data.user != null && data.token != null) {
           email.value = user.email;
           _analytics.logSignIn(method: EAuthProvider.google.name);
@@ -463,14 +463,14 @@ class AuthController extends GetxController {
     }
   }
 
-  // Complete Google sign up with the newly created passcode.
+  // Complete Google sign up with the newly created password.
   Future<void> completeGoogleSignIn() async {
-    if (passcode.value.length != 6) {
+    if (password.value.length != 6) {
       signupPin.triggerError();
       AppSnackbar.error(Constants.locale.passcode6Digits.tr);
       return;
     }
-    if (passcode.value != confirmPasscode.value) {
+    if (password.value != confirmPassword.value) {
       signupConfirmPin.triggerError();
       AppSnackbar.error(Constants.locale.passcodesDoNotMatch.tr);
       return;
@@ -479,7 +479,7 @@ class AuthController extends GetxController {
     try {
       final response = await _auth.googleSignInComplete(
         GoogleSignInCompleteRequest(
-          passcode: passcode.value,
+          password: password.value,
           challengeToken: googleChallengeToken.value,
         ),
       );
@@ -518,12 +518,12 @@ class AuthController extends GetxController {
     } catch (_) {}
   }
 
-  // Forgot passcode: email a reset link (60s resend countdown).
+  // Forgot password: email a reset link (60s resend countdown).
   Future<void> forgotPassword() async {
     if (!validateEmail()) return;
     try {
-      final response = await _auth.forgotPasscode(
-        ForgotPasscodeRequest(email: email.value),
+      final response = await _auth.forgotPassword(
+        ForgotPasswordRequest(email: email.value),
       );
       if (response.success) {
         _startResendCountdown(60);
@@ -557,8 +557,8 @@ class AuthController extends GetxController {
     currentUser.value = null;
     email.value = '';
     emailError.value = null;
-    passcode.value = '';
-    confirmPasscode.value = '';
+    password.value = '';
+    confirmPassword.value = '';
     fullName.value = '';
     username.value = '';
     googleChallengeToken.value = '';

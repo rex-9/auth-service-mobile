@@ -18,28 +18,28 @@ test-analyze:
 
 ## Run all Patrol E2E tests
 test-e2e:
-	./scripts/run_e2e.sh all
+	./scripts/test.sh all
 
 ## Run auth E2E tests only
 test-e2e-auth:
-	./scripts/run_e2e.sh all
+	./scripts/test.sh all
 
 ## Run specific auth flows
 test-e2e-signin:
-	./scripts/run_e2e.sh sign-in
+	./scripts/test.sh sign-in
 
 test-e2e-signup:
-	./scripts/run_e2e.sh sign-up
+	./scripts/test.sh sign-up
 
-test-e2e-passcode:
-	./scripts/run_e2e.sh passcode
+test-e2e-password:
+	./scripts/test.sh password
 
 test-e2e-reset:
-	./scripts/run_e2e.sh password-reset
+	./scripts/test.sh password-reset
 
 test-e2e-signout:
-	./scripts/run_e2e.sh sign-out
+	./scripts/test.sh sign-out
 
 ## Run E2E on iOS simulator
 test-e2e-ios:
-	./scripts/run_e2e.sh all -d "iPhone 16 Pro"
+	./scripts/test.sh all -d "iPhone 16 Pro"

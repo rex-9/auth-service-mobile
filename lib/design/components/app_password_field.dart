@@ -1,11 +1,11 @@
-// lib/design/components/app_passcode_field.dart
+// lib/design/components/app_password_field.dart
 import 'package:flutter/material.dart';
 import 'package:rexone_mobile/design/design.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-/// A 6-digit passcode field with consistent styling across the app
-class AppPasscodeField extends StatelessWidget {
-  const AppPasscodeField({
+/// A 6-digit password field with consistent styling across the app
+class AppPasswordField extends StatelessWidget {
+  const AppPasswordField({
     super.key,
     required this.pinController,
     this.onChanged,
@@ -64,3 +64,4 @@ class AppPasscodeField extends StatelessWidget {
     );
   }
 }
+
