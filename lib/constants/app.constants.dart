@@ -57,4 +57,9 @@ class AppConstants {
 
   // Chat voice
   static const chatVoiceLevelBarCount = 12;
+  static const chatInputMaxLines = 5;
+  static const speechSampleRate = 16000;
+  static const speechNumChannels = 1;
+  // 100ms of 16 kHz 16-bit mono PCM.
+  static const speechChunkBytes = 3200;
 }

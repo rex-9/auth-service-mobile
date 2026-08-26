@@ -129,10 +129,7 @@ class LocaleConstants {
   String get aiHistoryCleared => 'ai_history_cleared';
   String get aiClearHistoryFailed => 'ai_clear_history_failed';
   String get aiStartRecordingFailed => 'ai_start_recording_failed';
-  String get aiSaveRecordingFailed => 'ai_save_recording_failed';
   String get aiTranscriptionFailed => 'ai_transcription_failed';
-  String get aiTranscriptionEmpty => 'ai_transcription_empty';
-  String get aiTranscribing => 'ai_transcribing';
   String get aiTtsFailed => 'ai_tts_failed';
   String get aiTtsEmpty => 'ai_tts_empty';
 }

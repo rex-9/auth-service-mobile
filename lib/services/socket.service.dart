@@ -12,10 +12,20 @@ class SocketMessage {
   final String? message;
   final Map<String, dynamic>? data;
   final String? createdAt;
+  final String? channel;
 
-  SocketMessage({required this.type, this.message, this.data, this.createdAt});
+  SocketMessage({
+    required this.type,
+    this.message,
+    this.data,
+    this.createdAt,
+    this.channel,
+  });
 
-  factory SocketMessage.fromJson(Map<String, dynamic> json) {
+  factory SocketMessage.fromJson(
+    Map<String, dynamic> json, {
+    String? channel,
+  }) {
     return SocketMessage(
       type: json[SocketKeys.type]?.toString() ?? '',
       message: json[SocketKeys.message]?.toString(),
@@ -23,6 +33,7 @@ class SocketMessage {
           ? Map<String, dynamic>.from(json[SocketKeys.data] as Map)
           : null,
       createdAt: json[SocketKeys.createdAt]?.toString(),
+      channel: channel,
     );
   }
 }
@@ -39,6 +50,9 @@ class SocketService extends GetxService with WidgetsBindingObserver {
 
   final StreamController<SocketMessage> _streamController =
       StreamController<SocketMessage>.broadcast();
+
+  final Set<String> _subscribed = <String>{};
+  final Map<String, Completer<bool>> _pendingSubs = {};
 
   Stream<SocketMessage> get stream => _streamController.stream;
 
@@ -125,15 +139,16 @@ class SocketService extends GetxService with WidgetsBindingObserver {
       _reconnectAttempts = 0;
       debugPrint('🔌 [SocketService] WebSocket connected successfully');
 
-      // Subscribe to NotificationChannel immediately upon opening
-      _subscribe('NotificationChannel');
-
       _ws!.listen(
         _handleMessage,
         onDone: _handleDone,
         onError: _handleError,
         cancelOnError: false,
       );
+
+      // Subscribe to NotificationChannel immediately upon opening.
+      // SpeechLiveChannel is subscribed only while the mic is live.
+      unawaited(subscribe(SocketKeys.notificationChannel));
     } catch (e) {
       debugPrint('🔌 [SocketService] WebSocket connection error: $e');
       _isConnecting = false;
@@ -152,6 +167,7 @@ class SocketService extends GetxService with WidgetsBindingObserver {
   void _cleanup() {
     _reconnectTimer?.cancel();
     _reconnectTimer = null;
+    _failPendingSubs();
 
     if (_ws != null) {
       try {
@@ -163,16 +179,89 @@ class SocketService extends GetxService with WidgetsBindingObserver {
     isConnected.value = false;
   }
 
-  // ============================================================
-  // PROTOCOL & MESSAGE HANDLING
-  // ============================================================
+  void _failPendingSubs() {
+    for (final completer in _pendingSubs.values) {
+      if (!completer.isCompleted) {
+        completer.complete(false);
+      }
+    }
+    _pendingSubs.clear();
+    _subscribed.clear();
+  }
 
-  void _subscribe(String channel) {
-    final message = {
-      'command': 'subscribe',
-      'identifier': jsonEncode({'channel': channel}),
-    };
-    send(message);
+
+  String _identifierFor(String channel) =>
+      jsonEncode({SocketKeys.channel: channel});
+
+  String? _channelFromIdentifier(dynamic identifier) {
+    if (identifier == null) return null;
+    try {
+      final decoded = identifier is String ? jsonDecode(identifier) : identifier;
+      if (decoded is Map) {
+        return decoded[SocketKeys.channel]?.toString();
+      }
+    } catch (_) {}
+    return null;
+  }
+
+
+  /// `confirm_subscription`, `false` on reject or timeout.
+  Future<bool> subscribe(String channel) async {
+    if (!isConnected.value) {
+      debugPrint('🔌 [SocketService] Cannot subscribe, socket is not connected');
+      return false;
+    }
+    if (_subscribed.contains(channel)) return true;
+
+    final existing = _pendingSubs[channel];
+    if (existing != null) return existing.future;
+
+    final completer = Completer<bool>();
+    _pendingSubs[channel] = completer;
+
+    send({
+      SocketKeys.command: SocketKeys.subscribe,
+      SocketKeys.identifier: _identifierFor(channel),
+    });
+
+    try {
+      return await completer.future.timeout(const Duration(seconds: 10));
+    } on TimeoutException {
+      debugPrint('🔌 [SocketService] Subscribe timeout: $channel');
+      return false;
+    } finally {
+      if (_pendingSubs[channel] == completer) {
+        _pendingSubs.remove(channel);
+      }
+    }
+  }
+
+  void unsubscribe(String channel) {
+    send({
+      SocketKeys.command: SocketKeys.unsubscribe,
+      SocketKeys.identifier: _identifierFor(channel),
+    });
+    _subscribed.remove(channel);
+    final completer = _pendingSubs.remove(channel);
+    if (completer != null && !completer.isCompleted) {
+      completer.complete(false);
+    }
+  }
+
+  /// Sends an Action Cable `perform` (`command: message`) on [channel].
+  void perform(
+    String channel,
+    String action, [
+    Map<String, dynamic>? data,
+  ]) {
+    send({
+      SocketKeys.command: SocketKeys.message,
+      SocketKeys.identifier: _identifierFor(channel),
+      SocketKeys.data: jsonEncode({
+        SpeechKeys.action: action,
+        ...?data,
+      }),
+    });
   }
 
   void send(Map<String, dynamic> data) {
@@ -187,10 +276,28 @@ class SocketService extends GetxService with WidgetsBindingObserver {
     }
   }
 
+  void _completeSubscribe(String? channel, bool success) {
+    if (channel == null || channel.isEmpty) return;
+    if (success) {
+      _subscribed.add(channel);
+    } else {
+      _subscribed.remove(channel);
+    }
+    final completer = _pendingSubs.remove(channel);
+    if (completer != null && !completer.isCompleted) {
+      completer.complete(success);
+    }
+  }
+
+  // ============================================================
+  // PROTOCOL & MESSAGE HANDLING
+  // ============================================================
+
   void _handleMessage(dynamic raw) {
     try {
       final Map<String, dynamic> data = jsonDecode(raw.toString());
-      final frameType = data['type']?.toString();
+      final frameType = data[SocketKeys.type]?.toString();
+      final channel = _channelFromIdentifier(data[SocketKeys.identifier]);
 
       // Welcome message
       if (frameType == 'welcome') {
@@ -206,32 +313,37 @@ class SocketService extends GetxService with WidgetsBindingObserver {
       // Subscription confirmation
       if (frameType == 'confirm_subscription') {
         debugPrint(
-          '✅ [SocketService] Subscription confirmed: ${data['identifier']}',
+          '✅ [SocketService] Subscription confirmed: ${data[SocketKeys.identifier]}',
         );
+        _completeSubscribe(channel, true);
         return;
       }
 
       // Reject (bad token / auth failure)
       if (frameType == 'reject_subscription') {
         debugPrint(
-          '🚫 [SocketService] Subscription REJECTED: ${data['identifier']}',
+          '🚫 [SocketService] Subscription REJECTED: ${data[SocketKeys.identifier]}',
         );
+        _completeSubscribe(channel, false);
         return;
       }
 
       // Action Cable channel broadcast wrapper: { type: null, message: { type, message, data, created_at } }
-      if (data['message'] != null && data['message'] is Map) {
-        final payload = Map<String, dynamic>.from(data['message']);
-        final msgType = payload['type']?.toString() ?? '?';
-        final msgText = payload['message']?.toString() ?? '';
-        final msgData = payload['data'];
+      if (data[SocketKeys.message] != null && data[SocketKeys.message] is Map) {
+        final payload = Map<String, dynamic>.from(
+          data[SocketKeys.message] as Map,
+        );
+        final msgType = payload[SocketKeys.type]?.toString() ?? '?';
+        final msgText = payload[SocketKeys.message]?.toString() ?? '';
+        final msgData = payload[SocketKeys.data];
         debugPrint(
           '📨 [SocketService] Broadcast received'
+          ' | channel=$channel'
           ' | type=$msgType'
           ' | message="$msgText"'
           ' | data=$msgData',
         );
-        final socketMsg = SocketMessage.fromJson(payload);
+        final socketMsg = SocketMessage.fromJson(payload, channel: channel);
         _notifyListeners(socketMsg);
         return;
       }
@@ -249,6 +361,7 @@ class SocketService extends GetxService with WidgetsBindingObserver {
     debugPrint('🔌 [SocketService] WebSocket connection closed');
     isConnected.value = false;
     _isConnecting = false;
+    _failPendingSubs();
     if (_token != null) {
       _scheduleReconnect();
     }

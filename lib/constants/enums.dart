@@ -41,3 +41,20 @@ enum EWsEventType {
     );
   }
 }
+
+enum ESpeechEventType {
+  partial('partial'),
+  finalPhrase('final'),
+  error('error'),
+  unknown('unknown');
+
+  final String value;
+  const ESpeechEventType(this.value);
+
+  factory ESpeechEventType.fromString(String value) {
+    return ESpeechEventType.values.firstWhere(
+      (e) => e.value == value,
+      orElse: () => ESpeechEventType.unknown,
+    );
+  }
+}

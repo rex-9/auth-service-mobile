@@ -1,10 +1,14 @@
-/// Keys for Speech service
+/// Keys for live speech (SpeechLiveChannel) and TTS.
 class SpeechKeys {
   const SpeechKeys._();
 
-  static const audio = "audio";
-  static const text = "text";
-
-  static const sttRecordingFilename = 'recording.m4a';
-  static const sttRecordingContentType = 'audio/mp4';
+  static const channel = 'SpeechLiveChannel';
+  static const action = 'action';
+  static const audio = 'audio';
+  static const chunk = 'chunk';
+  static const stop = 'stop';
+  static const partial = 'partial';
+  static const finalPhrase = 'final';
+  static const error = 'error';
+  static const text = 'text';
 }

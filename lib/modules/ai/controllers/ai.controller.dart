@@ -1,5 +1,6 @@
 // lib/modules/ai/controllers/ai.controller.dart
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -11,11 +12,13 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
 import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/design/design.dart';
+import 'package:rexone_mobile/services/services.dart';
 
 import '../ai.dart';
 
-class AiController extends GetxController {
+class AiController extends GetxController with WidgetsBindingObserver {
   final AiService _ai = Get.find<AiService>();
+  late final SocketService _socket;
   final AudioRecorder _recorder = AudioRecorder();
   final AudioPlayer _ttsPlayer = AudioPlayer();
 
@@ -27,24 +30,36 @@ class AiController extends GetxController {
 
   final RxBool isProcessing = false.obs;
   final RxBool isRecording = false.obs;
-  final RxBool isTranscribing = false.obs;
-  final RxInt recordingSeconds = 0.obs;
   final RxDouble voiceLevel = 0.0.obs;
-  final RxnString lastRecordingPath = RxnString();
   final RxnString activeTtsMessageId = RxnString();
   final RxBool isTtsLoading = false.obs;
 
   bool _isSubmitting = false;
-  Timer? _recordingTimer;
+  bool _isStartingListen = false;
+  bool _isTearingDownSpeech = false;
+  bool _speechSubscribed = false;
+  int _listenEpoch = 0;
   StreamSubscription<Amplitude>? _amplitudeSub;
+  StreamSubscription<Uint8List>? _pcmSub;
+  StreamSubscription<bool>? _connSub;
   StreamSubscription<PlayerState>? _ttsStateSub;
-  String? _activeRecordingPath;
   String? _cachedTtsMessageId;
   String? _cachedTtsFilePath;
+  String _committedText = '';
+  String _partialText = '';
+  String _textBeforeListen = '';
+  final BytesBuilder _pcmBuffer = BytesBuilder(copy: false);
 
   // UI controllers — owned here so no StatefulWidget is needed in AiPage.
   final textController = TextEditingController();
   final scrollController = ScrollController();
+
+  @override
+  void onInit() {
+    super.onInit();
+    _socket = Get.find<SocketService>();
+    WidgetsBinding.instance.addObserver(this);
+  }
 
   @override
   void onReady() {
@@ -54,12 +69,20 @@ class AiController extends GetxController {
   }
 
   @override
-  void onClose() {
-    _recordingTimer?.cancel();
-    _amplitudeSub?.cancel();
-    if (isRecording.value) {
-      unawaited(_recorder.stop());
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.paused ||
+        state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.hidden) {
+      if (isRecording.value || _speechSubscribed) {
+        unawaited(stopListening());
+      }
     }
+  }
+
+  @override
+  void onClose() {
+    WidgetsBinding.instance.removeObserver(this);
+    unawaited(_teardownSpeech(restoreText: false));
     unawaited(_recorder.dispose());
     unawaited(_stopTtsPlayback());
     unawaited(_clearTtsCache());
@@ -82,6 +105,26 @@ class AiController extends GetxController {
     }
     if (roomId == null || roomId.isEmpty || roomId == currentRoomId.value) {
       await loadHistory(currentRoomId.value);
+    }
+  }
+
+  /// Called by [SocketController] for SpeechLiveChannel partial/final/error.
+  ///
+  /// Partials are fragments: each one is appended to the in-progress phrase.
+  /// A final discards that phrase and commits only the final text.
+  void onSpeechEvent(SocketMessage event, ESpeechEventType eventType) {
+    switch (eventType) {
+      case ESpeechEventType.partial:
+        _partialText = _mergePartial(_partialText, event.message ?? '');
+        _setInputText(_joinSpeech(_committedText, _partialText));
+      case ESpeechEventType.finalPhrase:
+        _committedText = _joinSpeech(_committedText, event.message ?? '');
+        _partialText = '';
+        _setInputText(_committedText);
+      case ESpeechEventType.error:
+        unawaited(stopListening());
+      case ESpeechEventType.unknown:
+        break;
     }
   }
 
@@ -236,7 +279,7 @@ class AiController extends GetxController {
   }
 
   void handleSend() {
-    if (isTranscribing.value || activeTtsMessageId.value != null) return;
+    if (isRecording.value || activeTtsMessageId.value != null) return;
     final text = textController.text.trim();
     if (text.isEmpty) return;
     textController.clear();
@@ -245,19 +288,26 @@ class AiController extends GetxController {
   }
 
   // ============================================================
-  // VOICE RECORDING
+  // LIVE SPEECH
   // ============================================================
-  String get formattedRecordingDuration {
-    final minutes = recordingSeconds.value ~/ 60;
-    final seconds = recordingSeconds.value % 60;
-    return '$minutes:${seconds.toString().padLeft(2, '0')}';
+  Future<void> toggleListening() async {
+    if (isRecording.value || _speechSubscribed || _isStartingListen) {
+      await stopListening();
+    } else {
+      await startListening();
+    }
   }
 
-  Future<void> startRecording() async {
+  Future<void> startListening() async {
     if (isRecording.value ||
         isProcessing.value ||
-        isTranscribing.value ||
+        _isStartingListen ||
         activeTtsMessageId.value != null) {
+      return;
+    }
+
+    if (!_socket.isConnected.value) {
+      AppSnackbar.error(Constants.locale.aiTranscriptionFailed.tr);
       return;
     }
 
@@ -275,24 +325,54 @@ class AiController extends GetxController {
       return;
     }
 
+    _isStartingListen = true;
+    final epoch = ++_listenEpoch;
     try {
-      final dir = await getTemporaryDirectory();
-      _activeRecordingPath =
-          '${dir.path}/ai_voice_${DateTime.now().millisecondsSinceEpoch}.m4a';
+      _textBeforeListen = textController.text;
+      _committedText = textController.text;
+      _partialText = '';
 
-      await _recorder.start(
-        const RecordConfig(encoder: AudioEncoder.aacLc),
-        path: _activeRecordingPath!,
+      final subscribed = await _socket.subscribe(SpeechKeys.channel);
+      if (epoch != _listenEpoch) {
+        if (subscribed) {
+          _socket.perform(SpeechKeys.channel, SpeechKeys.stop);
+          _socket.unsubscribe(SpeechKeys.channel);
+        }
+        return;
+      }
+      if (!subscribed) {
+        AppSnackbar.error(Constants.locale.aiTranscriptionFailed.tr);
+        return;
+      }
+      _speechSubscribed = true;
+
+      final stream = await _recorder.startStream(
+        const RecordConfig(
+          encoder: AudioEncoder.pcm16bits,
+          sampleRate: AppConstants.speechSampleRate,
+          numChannels: AppConstants.speechNumChannels,
+          streamBufferSize: AppConstants.speechChunkBytes,
+        ),
       );
+      if (epoch != _listenEpoch) {
+        try {
+          if (await _recorder.isRecording()) {
+            await _recorder.stop();
+          }
+        } catch (_) {}
+        return;
+      }
 
-      recordingSeconds.value = 0;
-      voiceLevel.value = 0;
       isRecording.value = true;
+      voiceLevel.value = 0;
 
-      _recordingTimer?.cancel();
-      _recordingTimer = Timer.periodic(const Duration(seconds: 1), (_) {
-        recordingSeconds.value++;
-      });
+      _pcmSub = stream.listen(
+        _onPcmChunk,
+        onError: (Object e) {
+          debugPrint('🤖 [AiController] PCM stream error: $e');
+          unawaited(stopListening());
+        },
+      );
 
       await _amplitudeSub?.cancel();
       _amplitudeSub = _recorder
@@ -300,62 +380,123 @@ class AiController extends GetxController {
           .listen((amplitude) {
         voiceLevel.value = _normalizeAmplitude(amplitude.current);
       });
+
+      await _connSub?.cancel();
+      _connSub = _socket.isConnected.listen((connected) {
+        if (!connected && (isRecording.value || _speechSubscribed)) {
+          unawaited(stopListening());
+        }
+      });
     } catch (e) {
-      debugPrint('🤖 [AiController] Error starting recording: $e');
+      debugPrint('🤖 [AiController] Error starting live listen: $e');
       AppSnackbar.error(Constants.locale.aiStartRecordingFailed.tr);
-      await _cleanupRecording(discardFile: true);
+      await _teardownSpeech(restoreText: true);
+    } finally {
+      _isStartingListen = false;
     }
   }
 
-  Future<void> cancelRecording() async {
-    if (!isRecording.value) return;
-    await _cleanupRecording(discardFile: true);
+  Future<void> stopListening() async {
+    if (!isRecording.value && !_speechSubscribed && !_isStartingListen) {
+      return;
+    }
+    await _teardownSpeech(restoreText: false);
   }
 
-  Future<void> finishRecording() async {
-    if (!isRecording.value || isTranscribing.value) return;
+  Future<void> cancelListening() async {
+    if (!isRecording.value && !_speechSubscribed && !_isStartingListen) {
+      return;
+    }
+    await _teardownSpeech(restoreText: true);
+  }
 
-    String? savedPath;
+  void _onPcmChunk(Uint8List chunk) {
+    _pcmBuffer.add(chunk);
+    if (_pcmBuffer.length >= AppConstants.speechChunkBytes) {
+      _flushPcm();
+    }
+  }
+
+  void _flushPcm() {
+    if (_pcmBuffer.isEmpty || !_speechSubscribed) return;
+    final bytes = _pcmBuffer.takeBytes();
+    if (bytes.isEmpty) return;
+    _socket.perform(SpeechKeys.channel, SpeechKeys.audio, {
+      SpeechKeys.chunk: base64Encode(bytes),
+    });
+  }
+
+  Future<void> _teardownSpeech({required bool restoreText}) async {
+    if (_isTearingDownSpeech) return;
+    _isTearingDownSpeech = true;
+    _listenEpoch++;
     try {
-      final path = await _recorder.stop();
-      _recordingTimer?.cancel();
+      await _pcmSub?.cancel();
+      _pcmSub = null;
       await _amplitudeSub?.cancel();
       _amplitudeSub = null;
+      await _connSub?.cancel();
+      _connSub = null;
 
-      savedPath = path ?? _activeRecordingPath;
-      _activeRecordingPath = null;
-      _resetRecordingUiState();
-
-      if (savedPath == null || savedPath.isEmpty) {
-        AppSnackbar.error(Constants.locale.aiSaveRecordingFailed.tr);
-        return;
+      if (_pcmBuffer.isNotEmpty) {
+        _flushPcm();
       }
+      _pcmBuffer.clear();
 
-      isTranscribing.value = true;
-      final response = await _ai.speechToText(savedPath);
-
-      if (response.success && response.data != null) {
-        final text = response.data!.text.trim();
-        if (text.isEmpty) {
-          AppSnackbar.error(Constants.locale.aiTranscriptionEmpty.tr);
-        } else {
-          textController.text = text;
+      try {
+        if (await _recorder.isRecording()) {
+          await _recorder.stop();
         }
-      } else {
-        AppSnackbar.error(
-          response.error ?? Constants.locale.aiTranscriptionFailed.tr,
-        );
+      } catch (_) {}
+
+      if (_speechSubscribed) {
+        _socket.perform(SpeechKeys.channel, SpeechKeys.stop);
+        _socket.unsubscribe(SpeechKeys.channel);
+        _speechSubscribed = false;
       }
-    } catch (e) {
-      debugPrint('🤖 [AiController] Error finishing recording: $e');
-      AppSnackbar.error(Constants.locale.aiTranscriptionFailed.tr);
+
+      isRecording.value = false;
+      voiceLevel.value = 0;
+
+      if (restoreText) {
+        _setInputText(_textBeforeListen);
+      }
+      _committedText = textController.text;
+      _partialText = '';
     } finally {
-      isTranscribing.value = false;
-      if (savedPath != null) {
-        await _deleteRecordingFile(savedPath);
-      }
-      lastRecordingPath.value = null;
+      _isTearingDownSpeech = false;
     }
+  }
+
+  String _joinSpeech(String committed, String incoming) {
+    final next = incoming.trim();
+    if (next.isEmpty) return committed;
+    if (committed.isEmpty) return next;
+    if (committed.endsWith(' ') || committed.endsWith('\n')) {
+      return '$committed$next';
+    }
+    return '$committed $next';
+  }
+
+  /// Fragment partials are appended. A longer/shorter revision of the same
+  /// phrase (typical Azure growing partial) replaces the in-progress text.
+  String _mergePartial(String current, String incoming) {
+    final next = incoming.trim();
+    if (next.isEmpty) return current;
+    if (current.isEmpty) return next;
+    final currentLower = current.toLowerCase();
+    final nextLower = next.toLowerCase();
+    if (nextLower.startsWith(currentLower) || currentLower.startsWith(nextLower)) {
+      return next;
+    }
+    return _joinSpeech(current, next);
+  }
+
+  void _setInputText(String text) {
+    textController.value = TextEditingValue(
+      text: text,
+      selection: TextSelection.collapsed(offset: text.length),
+    );
   }
 
   double _normalizeAmplitude(double db) {
@@ -378,39 +519,14 @@ class AiController extends GetxController {
     }
   }
 
-  void _resetRecordingUiState() {
-    isRecording.value = false;
-    recordingSeconds.value = 0;
-    voiceLevel.value = 0;
-  }
-
-  Future<void> _cleanupRecording({required bool discardFile}) async {
-    _recordingTimer?.cancel();
-    await _amplitudeSub?.cancel();
-    _amplitudeSub = null;
-
-    try {
-      if (await _recorder.isRecording()) {
-        await _recorder.stop();
-      }
-    } catch (_) {}
-
-    if (discardFile && _activeRecordingPath != null) {
-      await _deleteRecordingFile(_activeRecordingPath!);
-    }
-
-    _activeRecordingPath = null;
-    _resetRecordingUiState();
-  }
-
-  Future<void> _deleteRecordingFile(String path) async {
+  Future<void> _deleteCachedFile(String path) async {
     try {
       final file = File(path);
       if (await file.exists()) {
         await file.delete();
       }
     } catch (e) {
-      debugPrint('🤖 [AiController] Error deleting recording file: $e');
+      debugPrint('🤖 [AiController] Error deleting cached file: $e');
     }
   }
 
@@ -486,7 +602,7 @@ class AiController extends GetxController {
 
   Future<void> _clearTtsCache() async {
     if (_cachedTtsFilePath != null) {
-      await _deleteRecordingFile(_cachedTtsFilePath!);
+      await _deleteCachedFile(_cachedTtsFilePath!);
     }
     _cachedTtsMessageId = null;
     _cachedTtsFilePath = null;

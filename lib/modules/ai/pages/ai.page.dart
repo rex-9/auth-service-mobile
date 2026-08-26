@@ -219,7 +219,7 @@ class AiPage extends GetView<AiController> {
   Widget _buildTtsButton(BuildContext context, AiMessageModel msg) {
     final colors = context.colors;
     final isActive = controller.activeTtsMessageId.value == msg.id;
-    final isDisabled = controller.isTranscribing.value ||
+    final isDisabled = controller.isRecording.value ||
         (controller.activeTtsMessageId.value != null && !isActive);
 
     if (isActive && controller.isTtsLoading.value) {
@@ -289,115 +289,82 @@ class AiPage extends GetView<AiController> {
         border: Border(top: BorderSide(color: context.colors.divider)),
       ),
       child: SafeArea(
-        child: Obx(() {
-          return controller.isRecording.value
-              ? _buildRecordingBar(context)
-              : _buildTextInputBar(context);
-        }),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Obx(() {
+              if (!controller.isRecording.value) {
+                return const SizedBox.shrink();
+              }
+              return Padding(
+                padding: EdgeInsets.only(bottom: Design.spacing.sm),
+                child: VoiceLevelBars(level: controller.voiceLevel.value),
+              );
+            }),
+            Obx(() => _buildTextInputBar(context)),
+          ],
+        ),
       ),
     );
   }
 
   Widget _buildTextInputBar(BuildContext context) {
-    final isDisabled =
-        controller.isProcessing.value || controller.isTranscribing.value;
-    final isTranscribing = controller.isTranscribing.value;
+    final isListening = controller.isRecording.value;
+    final isDisabled = controller.isProcessing.value || isListening;
     final mutedColor = context.colors.textMuted;
     final activeColor = context.colors.primary;
 
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
+        if (isListening)
+          IconButton(
+            icon: Icon(
+              Design.icons.close,
+              color: context.colors.textSecondary,
+            ),
+            onPressed: controller.cancelListening,
+            tooltip: 'Cancel listening',
+          ),
         Expanded(
           child: TextField(
             controller: controller.textController,
-            enabled: !isDisabled,
-            textInputAction: TextInputAction.send,
+            enabled: !controller.isProcessing.value,
+            readOnly: isListening,
+            minLines: 1,
+            maxLines: AppConstants.chatInputMaxLines,
+            keyboardType: TextInputType.multiline,
+            textInputAction: TextInputAction.newline,
+            textAlignVertical: TextAlignVertical.top,
             onSubmitted: (_) => controller.handleSend(),
             decoration: Design.styles.input(
-              hint: isTranscribing
-                  ? Constants.locale.aiTranscribing.tr
-                  : 'Type your message...',
-              suffixIcon: isTranscribing
-                  ? Padding(
-                      padding: EdgeInsets.all(Design.spacing.md),
-                      child: const AppLoading(
-                        type: LoadingType.dots,
-                        size: LoadingSize.small,
-                      ),
-                    )
-                  : IconButton(
-                      onPressed: isDisabled ? null : controller.startRecording,
-                      icon: Icon(
-                        Design.icons.mic,
-                        color: isDisabled ? mutedColor : activeColor,
-                        size: 20,
-                      ),
-                    ),
+              hint: 'Type your message...',
+              suffixIcon: IconButton(
+                onPressed: controller.isProcessing.value
+                    ? null
+                    : controller.toggleListening,
+                icon: Icon(
+                  isListening ? Design.icons.stop : Design.icons.mic,
+                  color: controller.isProcessing.value
+                      ? mutedColor
+                      : isListening
+                          ? context.colors.error
+                          : activeColor,
+                  size: 20,
+                ),
+              ),
             ),
           ),
         ),
         SizedBox(width: Design.spacing.sm),
-        if (isTranscribing)
-          Padding(
-            padding: EdgeInsets.all(Design.spacing.sm),
-            child: const AppLoading(
-              type: LoadingType.circular,
-              size: LoadingSize.small,
-            ),
-          )
-        else
-          IconButton(
-            icon: Icon(
-              Design.icons.send,
-              color: isDisabled ? mutedColor : activeColor,
-            ),
-            onPressed: isDisabled ? null : controller.handleSend,
+        IconButton(
+          icon: Icon(
+            Design.icons.send,
+            color: isDisabled ? mutedColor : activeColor,
           ),
+          onPressed: isDisabled ? null : controller.handleSend,
+        ),
       ],
-    );
-  }
-
-  Widget _buildRecordingBar(BuildContext context) {
-    return Obx(
-      () {
-        final isTranscribing = controller.isTranscribing.value;
-
-        return Row(
-          children: [
-            IconButton(
-              icon: Icon(
-                Design.icons.close,
-                color: context.colors.textSecondary,
-              ),
-              onPressed: isTranscribing ? null : controller.cancelRecording,
-              tooltip: 'Cancel recording',
-            ),
-            Expanded(child: VoiceLevelBars(level: controller.voiceLevel.value)),
-            SizedBox(width: Design.spacing.sm),
-            Text(
-              controller.formattedRecordingDuration,
-              style: context.typo.bodyMedium.copyWith(
-                color: context.colors.textSecondary,
-                fontFeatures: const [FontFeature.tabularFigures()],
-              ),
-            ),
-            if (isTranscribing)
-              Padding(
-                padding: EdgeInsets.all(Design.spacing.sm),
-                child: const AppLoading(
-                  type: LoadingType.dots,
-                  size: LoadingSize.small,
-                ),
-              )
-            else
-              IconButton(
-                icon: Icon(Design.icons.send, color: context.colors.primary),
-                onPressed: controller.finishRecording,
-                tooltip: 'Finish recording',
-              ),
-          ],
-        );
-      },
     );
   }
 }
