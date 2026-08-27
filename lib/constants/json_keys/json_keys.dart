@@ -1,4 +1,5 @@
 export 'api.keys.dart';
+export 'asset.keys.dart';
 export 'auth.keys.dart';
 export 'ai.keys.dart';
 export 'log.keys.dart';
