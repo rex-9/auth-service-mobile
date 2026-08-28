@@ -35,7 +35,7 @@ class ApiService extends GetConnect {
       request.headers[AppConstants.headerContentType] =
           AppConstants.contentTypeJson;
       request.headers[AppConstants.headerXPlatform] =
-          AppConstants.platformMobile;
+          AppConstants.currentPlatform;
       String apiLocale = 'en';
       if (Get.isRegistered<SettingController>()) {
         final code = Get.find<SettingController>().localeCode.value;

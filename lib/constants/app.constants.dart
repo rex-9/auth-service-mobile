@@ -1,4 +1,5 @@
 // lib/constants/app.constants.dart
+import 'dart:io' show Platform;
 import 'package:package_info_plus/package_info_plus.dart';
 
 class AppConstants {
@@ -51,6 +52,20 @@ class AppConstants {
   static const headerXLocale = 'X-Locale';
   static const headerAcceptLanguage = 'Accept-Language';
   static const contentTypeJson = 'application/json';
+  static const platformAndroid = 'android';
+  static const platformIos = 'ios';
+  static const platformWeb = 'web';
   static const platformMobile = 'mobile';
   static const bearerPrefix = 'Bearer ';
+
+  /// Dynamic runtime platform identifier (android / ios / web)
+  static String get currentPlatform {
+    try {
+      if (Platform.isIOS) return platformIos;
+      if (Platform.isAndroid) return platformAndroid;
+    } catch (_) {
+      // In web or tests where Platform isn't supported
+    }
+    return platformAndroid;
+  }
 }

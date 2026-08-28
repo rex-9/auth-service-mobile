@@ -61,7 +61,7 @@ Transport Layer (lib/services/api.service.dart)
   - Exclusively perform remote API/WebSocket/persistence calls.
   - NEVER trigger UI, Snackbars, or navigation inside Services.
 - **Transport (`api.service.dart`)**:
-  - Extends `GetConnect` with automatic `Authorization: Bearer <token>`, `X-Platform: mobile`, `X-Locale`, and `Accept-Language` headers.
+  - Extends `GetConnect` with automatic `Authorization: Bearer <token>`, `X-Platform: android|ios`, `X-Locale`, and `Accept-Language` headers.
   - Unified loading overlay via `_withLoading()`.
 
 ---
@@ -70,7 +70,7 @@ Transport Layer (lib/services/api.service.dart)
 
 ### 4.1 Zero Loose String Literals or Magic Numbers
 - **Rule**: Every status string, API key, storage key, header, and route MUST be centralized in `lib/constants/`:
-  - `app.constants.dart` — Storage keys (`Constants.app.storageKey*`), platform headers (`Constants.app.platformMobile`).
+  - `app.constants.dart` — Storage keys (`Constants.app.storageKey*`), platform headers (`AppConstants.platformAndroid`, `AppConstants.platformIos`, `AppConstants.currentPlatform`).
   - `json_keys.dart` — Centralized API request and response JSON envelope keys (`JsonKeys.*`).
   - `log.constants.dart` — Client telemetry constants (`LogConstants.*`).
   - `enums.dart` — Strongly-typed domain enums (`AuthProvider`, `ChatRole`, `ThemePreference`).
