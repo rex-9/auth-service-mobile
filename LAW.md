@@ -123,7 +123,14 @@ Transport Layer (lib/services/api.service.dart)
 
 ---
 
-## 🧱 9. Module Structure
-
-- Feature-specific code lives in domain modules under `lib/modules/` or dedicated feature controllers/services with clean barrel exports.
 - Shared foundation code lives in `lib/design/`, `lib/services/`, `lib/constants/`, `lib/models/`, `lib/helpers/`, `lib/locales/`, `lib/routes/`.
+
+---
+
+## 📚 10. Documentation Synchronization Law
+
+- **Rule**: After EVERY feature creation, modification, or bugfix:
+  - **`README.md`** MUST be updated with newly added screens, user workflows, feature capabilities, or configuration variables.
+  - **`ECOSYSTEM.md`** MUST be updated if changes affect cross-platform feature parity, shared contracts, WebSocket events, or communication protocols between Mobile, Web, and Core.
+  - **`LAW.md`** represents the non-negotiable constitutional framework; it should ONLY be modified when establishing, refining, or expanding fundamental architectural laws and engineering standards.
+
