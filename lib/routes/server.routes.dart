@@ -70,6 +70,10 @@ class ServerRoutes {
   static String get aiTranslate => api('/ai/translate');
   static String get aiAnalyze => api('/ai/analyze');
 
+  // Feedback
+  static String get feedbacks => api('/feedbacks');
+
   // Admin API
   static String get adminUsers => adminApi('/users');
+  static String get adminFeedbacks => adminApi('/feedbacks');
 }

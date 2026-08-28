@@ -93,6 +93,7 @@ All tables use **UUID** primary keys (`gen_random_uuid()`), utilize **Discard** 
 | **AI / Chat**        | `Chat::Room`, `Chat::Message`                                                                | Conversational rooms, messages with roles (`user`, `assistant`), `ai_status` (`queued`, `processing`, `completed`, `failed`), system prompts, temperature, max tokens, metadata.                                 |
 | **Media**            | `Asset`                                                                                      | Unified media metadata (`storage_key` for Garage/S3/Cloudinary/Local, format, size_bytes, duration_secs, type, polymorphic resource model/id). |
 | **Telemetry**        | `Log::Client`                                                                                | Frontend error ingest (stack traces, device, OS, browser, URL, severity, occurrences, local/session storage keys, cookies, resolution status).                                                                   |
+| **Feedback**         | `Feedback`                                                                                   | Intelligent in-place feedback (1-10 rating, auto-inferred category: `bug`/`feature_request`/`improvement`/`general`, priority: `low`/`normal`/`high`/`urgent`, status, automated device/route telemetry).       |
 
 ### ⚙️ Services & Background Jobs (Solid Queue / Waka)
 
@@ -107,6 +108,18 @@ Heavy or external provider operations sit behind clean service interfaces and ex
 ### 🛡️ Active Platform Session Control
 
 `ApplicationController` inspects the `X-Platform` header (`web`, `android`, or `ios`) and validates against `CacheService.read("active_session:user:#{user_id}:#{platform}")`. This permits simultaneous logins across up to 3 concurrent active sessions (1 Web, 1 Android, 1 iOS) for the same user while invalidating duplicate sessions on the same platform type when a new sign-in occurs.
+
+### 🌟 The Revolutionary Smart Auth System (Zero Decision Fatigue)
+Unlike legacy systems that force users through frustrating decision trees ("Do you want to log in or sign up?", "Select SSO vs Email", "Enter password vs request magic link"), Rexone's authentication engine eliminates decision fatigue entirely:
+- **Unified Single-Field Entry**: The user simply enters their email or username. The system dynamically queries the account state (`/peek`) to infer whether to proceed with registration, prompt for their 6-digit passcode, route through email verification, or apply rate-limited security cooldowns.
+- **Frictionless Google SSO & Challenge Flows**: Seamlessly links OAuth accounts and requests password setup only when necessary, smoothly converting unconfirmed dropped registrations without jarring interruptions.
+- **Tri-Platform Concurrent Isolation**: Supports 3 distinct active sessions simultaneously (Web, Android, iOS) without logging users out across devices.
+
+### 💡 The Intelligent Frictionless Feedback System
+Inspired by our smart auth philosophy, the feedback system removes bureaucratic dropdowns, category selectors, and page redirects:
+- **In-Place Non-Intrusive Submission**: Users can share thoughts, report bugs, or give a 1-10 feeling rating from ANY page via a lightweight modal or bottom sheet without losing their place or facing page reloads.
+- **Automated Context & Telemetry Capture**: The client SDKs automatically attach active route/screen name, platform, browser, OS, viewport dimensions, and app version.
+- **Server-Side Smart Classification**: The backend automatically classifies the submission into `bug`, `feature_request`, `improvement`, or `general`, and calculates urgency/priority (`low`, `normal`, `high`, `urgent`) for streamlined admin triage.
 
 ---
 
@@ -125,14 +138,14 @@ Defined under `src/design/`:
 
 - **Atoms & Tokens**: Kindness Gold (`#F8D57E`), Clarity Blue (`#9EC9FF`), Deep Navy (`#14202E`), semantic palettes, Inter / SF Pro typography scale, 8-based spacing, soft radius (`xs` to `full`).
 - **Molecules & Overlays**:
-  - Auth dialog suite (`AuthDialog`, `InitialDialog`, `SigninPasscodeDialog`, `SignupPasscodeCreateDialog`, `SignupPasscodeConfirmDialog`, `SignupInfoDialog`, `ConfirmEmailDialog`, `ForgotPasscodeDialog`).
-  - Inputs (`TextInput`, `TextArea`, `PasscodeInput`, `Dropdown`, `Toggle`).
+  - Auth dialog suite (`AuthDialog`, `InitialDialog`, `SigninPasswordDialog`, `SignupPasswordCreateDialog`, `SignupPasswordConfirmDialog`, `SignupInfoDialog`, `ConfirmEmailDialog`, `ForgotPasswordDialog`).
+  - Inputs (`TextInput`, `TextArea`, `PasswordInput`, `Dropdown`, `Toggle`).
   - Overlays: Base `Dialog` molecule, `ConfirmDialog` (powered by `Dialog` underneath for destructive confirmations), `LoadingOverlay`, `Toast`.
   - Buttons (`Button`, `GoogleButton`, `SignOutButton`).
 
 ### 🧩 Domain Modules & Flows
 
-- **Auth**: URL-driven dialog navigation (`?dialog=auth&step=...`). Passcodes are held purely in memory and never leaked into URL params or persistent storage.
+- **Auth**: URL-driven dialog navigation (`?dialog=auth&step=...`). Passwords are held purely in memory and never leaked into URL params or persistent storage.
 - **Commerce & Stripe**: Fetches products, triggers Checkout Session (`/v1/payment/session`), redirects to Stripe, handles success/cancel redirects, manages active subscriptions and transactions, and provides modal confirmation for cancellations.
 - **AI Workspace**: Non-blocking queued chat. Submits message, displays thinking state, receives completion or error event over WebSocket (`useAiSocket`), auto-refreshes room history. Includes utilities for translation, summarization, and sentiment analysis.
 - **Telemetry & Error Logging**: Unhandled client exceptions and React Error Boundary catches are posted directly to Core at `POST /v1/log/clients` with storage keys snapshot.
@@ -154,11 +167,11 @@ Rexone Mobile has a strictly governed design system accessible via `lib/design/d
 - **Elements**: `AppColors` (Kindness Gold, Clarity Blue, Deep Navy, surfaces, text), `AppTypography`, `AppSpacing`, `AppStyles`, `AppIcons`, `AppMedia`, `AppTimers`, `AppTheme` (Light/Dark mode Material 3).
 - **Theme Extensions**: `context.colors.*` and `context.typo.*` for theme-aware reactive styling.
 - **Static Tokens**: `Design.spacing.*`, `Design.timers.*`, `Design.icons.*`, `Design.media.*`.
-- **Reusable UI Components**: `AppButton`, `AppInputField`, `AppPasscodeField`, `AppLoading`, `AppSnackbar`, `AppDialog` (with `AppDialog.confirm()` for destructive actions), `AppPage`, `AppListTile`, `AppToggle`.
+- **Reusable UI Components**: `AppButton`, `AppInputField`, `AppPasswordField`, `AppLoading`, `AppSnackbar`, `AppDialog` (with `AppDialog.confirm()` for destructive actions), `AppPage`, `AppListTile`, `AppToggle`.
 
 ### 🧩 Mobile Domain Capabilities
 
-- **Auth Flow**: Complete parity with Web & Core (email check, 6-digit passcode, OTP verification, Google OAuth challenge, session replacement). Zero hardcoded string literals.
+- **Auth Flow**: Complete parity with Web & Core (email check, 6-digit password, OTP verification, Google OAuth challenge, session replacement). Zero hardcoded string literals.
 - **Push Notifications**: Powered by OneSignal (`PushNotiService`). Automatically syncs user IDs and tags on login/session restore and clears state on logout.
 - **Product Analytics**: Powered by Firebase Analytics (`AnalyticsService`). Integrates navigation observers for screen tracking and records authentication and application lifecycle events.
 - **In-App Upgrader**: Powered by `upgrader`. Wraps root app builder with `UpgradeAlert` to notify users of critical or optional Play Store / App Store updates.
@@ -176,7 +189,7 @@ All three pillars of the Rexone platform are fully aligned at **100% feature par
 
 | Capability Area                                          | `rexone-core` |     `rexone-web`     |     `rexone_mobile`      |
 | -------------------------------------------------------- | :-----------: | :------------------: | :----------------------: |
-| **Auth: Email & 6-digit Passcode**                       |      ✅       |          ✅          |            ✅            |
+| **Auth: Email & 6-digit Password**                       |      ✅       |          ✅          |            ✅            |
 | **Auth: Google Sign-In & Challenge Flow**                |      ✅       |          ✅          |            ✅            |
 | **Auth: Active Single-Platform Session Enforcement**     |      ✅       |          ✅          |            ✅            |
 | **Auth: Escalating Password Retry Cooldown (Redis)**     |      ✅       |          ✅          |            ✅            |
@@ -189,6 +202,7 @@ All three pillars of the Rexone platform are fully aligned at **100% feature par
 | **Stripe: Checkout Session Handoff**                     |      ✅       |    ✅ (Redirect)     |       ✅ (WebView)       |
 | **Stripe: Subscriptions & Cancellation/Resumption**      |      ✅       |          ✅          |            ✅            |
 | **Stripe: Transaction History**                          |      ✅       |          ✅          |            ✅            |
+| **Intelligent Frictionless Feedback System (1-10)**      |      ✅       |          ✅          |            ✅            |
 | **AI: Conversational Rooms & Message History**           |      ✅       |          ✅          |            ✅            |
 | **AI: Queued Background Execution (DeepSeek)**           |      ✅       |          ✅          |            ✅            |
 | **AI: Real-Time WebSocket Completion Alerts**            |      ✅       |          ✅          |            ✅            |

@@ -1,6 +1,7 @@
 // lib/design/components/app_input_field.dart
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rexone_mobile/design/design.dart';
 
@@ -23,6 +24,8 @@ class AppInputField extends StatelessWidget {
     this.minLines = 1,
     this.enabled = true,
     this.textCapitalization = TextCapitalization.none,
+    this.onSubmitted,
+    this.onCtrlEnter,
   });
 
   final String label;
@@ -41,34 +44,55 @@ class AppInputField extends StatelessWidget {
   final int minLines;
   final bool enabled;
   final TextCapitalization textCapitalization;
+  final VoidCallback? onSubmitted;
+  final VoidCallback? onCtrlEnter;
 
   static bool get isIOS => GetPlatform.isIOS;
 
+  void _handleCtrlEnter(BuildContext context) {
+    if (onCtrlEnter != null) {
+      onCtrlEnter!();
+    } else if (onSubmitted != null) {
+      onSubmitted!();
+    } else {
+      FocusScope.of(context).nextFocus();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(label, style: context.typo.labelMedium),
-        SizedBox(height: Design.spacing.xs),
-        osTextField(
-          controller: controller,
-          focusNode: focusNode,
-          autofocus: autoFocus,
-          obscureText: obscureText,
-          keyboardType: keyboardType,
-          onChanged: onChanged,
-          maxLines: maxLines,
-          minLines: minLines,
-          enabled: enabled,
-          textCapitalization: textCapitalization,
-          hint: hint,
-          error: error,
-          helper: helper,
-          prefixIcon: prefixIcon,
-          suffixIcon: suffixIcon,
-        ),
-      ],
+    return CallbackShortcuts(
+      bindings: {
+        const SingleActivator(LogicalKeyboardKey.enter, control: true): () =>
+            _handleCtrlEnter(context),
+        const SingleActivator(LogicalKeyboardKey.enter, meta: true): () =>
+            _handleCtrlEnter(context),
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(label, style: context.typo.labelMedium),
+          SizedBox(height: Design.spacing.xs),
+          osTextField(
+            controller: controller,
+            focusNode: focusNode,
+            autofocus: autoFocus,
+            obscureText: obscureText,
+            keyboardType: keyboardType,
+            onChanged: onChanged,
+            maxLines: maxLines,
+            minLines: minLines,
+            enabled: enabled,
+            textCapitalization: textCapitalization,
+            hint: hint,
+            error: error,
+            helper: helper,
+            prefixIcon: prefixIcon,
+            suffixIcon: suffixIcon,
+            onSubmitted: onSubmitted != null ? (_) => onSubmitted!() : null,
+          ),
+        ],
+      ),
     );
   }
 
@@ -88,6 +112,7 @@ class AppInputField extends StatelessWidget {
     String? helper,
     Widget? prefixIcon,
     Widget? suffixIcon,
+    ValueChanged<String>? onSubmitted,
   }) {
     final theme = Get.theme;
     if (isIOS) {
@@ -101,12 +126,14 @@ class AppInputField extends StatelessWidget {
             obscureText: obscureText,
             keyboardType: keyboardType,
             onChanged: onChanged,
+            onSubmitted: onSubmitted,
             maxLines: maxLines,
             minLines: minLines,
             enabled: enabled,
             placeholder: hint,
             placeholderStyle: Design.typo.helper.copyWith(
-              color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
+              color:
+                  theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
             ),
             style: Design.typo.bodyMedium.copyWith(
               color: theme.colorScheme.onSurface,
@@ -129,7 +156,8 @@ class AppInputField extends StatelessWidget {
                 : null,
             decoration: BoxDecoration(
               color: theme.colorScheme.surface,
-              borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+              borderRadius:
+                  BorderRadius.circular(Design.spacing.radiusMedium),
               border: Border.all(
                 color: error != null
                     ? theme.colorScheme.error
@@ -144,7 +172,8 @@ class AppInputField extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: Design.spacing.xs),
               child: Text(
                 error,
-                style: Design.typo.caption.copyWith(color: theme.colorScheme.error),
+                style: Design.typo.caption
+                    .copyWith(color: theme.colorScheme.error),
               ),
             ),
           ] else if (helper != null) ...[
@@ -154,7 +183,8 @@ class AppInputField extends StatelessWidget {
               child: Text(
                 helper,
                 style: Design.typo.caption.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
+                  color: theme.colorScheme.onSurfaceVariant
+                      .withValues(alpha: 0.7),
                 ),
               ),
             ),
@@ -169,6 +199,7 @@ class AppInputField extends StatelessWidget {
       obscureText: obscureText,
       keyboardType: keyboardType,
       onChanged: onChanged,
+      onSubmitted: onSubmitted,
       maxLines: maxLines,
       minLines: minLines,
       enabled: enabled,

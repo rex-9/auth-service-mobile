@@ -7,6 +7,7 @@ import 'package:rexone_mobile/design/design.dart';
 import 'package:rexone_mobile/helpers/helpers.dart';
 
 import '../../auth/auth.dart';
+import '../../feedback/feedback.dart';
 import '../setting.dart';
 
 class SettingPage extends GetView<SettingController> {
@@ -40,10 +41,30 @@ class SettingPage extends GetView<SettingController> {
 
           SizedBox(height: Design.spacing.xxl),
 
+          // Feedback Section
+          _buildSectionHeader(context, 'Feedback'),
+          _buildFeedbackTile(context),
+
+          SizedBox(height: Design.spacing.xxl),
+
           // App Info Section
           _buildSectionHeader(context, Constants.locale.appInfo.tr),
           _buildAppInfoTile(context),
         ],
+      ),
+    );
+  }
+
+  Widget _buildFeedbackTile(BuildContext context) {
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: AppListTile(
+        leading: Icon(Icons.feedback_outlined, color: context.colors.primary),
+        title: const Text('Feedback & Suggestions'),
+        subtitle: const Text('Help us improve Rexone'),
+        trailing:
+            Icon(Design.icons.rightArrow, color: context.colors.textSecondary),
+        onTap: () => FeedbackBottomSheet.show(),
       ),
     );
   }

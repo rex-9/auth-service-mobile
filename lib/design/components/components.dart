@@ -9,3 +9,5 @@ export 'app_loading.dart';
 export 'app_page.dart';
 export 'app_card.dart';
 export 'app_badge.dart';
+export 'app_handle_bar.dart';
+export 'app_rating_slider.dart';

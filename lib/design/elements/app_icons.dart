@@ -21,9 +21,11 @@ class AppIcons {
 
   // ── Navigation / Actions ───────────────────────────────────────
   IconData get backArrow => Icons.arrow_back_rounded;
+  IconData get rightArrow => Icons.chevron_right_rounded;
   IconData get downArrow => Icons.arrow_drop_down_rounded;
   IconData get close => Icons.close_rounded;
   IconData get send => Icons.send_rounded;
+  IconData get feedback => Icons.feedback_outlined;
   IconData get delete => Icons.delete_outline;
   IconData get deleteSweep => Icons.delete_sweep_outlined;
 
