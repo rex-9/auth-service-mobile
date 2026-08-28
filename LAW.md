@@ -85,12 +85,17 @@ Transport Layer (lib/services/api.service.dart)
 ---
 
 ## 🔐 5. RBAC & Client-Side Authorization Law
+The mobile RBAC system strictly synchronizes with the backend's three-tier administrative hierarchy:
 
-- User permissions map to backend resources and actions (`read`, `create`, `update`, `delete`).
-- Navigation and feature access are guarded by role and permission checkers:
-  - `super_admin`: Full access across all admin features.
-  - `admin`: Full access EXCEPT `users` and `iam`.
-  - Domain roles: Access strictly granted based on permissions.
+### 5.1 Three-Tier Administrative Hierarchy
+1. **`super_admin` (Full System Authority)**:
+   - Full access across all administration areas, features, and settings.
+2. **`admin` (Standard Administrator)**:
+   - Full operational access across domain resources (`feedbacks`, `payments`, `ai`, `assets`, `logs`, `notifications`).
+   - **Strict Restriction**: Restricted from `users` and `iam`.
+3. **Partial Admin (`*_admin` Suffix Naming Law)**:
+   - Users with base `user` role plus specific `*_admin` role (e.g. `feedback_admin`, `payment_admin`).
+   - Feature access and navigation are strictly restricted to the read/update actions matching their `*_admin` permissions.
 
 ---
 

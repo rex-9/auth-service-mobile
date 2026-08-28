@@ -134,6 +134,13 @@ flowchart LR
 - **Active Session Enforcement**: Sends `X-Platform: mobile` to ensure single-device active session rules enforced by the backend cache.
 - **Session Replacement Handling**: Detects active session invalidation and gracefully routes the user to sign-in with localized feedback.
 
+### IAM & RBAC Administrative Hierarchy
+
+The mobile client enforces a synchronized three-tier administrative hierarchy:
+- **`super_admin`**: Full authority across all features, screens, and administrative tools.
+- **`admin`**: Full authority across domain operations (`feedbacks`, `payments`, `ai`, `assets`, `logs`), strictly excluded from `users` and `iam`.
+- **Partial Admins (`*_admin` naming convention)**: Users holding the base `user` role plus a specific `*_admin` role (e.g. `feedback_admin`). Feature access is strictly restricted to the read/update actions matching their `*_admin` permissions.
+
 ### Push notifications
 
 - Powered by **OneSignal Flutter SDK** (`onesignal_flutter`).
