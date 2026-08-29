@@ -15,7 +15,7 @@ class SignUpPasswordCreatePage extends GetView<AuthController> {
     final isGoogle = controller.isGooglePasswordSetup;
 
     return AppPage(
-      title: Constants.locale.signupTitle.tr,
+      title: AppLocales.auth.signUpPasscodeCreate.title.tr,
       child: Center(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: Design.spacing.lg),
@@ -25,23 +25,23 @@ class SignUpPasswordCreatePage extends GetView<AuthController> {
             children: [
               Text(
                 isGoogle
-                    ? Constants.locale.googlePasscodeHeading.tr
-                    : Constants.locale.createPasscodeHeading.tr,
+                    ? AppLocales.auth.signUpPasscodeCreate.googleHeading.tr
+                    : AppLocales.auth.signUpPasscodeCreate.heading.tr,
                 style: context.typo.headline1,
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: Design.spacing.sm),
               Text(
                 isGoogle
-                    ? Constants.locale.googlePasscodeSubtitle.tr
-                    : Constants.locale.createPasscodeSubtitle.tr,
+                    ? AppLocales.auth.signUpPasscodeCreate.googleSubtitle.tr
+                    : AppLocales.auth.signUpPasscodeCreate.subtitle.tr,
                 style: context.typo.bodyMedium,
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: Design.spacing.xxxl),
 
               Text(
-                Constants.locale.passcodeLabel.tr,
+                AppLocales.auth.signInPasscode.passcodeLabel.tr,
                 style: context.typo.labelMedium,
               ),
               SizedBox(height: Design.spacing.sm),
@@ -62,7 +62,7 @@ class SignUpPasswordCreatePage extends GetView<AuthController> {
               AppButton(
                 type: EButtonType.text,
                 onPressed: () => Get.back(),
-                text: Constants.locale.goBack.tr,
+                text: AppLocales.auth.initial.goBack.tr,
               ),
             ],
           ),
@@ -71,5 +71,3 @@ class SignUpPasswordCreatePage extends GetView<AuthController> {
     );
   }
 }
-
-

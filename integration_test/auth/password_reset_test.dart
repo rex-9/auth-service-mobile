@@ -46,7 +46,7 @@ void main() {
       await tester.pumpAndSettle(const Duration(seconds: 2));
 
       // Scroll and Tap Forgot Password link
-      final forgotText = Constants.locale.forgotPasscodeLink.tr;
+      final forgotText = AppLocales.auth.signInPasscode.forgotPasscodeLink.tr;
       final forgotButton = find.text(forgotText);
       if (forgotButton.evaluate().isEmpty) {
         await tester.scrollUntilVisible(
@@ -64,7 +64,7 @@ void main() {
       expect(find.byType(ForgotPasswordPage), findsOneWidget);
 
       // Tap Send Reset Link
-      final sendResetText = Constants.locale.sendResetLink.tr;
+      final sendResetText = AppLocales.auth.forgotPasscode.sendResetLink.tr;
       final sendButton = find.text(sendResetText);
       expect(sendButton, findsOneWidget);
       await tester.tap(sendButton);

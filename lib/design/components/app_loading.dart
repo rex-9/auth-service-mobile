@@ -53,15 +53,15 @@ class AppLoading extends StatelessWidget {
     if (_activeCount > 0) _activeCount--;
     if (_activeCount <= 0) {
       _activeCount = 0;
-      // Defer by one frame — guarantees the overlay renders at least once
-      // even when the API response arrives before the next vsync (localhost).
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (_activeCount <= 0) {
-          isGlobalLoading.value = false;
-          globalLoadingMessage.value = null;
-        }
-      });
+      isGlobalLoading.value = false;
+      globalLoadingMessage.value = null;
     }
+  }
+
+  static void reset() {
+    _activeCount = 0;
+    isGlobalLoading.value = false;
+    globalLoadingMessage.value = null;
   }
 
   /// Mounts the global blocking overlay at the app root.

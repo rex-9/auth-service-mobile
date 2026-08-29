@@ -14,6 +14,7 @@ class AppButton extends StatelessWidget {
     this.text,
     this.icon,
     this.tooltip,
+    this.color,
   });
 
   final VoidCallback? onPressed;
@@ -22,6 +23,7 @@ class AppButton extends StatelessWidget {
   final String? text;
   final IconData? icon;
   final String? tooltip;
+  final Color? color;
 
   static bool get isIOS => GetPlatform.isIOS;
 
@@ -56,6 +58,7 @@ class AppButton extends StatelessWidget {
           onPressed: onPressed,
           icon: icon!,
           tooltip: tooltip,
+          color: color,
         );
 
       case EButtonType.google:
@@ -75,7 +78,7 @@ class AppButton extends StatelessWidget {
           ),
           SizedBox(width: Design.spacing.sm),
           Text(
-            text ?? Constants.locale.continueWithGoogle.tr,
+            text ?? AppLocales.auth.initial.continueWithGoogle.tr,
             style: context.typo.bodyMedium,
           ),
         ],
@@ -127,15 +130,21 @@ class AppButton extends StatelessWidget {
     required VoidCallback? onPressed,
     required IconData icon,
     String? tooltip,
+    Color? color,
   }) {
+    final iconColor = color ?? Get.theme.colorScheme.onSurface;
     if (isIOS) {
       return CupertinoButton(
         onPressed: onPressed,
         padding: EdgeInsets.zero,
-        child: Icon(icon, color: Get.theme.colorScheme.onSurface),
+        child: Icon(icon, color: iconColor),
       );
     }
-    return IconButton(onPressed: onPressed, icon: Icon(icon), tooltip: tooltip);
+    return IconButton(
+      onPressed: onPressed,
+      icon: Icon(icon, color: iconColor),
+      tooltip: tooltip,
+    );
   }
 
   static Widget osGoogleButton({
@@ -171,7 +180,7 @@ class AppButton extends StatelessWidget {
   }
 }
 
-/// Interactive Primary Button with touch Press & Hold neon glow reaction
+/// Interactive Primary Button with crisp solid idle state and touch Press & Hold neon glow reaction
 class _InteractivePrimaryButton extends StatefulWidget {
   const _InteractivePrimaryButton({
     required this.onPressed,
@@ -191,32 +200,34 @@ class _InteractivePrimaryButtonState extends State<_InteractivePrimaryButton> {
 
   @override
   Widget build(BuildContext context) {
+    final isEnabled = widget.onPressed != null;
+
     return AnimatedScale(
-      scale: _isPressed ? 0.97 : 1.0,
+      scale: (_isPressed && isEnabled) ? 0.97 : 1.0,
       duration: const Duration(milliseconds: 150),
       curve: Curves.easeOut,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeOut,
         decoration: BoxDecoration(
-          color: _isPressed ? Design.colors.primary : Design.colors.glass.tagBg,
+          color: isEnabled
+              ? (_isPressed
+                  ? Design.colors.primary.withValues(alpha: 0.9)
+                  : Design.colors.primary)
+              : Design.colors.primary.withValues(alpha: 0.4),
           borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
-          border: Border.all(
-            color: _isPressed
-                ? Design.colors.primary
-                : Design.colors.glass.border,
-            width: 1,
-          ),
-          boxShadow: _isPressed
-              ? Design.colors.shadows.neonLg
-              : Design.colors.shadows.neon,
+          boxShadow: (_isPressed && isEnabled)
+              ? Design.colors.shadows.neon
+              : const [],
         ),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
             onTap: widget.onPressed,
             onHighlightChanged: (highlighted) {
-              setState(() => _isPressed = highlighted);
+              if (isEnabled) {
+                setState(() => _isPressed = highlighted);
+              }
             },
             borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
             child: Padding(
@@ -227,7 +238,9 @@ class _InteractivePrimaryButtonState extends State<_InteractivePrimaryButton> {
               child: Center(
                 child: DefaultTextStyle(
                   style: Design.typo.button.copyWith(
-                    color: _isPressed ? Colors.white : Design.colors.primary,
+                    color: isEnabled
+                        ? Colors.white
+                        : Colors.white.withValues(alpha: 0.6),
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.2,
                   ),
@@ -261,32 +274,38 @@ class _InteractiveNeonButtonState extends State<_InteractiveNeonButton> {
 
   @override
   Widget build(BuildContext context) {
+    final isEnabled = widget.onPressed != null;
+
     return AnimatedScale(
-      scale: _isPressed ? 0.97 : 1.0,
+      scale: (_isPressed && isEnabled) ? 0.97 : 1.0,
       duration: const Duration(milliseconds: 150),
       curve: Curves.easeOut,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeOut,
         decoration: BoxDecoration(
-          color: _isPressed ? Design.colors.primary : Design.colors.glass.card,
+          color: (_isPressed && isEnabled)
+              ? Design.colors.primary
+              : Design.colors.glass.card,
           borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
           border: Border.all(
-            color: _isPressed
+            color: (_isPressed && isEnabled)
                 ? Design.colors.primary
                 : Design.colors.glass.border,
             width: 1,
           ),
-          boxShadow: _isPressed
-              ? Design.colors.shadows.neonLg
-              : Design.colors.shadows.neon,
+          boxShadow: (_isPressed && isEnabled)
+              ? Design.colors.shadows.neon
+              : const [],
         ),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
             onTap: widget.onPressed,
             onHighlightChanged: (highlighted) {
-              setState(() => _isPressed = highlighted);
+              if (isEnabled) {
+                setState(() => _isPressed = highlighted);
+              }
             },
             borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
             child: Padding(
@@ -300,10 +319,6 @@ class _InteractiveNeonButtonState extends State<_InteractiveNeonButton> {
                     color: Design.colors.glowWhite,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 1.2,
-                    shadows: [
-                      Shadow(color: Design.colors.glowWhite, blurRadius: 6),
-                      Shadow(color: Design.colors.primary, blurRadius: 12),
-                    ],
                   ),
                   child: widget.child,
                 ),
@@ -337,30 +352,38 @@ class _InteractiveSecondaryButtonState
 
   @override
   Widget build(BuildContext context) {
+    final isEnabled = widget.onPressed != null;
+
     return AnimatedScale(
-      scale: _isPressed ? 0.97 : 1.0,
+      scale: (_isPressed && isEnabled) ? 0.97 : 1.0,
       duration: const Duration(milliseconds: 150),
       curve: Curves.easeOut,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeOut,
         decoration: BoxDecoration(
-          color: _isPressed
+          color: (_isPressed && isEnabled)
               ? Design.colors.primary.withValues(alpha: 0.15)
               : Colors.transparent,
           borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
           border: Border.all(
-            color: Design.colors.primary,
+            color: isEnabled
+                ? Design.colors.primary
+                : Design.colors.primary.withValues(alpha: 0.4),
             width: 1.5,
           ),
-          boxShadow: _isPressed ? Design.colors.shadows.neon : const [],
+          boxShadow: (_isPressed && isEnabled)
+              ? Design.colors.shadows.neon
+              : const [],
         ),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
             onTap: widget.onPressed,
             onHighlightChanged: (highlighted) {
-              setState(() => _isPressed = highlighted);
+              if (isEnabled) {
+                setState(() => _isPressed = highlighted);
+              }
             },
             borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
             child: Padding(
@@ -371,7 +394,9 @@ class _InteractiveSecondaryButtonState
               child: Center(
                 child: DefaultTextStyle(
                   style: Design.typo.button.copyWith(
-                    color: Design.colors.primary,
+                    color: isEnabled
+                        ? Design.colors.primary
+                        : Design.colors.primary.withValues(alpha: 0.4),
                     fontWeight: FontWeight.w600,
                   ),
                   child: widget.child,

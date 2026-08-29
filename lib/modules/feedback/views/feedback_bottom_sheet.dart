@@ -1,6 +1,7 @@
 // lib/modules/feedback/views/feedback_bottom_sheet.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/design/design.dart';
 import '../controllers/feedback.controller.dart';
 
@@ -8,6 +9,9 @@ class FeedbackBottomSheet extends StatelessWidget {
   const FeedbackBottomSheet({super.key});
 
   static void show() {
+    if (!Get.isRegistered<FeedbackController>()) {
+      Get.put(FeedbackController());
+    }
     Get.bottomSheet(
       const FeedbackBottomSheet(),
       isScrollControlled: true,
@@ -17,15 +21,14 @@ class FeedbackBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(FeedbackController());
+    final controller = Get.find<FeedbackController>();
 
     return Container(
       padding: EdgeInsets.only(
         left: Design.spacing.lg,
         right: Design.spacing.lg,
         top: Design.spacing.xl,
-        bottom:
-            MediaQuery.of(context).viewInsets.bottom + Design.spacing.xxl,
+        bottom: MediaQuery.of(context).viewInsets.bottom + Design.spacing.xxl,
       ),
       decoration: BoxDecoration(
         color: context.colors.surface,
@@ -52,9 +55,10 @@ class FeedbackBottomSheet extends StatelessWidget {
                     color: context.colors.textPrimary,
                   ),
                 ),
-                IconButton(
-                  icon: Icon(Design.icons.close,
-                      color: context.colors.textSecondary),
+                AppButton(
+                  type: EButtonType.icon,
+                  icon: Design.icons.close,
+                  color: context.colors.textSecondary,
                   onPressed: () => Get.back(),
                 ),
               ],
@@ -87,7 +91,7 @@ class FeedbackBottomSheet extends StatelessWidget {
               () => SizedBox(
                 width: double.infinity,
                 child: controller.isSubmitting.value
-                    ? const Center(child: CircularProgressIndicator())
+                    ? const Center(child: AppLoading())
                     : AppButton(
                         text: 'Send Feedback',
                         onPressed: () => controller.submitFeedback(),

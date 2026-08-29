@@ -184,9 +184,9 @@ class PaymentPage extends GetView<PaymentController> {
             onPressed: () async {
               final ok = await AppDialog.confirm(
                 context: context,
-                title: Constants.locale.cancelSubTitle.tr,
-                message: Constants.locale.cancelSubConfirmMsg.tr,
-                confirmLabel: Constants.locale.cancelSubTitle.tr,
+                title: AppLocales.setting.cancelSubTitle.tr,
+                message: AppLocales.setting.cancelSubConfirmMsg.tr,
+                confirmLabel: AppLocales.setting.cancelSubTitle.tr,
               );
               if (ok) controller.cancelSubscription(activeSub.id);
             },

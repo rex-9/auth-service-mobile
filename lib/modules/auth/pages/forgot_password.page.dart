@@ -14,7 +14,7 @@ class ForgotPasswordPage extends GetView<AuthController> {
     final emailController = TextEditingController(text: controller.email.value);
 
     return AppPage(
-      title: Constants.locale.forgotPasscodeTitle.tr,
+      title: AppLocales.auth.forgotPasscode.title.tr,
       child: Center(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: Design.spacing.lg),
@@ -23,7 +23,7 @@ class ForgotPasswordPage extends GetView<AuthController> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                Constants.locale.forgotPasscodeSubtitle.tr,
+                AppLocales.auth.forgotPasscode.subtitle.tr,
                 style: context.typo.bodyMedium,
                 textAlign: TextAlign.center,
               ),
@@ -31,8 +31,8 @@ class ForgotPasswordPage extends GetView<AuthController> {
 
               Obx(
                 () => AppInputField(
-                  label: Constants.locale.emailLabel.tr,
-                  hint: Constants.locale.emailHint.tr,
+                  label: AppLocales.auth.shared.emailLabel.tr,
+                  hint: AppLocales.auth.shared.emailHint.tr,
                   error: controller.emailError.value,
                   controller: emailController,
                   keyboardType: TextInputType.emailAddress,
@@ -45,10 +45,10 @@ class ForgotPasswordPage extends GetView<AuthController> {
                 final waiting = controller.resendSecondsLeft.value > 0;
                 return AppButton(
                   text: waiting
-                      ? Constants.locale.resendCodeIn.trParams({
+                      ? AppLocales.auth.confirmEmail.resendCodeIn.trParams({
                           'seconds': '${controller.resendSecondsLeft.value}',
                         })
-                      : Constants.locale.sendResetLink.tr,
+                      : AppLocales.auth.forgotPasscode.sendResetLink.tr,
                   onPressed: () {
                     if (waiting) return;
                     controller.forgotPassword();
@@ -60,7 +60,7 @@ class ForgotPasswordPage extends GetView<AuthController> {
               AppButton(
                 type: EButtonType.text,
                 onPressed: () => Get.back(),
-                text: Constants.locale.backToSignIn.tr,
+                text: AppLocales.auth.forgotPasscode.backToSignIn.tr,
               ),
             ],
           ),
@@ -69,4 +69,3 @@ class ForgotPasswordPage extends GetView<AuthController> {
     );
   }
 }
-

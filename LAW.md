@@ -70,7 +70,9 @@ Transport Layer (lib/services/api.service.dart)
 
 ### 4.1 Zero Loose String Literals or Magic Numbers
 - **Rule**: Every status string, API key, storage key, header, and route MUST be centralized in `lib/constants/`:
-  - `app.constants.dart` — Storage keys (`Constants.app.storageKey*`), platform headers (`AppConstants.platformAndroid`, `AppConstants.platformIos`, `AppConstants.currentPlatform`).
+  - `app_locales.dart` — Centralized namespaced translation keys (`AppLocales.*`) matching web `AppLocales`.
+  - `storage_keys.dart` — Centralized local storage keys (`StorageKeys.*`) matching web `StorageKeys` parity.
+  - `app.constants.dart` — Platform headers (`AppConstants.platformAndroid`, `AppConstants.platformIos`, `AppConstants.currentPlatform`).
   - `json_keys.dart` — Centralized API request and response JSON envelope keys (`JsonKeys.*`).
   - `log.constants.dart` — Client telemetry constants (`LogConstants.*`).
   - `enums.dart` — Strongly-typed domain enums (`AuthProvider`, `ChatRole`, `ThemePreference`).
@@ -79,8 +81,9 @@ Transport Layer (lib/services/api.service.dart)
   - `asset_keys.dart` — Asset model constants (`AssetKeys.*`).
 - Exported cleanly from `lib/constants/constants.dart`.
 
-### 4.2 Zero Raw Local Storage Keys
-- **Rule**: NEVER pass loose string literals to `GetStorage()` or secure storage. Always use `Constants.app.storageKey*`.
+### 4.2 Cross-Platform Storage Keys Parity Law
+- **Rule**: All common local storage keys MUST match `rexone-web` `StorageKeys` exactly (`'token'`, `'user'`, `'locale'`, `'theme'`).
+- **Rule**: NEVER pass loose string literals to `GetStorage()` or secure storage. Always use `StorageKeys.*`.
 
 ---
 

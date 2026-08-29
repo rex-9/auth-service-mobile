@@ -17,18 +17,18 @@ class ConfirmEmailPage extends GetView<AuthController> {
     controller.email.value = arguments['email'];
 
     return AppPage(
-      title: Constants.locale.confirmEmailTitle.tr,
+      title: AppLocales.auth.confirmEmail.title.tr,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            Constants.locale.confirmEmailHeading.tr,
+            AppLocales.auth.confirmEmail.heading.tr,
             style: context.typo.headline3,
           ),
           SizedBox(height: Design.spacing.sm),
           Obx(
             () => Text(
-              Constants.locale.confirmEmailSubtitle.trParams({
+              AppLocales.auth.confirmEmail.subtitle.trParams({
                 'email': controller.email.value,
               }),
               style: context.typo.bodyMedium,
@@ -45,11 +45,11 @@ class ConfirmEmailPage extends GetView<AuthController> {
 
           SizedBox(height: Design.spacing.xxxl),
           AppButton(
-            text: Constants.locale.confirmCodeButton.tr,
+            text: AppLocales.auth.confirmEmail.confirmCodeButton.tr,
             onPressed: () {
               if (controller.confirmPin.text.length != 6) {
                 controller.confirmPin.triggerError();
-                AppSnackbar.error(Constants.locale.enter6DigitCode.tr);
+                AppSnackbar.error(AppLocales.auth.confirmEmail.enter6DigitCode.tr);
                 return;
               }
               controller.confirmOTPCode(controller.confirmPin.text);
@@ -65,10 +65,10 @@ class ConfirmEmailPage extends GetView<AuthController> {
                     ? null
                     : () => controller.sendConfirmationOTPCode(),
                 text: controller.resendSecondsLeft.value > 0
-                    ? Constants.locale.resendCodeIn.trParams({
+                    ? AppLocales.auth.confirmEmail.resendCodeIn.trParams({
                         'seconds': '${controller.resendSecondsLeft.value}',
                       })
-                    : Constants.locale.resendCode.tr,
+                    : AppLocales.auth.confirmEmail.resendCode.tr,
               ),
             ),
           ),
@@ -82,7 +82,7 @@ class ConfirmEmailPage extends GetView<AuthController> {
               controller.confirmPin.clear();
               Get.offAllNamed(AppRoutes.auth);
             },
-            text: Constants.locale.useDifferentEmail.tr,
+            text: AppLocales.auth.shared.useDifferentEmail.tr,
           ),
         ],
       ),

@@ -13,7 +13,7 @@ class SignInPasswordPage extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     return AppPage(
-      title: Constants.locale.signinTitle.tr,
+      title: AppLocales.auth.signInPasscode.title.tr,
       child: Center(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: Design.spacing.lg),
@@ -22,14 +22,14 @@ class SignInPasswordPage extends GetView<AuthController> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                Constants.locale.signinHeading.tr,
+                AppLocales.auth.signInPasscode.heading.tr,
                 style: context.typo.headline1,
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: Design.spacing.sm),
               Obx(
                 () => Text(
-                  Constants.locale.signinSubtitle.trParams({
+                  AppLocales.auth.signInPasscode.subtitle.trParams({
                     'email': controller.email.value,
                   }),
                   style: context.typo.bodyMedium,
@@ -56,7 +56,7 @@ class SignInPasswordPage extends GetView<AuthController> {
                   return Padding(
                     padding: EdgeInsets.only(top: Design.spacing.lg),
                     child: Text(
-                      Constants.locale.cooldownMessage.trParams({
+                      AppLocales.auth.signInPasscode.cooldownMessage.trParams({
                         'seconds': '${controller.cooldownSecondsLeft.value}',
                       }),
                       style: context.typo.caption.copyWith(
@@ -72,7 +72,7 @@ class SignInPasswordPage extends GetView<AuthController> {
                   return Padding(
                     padding: EdgeInsets.only(top: Design.spacing.lg),
                     child: Text(
-                      Constants.locale.attemptsRemaining.trParams({
+                      AppLocales.auth.signInPasscode.attemptsRemaining.trParams({
                         'left': '${controller.attemptsLeft.value}',
                         'total': '${AuthController.maxAttempts}',
                       }),
@@ -88,10 +88,10 @@ class SignInPasswordPage extends GetView<AuthController> {
               Obx(
                 () => AppButton(
                   text: controller.cooldownSecondsLeft.value > 0
-                      ? Constants.locale.tryAgainIn.trParams({
+                      ? AppLocales.auth.signInPasscode.tryAgainIn.trParams({
                           'seconds': '${controller.cooldownSecondsLeft.value}',
                         })
-                      : Constants.locale.signinTitle.tr,
+                      : AppLocales.auth.signInPasscode.title.tr,
                   onPressed: () => controller.signIn(),
                 ),
               ),
@@ -104,12 +104,12 @@ class SignInPasswordPage extends GetView<AuthController> {
                   controller.signinPin.clear();
                   Get.back();
                 },
-                text: Constants.locale.useDifferentEmail.tr,
+                text: AppLocales.auth.shared.useDifferentEmail.tr,
               ),
               AppButton(
                 type: EButtonType.text,
                 onPressed: () => AppRoutes.toForgotPassword(),
-                text: Constants.locale.forgotPasscodeLink.tr,
+                text: AppLocales.auth.signInPasscode.forgotPasscodeLink.tr,
               ),
             ],
           ),
@@ -118,5 +118,3 @@ class SignInPasswordPage extends GetView<AuthController> {
     );
   }
 }
-
-

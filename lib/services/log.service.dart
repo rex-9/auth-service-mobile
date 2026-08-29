@@ -153,7 +153,11 @@ class LogService extends GetxService {
         context: context ?? {},
       );
 
-      await _api.post(ServerRoutes.clientLogs, {'log': log.toJson()});
+      await _api.post(
+        ServerRoutes.clientLogs,
+        {'log': log.toJson()},
+        showLoading: false,
+      );
     } catch (e) {
       // Fail silently to never impact user experience
       debugPrint('[LogService] Failed to send client log: $e');
@@ -168,6 +172,11 @@ class LogService extends GetxService {
   static bool _isIgnoredError(String errorString, StackTrace? stack) {
     final lower = errorString.toLowerCase();
     final stackString = stack?.toString().toLowerCase() ?? '';
+
+    // Ignore benign framework warnings
+    if (lower.contains('listtile background color or ink splashes may be invisible')) {
+      return true;
+    }
 
     // Ignore HTTP/API network request failures
     if (lower.contains('socketexception') ||

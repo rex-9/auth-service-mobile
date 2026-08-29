@@ -78,17 +78,24 @@ class AppListTile extends StatelessWidget {
         padding: contentPadding ?? EdgeInsets.zero,
       );
     }
-    return ListTile(
-      leading: leading,
-      title: title,
-      subtitle: subtitle,
-      trailing: trailing,
-      onTap: onTap,
-      tileColor: backgroundColor,
-      contentPadding:
-          contentPadding ??
-           EdgeInsets.symmetric(horizontal: Design.spacing.lg, vertical: Design.spacing.sm),
-      visualDensity: VisualDensity.compact,
+    return Material(
+      color: backgroundColor ?? Colors.transparent,
+      borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+      clipBehavior: Clip.antiAlias,
+      child: ListTile(
+        leading: leading,
+        title: title,
+        subtitle: subtitle,
+        trailing: trailing,
+        onTap: onTap,
+        contentPadding:
+            contentPadding ??
+            EdgeInsets.symmetric(
+              horizontal: Design.spacing.lg,
+              vertical: Design.spacing.sm,
+            ),
+        visualDensity: VisualDensity.compact,
+      ),
     );
   }
 }

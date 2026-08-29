@@ -12,7 +12,7 @@ class SignUpPasswordConfirmPage extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     return AppPage(
-      title: Constants.locale.signupTitle.tr,
+      title: AppLocales.auth.signUpPasscodeConfirm.title.tr,
       child: Center(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: Design.spacing.lg),
@@ -21,20 +21,20 @@ class SignUpPasswordConfirmPage extends GetView<AuthController> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                Constants.locale.confirmPasscodeHeading.tr,
+                AppLocales.auth.signUpPasscodeConfirm.heading.tr,
                 style: context.typo.headline1,
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: Design.spacing.sm),
               Text(
-                Constants.locale.confirmPasscodeSubtitle.tr,
+                AppLocales.auth.signUpPasscodeConfirm.subtitle.tr,
                 style: context.typo.bodyMedium,
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: Design.spacing.xxxl),
 
               Text(
-                Constants.locale.confirmPasscodeHeading.tr,
+                AppLocales.auth.signUpPasscodeConfirm.heading.tr,
                 style: context.typo.labelMedium,
               ),
               SizedBox(height: Design.spacing.sm),
@@ -46,7 +46,7 @@ class SignUpPasswordConfirmPage extends GetView<AuthController> {
 
               SizedBox(height: Design.spacing.xxxl),
               AppButton(
-                text: Constants.locale.confirm.tr,
+                text: AppLocales.auth.signUpPasscodeConfirm.confirm.tr,
                 onPressed: controller.handleConfirmPassword,
               ),
 
@@ -60,7 +60,7 @@ class SignUpPasswordConfirmPage extends GetView<AuthController> {
                   controller.signupPin.clear();
                   Get.back();
                 },
-                text: Constants.locale.changePasscode.tr,
+                text: AppLocales.auth.signUpPasscodeConfirm.changePasscode.tr,
               ),
             ],
           ),
@@ -69,4 +69,3 @@ class SignUpPasswordConfirmPage extends GetView<AuthController> {
     );
   }
 }
-

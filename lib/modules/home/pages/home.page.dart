@@ -15,13 +15,13 @@ class HomePage extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
     return AppPage(
-      title: Constants.locale.home.tr,
+      title: AppLocales.common.home.tr,
       actions: [
         AppButton(
           type: EButtonType.icon,
           icon: Design.icons.settings,
           onPressed: AppRoutes.toSettings,
-          tooltip: Constants.locale.settings.tr,
+          tooltip: AppLocales.setting.settings.tr,
         ),
       ],
       child: Center(
@@ -30,7 +30,7 @@ class HomePage extends GetView<AuthController> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                Constants.locale.welcomeHome.tr,
+                AppLocales.common.welcomeHome.tr,
                 style: context.typo.headline1,
                 textAlign: TextAlign.center,
               ),
@@ -50,14 +50,14 @@ class HomePage extends GetView<AuthController> {
                       controller.currentUser.value?.name ??
                           controller.currentUser.value?.username ??
                           controller.currentUser.value?.email ??
-                          Constants.locale.loading.tr,
+                          AppLocales.common.loading.tr,
                       style: context.typo.bodyLarge,
                       textAlign: TextAlign.center,
                     ),
                     SizedBox(height: Design.spacing.xs),
                     Text(
                       controller.currentUser.value?.email ??
-                          Constants.locale.loading.tr,
+                          AppLocales.common.loading.tr,
                       style: context.typo.bodyMedium,
                       textAlign: TextAlign.center,
                     ),
@@ -86,13 +86,13 @@ class HomePage extends GetView<AuthController> {
                     SizedBox(height: Design.spacing.lg),
                     AppButton(
                       type: EButtonType.text,
-                      text: Constants.locale.signOutButton.tr,
+                      text: AppLocales.common.signOut.tr,
                       onPressed: () async {
                         final ok = await AppDialog.confirm(
                           context: context,
-                          title: Constants.locale.signOutButton.tr,
-                          message: Constants.locale.logoutConfirmation.tr,
-                          confirmLabel: Constants.locale.signOutButton.tr,
+                          title: AppLocales.common.signOut.tr,
+                          message: AppLocales.setting.logoutConfirmation.tr,
+                          confirmLabel: AppLocales.common.signOut.tr,
                         );
                         if (ok) controller.signOut();
                       },
