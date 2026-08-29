@@ -182,9 +182,14 @@ class AiPage extends GetView<AiController> {
         ),
         decoration: BoxDecoration(
           color: isUser ? colors.primary : colors.surface,
-          borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(Design.spacing.radiusMedium),
+            bottomLeft: Radius.circular(Design.spacing.radiusMedium),
+            bottomRight: Radius.circular(Design.spacing.radiusMedium),
+            topRight: Radius.circular(isUser ? 2 : Design.spacing.radiusMedium),
+          ),
           border: isUser ? null : Border.all(color: colors.border),
-          boxShadow: Design.colors.shadows.sm,
+          boxShadow: isUser ? Design.colors.shadows.neon : Design.colors.shadows.sm,
         ),
         child: Column(
           crossAxisAlignment: isUser
