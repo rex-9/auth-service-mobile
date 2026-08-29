@@ -16,13 +16,6 @@ class ConfirmEmailPage extends GetView<AuthController> {
 
     controller.email.value = arguments['email'];
 
-    // Auto-send code if not already sent
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (controller.resendSecondsLeft.value == 0) {
-        controller.sendConfirmationOTPCode();
-      }
-    });
-
     return AppPage(
       title: Constants.locale.confirmEmailTitle.tr,
       child: Column(
