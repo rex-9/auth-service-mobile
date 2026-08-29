@@ -139,7 +139,7 @@ flowchart LR
 The mobile client enforces a synchronized three-tier administrative hierarchy:
 - **`super_admin`**: Full authority across all features, screens, and administrative tools.
 - **`admin`**: Full authority across domain operations (`feedbacks`, `payments`, `ai`, `assets`, `logs`), strictly excluded from `users` and `iam`.
-- **Partial Admins (`*_admin` naming convention)**: Users holding the base `user` role plus a specific `*_admin` role (e.g. `feedback_admin`). Feature access is strictly restricted to the read/update actions matching their `*_admin` permissions.
+- **Partial Admins (`*_admin` naming convention)**: Users holding the base `user` role plus a specific `*_admin` role (e.g. `feedback_admin`). Any role with `admin` in its name is an admin role. Permissions in admin roles grant access to both standard and admin endpoints, whereas permissions in non-admin roles (such as `user`) only grant access to non-admin features.
 
 ### Push notifications
 
