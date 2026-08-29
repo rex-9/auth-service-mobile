@@ -28,6 +28,8 @@ enum EWsEventType {
   welcome('welcome'),
   aiResponseReady('ai_response_ready'),
   aiResponseFailed('ai_response_failed'),
+  ttsReady('tts_ready'),
+  ttsFailed('tts_failed'),
 
   unknown('unknown');
 

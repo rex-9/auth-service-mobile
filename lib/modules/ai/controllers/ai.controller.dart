@@ -1,13 +1,11 @@
 // lib/modules/ai/controllers/ai.controller.dart
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
 import 'package:rexone_mobile/constants/constants.dart';
@@ -43,8 +41,6 @@ class AiController extends GetxController with WidgetsBindingObserver {
   StreamSubscription<Uint8List>? _pcmSub;
   StreamSubscription<bool>? _connSub;
   StreamSubscription<PlayerState>? _ttsStateSub;
-  String? _cachedTtsMessageId;
-  String? _cachedTtsFilePath;
   String _committedText = '';
   String _partialText = '';
   String _textBeforeListen = '';
@@ -85,7 +81,6 @@ class AiController extends GetxController with WidgetsBindingObserver {
     unawaited(_teardownSpeech(restoreText: false));
     unawaited(_recorder.dispose());
     unawaited(_stopTtsPlayback());
-    unawaited(_clearTtsCache());
     unawaited(_ttsPlayer.dispose());
     textController.dispose();
     scrollController.dispose();
@@ -98,13 +93,34 @@ class AiController extends GetxController with WidgetsBindingObserver {
 
   /// Called by [SocketController] when an AI-related notification arrives.
   /// Reloads history only if the event belongs to the current room.
-  Future<void> onSocketEvent(EWsEventType eventType, String? roomId) async {
-    if (eventType != EWsEventType.aiResponseReady &&
-        eventType != EWsEventType.aiResponseFailed) {
-      return;
+  Future<void> onSocketEvent(
+    EWsEventType eventType,
+    String? roomId, {
+    String? messageId,
+  }) async {
+    switch (eventType) {
+      case EWsEventType.ttsReady:
+        if (roomId == null || roomId.isEmpty || roomId == currentRoomId.value) {
+          await loadHistory(currentRoomId.value ?? roomId);
+        }
+        _clearTtsQueue(messageId);
+      case EWsEventType.ttsFailed:
+        _clearTtsQueue(messageId);
+      case EWsEventType.aiResponseReady:
+      case EWsEventType.aiResponseFailed:
+        if (roomId == null || roomId.isEmpty || roomId == currentRoomId.value) {
+          await loadHistory(currentRoomId.value);
+        }
+      default:
+        return;
     }
-    if (roomId == null || roomId.isEmpty || roomId == currentRoomId.value) {
-      await loadHistory(currentRoomId.value);
+  }
+
+  void _clearTtsQueue(String? messageId) {
+    if (messageId != null && activeTtsMessageId.value != messageId) return;
+    isTtsLoading.value = false;
+    if (!_ttsPlayer.playing) {
+      activeTtsMessageId.value = null;
     }
   }
 
@@ -519,27 +535,10 @@ class AiController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-  Future<void> _deleteCachedFile(String path) async {
-    try {
-      final file = File(path);
-      if (await file.exists()) {
-        await file.delete();
-      }
-    } catch (e) {
-      debugPrint('🤖 [AiController] Error deleting cached file: $e');
-    }
-  }
-
   // ============================================================
   // TEXT-TO-SPEECH
   // ============================================================
   Future<void> speakMessage(AiMessageModel msg) async {
-    final text = msg.content.trim();
-    if (text.isEmpty) {
-      AppSnackbar.error(Constants.locale.aiTtsEmpty.tr);
-      return;
-    }
-
     if (activeTtsMessageId.value == msg.id && _ttsPlayer.playing) {
       await _stopTtsPlayback();
       return;
@@ -547,27 +546,31 @@ class AiController extends GetxController with WidgetsBindingObserver {
 
     await _stopTtsPlayback();
 
-    if (_cachedTtsMessageId != null && _cachedTtsMessageId != msg.id) {
-      await _clearTtsCache();
+    final audioUrl = msg.audioUrl;
+    if (audioUrl != null) {
+      activeTtsMessageId.value = msg.id;
+      try {
+        await _playTtsUrl(audioUrl);
+      } catch (e) {
+        debugPrint('🤖 [AiController] Error playing TTS: $e');
+        AppSnackbar.error(Constants.locale.aiTtsFailed.tr);
+        activeTtsMessageId.value = null;
+      }
+      return;
+    }
+
+    if (msg.content.trim().isEmpty) {
+      AppSnackbar.error(Constants.locale.aiTtsEmpty.tr);
+      return;
     }
 
     activeTtsMessageId.value = msg.id;
-
-    if (_cachedTtsMessageId == msg.id && _cachedTtsFilePath != null) {
-      final file = File(_cachedTtsFilePath!);
-      if (await file.exists()) {
-        await _playTtsFile(_cachedTtsFilePath!);
-        return;
-      }
-      await _clearTtsCache();
-    }
-
     isTtsLoading.value = true;
 
     try {
-      final response = await _ai.textToSpeech(text);
-      if (!response.success || response.bytes == null) {
-        AppSnackbar.error(response.error ?? Constants.locale.aiTtsFailed.tr);
+      final response = await _ai.textToSpeech(msg.id);
+      if (!response.success) {
+        AppSnackbar.error(response.error ?? response.message);
         activeTtsMessageId.value = null;
         isTtsLoading.value = false;
         return;
@@ -578,10 +581,11 @@ class AiController extends GetxController with WidgetsBindingObserver {
         return;
       }
 
-      isTtsLoading.value = false;
-      await _cacheAndPlayTts(msg.id, response.bytes!);
+      if (response.message.isNotEmpty) {
+        AppSnackbar.info(response.message);
+      }
     } catch (e) {
-      debugPrint('🤖 [AiController] Error playing TTS: $e');
+      debugPrint('🤖 [AiController] Error queueing TTS: $e');
       AppSnackbar.error(Constants.locale.aiTtsFailed.tr);
       activeTtsMessageId.value = null;
       isTtsLoading.value = false;
@@ -600,26 +604,8 @@ class AiController extends GetxController with WidgetsBindingObserver {
     isTtsLoading.value = false;
   }
 
-  Future<void> _clearTtsCache() async {
-    if (_cachedTtsFilePath != null) {
-      await _deleteCachedFile(_cachedTtsFilePath!);
-    }
-    _cachedTtsMessageId = null;
-    _cachedTtsFilePath = null;
-  }
-
-  Future<void> _cacheAndPlayTts(String messageId, Uint8List bytes) async {
-    final dir = await getTemporaryDirectory();
-    final path = '${dir.path}/tts_$messageId.mp3';
-    final file = File(path);
-    await file.writeAsBytes(bytes, flush: true);
-    _cachedTtsMessageId = messageId;
-    _cachedTtsFilePath = path;
-    await _playTtsFile(path);
-  }
-
-  Future<void> _playTtsFile(String path) async {
-    await _ttsPlayer.setFilePath(path);
+  Future<void> _playTtsUrl(String url) async {
+    await _ttsPlayer.setUrl(url);
     _ttsStateSub?.cancel();
     _ttsStateSub = _ttsPlayer.playerStateStream.listen((state) {
       if (state.processingState == ProcessingState.completed) {

@@ -97,11 +97,13 @@ class SocketController extends GetxController {
       case EWsEventType.subscriptionCreated:
       case EWsEventType.welcome:
       case EWsEventType.aiResponseReady:
+      case EWsEventType.ttsReady:
         AppSnackbar.success(message);
         break;
 
       case EWsEventType.paymentFailed:
       case EWsEventType.aiResponseFailed:
+      case EWsEventType.ttsFailed:
         AppSnackbar.error(message);
         break;
 
@@ -132,7 +134,12 @@ class SocketController extends GetxController {
     // --- AI ---
     if (Get.isRegistered<AiController>()) {
       final roomId = event.data?[AiKeys.roomId]?.toString();
-      await Get.find<AiController>().onSocketEvent(eventType, roomId);
+      final messageId = event.data?[AiKeys.messageId]?.toString();
+      await Get.find<AiController>().onSocketEvent(
+        eventType,
+        roomId,
+        messageId: messageId,
+      );
     }
   }
 }

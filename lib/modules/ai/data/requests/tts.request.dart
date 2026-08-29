@@ -1,11 +1,11 @@
 import 'package:rexone_mobile/constants/constants.dart';
 
 class TtsRequest {
-  final String text;
+  final String messageId;
 
-  const TtsRequest({required this.text});
+  const TtsRequest({required this.messageId});
 
   Map<String, dynamic> toJson() => {
-    SpeechKeys.text: text,
+    AiKeys.messageId: messageId,
   };
 }

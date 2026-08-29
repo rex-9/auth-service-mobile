@@ -10,5 +10,4 @@ class SpeechKeys {
   static const partial = 'partial';
   static const finalPhrase = 'final';
   static const error = 'error';
-  static const text = 'text';
 }

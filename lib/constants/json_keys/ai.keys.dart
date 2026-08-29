@@ -6,6 +6,7 @@ class AiKeys {
   static const processing = 'processing';
   static const roomTitle = 'room_title';
   static const roomId = 'room_id';
+  static const messageId = 'message_id';
   static const title = 'title';
   static const room = 'room';
   static const role = 'role';
@@ -16,4 +17,18 @@ class AiKeys {
   static const createdAt = 'created_at';
   static const updatedAt = 'updated_at';
   static const status = 'status';
+  static const ttsStatus = 'tts_status';
+  static const assets = 'assets';
+  static const url = 'url';
+  static const type = 'type';
+  static const audio = 'audio';
+  static const name = 'name';
+  static const format = 'format';
+  static const extension = 'extension';
+  static const sizeBytes = 'size_bytes';
+  static const durationSecs = 'duration_secs';
+  static const source = 'source';
+  static const resourceModel = 'resource_model';
+  static const resourceId = 'resource_id';
+  static const jobId = 'job_id';
 }

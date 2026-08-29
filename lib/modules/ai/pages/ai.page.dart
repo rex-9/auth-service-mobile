@@ -238,11 +238,17 @@ class AiPage extends GetView<AiController> {
             ? colors.primary
             : colors.textSecondary;
 
+    final icon = isActive && !controller.isTtsLoading.value && msg.hasAudio
+        ? Design.icons.stop
+        : msg.hasAudio
+            ? Design.icons.play
+            : Design.icons.speaker;
+
     return IconButton(
       visualDensity: VisualDensity.compact,
       padding: EdgeInsets.zero,
       constraints:  BoxConstraints(minWidth: Design.spacing.xxxl, minHeight: Design.spacing.xxxl),
-      icon: Icon(Design.icons.speaker, size: Design.spacing.iconSmall, color: iconColor),
+      icon: Icon(icon, size: Design.spacing.iconSmall, color: iconColor),
       onPressed: isDisabled && !isActive
           ? null
           : () => controller.speakMessage(msg),

@@ -89,11 +89,15 @@ class AiService extends GetxService {
   // SPEECH
   // ============================================================
 
-  Future<BinaryResponse> textToSpeech(String text) async {
-    return _api.postBinary(
+  Future<ApiResponse<Map<String, dynamic>>> textToSpeech(String messageId) async {
+    final response = await _api.post(
       ServerRoutes.textToSpeech,
-      TtsRequest(text: text).toJson(),
+      TtsRequest(messageId: messageId).toJson(),
       showLoading: false,
+    );
+    return _api.parseResponse<Map<String, dynamic>>(
+      response,
+      (data) => data is Map ? Map<String, dynamic>.from(data) : {},
     );
   }
 }
