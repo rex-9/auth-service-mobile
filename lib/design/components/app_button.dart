@@ -39,11 +39,15 @@ class AppButton extends StatelessWidget {
 
     switch (type) {
       case EButtonType.primary:
-        return osElevatedButton(onPressed: onPressed, child: child);
+        return _InteractivePrimaryButton(onPressed: onPressed, child: child);
+
+      case EButtonType.neon:
+        return _InteractiveNeonButton(onPressed: onPressed, child: child);
 
       case EButtonType.secondary:
-        return osOutlinedButton(onPressed: onPressed, child: child);
+        return _InteractiveSecondaryButton(onPressed: onPressed, child: child);
 
+      case EButtonType.tertiary:
       case EButtonType.text:
         return osTextButton(onPressed: onPressed, child: child);
 
@@ -91,64 +95,6 @@ class AppButton extends StatelessWidget {
     }
 
     return Text(text ?? '', style: context.typo.button);
-  }
-
-  static Widget osElevatedButton({
-    required VoidCallback? onPressed,
-    required Widget child,
-  }) {
-    if (isIOS) {
-      return CupertinoButton(
-        onPressed: onPressed,
-        color: Get.theme.colorScheme.primary,
-        borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
-        padding: EdgeInsets.symmetric(
-          horizontal: Design.spacing.xl,
-          vertical: Design.spacing.md,
-        ),
-        child: DefaultTextStyle(
-          style: Design.typo.button.copyWith(color: Colors.white),
-          child: child,
-        ),
-      );
-    }
-    return ElevatedButton(
-      onPressed: onPressed,
-      style: Design.styles.buttonPrimary,
-      child: child,
-    );
-  }
-
-  static Widget osOutlinedButton({
-    required VoidCallback? onPressed,
-    required Widget child,
-  }) {
-    if (isIOS) {
-      return Container(
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
-          border: Border.all(color: Get.theme.colorScheme.primary),
-        ),
-        child: CupertinoButton(
-          onPressed: onPressed,
-          padding: EdgeInsets.symmetric(
-            horizontal: Design.spacing.xl,
-            vertical: Design.spacing.md,
-          ),
-          child: DefaultTextStyle(
-            style: Design.typo.button.copyWith(
-              color: Get.theme.colorScheme.primary,
-            ),
-            child: child,
-          ),
-        ),
-      );
-    }
-    return OutlinedButton(
-      onPressed: onPressed,
-      style: Design.styles.buttonSecondary,
-      child: child,
-    );
   }
 
   static Widget osTextButton({
@@ -220,6 +166,220 @@ class AppButton extends StatelessWidget {
         onPressed: onPressed,
         style: Design.styles.buttonGoogle,
         child: child,
+      ),
+    );
+  }
+}
+
+/// Interactive Primary Button with touch Press & Hold neon glow reaction
+class _InteractivePrimaryButton extends StatefulWidget {
+  const _InteractivePrimaryButton({
+    required this.onPressed,
+    required this.child,
+  });
+
+  final VoidCallback? onPressed;
+  final Widget child;
+
+  @override
+  State<_InteractivePrimaryButton> createState() =>
+      _InteractivePrimaryButtonState();
+}
+
+class _InteractivePrimaryButtonState extends State<_InteractivePrimaryButton> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedScale(
+      scale: _isPressed ? 0.97 : 1.0,
+      duration: const Duration(milliseconds: 150),
+      curve: Curves.easeOut,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+        decoration: BoxDecoration(
+          color: _isPressed ? Design.colors.primary : Design.colors.glass.tagBg,
+          borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+          border: Border.all(
+            color: _isPressed
+                ? Design.colors.primary
+                : Design.colors.glass.border,
+            width: 1,
+          ),
+          boxShadow: _isPressed
+              ? Design.colors.shadows.neonLg
+              : Design.colors.shadows.neon,
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: widget.onPressed,
+            onHighlightChanged: (highlighted) {
+              setState(() => _isPressed = highlighted);
+            },
+            borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: Design.spacing.xl,
+                vertical: Design.spacing.md,
+              ),
+              child: Center(
+                child: DefaultTextStyle(
+                  style: Design.typo.button.copyWith(
+                    color: _isPressed ? Colors.white : Design.colors.primary,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.2,
+                  ),
+                  child: widget.child,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Interactive Neon Button with touch Press & Hold animated glow reaction
+class _InteractiveNeonButton extends StatefulWidget {
+  const _InteractiveNeonButton({
+    required this.onPressed,
+    required this.child,
+  });
+
+  final VoidCallback? onPressed;
+  final Widget child;
+
+  @override
+  State<_InteractiveNeonButton> createState() => _InteractiveNeonButtonState();
+}
+
+class _InteractiveNeonButtonState extends State<_InteractiveNeonButton> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedScale(
+      scale: _isPressed ? 0.97 : 1.0,
+      duration: const Duration(milliseconds: 150),
+      curve: Curves.easeOut,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+        decoration: BoxDecoration(
+          color: _isPressed ? Design.colors.primary : Design.colors.glass.card,
+          borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+          border: Border.all(
+            color: _isPressed
+                ? Design.colors.primary
+                : Design.colors.glass.border,
+            width: 1,
+          ),
+          boxShadow: _isPressed
+              ? Design.colors.shadows.neonLg
+              : Design.colors.shadows.neon,
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: widget.onPressed,
+            onHighlightChanged: (highlighted) {
+              setState(() => _isPressed = highlighted);
+            },
+            borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: Design.spacing.xl,
+                vertical: Design.spacing.md,
+              ),
+              child: Center(
+                child: DefaultTextStyle(
+                  style: Design.typo.button.copyWith(
+                    color: Design.colors.glowWhite,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.2,
+                    shadows: [
+                      Shadow(color: Design.colors.glowWhite, blurRadius: 6),
+                      Shadow(color: Design.colors.primary, blurRadius: 12),
+                    ],
+                  ),
+                  child: widget.child,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Interactive Secondary Button with touch Press & Hold feedback
+class _InteractiveSecondaryButton extends StatefulWidget {
+  const _InteractiveSecondaryButton({
+    required this.onPressed,
+    required this.child,
+  });
+
+  final VoidCallback? onPressed;
+  final Widget child;
+
+  @override
+  State<_InteractiveSecondaryButton> createState() =>
+      _InteractiveSecondaryButtonState();
+}
+
+class _InteractiveSecondaryButtonState
+    extends State<_InteractiveSecondaryButton> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedScale(
+      scale: _isPressed ? 0.97 : 1.0,
+      duration: const Duration(milliseconds: 150),
+      curve: Curves.easeOut,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+        decoration: BoxDecoration(
+          color: _isPressed
+              ? Design.colors.primary.withValues(alpha: 0.15)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+          border: Border.all(
+            color: Design.colors.primary,
+            width: 1.5,
+          ),
+          boxShadow: _isPressed ? Design.colors.shadows.neon : const [],
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: widget.onPressed,
+            onHighlightChanged: (highlighted) {
+              setState(() => _isPressed = highlighted);
+            },
+            borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: Design.spacing.xl,
+                vertical: Design.spacing.md,
+              ),
+              child: Center(
+                child: DefaultTextStyle(
+                  style: Design.typo.button.copyWith(
+                    color: Design.colors.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  child: widget.child,
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

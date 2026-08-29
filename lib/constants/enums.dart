@@ -5,7 +5,7 @@ enum EPeekedUserStatus {
   notExists, // User does not exist
 }
 
-enum EButtonType { primary, secondary, text, icon, google }
+enum EButtonType { primary, neon, secondary, tertiary, text, icon, google }
 
 enum EAuthProvider { email, google }
 

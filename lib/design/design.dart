@@ -1,4 +1,5 @@
-// Export Components and Extensions
+// Export Components, Constants and Extensions
+export 'package:rexone_mobile/design/constants/constants.dart';
 export 'package:rexone_mobile/design/extensions/extensions.dart';
 export 'package:rexone_mobile/design/components/components.dart';
 

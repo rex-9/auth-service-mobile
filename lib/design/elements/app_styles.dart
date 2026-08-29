@@ -59,7 +59,7 @@ class AppStyles {
   // ===== BUTTON STYLES =====
   ButtonStyle get buttonPrimary => ElevatedButton.styleFrom(
     backgroundColor: Design.colors.primary,
-    foregroundColor: Colors.white,
+    foregroundColor: Design.colors.glowWhite,
     minimumSize: Size(double.infinity, Design.spacing.buttonHeight),
     padding: EdgeInsets.symmetric(
       horizontal: Design.spacing.xl,
@@ -67,10 +67,14 @@ class AppStyles {
     ),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+      side: BorderSide(color: Design.colors.glass.border, width: 1),
     ),
-    textStyle: Design.typo.button,
-    elevation: 0,
-    shadowColor: Colors.transparent,
+    textStyle: Design.typo.button.copyWith(
+      fontWeight: FontWeight.w700,
+      letterSpacing: 1.2,
+    ),
+    elevation: 2,
+    shadowColor: Design.colors.primary.withValues(alpha: 0.5),
   );
 
   ButtonStyle get buttonSecondary => OutlinedButton.styleFrom(

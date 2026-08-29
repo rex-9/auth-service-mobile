@@ -6,10 +6,16 @@ import 'package:flutter/material.dart';
 class AppColors {
   const AppColors();
 
-  // ===== BRAND (Unified across Light & Dark) =====
+  // ===== BRAND (Rex9 Neon Sunset Coral Palette) =====
   Color get primary => const Color(0xFFFF5E62);
+  Color get primaryLight => const Color(0xFFFF8A8D);
+  Color get primaryDark => const Color(0xFFE8334A);
   Color get secondary => const Color(0xFFFF7556);
   Color get accent => const Color(0xFFFF2A4B);
+
+  // ===== NEON GLOW COLORS =====
+  Color get glowWhite => const Color(0xFFFFF2F4);
+  Color get glowRuby => const Color(0xFF6B1426);
 
   // ===== SEMANTIC (Unified across Light & Dark) =====
   Color get success => const Color(0xFF10B981);
@@ -47,22 +53,28 @@ class AppDayColors {
 class AppNightColors {
   const AppNightColors();
 
-  Color get background => const Color(0xFF080808);
-  Color get surface => const Color(0xFF12060A);
-  Color get card => const Color(0xFF16080E);
-  Color get border => const Color(0xFF2A1018);
-  Color get divider => const Color(0xFF1F0B13);
+  Color get background => const Color(0xFF160B11);
+  Color get surface => const Color(0xFF1F1018);
+  Color get card => const Color(0xFF26131E);
+  Color get border => const Color(0xFF3D1B28);
+  Color get divider => const Color(0xFF2C111C);
   Color get textPrimary => const Color(0xFFFFFFFF);
   Color get textSecondary => const Color(0xFFE2D4D8);
-  Color get textMuted => const Color(0xFF8E7E84);
+  Color get textMuted => const Color(0xFFA39298);
 }
 
 class AppGlassColors {
   const AppGlassColors();
 
-  Color get nav => const Color(0xCC12060A);
-  Color get card => const Color(0x9916080E);
+  Color get nav => const Color(0xBF16070D);
+  Color get card => const Color(0x61230C14);
+  Color get cardHover => const Color(0x8C32101C);
+  Color get form => const Color(0xA61C0810);
+  Color get project => const Color(0x8C12060C);
   Color get border => const Color(0x38FF5E62);
+  Color get borderHover => const Color(0x8CFF5E62);
+  Color get tag => const Color(0xA6FF5E62);
+  Color get tagBg => const Color(0x14FF5E62);
 }
 
 class GradientColors {
@@ -112,6 +124,48 @@ class Shadows {
       color: Colors.black.withValues(alpha: 0.12),
       blurRadius: 30,
       offset: const Offset(0, 8),
+    ),
+  ];
+
+  List<BoxShadow> get neon => const [
+    BoxShadow(
+      color: Color(0xFFFF5E62),
+      blurRadius: 8,
+    ),
+    BoxShadow(
+      color: Color(0xFFE8334A),
+      blurRadius: 25,
+    ),
+  ];
+
+  List<BoxShadow> get neonLg => const [
+    BoxShadow(
+      color: Color(0xFFFF5E62),
+      blurRadius: 8,
+    ),
+    BoxShadow(
+      color: Color(0xFFE8334A),
+      blurRadius: 25,
+    ),
+    BoxShadow(
+      color: Color(0xFF6B1426),
+      blurRadius: 50,
+    ),
+  ];
+
+  List<BoxShadow> get glassCard => const [
+    BoxShadow(
+      color: Color(0x59FF5E62),
+      blurRadius: 30,
+      offset: Offset(0, 6),
+    ),
+  ];
+
+  List<BoxShadow> get glassHover => const [
+    BoxShadow(
+      color: Color(0x73FF5E62),
+      blurRadius: 32,
+      offset: Offset(0, 8),
     ),
   ];
 }

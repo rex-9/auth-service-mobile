@@ -2,27 +2,61 @@
 import 'package:flutter/material.dart';
 import '../design.dart';
 
-enum BadgeType { success, warning, error, info }
+enum BadgeType { success, warning, error, info, neon, primary, secondary }
 
-class AppBadge extends StatelessWidget {
+class AppBadge extends StatefulWidget {
   const AppBadge({
     super.key,
     required this.text,
     this.type = BadgeType.info,
     this.icon,
+    this.onTap,
   });
 
   final String text;
   final BadgeType type;
   final IconData? icon;
+  final VoidCallback? onTap;
+
+  @override
+  State<AppBadge> createState() => _AppBadgeState();
+}
+
+class _AppBadgeState extends State<AppBadge> {
+  bool _isPressed = false;
 
   @override
   Widget build(BuildContext context) {
     final colors = context.colors;
     Color bg;
     Color fg;
+    Border? border;
+    List<BoxShadow>? shadows;
 
-    switch (type) {
+    switch (widget.type) {
+      case BadgeType.neon:
+        bg = _isPressed ? Design.colors.primary : Design.colors.glass.tagBg;
+        fg = _isPressed ? Colors.white : Design.colors.glowWhite;
+        border = Border.all(
+          color: _isPressed ? Design.colors.primary : Design.colors.glass.tag,
+        );
+        shadows = _isPressed ? Design.colors.shadows.neon : null;
+        break;
+      case BadgeType.primary:
+        bg = _isPressed
+            ? colors.primary
+            : colors.primary.withValues(alpha: 0.15);
+        fg = _isPressed ? Colors.white : colors.primary;
+        border = Border.all(color: colors.primary.withValues(alpha: 0.3));
+        shadows = _isPressed ? Design.colors.shadows.neon : null;
+        break;
+      case BadgeType.secondary:
+        bg = _isPressed
+            ? colors.secondary
+            : colors.secondary.withValues(alpha: 0.15);
+        fg = _isPressed ? Colors.white : colors.secondary;
+        border = Border.all(color: colors.secondary.withValues(alpha: 0.3));
+        break;
       case BadgeType.success:
         bg = Design.colors.success.withValues(alpha: 0.15);
         fg = Design.colors.success;
@@ -41,30 +75,52 @@ class AppBadge extends StatelessWidget {
         break;
     }
 
-    return Container(
+    final badgeContent = AnimatedContainer(
+      duration: const Duration(milliseconds: 150),
+      curve: Curves.easeOut,
       padding: EdgeInsets.symmetric(
         horizontal: Design.spacing.md,
         vertical: Design.spacing.xs,
       ),
       decoration: BoxDecoration(
         color: bg,
+        border: border,
+        boxShadow: shadows,
         borderRadius: BorderRadius.circular(Design.spacing.radiusSmall),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (icon != null) ...[
-            Icon(icon, size: 14, color: fg),
+          if (widget.icon != null) ...[
+            Icon(widget.icon, size: 14, color: fg),
             SizedBox(width: Design.spacing.xs),
           ],
           Text(
-            text,
+            widget.text,
             style: Design.typo.caption.copyWith(
               color: fg,
               fontWeight: FontWeight.w600,
             ),
           ),
         ],
+      ),
+    );
+
+    if (widget.onTap == null) {
+      return badgeContent;
+    }
+
+    return AnimatedScale(
+      scale: _isPressed ? 0.95 : 1.0,
+      duration: const Duration(milliseconds: 120),
+      curve: Curves.easeOut,
+      child: InkWell(
+        onTap: widget.onTap,
+        onHighlightChanged: (highlighted) {
+          setState(() => _isPressed = highlighted);
+        },
+        borderRadius: BorderRadius.circular(Design.spacing.radiusSmall),
+        child: badgeContent,
       ),
     );
   }
