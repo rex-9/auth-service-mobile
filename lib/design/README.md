@@ -115,7 +115,13 @@ await Future.delayed(Design.timers.medium)
 AppButton(
   text: 'Continue',
   onPressed: () {},
-  type: EButtonType.primary,  // primary | secondary | text | google
+  type: EButtonType.primary,  // primary | neon | secondary | tertiary | text | google
+)
+
+// Badges
+AppBadge(
+  text: 'Active',
+  type: BadgeType.neon,       // neon | primary | secondary | success | warning | error | info
 )
 
 // Input Fields
