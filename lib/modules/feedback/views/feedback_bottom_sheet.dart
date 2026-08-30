@@ -5,7 +5,7 @@ import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/design/design.dart';
 import '../controllers/feedback.controller.dart';
 
-class FeedbackBottomSheet extends StatelessWidget {
+class FeedbackBottomSheet extends GetView<FeedbackController> {
   const FeedbackBottomSheet({super.key});
 
   static void show() {
@@ -21,8 +21,6 @@ class FeedbackBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<FeedbackController>();
-
     return Container(
       padding: EdgeInsets.only(
         left: Design.spacing.lg,
@@ -50,7 +48,7 @@ class FeedbackBottomSheet extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Share Feedback',
+                  AppLocales.feedback.title.tr,
                   style: context.typo.headline3.copyWith(
                     color: context.colors.textPrimary,
                   ),
@@ -70,15 +68,15 @@ class FeedbackBottomSheet extends StatelessWidget {
               () => AppRatingSlider(
                 value: controller.rating.value.toDouble(),
                 onChanged: (val) => controller.setRating(val.round()),
-                label: 'How was your experience?',
+                label: AppLocales.feedback.rateExperience.tr,
               ),
             ),
             SizedBox(height: Design.spacing.lg),
 
             // Feedback input field
             AppInputField(
-              label: 'Your Thoughts',
-              hint: 'Tell us anything — bugs, suggestions, or ideas...',
+              label: AppLocales.feedback.tellUsMore.tr,
+              hint: AppLocales.feedback.placeholder.tr,
               controller: controller.textController,
               maxLines: 4,
               minLines: 3,
@@ -93,7 +91,7 @@ class FeedbackBottomSheet extends StatelessWidget {
                 child: controller.isSubmitting.value
                     ? const Center(child: AppLoading())
                     : AppButton(
-                        text: 'Send Feedback',
+                        text: AppLocales.feedback.submit.tr,
                         onPressed: () => controller.submitFeedback(),
                       ),
               ),

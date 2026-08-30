@@ -35,31 +35,54 @@
 
 ---
 
-## 🏗️ 3. Architecture & Layering (GetX MVC)
+## 🏗️ 3. Architecture & Layering (GetX MVCS System Architecture)
 
-### 3.1 Strict 4-Tier Separation of Concerns
+### 3.1 Server-Business Logic Authority vs. Client-Business Logic
+- **Server-Business Logic in Core**: All primary application business logic (or **server-business logic**)—including authorization rules, access lifecycles, pricing, rate limits, payment processing, AI pipelines, and database integrity—is handled exclusively in `rexone-core`.
+- **Zero Server-Business Logic Duplication**: The mobile client MUST NEVER duplicate, re-implement, or re-calculate server-business rules. This prevents writing duplicate business logic across Mobile and Web.
+- **Client-Business Logic Focus**: The mobile client strictly limits its logic to **client-business logic** (frontend reactive state management (`.obs`), device interaction orchestration, local form controllers, and UI presentation).
+
+### 3.2 Strict GetX Ecosystem Adherence & Zero Redundant Dependencies
+- **GetX as the System Foundation**: The entire mobile architecture is built upon the unified GetX ecosystem (`State Management`, `Dependency Injection`, `Route Management`, `GetStorage`, `GetConnect`).
+- **Zero Redundant State / Storage / Navigation Packages**:
+  - **NEVER** add or use external state managers (`provider`, `bloc`, `flutter_bloc`, `riverpod`, `mobx`, `redux`).
+  - **NEVER** add or use external local storage managers (`shared_preferences`, `hive`, `sqflite`) when `GetStorage` natively provides high-performance persistent key-value and JSON caching.
+  - **NEVER** add or use external routing managers (`go_router`, `auto_route`) when GetX navigation (`Get.toNamed`, `Get.offNamed`, `Get.offAllNamed`, `Get.back`) is the system standard.
+  - **Strict Dependency Rule**: ONLY introduce third-party packages if GetX is fundamentally incapable of providing the capability (e.g., `google_sign_in`, `onesignal_flutter`, `webview_flutter`, `firebase_core`, `package_info_plus`, `flutter_screenutil`).
+
+### 3.3 Strict 4-Tier MVCS Separation of Concerns
 ```
-View Layer (lib/pages/ or lib/modules/*/pages)
-       ↓  (Triggers actions, displays reactive state)
-Controller Layer (lib/controllers/ or lib/modules/*/controllers)
-       ↓  (Manages state .obs, shows dialogs/snackbars)
-Service Layer (lib/services/ or lib/modules/*/services)
-       ↓  (Data formatting & API calls)
+Model Layer (lib/models/ & lib/modules/*/data/)
+       │  (Typed models, JSON serialization toJson/fromJson, request/response envelopes)
+View Layer (lib/pages/ or lib/modules/*/pages/ & views/)
+       ↓  (Extends GetView<TController>, triggers actions, renders Obx reactive UI)
+Controller Layer (lib/modules/*/controllers/*.controller.dart)
+       ↓  (Extends GetxController, orchestrates client-business logic, manages .obs state)
+Service Layer (lib/services/ & lib/modules/*/services/*.service.dart)
+       ↓  (Extends GetxService, formats request payloads & backend API calls)
 Transport Layer (lib/services/api.service.dart)
+       ↓  (Extends GetConnect, auto JWT/Platform/Locale headers, _withLoading overlay)
 ```
 
-- **Views / Pages**:
-  - PURE presentation widgets extending `GetView<TController>` or `StatelessWidget`.
-  - Zero direct API calls.
-  - Zero raw business calculations.
-  - Listen to reactive state with `Obx(() => ...)` and call controller methods.
+- **Views / Pages / Modals (`GetView<TController>`)**:
+  - **Mandatory `GetView` Extension**: ALL feature pages, screens, modal dialogs, and bottom sheets MUST extend `GetView<TController>` (or `GetWidget<TController>`).
+  - **No `StatelessWidget` / `StatefulWidget` for Feature Screens**: Feature views must never use raw `StatelessWidget` or `StatefulWidget` when a `GetView` with `GetxController` and Get lifecycles (`onInit`, `onReady`, `onClose`) is the architectural standard.
+  - **Pure Presentation**: Zero direct API calls, zero server-business logic calculations.
+  - **Reactive Rendering**: Listen to observable properties strictly via `Obx(() => ...)` or `GetBuilder<TController>` and invoke controller methods.
+
 - **Controllers (`*.controller.dart`)**:
-  - Manage observable state (`final count = 0.obs;`).
-  - Coordinate workflows, show Snackbars/Dialogs (`Get.snackbar`, `Get.dialog`), navigate routes.
-  - Call Services for backend interaction.
+  - **Mandatory `GetxController` Extension**: Manage observable state variables (`final count = 0.obs;`).
+  - **Lean Controller Logic Law**: Controller logic must remain lean and minimal — focused on client-business logic (state reactivity, local UI orchestration, and data mapping). Server-business rules stay in Core.
+  - **GetX Lifecycles**: Leverage `onInit()`, `onReady()`, and `onClose()` for initialization, subscriptions, worker listeners (`ever()`, `debounce()`), and resource cleanup (e.g. `TextEditingController.dispose()`).
+  - **Workflow & UI Coordination**: Coordinate business flows, trigger GetX UI feedback (`AppSnackbar`, `Get.dialog`, `Get.bottomSheet`), and execute GetX route transitions (`Get.toNamed`, `Get.back`).
+  - **Service Interaction**: Call Services (`GetxService`) for backend operations and persistence.
+
 - **Services (`*.service.dart`)**:
-  - Exclusively perform remote API/WebSocket/persistence calls.
-  - NEVER trigger UI, Snackbars, or navigation inside Services.
+  - **Mandatory `GetxService` Extension**: Permanent singleton services that remain in memory throughout the application lifecycle.
+  - **Shared Services (`lib/services/`)**: Application-wide infrastructure services used by any controller or background workflow (`api.service.dart`, `socket.service.dart`, `storage.service.dart`, `analytics.service.dart`, `log.service.dart`).
+  - **Module Services (`lib/modules/*/services/`)**: Domain-specific network clients (`auth.service.dart`, `ai.service.dart`, `payment.service.dart`, `feedback.service.dart`). Can be injected and utilized across controllers via `Get.find<TService>()` whenever cross-domain access is required.
+  - **Zero UI in Services**: NEVER trigger UI dialogs, snackbars, or route navigation inside Services.
+
 - **Transport (`api.service.dart`)**:
   - Extends `GetConnect` with automatic `Authorization: Bearer <token>`, `X-Platform: android|ios`, `X-Locale`, and `Accept-Language` headers.
   - Unified loading overlay via `_withLoading()`.
