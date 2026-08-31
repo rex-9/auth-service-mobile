@@ -15,7 +15,7 @@ import '../modules/payment/payment.dart';
 /// No other controller should call `socket.stream.listen`.
 ///
 /// To add a new notification type: edit [_showSnackbar] and/or [_dispatch].
-/// SpeechLiveChannel events are handled in [_handleSpeechEvent].
+/// SpeechLiveChannel events are forwarded to [SpeechService].
 class SocketController extends GetxController {
   late final SocketService _socket;
   StreamSubscription<SocketMessage>? _sub;
@@ -66,8 +66,8 @@ class SocketController extends GetxController {
       '🎤 [SocketController] speech=$eventType | message="${event.message}"',
     );
 
-    if (Get.isRegistered<AiController>()) {
-      Get.find<AiController>().onSpeechEvent(event, eventType);
+    if (Get.isRegistered<SpeechService>()) {
+      Get.find<SpeechService>().onSpeechEvent(event, eventType);
     }
 
     if (eventType == ESpeechEventType.error) {

@@ -84,20 +84,4 @@ class AiService extends GetxService {
     final response = await _api.delete(ServerRoutes.aiDeleteRoom(roomId));
     return _api.parseResponse(response, (data) => data);
   }
-
-  // ============================================================
-  // SPEECH
-  // ============================================================
-
-  Future<ApiResponse<Map<String, dynamic>>> textToSpeech(String messageId) async {
-    final response = await _api.post(
-      ServerRoutes.textToSpeech,
-      TtsRequest(messageId: messageId).toJson(),
-      showLoading: false,
-    );
-    return _api.parseResponse<Map<String, dynamic>>(
-      response,
-      (data) => data is Map ? Map<String, dynamic>.from(data) : {},
-    );
-  }
 }

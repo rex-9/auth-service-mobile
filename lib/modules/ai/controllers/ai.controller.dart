@@ -1,24 +1,18 @@
 // lib/modules/ai/controllers/ai.controller.dart
 import 'dart:async';
-import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:record/record.dart';
 import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/design/design.dart';
 import 'package:rexone_mobile/services/services.dart';
 
 import '../ai.dart';
 
-class AiController extends GetxController with WidgetsBindingObserver {
+class AiController extends GetxController {
   final AiService _ai = Get.find<AiService>();
-  late final SocketService _socket;
-  final AudioRecorder _recorder = AudioRecorder();
-  final AudioPlayer _ttsPlayer = AudioPlayer();
+  final SpeechService _speech = Get.find<SpeechService>();
 
   final RxList<AiMessageModel> messages = <AiMessageModel>[].obs;
   final RxList<AiRoomModel> rooms = <AiRoomModel>[].obs;
@@ -27,24 +21,16 @@ class AiController extends GetxController with WidgetsBindingObserver {
   final RxString currentRoomTitle = 'AI Assistant'.obs;
 
   final RxBool isProcessing = false.obs;
-  final RxBool isRecording = false.obs;
-  final RxDouble voiceLevel = 0.0.obs;
   final RxnString activeTtsMessageId = RxnString();
   final RxBool isTtsLoading = false.obs;
 
   bool _isSubmitting = false;
-  bool _isStartingListen = false;
-  bool _isTearingDownSpeech = false;
-  bool _speechSubscribed = false;
-  int _listenEpoch = 0;
-  StreamSubscription<Amplitude>? _amplitudeSub;
-  StreamSubscription<Uint8List>? _pcmSub;
-  StreamSubscription<bool>? _connSub;
-  StreamSubscription<PlayerState>? _ttsStateSub;
-  String _committedText = '';
-  String _partialText = '';
   String _textBeforeListen = '';
-  final BytesBuilder _pcmBuffer = BytesBuilder(copy: false);
+  Worker? _liveTextWorker;
+  Worker? _playbackWorker;
+
+  RxBool get isRecording => _speech.isListening;
+  RxDouble get voiceLevel => _speech.voiceLevel;
 
   // UI controllers — owned here so no StatefulWidget is needed in AiPage.
   final textController = TextEditingController();
@@ -53,8 +39,11 @@ class AiController extends GetxController with WidgetsBindingObserver {
   @override
   void onInit() {
     super.onInit();
-    _socket = Get.find<SocketService>();
-    WidgetsBinding.instance.addObserver(this);
+    _playbackWorker = ever(_speech.isPlaying, (playing) {
+      if (!playing && !isTtsLoading.value) {
+        activeTtsMessageId.value = null;
+      }
+    });
   }
 
   @override
@@ -65,23 +54,11 @@ class AiController extends GetxController with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.paused ||
-        state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.hidden) {
-      if (isRecording.value || _speechSubscribed) {
-        unawaited(stopListening());
-      }
-    }
-  }
-
-  @override
   void onClose() {
-    WidgetsBinding.instance.removeObserver(this);
-    unawaited(_teardownSpeech(restoreText: false));
-    unawaited(_recorder.dispose());
-    unawaited(_stopTtsPlayback());
-    unawaited(_ttsPlayer.dispose());
+    _liveTextWorker?.dispose();
+    _playbackWorker?.dispose();
+    unawaited(_speech.stopListening());
+    unawaited(_speech.stopPlayback());
     textController.dispose();
     scrollController.dispose();
     super.onClose();
@@ -119,28 +96,8 @@ class AiController extends GetxController with WidgetsBindingObserver {
   void _clearTtsQueue(String? messageId) {
     if (messageId != null && activeTtsMessageId.value != messageId) return;
     isTtsLoading.value = false;
-    if (!_ttsPlayer.playing) {
+    if (!_speech.isPlaying.value) {
       activeTtsMessageId.value = null;
-    }
-  }
-
-  /// Called by [SocketController] for SpeechLiveChannel partial/final/error.
-  ///
-  /// Partials are fragments: each one is appended to the in-progress phrase.
-  /// A final discards that phrase and commits only the final text.
-  void onSpeechEvent(SocketMessage event, ESpeechEventType eventType) {
-    switch (eventType) {
-      case ESpeechEventType.partial:
-        _partialText = _mergePartial(_partialText, event.message ?? '');
-        _setInputText(_joinSpeech(_committedText, _partialText));
-      case ESpeechEventType.finalPhrase:
-        _committedText = _joinSpeech(_committedText, event.message ?? '');
-        _partialText = '';
-        _setInputText(_committedText);
-      case ESpeechEventType.error:
-        unawaited(stopListening());
-      case ESpeechEventType.unknown:
-        break;
     }
   }
 
@@ -307,7 +264,7 @@ class AiController extends GetxController with WidgetsBindingObserver {
   // LIVE SPEECH
   // ============================================================
   Future<void> toggleListening() async {
-    if (isRecording.value || _speechSubscribed || _isStartingListen) {
+    if (_speech.isListenSessionActive) {
       await stopListening();
     } else {
       await startListening();
@@ -315,197 +272,40 @@ class AiController extends GetxController with WidgetsBindingObserver {
   }
 
   Future<void> startListening() async {
-    if (isRecording.value ||
-        isProcessing.value ||
-        _isStartingListen ||
-        activeTtsMessageId.value != null) {
-      return;
-    }
+    if (isProcessing.value || activeTtsMessageId.value != null) return;
 
-    if (!_socket.isConnected.value) {
-      AppSnackbar.error(Constants.locale.aiTranscriptionFailed.tr);
-      return;
-    }
+    _textBeforeListen = textController.text;
+    _liveTextWorker?.dispose();
+    _liveTextWorker = ever(_speech.liveText, _setInputText);
 
-    var permission = await Permission.microphone.status;
-    if (!permission.isGranted) {
-      permission = await Permission.microphone.request();
-    }
-    if (!permission.isGranted) {
-      await _promptMicPermission();
-      return;
-    }
+    final result = await _speech.startListening(seed: textController.text);
+    if (result == ESpeechListenResult.started) return;
 
-    if (!await _recorder.hasPermission()) {
-      await _promptMicPermission();
-      return;
-    }
+    _liveTextWorker?.dispose();
+    _liveTextWorker = null;
 
-    _isStartingListen = true;
-    final epoch = ++_listenEpoch;
-    try {
-      _textBeforeListen = textController.text;
-      _committedText = textController.text;
-      _partialText = '';
-
-      final subscribed = await _socket.subscribe(SpeechKeys.channel);
-      if (epoch != _listenEpoch) {
-        if (subscribed) {
-          _socket.perform(SpeechKeys.channel, SpeechKeys.stop);
-          _socket.unsubscribe(SpeechKeys.channel);
-        }
-        return;
-      }
-      if (!subscribed) {
+    switch (result) {
+      case ESpeechListenResult.disconnected:
         AppSnackbar.error(Constants.locale.aiTranscriptionFailed.tr);
-        return;
-      }
-      _speechSubscribed = true;
-
-      final stream = await _recorder.startStream(
-        const RecordConfig(
-          encoder: AudioEncoder.pcm16bits,
-          sampleRate: AppConstants.speechSampleRate,
-          numChannels: AppConstants.speechNumChannels,
-          streamBufferSize: AppConstants.speechChunkBytes,
-        ),
-      );
-      if (epoch != _listenEpoch) {
-        try {
-          if (await _recorder.isRecording()) {
-            await _recorder.stop();
-          }
-        } catch (_) {}
-        return;
-      }
-
-      isRecording.value = true;
-      voiceLevel.value = 0;
-
-      _pcmSub = stream.listen(
-        _onPcmChunk,
-        onError: (Object e) {
-          debugPrint('🤖 [AiController] PCM stream error: $e');
-          unawaited(stopListening());
-        },
-      );
-
-      await _amplitudeSub?.cancel();
-      _amplitudeSub = _recorder
-          .onAmplitudeChanged(const Duration(milliseconds: 100))
-          .listen((amplitude) {
-        voiceLevel.value = _normalizeAmplitude(amplitude.current);
-      });
-
-      await _connSub?.cancel();
-      _connSub = _socket.isConnected.listen((connected) {
-        if (!connected && (isRecording.value || _speechSubscribed)) {
-          unawaited(stopListening());
-        }
-      });
-    } catch (e) {
-      debugPrint('🤖 [AiController] Error starting live listen: $e');
-      AppSnackbar.error(Constants.locale.aiStartRecordingFailed.tr);
-      await _teardownSpeech(restoreText: true);
-    } finally {
-      _isStartingListen = false;
+      case ESpeechListenResult.permissionDenied:
+        await _promptMicPermission();
+      case ESpeechListenResult.failed:
+        AppSnackbar.error(Constants.locale.aiStartRecordingFailed.tr);
+      case ESpeechListenResult.alreadyListening:
+      case ESpeechListenResult.started:
+        break;
     }
   }
 
   Future<void> stopListening() async {
-    if (!isRecording.value && !_speechSubscribed && !_isStartingListen) {
-      return;
-    }
-    await _teardownSpeech(restoreText: false);
+    _liveTextWorker?.dispose();
+    _liveTextWorker = null;
+    await _speech.stopListening();
   }
 
   Future<void> cancelListening() async {
-    if (!isRecording.value && !_speechSubscribed && !_isStartingListen) {
-      return;
-    }
-    await _teardownSpeech(restoreText: true);
-  }
-
-  void _onPcmChunk(Uint8List chunk) {
-    _pcmBuffer.add(chunk);
-    if (_pcmBuffer.length >= AppConstants.speechChunkBytes) {
-      _flushPcm();
-    }
-  }
-
-  void _flushPcm() {
-    if (_pcmBuffer.isEmpty || !_speechSubscribed) return;
-    final bytes = _pcmBuffer.takeBytes();
-    if (bytes.isEmpty) return;
-    _socket.perform(SpeechKeys.channel, SpeechKeys.audio, {
-      SpeechKeys.chunk: base64Encode(bytes),
-    });
-  }
-
-  Future<void> _teardownSpeech({required bool restoreText}) async {
-    if (_isTearingDownSpeech) return;
-    _isTearingDownSpeech = true;
-    _listenEpoch++;
-    try {
-      await _pcmSub?.cancel();
-      _pcmSub = null;
-      await _amplitudeSub?.cancel();
-      _amplitudeSub = null;
-      await _connSub?.cancel();
-      _connSub = null;
-
-      if (_pcmBuffer.isNotEmpty) {
-        _flushPcm();
-      }
-      _pcmBuffer.clear();
-
-      try {
-        if (await _recorder.isRecording()) {
-          await _recorder.stop();
-        }
-      } catch (_) {}
-
-      if (_speechSubscribed) {
-        _socket.perform(SpeechKeys.channel, SpeechKeys.stop);
-        _socket.unsubscribe(SpeechKeys.channel);
-        _speechSubscribed = false;
-      }
-
-      isRecording.value = false;
-      voiceLevel.value = 0;
-
-      if (restoreText) {
-        _setInputText(_textBeforeListen);
-      }
-      _committedText = textController.text;
-      _partialText = '';
-    } finally {
-      _isTearingDownSpeech = false;
-    }
-  }
-
-  String _joinSpeech(String committed, String incoming) {
-    final next = incoming.trim();
-    if (next.isEmpty) return committed;
-    if (committed.isEmpty) return next;
-    if (committed.endsWith(' ') || committed.endsWith('\n')) {
-      return '$committed$next';
-    }
-    return '$committed $next';
-  }
-
-  /// Fragment partials are appended. A longer/shorter revision of the same
-  /// phrase (typical Azure growing partial) replaces the in-progress text.
-  String _mergePartial(String current, String incoming) {
-    final next = incoming.trim();
-    if (next.isEmpty) return current;
-    if (current.isEmpty) return next;
-    final currentLower = current.toLowerCase();
-    final nextLower = next.toLowerCase();
-    if (nextLower.startsWith(currentLower) || currentLower.startsWith(nextLower)) {
-      return next;
-    }
-    return _joinSpeech(current, next);
+    await stopListening();
+    _setInputText(_textBeforeListen);
   }
 
   void _setInputText(String text) {
@@ -513,10 +313,6 @@ class AiController extends GetxController with WidgetsBindingObserver {
       text: text,
       selection: TextSelection.collapsed(offset: text.length),
     );
-  }
-
-  double _normalizeAmplitude(double db) {
-    return ((db + 50) / 50).clamp(0.0, 1.0);
   }
 
   Future<void> _promptMicPermission() async {
@@ -539,18 +335,18 @@ class AiController extends GetxController with WidgetsBindingObserver {
   // TEXT-TO-SPEECH
   // ============================================================
   Future<void> speakMessage(AiMessageModel msg) async {
-    if (activeTtsMessageId.value == msg.id && _ttsPlayer.playing) {
-      await _stopTtsPlayback();
+    if (activeTtsMessageId.value == msg.id && _speech.isPlaying.value) {
+      await stopSpeaking();
       return;
     }
 
-    await _stopTtsPlayback();
+    await stopSpeaking();
 
     final audioUrl = msg.audioUrl;
     if (audioUrl != null) {
       activeTtsMessageId.value = msg.id;
       try {
-        await _playTtsUrl(audioUrl);
+        await _speech.playUrl(audioUrl);
       } catch (e) {
         debugPrint('🤖 [AiController] Error playing TTS: $e');
         AppSnackbar.error(Constants.locale.aiTtsFailed.tr);
@@ -568,7 +364,7 @@ class AiController extends GetxController with WidgetsBindingObserver {
     isTtsLoading.value = true;
 
     try {
-      final response = await _ai.textToSpeech(msg.id);
+      final response = await _speech.textToSpeech(msg.id);
       if (!response.success) {
         AppSnackbar.error(response.error ?? response.message);
         activeTtsMessageId.value = null;
@@ -581,7 +377,7 @@ class AiController extends GetxController with WidgetsBindingObserver {
         return;
       }
 
-      if (response.message.isNotEmpty) {
+      if (response.message.isNotEmpty) {  
         AppSnackbar.info(response.message);
       }
     } catch (e) {
@@ -593,25 +389,8 @@ class AiController extends GetxController with WidgetsBindingObserver {
   }
 
   Future<void> stopSpeaking() async {
-    await _stopTtsPlayback();
-  }
-
-  Future<void> _stopTtsPlayback() async {
-    _ttsStateSub?.cancel();
-    _ttsStateSub = null;
-    await _ttsPlayer.stop();
-    activeTtsMessageId.value = null;
+    await _speech.stopPlayback();
     isTtsLoading.value = false;
-  }
-
-  Future<void> _playTtsUrl(String url) async {
-    await _ttsPlayer.setUrl(url);
-    _ttsStateSub?.cancel();
-    _ttsStateSub = _ttsPlayer.playerStateStream.listen((state) {
-      if (state.processingState == ProcessingState.completed) {
-        unawaited(_stopTtsPlayback());
-      }
-    });
-    await _ttsPlayer.play();
+    activeTtsMessageId.value = null;
   }
 }

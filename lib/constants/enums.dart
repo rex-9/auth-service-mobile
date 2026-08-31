@@ -44,6 +44,14 @@ enum EWsEventType {
   }
 }
 
+enum ESpeechListenResult {
+  started,
+  alreadyListening,
+  disconnected,
+  permissionDenied,
+  failed,
+}
+
 enum ESpeechEventType {
   partial('partial'),
   finalPhrase('final'),
