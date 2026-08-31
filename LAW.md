@@ -1,5 +1,7 @@
 > [!IMPORTANT]
+>
 > ### 🏛️ The Foundation Creed
+>
 > **"Clarity before cleverness. Precision before haste. Simplicity without weakness. Strength without spectacle."**
 >
 > This document defines the non-negotiable architectural laws and engineering standards for **Rexone Mobile** (`rexone_mobile`). Every developer, agent, and contributor must adhere strictly to these rules. Zero exceptions.
@@ -9,6 +11,7 @@
 ## 🎨 1. Design System & Layout Doctrine
 
 ### 1.1 Zero Ad-Hoc Widgets Outside `lib/design/`
+
 - **Rule**: NEVER create arbitrary `SizedBox(width: 20)`, hardcoded `EdgeInsets.all(16)`, or inline raw styling.
 - Strictly use tokens and elements provided by `lib/design/`:
   - `Design.space.xs`, `Design.space.s`, `Design.space.m`, `Design.space.l`, `Design.space.xl`
@@ -17,6 +20,7 @@
 - Reusable UI elements and components live in `lib/design/elements/` and `lib/design/components/`.
 
 ### 1.2 Theme-Aware Styling (Light & Dark Modes)
+
 - **Rule**: NEVER hardcode `Color(0xFF...)` or `Colors.white`/`Colors.black` directly in feature widgets.
 - ALWAYS access theme tokens through context extensions:
   - `context.colors.primary`, `context.colors.surface`, `context.colors.background`, `context.colors.textPrimary`
@@ -38,11 +42,13 @@
 ## 🏗️ 3. Architecture & Layering (GetX MVCS System Architecture)
 
 ### 3.1 Server-Business Logic Authority vs. Client-Business Logic
+
 - **Server-Business Logic in Core**: All primary application business logic (or **server-business logic**)—including authorization rules, access lifecycles, pricing, rate limits, payment processing, AI pipelines, and database integrity—is handled exclusively in `rexone-core`.
 - **Zero Server-Business Logic Duplication**: The mobile client MUST NEVER duplicate, re-implement, or re-calculate server-business rules. This prevents writing duplicate business logic across Mobile and Web.
 - **Client-Business Logic Focus**: The mobile client strictly limits its logic to **client-business logic** (frontend reactive state management (`.obs`), device interaction orchestration, local form controllers, and UI presentation).
 
 ### 3.2 Strict GetX Ecosystem Adherence & Zero Redundant Dependencies
+
 - **GetX as the System Foundation**: The entire mobile architecture is built upon the unified GetX ecosystem (`State Management`, `Dependency Injection`, `Route Management`, `GetStorage`, `GetConnect`).
 - **Zero Redundant State / Storage / Navigation Packages**:
   - **NEVER** add or use external state managers (`provider`, `bloc`, `flutter_bloc`, `riverpod`, `mobx`, `redux`).
@@ -51,6 +57,7 @@
   - **Strict Dependency Rule**: ONLY introduce third-party packages if GetX is fundamentally incapable of providing the capability (e.g., `google_sign_in`, `onesignal_flutter`, `webview_flutter`, `firebase_core`, `package_info_plus`, `flutter_screenutil`).
 
 ### 3.3 Strict 4-Tier MVCS Separation of Concerns
+
 ```
 Model Layer (lib/models/ & lib/modules/*/data/)
        │  (Typed models, JSON serialization toJson/fromJson, request/response envelopes)
@@ -92,6 +99,7 @@ Transport Layer (lib/services/api.service.dart)
 ## 🗂️ 4. Constants & Enums Law
 
 ### 4.1 Zero Loose String Literals or Magic Numbers
+
 - **Rule**: Every status string, API key, storage key, header, and route MUST be centralized in `lib/constants/`:
   - `app_locales.dart` — Centralized namespaced translation keys (`AppLocales.*`) matching web `AppLocales`.
   - `storage_keys.dart` — Centralized local storage keys (`StorageKeys.*`) matching web `StorageKeys` parity.
@@ -105,15 +113,18 @@ Transport Layer (lib/services/api.service.dart)
 - Exported cleanly from `lib/constants/constants.dart`.
 
 ### 4.2 Cross-Platform Storage Keys Parity Law
+
 - **Rule**: All common local storage keys MUST match `rexone-web` `StorageKeys` exactly (`'token'`, `'user'`, `'locale'`, `'theme'`).
 - **Rule**: NEVER pass loose string literals to `GetStorage()` or secure storage. Always use `StorageKeys.*`.
 
 ---
 
 ## 🔐 5. RBAC & Client-Side Authorization Law
+
 The mobile RBAC system strictly synchronizes with the backend's three-tier administrative hierarchy:
 
 ### 5.1 Three-Tier Administrative Hierarchy
+
 1. **`super_admin` (Full System Authority)**:
    - Full access across all administration areas, features, and settings.
 2. **`admin` (Standard Administrator)**:
@@ -128,10 +139,12 @@ The mobile RBAC system strictly synchronizes with the backend's three-tier admin
 ## 📄 6. Pagination & Response Handling Law
 
 ### 6.1 Mandatory Pagination for All List Endpoints
+
 - **Rule**: ALL collection and list responses from the server MUST be parsed with `parsePaginatedResponse<T>` and return `PaginatedResponse<T>` with `PaginationMeta`.
 - Never consume raw unpaginated arrays for list screens.
 
 ### 6.2 Mandatory Centralized Response Parsing
+
 - **Rule**: ALWAYS use `ApiService` parsing utilities:
   - `parseResponse<T>(response, fromJson)` — Parses single entity response envelopes.
   - `parsePaginatedResponse<T>(response, fromJson)` — Parses list records with `PaginationMeta`.
@@ -165,3 +178,10 @@ The mobile RBAC system strictly synchronizes with the backend's three-tier admin
   - **`ECOSYSTEM.md`** MUST be updated if changes affect cross-platform feature parity, shared contracts, WebSocket events, or communication protocols between Mobile, Web, and Core.
   - **`LAW.md`** represents the non-negotiable constitutional framework; it should ONLY be modified when establishing, refining, or expanding fundamental architectural laws and engineering standards.
 
+---
+
+## ⏰ 11. UTC Transport & Client-Side Local Timezone Law
+
+- **Rule**: The backend API operates exclusively in UTC.
+- **Rule**: Mobile client MUST convert user local dates and range boundaries to UTC ISO 8601 strings (`start_date`, `end_date`) before dispatching API requests.
+- **Rule**: Mobile client MUST parse and format all UTC timestamps received from the backend into the user's mobile device local timezone for presentation.
