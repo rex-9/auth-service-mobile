@@ -206,6 +206,24 @@ The mobile client enforces a synchronized three-tier administrative hierarchy:
 
 ---
 
+## Speech & AI Assistant
+
+Rexone Mobile pairs reactive GetX UI with real-time audio and AI capabilities:
+
+- **Live Voice Dictation (STT)**:
+  - Microphones stream normalized 16-bit PCM chunks to Core's ActionCable `SpeechLiveChannel` in real time.
+  - Interactive `VoiceLevelBars` wave animation visualizes live amplitude and voice input levels.
+  - Seamless fallback with automatic cancellation and error handling.
+- **Text-to-Speech (TTS) Playback**:
+  - Direct binary audio stream playback via `just_audio` / `AudioPlayer` without base64 overhead.
+  - Message-level speech synthesis button with animated loading states and playing indicators.
+  - Background completion notifications (`tts_ready`) dynamically link generated MP3 assets to assistant message bubbles.
+- **Conversational AI Chat**:
+  - Non-blocking queued AI chat execution with persistent conversation rooms and message history.
+  - Optimistic UI updates with live thinking indicators and ActionCable socket synchronization.
+
+---
+
 ## End-to-End Testing (Flutter Driver)
 
 Rexone Mobile includes on-device E2E tests built with **`package:integration_test`** and Flutter Driver. Tests exercise real user flows on active iOS Simulators or Android Emulators without mocking UI behavior.

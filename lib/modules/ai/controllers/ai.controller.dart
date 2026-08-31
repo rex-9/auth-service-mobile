@@ -18,7 +18,7 @@ class AiController extends GetxController {
   final RxList<AiRoomModel> rooms = <AiRoomModel>[].obs;
 
   final RxnString currentRoomId = RxnString();
-  final RxString currentRoomTitle = 'AI Assistant'.obs;
+  final RxString currentRoomTitle = AppLocales.ai.title.tr.obs;
 
   final RxBool isProcessing = false.obs;
   final RxnString activeTtsMessageId = RxnString();
@@ -113,8 +113,7 @@ class AiController extends GetxController {
             AiMessageModel(
               id: 'welcome',
               role: EChatRole.assistant.name,
-              content:
-                  "Hello! I'm your AI assistant. How can I help you today?",
+              content: AppLocales.ai.defaultGreeting.tr,
               createdAt: DateTime.now().toIso8601String(),
             ),
           ]);
@@ -195,9 +194,12 @@ class AiController extends GetxController {
     loadHistory(room.id);
   }
 
-  Future<void> createNewRoom([String title = 'New Chat']) async {
+  Future<void> createNewRoom([String? title]) async {
     try {
-      final response = await _ai.createRoom(CreateRoomRequest(title: title));
+      final roomTitle = title ?? AppLocales.ai.newChat.tr;
+      final response = await _ai.createRoom(
+        CreateRoomRequest(title: roomTitle),
+      );
       if (response.success && response.data != null) {
         final newRoom = response.data!;
         rooms.insert(0, newRoom);
@@ -215,7 +217,7 @@ class AiController extends GetxController {
         rooms.removeWhere((r) => r.id == roomId);
         if (currentRoomId.value == roomId) {
           currentRoomId.value = null;
-          currentRoomTitle.value = 'AI Assistant';
+          currentRoomTitle.value = AppLocales.ai.title.tr;
           loadHistory();
         }
       }
@@ -377,7 +379,7 @@ class AiController extends GetxController {
         return;
       }
 
-      if (response.message.isNotEmpty) {  
+      if (response.message.isNotEmpty) {
         AppSnackbar.info(response.message);
       }
     } catch (e) {

@@ -85,10 +85,10 @@ class AiPage extends GetView<AiController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Chat Rooms', style: context.typo.headline3),
+                  Text(AppLocales.ai.rooms.tr, style: context.typo.headline3),
                   AppButton(
                     type: EButtonType.text,
-                    text: '+ New Chat',
+                    text: '+ ${AppLocales.ai.newChat.tr}',
                     onPressed: () {
                       Get.back();
                       controller.createNewRoom();
@@ -126,7 +126,9 @@ class AiPage extends GetView<AiController> {
                           ),
                         ),
                         subtitle: Text(
-                          '${room.messageCount} messages',
+                          AppLocales.ai.messagesCount.trParams({
+                            'count': '${room.messageCount}',
+                          }),
                           style: context.typo.caption,
                         ),
                         trailing: AppButton(
@@ -137,7 +139,8 @@ class AiPage extends GetView<AiController> {
                             final ok = await AppDialog.confirm(
                               context: context,
                               title: AppLocales.setting.deleteRoomTitle.tr,
-                              message: AppLocales.setting.deleteRoomConfirmMsg.tr,
+                              message:
+                                  AppLocales.setting.deleteRoomConfirmMsg.tr,
                               confirmLabel: AppLocales.setting.confirmDelete.tr,
                             );
                             if (ok) {
@@ -183,10 +186,14 @@ class AiPage extends GetView<AiController> {
             topLeft: Radius.circular(Design.spacing.radiusMedium),
             bottomLeft: Radius.circular(Design.spacing.radiusMedium),
             bottomRight: Radius.circular(Design.spacing.radiusMedium),
-            topRight: Radius.circular(isUser ? 2 : Design.spacing.radiusMedium),
+            topRight: Radius.circular(
+              isUser ? Design.spacing.radiusSmall : Design.spacing.radiusMedium,
+            ),
           ),
           border: isUser ? null : Border.all(color: colors.border),
-          boxShadow: isUser ? Design.colors.shadows.neon : Design.colors.shadows.sm,
+          boxShadow: isUser
+              ? Design.colors.shadows.neon
+              : Design.colors.shadows.sm,
         ),
         child: Column(
           crossAxisAlignment: isUser
@@ -202,7 +209,7 @@ class AiPage extends GetView<AiController> {
             if (msg.isFailed) ...[
               SizedBox(height: Design.spacing.xs),
               Text(
-                'Failed to generate response',
+                AppLocales.ai.aiResponseFailed.tr,
                 style: context.typo.caption.copyWith(color: colors.error),
               ),
             ],
@@ -222,7 +229,8 @@ class AiPage extends GetView<AiController> {
   Widget _buildTtsButton(BuildContext context, AiMessageModel msg) {
     final colors = context.colors;
     final isActive = controller.activeTtsMessageId.value == msg.id;
-    final isDisabled = controller.isRecording.value ||
+    final isDisabled =
+        controller.isRecording.value ||
         (controller.activeTtsMessageId.value != null && !isActive);
 
     if (isActive && controller.isTtsLoading.value) {
@@ -238,24 +246,27 @@ class AiPage extends GetView<AiController> {
     final iconColor = isDisabled
         ? colors.textMuted
         : isActive
-            ? colors.primary
-            : colors.textSecondary;
+        ? colors.primary
+        : colors.textSecondary;
 
     final icon = isActive && !controller.isTtsLoading.value && msg.hasAudio
         ? Design.icons.stop
         : msg.hasAudio
-            ? Design.icons.play
-            : Design.icons.speaker;
+        ? Design.icons.play
+        : Design.icons.speaker;
 
     return IconButton(
       visualDensity: VisualDensity.compact,
       padding: EdgeInsets.zero,
-      constraints:  BoxConstraints(minWidth: Design.spacing.xxxl, minHeight: Design.spacing.xxxl),
+      constraints: BoxConstraints(
+        minWidth: Design.spacing.xxxl,
+        minHeight: Design.spacing.xxxl,
+      ),
       icon: Icon(icon, size: Design.spacing.iconSmall, color: iconColor),
       onPressed: isDisabled && !isActive
           ? null
           : () => controller.speakMessage(msg),
-      tooltip: 'Listen',
+      tooltip: AppLocales.ai.listen.tr,
     );
   }
 
@@ -277,7 +288,7 @@ class AiPage extends GetView<AiController> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'AI is thinking',
+              AppLocales.ai.thinking.tr,
               style: context.typo.bodyMedium.copyWith(
                 color: context.colors.textSecondary,
               ),
@@ -328,12 +339,9 @@ class AiPage extends GetView<AiController> {
       children: [
         if (isListening)
           IconButton(
-            icon: Icon(
-              Design.icons.close,
-              color: context.colors.textSecondary,
-            ),
+            icon: Icon(Design.icons.close, color: context.colors.textSecondary),
             onPressed: controller.cancelListening,
-            tooltip: 'Cancel listening',
+            tooltip: AppLocales.ai.cancelListening.tr,
           ),
         Expanded(
           child: TextField(
@@ -347,7 +355,7 @@ class AiPage extends GetView<AiController> {
             textAlignVertical: TextAlignVertical.top,
             onSubmitted: (_) => controller.handleSend(),
             decoration: Design.styles.input(
-              hint: 'Type your message...',
+              hint: AppLocales.ai.typeMessage.tr,
               suffixIcon: IconButton(
                 onPressed: controller.isProcessing.value
                     ? null
@@ -357,8 +365,8 @@ class AiPage extends GetView<AiController> {
                   color: controller.isProcessing.value
                       ? mutedColor
                       : isListening
-                          ? context.colors.error
-                          : activeColor,
+                      ? context.colors.error
+                      : activeColor,
                   size: 20,
                 ),
               ),
