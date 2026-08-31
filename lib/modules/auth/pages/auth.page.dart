@@ -72,19 +72,19 @@ class AuthPage extends GetView<AuthController> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  Constants.locale.welcomeTitle.tr,
+                  AppLocales.auth.initial.title.tr,
                   style: context.typo.headline1,
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: Design.spacing.md),
                 Text(
-                  Constants.locale.welcomeSubtitle.tr,
+                  AppLocales.auth.initial.subtitle.tr,
                   style: context.typo.bodyMedium,
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: Design.spacing.xxxl),
                 AppButton(
-                  text: Constants.locale.continueWithGoogle.tr,
+                  text: AppLocales.auth.initial.continueWithGoogle.tr,
                   onPressed: controller.signInWithGoogle,
                   type: EButtonType.google,
                 ),
@@ -97,7 +97,7 @@ class AuthPage extends GetView<AuthController> {
                         h: Design.spacing.lg,
                       ),
                       child: Text(
-                        Constants.locale.or.tr,
+                        AppLocales.auth.initial.or.tr,
                         style: context.typo.bodyMedium,
                       ),
                     ),
@@ -107,9 +107,9 @@ class AuthPage extends GetView<AuthController> {
                 SizedBox(height: Design.spacing.xl),
                 Obx(
                   () => AppInputField(
-                    label: Constants.locale.emailLabel.tr,
-                    hint: Constants.locale.emailHint.tr,
-                    helper: Constants.locale.emailHelper.tr,
+                    label: AppLocales.auth.shared.emailLabel.tr,
+                    hint: AppLocales.auth.shared.emailHint.tr,
+                    helper: AppLocales.auth.initial.emailHelper.tr,
                     error: controller.emailError.value,
                     keyboardType: TextInputType.emailAddress,
                     onChanged: (value) => controller.email.value = value,
@@ -117,7 +117,7 @@ class AuthPage extends GetView<AuthController> {
                 ),
                 SizedBox(height: Design.spacing.xl),
                 AppButton(
-                  text: Constants.locale.continueButton.tr,
+                  text: AppLocales.auth.shared.continueButton.tr,
                   onPressed: controller.handleContinue,
                   type: EButtonType.primary,
                 ),

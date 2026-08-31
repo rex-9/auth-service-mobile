@@ -1,0 +1,71 @@
+import 'package:rexone_mobile/constants/constants.dart';
+
+class AssetModel {
+  final String id;
+  final String name;
+  final String url;
+  final String type;
+  final String? format;
+  final String? extension;
+  final int? sizeBytes;
+  final int? durationSecs;
+  final String source;
+  final String? resourceModel;
+  final String? resourceId;
+  final String? createdById;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+
+  AssetModel({
+    required this.id,
+    required this.name,
+    required this.url,
+    required this.type,
+    this.format,
+    this.extension,
+    this.sizeBytes,
+    this.durationSecs,
+    required this.source,
+    this.resourceModel,
+    this.resourceId,
+    this.createdById,
+    this.createdAt,
+    this.updatedAt,
+  });
+
+  factory AssetModel.fromJson(Map<String, dynamic> json) {
+    return AssetModel(
+      id: json[ApiKeys.id]?.toString() ?? '',
+      name: json[AssetKeys.name] ?? '',
+      url: json[AssetKeys.url] ?? '',
+      type: json[AssetKeys.type] ?? 'general',
+      format: json[AssetKeys.format],
+      extension: json[AssetKeys.extension],
+      sizeBytes: json[AssetKeys.sizeBytes] as int?,
+      durationSecs: json[AssetKeys.durationSecs] as int?,
+      source: json[AssetKeys.source] ?? 'upload',
+      resourceModel: json[AssetKeys.resourceModel],
+      resourceId: json[AssetKeys.resourceId],
+      createdById: json[AssetKeys.createdById],
+      createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'].toString()) : null,
+      updatedAt: json['updated_at'] != null ? DateTime.tryParse(json['updated_at'].toString()) : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      ApiKeys.id: id,
+      AssetKeys.name: name,
+      AssetKeys.url: url,
+      AssetKeys.type: type,
+      if (format != null) AssetKeys.format: format,
+      if (extension != null) AssetKeys.extension: extension,
+      if (sizeBytes != null) AssetKeys.sizeBytes: sizeBytes,
+      if (durationSecs != null) AssetKeys.durationSecs: durationSecs,
+      AssetKeys.source: source,
+      if (resourceModel != null) AssetKeys.resourceModel: resourceModel,
+      if (resourceId != null) AssetKeys.resourceId: resourceId,
+      if (createdById != null) AssetKeys.createdById: createdById,
+    };
+  }
+}

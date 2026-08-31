@@ -163,12 +163,12 @@ class AiController extends GetxController {
         }
       } else {
         AppSnackbar.error(
-          response.error ?? Constants.locale.aiSendMessageFailed.tr,
+          response.error ?? AppLocales.ai.aiSendMessageFailed.tr,
         );
         isProcessing.value = false;
       }
     } catch (e) {
-      AppSnackbar.error(Constants.locale.aiResponseFailed.tr);
+      AppSnackbar.error(AppLocales.ai.aiResponseFailed.tr);
       isProcessing.value = false;
     } finally {
       _isSubmitting = false;
@@ -229,10 +229,10 @@ class AiController extends GetxController {
       final response = await _ai.clearHistory(roomId: currentRoomId.value);
       if (response.success) {
         loadHistory(currentRoomId.value);
-        AppSnackbar.success(Constants.locale.aiHistoryCleared.tr);
+        AppSnackbar.success(AppLocales.ai.aiHistoryCleared.tr);
       }
     } catch (e) {
-      AppSnackbar.error(Constants.locale.aiClearHistoryFailed.tr);
+      AppSnackbar.error(AppLocales.ai.aiClearHistoryFailed.tr);
     }
   }
 
@@ -286,11 +286,11 @@ class AiController extends GetxController {
 
     switch (result) {
       case ESpeechListenResult.disconnected:
-        AppSnackbar.error(Constants.locale.aiTranscriptionFailed.tr);
+        AppSnackbar.error(AppLocales.ai.aiTranscriptionFailed.tr);
       case ESpeechListenResult.permissionDenied:
         await _promptMicPermission();
       case ESpeechListenResult.failed:
-        AppSnackbar.error(Constants.locale.aiStartRecordingFailed.tr);
+        AppSnackbar.error(AppLocales.ai.aiStartRecordingFailed.tr);
       case ESpeechListenResult.alreadyListening:
       case ESpeechListenResult.started:
         break;
@@ -321,9 +321,9 @@ class AiController extends GetxController {
 
     final openSettings = await AppDialog.confirm(
       context: context,
-      title: Constants.locale.micPermissionTitle.tr,
-      message: Constants.locale.micPermissionMessage.tr,
-      confirmLabel: Constants.locale.openSettings.tr,
+      title: AppLocales.ai.micPermissionTitle.tr,
+      message: AppLocales.ai.micPermissionMessage.tr,
+      confirmLabel: AppLocales.ai.openSettings.tr,
     );
 
     if (openSettings) {
@@ -349,14 +349,14 @@ class AiController extends GetxController {
         await _speech.playUrl(audioUrl);
       } catch (e) {
         debugPrint('🤖 [AiController] Error playing TTS: $e');
-        AppSnackbar.error(Constants.locale.aiTtsFailed.tr);
+        AppSnackbar.error(AppLocales.ai.aiTtsFailed.tr);
         activeTtsMessageId.value = null;
       }
       return;
     }
 
     if (msg.content.trim().isEmpty) {
-      AppSnackbar.error(Constants.locale.aiTtsEmpty.tr);
+      AppSnackbar.error(AppLocales.ai.aiTtsEmpty.tr);
       return;
     }
 
@@ -382,7 +382,7 @@ class AiController extends GetxController {
       }
     } catch (e) {
       debugPrint('🤖 [AiController] Error queueing TTS: $e');
-      AppSnackbar.error(Constants.locale.aiTtsFailed.tr);
+      AppSnackbar.error(AppLocales.ai.aiTtsFailed.tr);
       activeTtsMessageId.value = null;
       isTtsLoading.value = false;
     }

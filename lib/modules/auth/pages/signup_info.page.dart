@@ -13,13 +13,13 @@ class SignUpInfoPage extends GetView<AuthController> {
   Widget build(BuildContext context) {
     final arguments = Get.arguments as Map<String, dynamic>;
 
-    controller.email.value = arguments['email'];
-    controller.passcode.value = arguments['passcode'];
-    controller.confirmPasscode.value =
-        arguments['confirm_passcode'] ?? arguments['passcode'];
+    controller.email.value = arguments['email'] ?? '';
+    controller.password.value = arguments['password'] ?? '';
+    controller.confirmPassword.value =
+        arguments['confirm_password'] ?? arguments['password'] ?? '';
 
     return AppPage(
-      title: Constants.locale.signupInfoTitle.tr,
+      title: AppLocales.auth.signUpInfo.title.tr,
       child: Center(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: Design.spacing.lg),
@@ -28,29 +28,29 @@ class SignUpInfoPage extends GetView<AuthController> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                Constants.locale.signupInfoHeading.tr,
+                AppLocales.auth.signUpInfo.heading.tr,
                 style: context.typo.headline1,
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: Design.spacing.xxxl),
 
               AppInputField(
-                label: Constants.locale.fullNameLabel.tr,
-                hint: Constants.locale.fullNameHint.tr,
+                label: AppLocales.auth.signUpInfo.fullNameLabel.tr,
+                hint: AppLocales.auth.signUpInfo.fullNameHint.tr,
                 onChanged: (value) => controller.fullName.value = value,
               ),
               SizedBox(height: Design.spacing.lg),
 
               AppInputField(
-                label: Constants.locale.usernameLabel.tr,
-                hint: Constants.locale.usernameHint.tr,
+                label: AppLocales.auth.signUpInfo.usernameLabel.tr,
+                hint: AppLocales.auth.signUpInfo.usernameHint.tr,
                 onChanged: (value) =>
                     controller.username.value = value.toLowerCase().trim(),
               ),
 
               SizedBox(height: Design.spacing.xxxl),
               AppButton(
-                text: Constants.locale.createAccountButton.tr,
+                text: AppLocales.auth.signUpInfo.createAccountButton.tr,
                 onPressed: () => controller.signUp(),
               ),
 
@@ -58,13 +58,13 @@ class SignUpInfoPage extends GetView<AuthController> {
               AppButton(
                 type: EButtonType.text,
                 onPressed: () {
-                  controller.passcode.value = '';
-                  controller.confirmPasscode.value = '';
+                  controller.password.value = '';
+                  controller.confirmPassword.value = '';
                   controller.signupPin.clear();
                   controller.signupConfirmPin.clear();
                   Get.back();
                 },
-                text: Constants.locale.useDifferentEmail.tr,
+                text: AppLocales.auth.shared.useDifferentEmail.tr,
               ),
             ],
           ),

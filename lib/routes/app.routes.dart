@@ -1,5 +1,6 @@
 // lib/routes/app_routes.dart
 import 'package:get/get.dart';
+import 'package:rexone_mobile/pages/pages.dart';
 import 'package:rexone_mobile/routes/guard.routes.dart';
 import 'package:rexone_mobile/routes/server.routes.dart';
 
@@ -8,7 +9,6 @@ import '../modules/auth/auth.dart';
 import '../modules/home/home.dart';
 import '../modules/payment/payment.dart';
 import '../modules/setting/setting.dart';
-import '../modules/splash/splash.dart';
 
 class AppRoutes {
   // ===== SERVER ROUTES =====
@@ -17,12 +17,12 @@ class AppRoutes {
   // ===== PUBLIC ROUTES (No Auth Required) =====
   static const String splash = '/splash';
   static const String auth = '/auth';
-  static const String signinPasscode = '/signin-passcode';
-  static const String signupPasscodeCreate = '/signup-passcode-create';
-  static const String signupPasscodeConfirm = '/signup-passcode-confirm';
+  static const String signinPassword = '/signin-password';
+  static const String signupPasswordCreate = '/signup-password-create';
+  static const String signupPasswordConfirm = '/signup-password-confirm';
   static const String signupInfo = '/signup-info';
   static const String confirmEmail = '/confirm-email';
-  static const String forgotPasscode = '/forgot-passcode';
+  static const String forgotPassword = '/forgot-password';
 
   // ===== PROTECTED ROUTES (Auth Required) =====
   static const String home = '/home';
@@ -34,20 +34,20 @@ class AppRoutes {
   // ===== PUBLIC NAVIGATION =====
   static void toSplash() => Get.offAllNamed(splash);
   static void toAuth() => Get.offAllNamed(auth);
-  static void toSignInPasscode() => Get.toNamed(signinPasscode);
-  static void toSignUpPasscodeCreate() => Get.toNamed(signupPasscodeCreate);
-  static void toSignUpPasscodeConfirm() => Get.toNamed(signupPasscodeConfirm);
+  static void toSignInPassword() => Get.toNamed(signinPassword);
+  static void toSignUpPasswordCreate() => Get.toNamed(signupPasswordCreate);
+  static void toSignUpPasswordConfirm() => Get.toNamed(signupPasswordConfirm);
   static void toSignUpInfo({
     required String email,
-    required String passcode,
-    required String confirmPasscode,
+    required String password,
+    required String confirmPassword,
   }) {
     Get.toNamed(
       signupInfo,
       arguments: {
         'email': email,
-        'passcode': passcode,
-        'confirm_passcode': confirmPasscode,
+        'password': password,
+        'confirm_password': confirmPassword,
       },
     );
   }
@@ -56,7 +56,7 @@ class AppRoutes {
     Get.toNamed(confirmEmail, arguments: {'email': email});
   }
 
-  static void toForgotPasscode() => Get.toNamed(forgotPasscode);
+  static void toForgotPassword() => Get.toNamed(forgotPassword);
 
   // ===== PROTECTED NAVIGATION =====
   static void toHome() => Get.offAllNamed(home);
@@ -70,18 +70,18 @@ class AppRoutes {
     // Public Pages
     GetPage(name: splash, page: () => const SplashPage()),
     GetPage(name: auth, page: () => AuthPage()),
-    GetPage(name: signinPasscode, page: () => const SignInPasscodePage()),
+    GetPage(name: signinPassword, page: () => const SignInPasswordPage()),
     GetPage(
-      name: signupPasscodeCreate,
-      page: () => const SignUpPasscodeCreatePage(),
+      name: signupPasswordCreate,
+      page: () => const SignUpPasswordCreatePage(),
     ),
     GetPage(
-      name: signupPasscodeConfirm,
-      page: () => const SignUpPasscodeConfirmPage(),
+      name: signupPasswordConfirm,
+      page: () => const SignUpPasswordConfirmPage(),
     ),
     GetPage(name: signupInfo, page: () => const SignUpInfoPage()),
     GetPage(name: confirmEmail, page: () => const ConfirmEmailPage()),
-    GetPage(name: forgotPasscode, page: () => const ForgotPasscodePage()),
+    GetPage(name: forgotPassword, page: () => const ForgotPasswordPage()),
 
     // Protected Pages
     GetPage(

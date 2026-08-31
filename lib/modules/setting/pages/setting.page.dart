@@ -7,6 +7,7 @@ import 'package:rexone_mobile/design/design.dart';
 import 'package:rexone_mobile/helpers/helpers.dart';
 
 import '../../auth/auth.dart';
+import '../../feedback/feedback.dart';
 import '../setting.dart';
 
 class SettingPage extends GetView<SettingController> {
@@ -17,33 +18,53 @@ class SettingPage extends GetView<SettingController> {
     final authController = Get.find<AuthController>();
 
     return AppPage(
-      title: Constants.locale.settings.tr,
+      title: AppLocales.setting.settings.tr,
       showBackButton: true,
       child: ListView(
         padding: EdgeInsets.all(Design.spacing.lg),
         children: [
           // Theme Section
-          _buildSectionHeader(context, Constants.locale.theme.tr),
+          _buildSectionHeader(context, AppLocales.setting.theme.tr),
           _buildThemeTile(context),
 
           SizedBox(height: Design.spacing.xxl),
 
           // Language Section
-          _buildSectionHeader(context, Constants.locale.language.tr),
+          _buildSectionHeader(context, AppLocales.setting.language.tr),
           _buildLanguageTile(context),
 
           SizedBox(height: Design.spacing.xxl),
 
           // Account Section
-          _buildSectionHeader(context, Constants.locale.account.tr),
+          _buildSectionHeader(context, AppLocales.setting.account.tr),
           _buildAccountTile(context, authController),
 
           SizedBox(height: Design.spacing.xxl),
 
+          // Feedback Section
+          _buildSectionHeader(context, AppLocales.feedback.title.tr),
+          _buildFeedbackTile(context),
+
+          SizedBox(height: Design.spacing.xxl),
+
           // App Info Section
-          _buildSectionHeader(context, Constants.locale.appInfo.tr),
+          _buildSectionHeader(context, AppLocales.setting.appInfo.tr),
           _buildAppInfoTile(context),
         ],
+      ),
+    );
+  }
+
+  Widget _buildFeedbackTile(BuildContext context) {
+    return AppCard(
+      padding: EdgeInsets.zero,
+      child: AppListTile(
+        leading: Icon(Icons.feedback_outlined, color: context.colors.primary),
+        title: Text(AppLocales.feedback.title.tr),
+        subtitle: Text(AppLocales.feedback.description.tr),
+        trailing:
+            Icon(Design.icons.rightArrow, color: context.colors.textSecondary),
+        onTap: () => FeedbackBottomSheet.show(),
       ),
     );
   }
@@ -67,11 +88,11 @@ class SettingPage extends GetView<SettingController> {
 
   Widget _buildThemeTile(BuildContext context) {
     return Obx(
-      () => Card(
-        clipBehavior: Clip.antiAlias,
+      () => AppCard(
+        padding: EdgeInsets.zero,
         child: AppListTile(
           leading: Icon(controller.themeIcon, color: context.colors.primary),
-          title: Text(Constants.locale.theme.tr),
+          title: Text(AppLocales.setting.theme.tr),
           subtitle: Text(controller.themeLabel),
           trailing: AppToggle(
             value: controller.isDarkMode.value,
@@ -85,11 +106,11 @@ class SettingPage extends GetView<SettingController> {
   }
 
   Widget _buildLanguageTile(BuildContext context) {
-    return Card(
-      clipBehavior: Clip.antiAlias,
+    return AppCard(
+      padding: EdgeInsets.zero,
       child: AppListTile(
         leading: _buildFlagIcon(context),
-        title: Text(Constants.locale.language.tr),
+        title: Text(AppLocales.setting.language.tr),
         subtitle: Obx(() => Text(controller.currentLanguageName)),
         trailing: PopupMenuButton<String>(
           icon: Icon(
@@ -143,8 +164,8 @@ class SettingPage extends GetView<SettingController> {
     BuildContext context,
     AuthController authController,
   ) {
-    return Card(
-      clipBehavior: Clip.antiAlias,
+    return AppCard(
+      padding: EdgeInsets.zero,
       child: Column(
         children: [
           AppListTile(
@@ -160,12 +181,12 @@ class SettingPage extends GetView<SettingController> {
             title: Text(
               authController.currentUser.value?.name ??
                   authController.currentUser.value?.username ??
-                  Constants.locale.account.tr,
+                  AppLocales.setting.account.tr,
             ),
             subtitle: Obx(
               () => Text(
                 authController.currentUser.value?.email ??
-                    Constants.locale.loading.tr,
+                    AppLocales.common.loading.tr,
               ),
             ),
           ),
@@ -177,7 +198,7 @@ class SettingPage extends GetView<SettingController> {
           ),
           AppListTile(
             leading: Icon(Design.icons.logout, color: context.colors.error),
-            title: Text(Constants.locale.signOutButton.tr),
+            title: Text(AppLocales.common.signOut.tr),
             isDestructive: true,
             onTap: () => _showLogoutDialog(context, authController),
           ),
@@ -187,8 +208,8 @@ class SettingPage extends GetView<SettingController> {
   }
 
   Widget _buildAppInfoTile(BuildContext context) {
-    return Card(
-      clipBehavior: Clip.antiAlias,
+    return AppCard(
+      padding: EdgeInsets.zero,
       child: AppListTile(
         leading: Icon(Design.icons.info, color: context.colors.textSecondary),
         title: Text(AppConfig.appName),
@@ -203,9 +224,9 @@ class SettingPage extends GetView<SettingController> {
   ) async {
     final confirmed = await AppDialog.confirm(
       context: context,
-      title: Constants.locale.signOutButton.tr,
-      message: Constants.locale.logoutConfirmation.tr,
-      confirmLabel: Constants.locale.signOutButton.tr,
+      title: AppLocales.common.signOut.tr,
+      message: AppLocales.setting.logoutConfirmation.tr,
+      confirmLabel: AppLocales.common.signOut.tr,
     );
     if (confirmed) authController.signOut();
   }

@@ -18,13 +18,16 @@ Built under the same creed as Rexone Core and Rexone Web: **clear in thought, ex
 
 **Typed · Modular · Localized · Observable · Push-ready · Analytics-enabled · API-driven · Fully Tested**
 
-[Explore the foundation](#feature-map) · [Ecosystem Architecture](ECOSYSTEM.md) · [Run it locally](#getting-started) · [Meet the architecture](#architecture) · [E2E Testing](#end-to-end-testing-flutter-driver) · [Connect the API](#configuration--environment-management)
+[Explore the foundation](#feature-map) · [Ecosystem Architecture](ECOSYSTEM.md) · [Development Law](LAW.md) · [Run it locally](#getting-started) · [Meet the architecture](#architecture) · [E2E Testing](#end-to-end-testing-flutter-driver) · [Connect the API](#configuration--environment-management)
 
 </div>
 
 ---
 
-> 🏛️ **Unified Ecosystem**: For the complete cross-platform architecture, 100% feature parity matrix, and communication protocols between Core, Web, and Mobile, see **[ECOSYSTEM.md](ECOSYSTEM.md)**.
+> [!IMPORTANT]
+> **🏛️ Unified Ecosystem**: For the complete cross-platform architecture, feature parity matrix, and communication protocols between Core, Web, and Mobile, see **[ECOSYSTEM.md](ECOSYSTEM.md)**.
+>
+> **📜 Constitutional Law**: All development must strictly adhere to the architecture, design system, and state laws in **[LAW.md](LAW.md)**. Zero exceptions.
 
 ## Why Rexone Mobile?
 
@@ -61,7 +64,9 @@ It was to build a **clear mobile foundation**—strong enough to carry ambitious
 
 | Foundation             | What is ready                                                                            | Details                                                              |
 | ---------------------- | ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| **Identity**           | Email/passcode flow, OTP verification, recovery, Google sign-in, platform sessions       | [Authentication & security](#authentication--security)               |
+| Foundation             | What is ready                                                                            | Details                                                              |
+| ---------------------- | ---------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
+| **Identity**           | Email/password flow, OTP verification, recovery, Google sign-in, platform sessions       | [Authentication & security](#authentication--security)               |
 | **Push Notifications** | OneSignal push messaging, permission management, user tag syncing, and click routing     | [Push notifications](#push-notifications)                            |
 | **Product Analytics**  | Firebase Analytics screen tracking, auth lifecycle events, and telemetry                 | [Product analytics](#product-analytics)                              |
 | **In-App Upgrades**    | Upgrader alert system supporting soft and hard store version prompts                     | [In-app version upgrader](#in-app-version-upgrader)                  |
@@ -108,9 +113,9 @@ flowchart LR
 - `lib/services/` holds shared infrastructure: HTTP (`ApiService`), Action Cable, Firebase Analytics, OneSignal, storage, and client logs.
 - `lib/design/` centralizes design tokens, theme definitions, extensions, and reusable UI components.
 - `lib/bindings/` handles centralized dependency injection for shared services and permanent controllers. Feature controllers that are route-scoped (Payment, Checkout, AI) are bound on their `GetPage`.
-- `lib/models/` contains strongly typed JSON:API models and response envelopes.
+- `lib/models/` contains strongly typed JSON:API models, pagination metadata (`PaginationMeta`, `PaginatedResponse`), and response envelopes.
 - `lib/locales/` contains multi-language translations and runtime dictionary updates.
-- `lib/config/` and `lib/constants/` manage environment definitions and constant keys.
+- `lib/config/` and `lib/constants/` manage environment definitions, typed JSON keys (`JsonKeys`), log constants (`LogConstants`), and application constants.
 - `integration_test/` houses end-to-end integration specifications, test robots, and test data factories.
 - `test_driver/` houses the Flutter driver entrypoint bridging device execution with test reporting.
 
@@ -120,13 +125,21 @@ flowchart LR
 
 ### Authentication & security
 
-- **Smart Email Discovery**: Automatically checks user registration and confirmation state via `POST /v1/auth/peek`.
-- **6-Digit Passcode**: In-memory passcode handling for sign-in and registration (passcodes never leak to persistent storage or route URLs).
+- **Smart Email Discovery**: Automatically checks user registration and confirmation state via `GET /peek`.
+- **6-Digit Password**: In-memory password handling for sign-in and registration (credentials never leak to persistent storage or route arguments).
+- **Unconfirmed Drop-off Recovery**: Returning unconfirmed users route directly to email confirmation OTP, bypassing credentials setup.
 - **Escalating Attempt Protection**: Reactive password retry limits and cooldown counters driven dynamically by rexone-core.
 - **Email Confirmation**: 6-digit email OTP verification with countdown-guarded resend capabilities.
 - **Google Sign-In**: Native Google OAuth flow with Rexone Core challenge token support for first-time signups.
 - **Active Session Enforcement**: Sends `X-Platform: mobile` to ensure single-device active session rules enforced by the backend cache.
 - **Session Replacement Handling**: Detects active session invalidation and gracefully routes the user to sign-in with localized feedback.
+
+### IAM & RBAC Administrative Hierarchy
+
+The mobile client enforces a synchronized three-tier administrative hierarchy:
+- **`super_admin`**: Full authority across all features, screens, and administrative tools.
+- **`admin`**: Full authority across domain operations (`feedbacks`, `payments`, `ai`, `assets`, `logs`), strictly excluded from `users` and `iam`.
+- **Partial Admins (`*_admin` naming convention)**: Users holding the base `user` role plus a specific `*_admin` role (e.g. `feedback_admin`). Any role with `admin` in its name is an admin role. Permissions in admin roles grant access to both standard and admin endpoints, whereas permissions in non-admin roles (such as `user`) only grant access to non-admin features.
 
 ### Push notifications
 
@@ -150,7 +163,7 @@ flowchart LR
 
 ### Payments & entitlements
 
-- Product catalogue with one-time and recurring pricing.
+- Product catalogue with one-time and recurring pricing and pagination support.
 - In-app Stripe Checkout handoff via WebView (`webview_flutter`).
 - Subscription state management (Active, Scheduled for Cancellation, Expired).
 - Safe end-of-period cancellation and resumption guarded by destructive confirmation dialogs.
@@ -158,7 +171,7 @@ flowchart LR
 ### AI capabilities
 
 - Non-blocking conversational AI assistant backed by Rexone Core and DeepSeek.
-- Multi-room management with persistent chat history.
+- Multi-room management with persistent chat history and pagination support.
 - Real-time response completion notifications delivered via Action Cable.
 - Room deletion and chat clearing guarded by destructive confirmation prompts.
 
@@ -179,7 +192,7 @@ flowchart LR
 - Centralized design entry point via `import 'package:rexone_mobile/design/design.dart';`.
 - Complete design tokens: `Design.spacing`, `Design.typography`, `Design.icons`, and `Design.timers`.
 - Theme extensions for theme-aware colors and typography (`context.colors`, `context.typo`).
-- Reusable components: `AppButton`, `AppInputField`, `AppPasscodeField`, `AppDialog`, `AppLoading`, `AppPage`, and `AppSnackbar`.
+- Reusable components: `AppButton`, `AppInputField`, `AppPasswordField`, `AppDialog`, `AppLoading`, `AppPage`, and `AppSnackbar`.
 - Cohesive light and dark themes with persistent user preferences.
 
 ### Localization
@@ -203,9 +216,9 @@ Rexone Mobile includes on-device E2E tests built with **`package:integration_tes
 rexone_mobile/
 ├── integration_test/
 │   ├── auth/
-│   │   ├── passcode_test.dart       # Passcode acceptance, rejection, and retries
-│   │   ├── password_reset_test.dart # Forgot passcode request flow
-│   │   ├── sign_in_test.dart        # End-to-end sign-in & home navigation
+│   │   ├── password_test.dart       # Password acceptance, rejection, and retries
+│   │   ├── password_reset_test.dart # Forgot password request flow
+│   │   ├── sign_in_test.dart        # End-to-end sign-in, drop-off recovery & home navigation
 │   │   ├── sign_out_test.dart       # Sign out & session termination
 │   │   ├── sign_up_test.dart        # Full registration & email confirmation
 │   │   └── sso_test.dart            # Google SSO button presence & interaction
@@ -215,7 +228,7 @@ rexone_mobile/
 ├── test_driver/
 │   └── integration_test.dart        # Flutter Driver bridge entrypoint
 └── scripts/
-    └── run_e2e.sh                   # Mobile E2E runner CLI
+    └── test.sh                   # Mobile E2E runner CLI
 ```
 
 ### Running Mobile E2E Tests
@@ -224,18 +237,18 @@ Use the unified runner script:
 
 ```bash
 # Run all mobile flows on a specific device/emulator:
-./scripts/run_e2e.sh all -d emulator-5554
+./scripts/test.sh all -d emulator-5554
 
 # Run an individual flow:
-./scripts/run_e2e.sh sign-in -d emulator-5554
-./scripts/run_e2e.sh sign-up -d emulator-5554
-./scripts/run_e2e.sh passcode -d emulator-5554
-./scripts/run_e2e.sh password-reset -d emulator-5554
-./scripts/run_e2e.sh sign-out -d emulator-5554
-./scripts/run_e2e.sh sso -d emulator-5554
+./scripts/test.sh sign-in -d emulator-5554
+./scripts/test.sh sign-up -d emulator-5554
+./scripts/test.sh password -d emulator-5554
+./scripts/test.sh password-reset -d emulator-5554
+./scripts/test.sh sign-out -d emulator-5554
+./scripts/test.sh sso -d emulator-5554
 
 # Or run on iOS Simulator:
-./scripts/run_e2e.sh sign-in -d "iPhone 16 Pro"
+./scripts/test.sh sign-in -d "iPhone 16 Pro"
 ```
 
 Or run via Flutter Driver directly:
@@ -342,7 +355,7 @@ flutter test test/
 Run on-device integration tests:
 
 ```sh
-./scripts/run_e2e.sh all -d emulator-5554
+./scripts/test.sh all -d emulator-5554
 ```
 
 ---
@@ -382,7 +395,7 @@ rexone_mobile/
 │   ├── constants/            # Constants, analytics event keys, locale keys, HTTP status
 │   ├── controllers/          # App-wide coordinators only (SocketController)
 │   ├── design/               # Design system (tokens, components, extensions, themes, icons)
-│   │   ├── components/       # Reusable atoms and molecules (Button, Input, Passcode, Dialog, Loading)
+│   │   ├── components/       # Reusable atoms and molecules (Button, Input, Password, Dialog, Loading)
 │   │   ├── elements/         # Design tokens (Colors, Spacing, Typography, Icons, Timers)
 │   │   └── extensions/       # Theme context extensions
 │   ├── helpers/              # Utility helpers (API JSON:API parser, flags, validators)
@@ -390,7 +403,7 @@ rexone_mobile/
 │   ├── models/               # Strongly typed models and JSON:API response envelopes
 │   ├── modules/              # Feature modules (pages + controllers + feature services)
 │   │   ├── splash/           # Launch / session restore
-│   │   ├── auth/             # Welcome, passcode, signup, OTP, recovery
+│   │   ├── auth/             # Welcome, password, signup, OTP, recovery
 │   │   ├── home/             # Main dashboard
 │   │   ├── payment/          # Plans, Stripe Checkout WebView, subscriptions
 │   │   ├── setting/          # Theme, language, and account
@@ -398,7 +411,7 @@ rexone_mobile/
 │   ├── routes/               # GetX route declarations and auth route guards
 │   └── services/             # Shared transport (API, Socket, Log, Analytics, Push, Storage)
 ├── scripts/
-│   └── run_e2e.sh            # E2E integration test CLI runner
+│   └── test.sh            # E2E integration test CLI runner
 ├── test/                     # Unit and localization tests
 ├── test_driver/
 │   └── integration_test.dart # Flutter Driver test bridge

@@ -1,11 +1,11 @@
 // lib/modules/splash/pages/splash_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rexone_mobile/modules/auth/auth.dart';
 import 'package:rexone_mobile/routes/routes.dart';
 import 'package:rexone_mobile/services/services.dart';
 
 import '../../../design/design.dart';
-import '../../auth/auth.dart';
 
 /// Entry point page. Reacts to [AuthController.isLoggedIn] via GetX workers
 class SplashPage extends GetView<AuthController> {

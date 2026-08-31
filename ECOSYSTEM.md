@@ -8,7 +8,10 @@ A unified, production-grade architectural blueprint spanning **Rexone Core** (Ba
 
 Across all three repositories, the architecture adheres to one uncompromising doctrine:
 
+> [!IMPORTANT]
 > **"Clarity before cleverness. Precision before haste. Simplicity without weakness. Strength without spectacle."**
+>
+> 📜 **Constitutional Law**: For strict repository-specific engineering constraints and architectural rules, see **[LAW.md](LAW.md)**. All developers and agents must adhere to these rules without exception.
 
 The Rexone platform provides a unified, battle-tested foundation where **any modern digital product** can be rapidly developed on top of ready-made capabilities: Identity & IAM, Commerce & Subscriptions, Background Queues, Asset Management, Real-Time WebSockets, Queued AI, Push Notifications, Product Analytics, Client Telemetry, In-App Upgrades, and Multi-Language Localization.
 
@@ -88,8 +91,9 @@ All tables use **UUID** primary keys (`gen_random_uuid()`), utilize **Discard** 
 | **Commerce**         | `Payment::Product`, `Payment::Subscription`, `Payment::Transaction`, `Payment::WebhookEvent` | Stripe synced products & prices, subscription lifecycle (`cancel_at_period_end`, resumption, periods), transactions with payment method details, durable webhook event queue with deduplication and retry state. |
 | **Entitlements**     | `Access`                                                                                     | Granted/revoked/expired access records tied to `User` and `Product`.                                                                                                                                             |
 | **AI / Chat**        | `Chat::Room`, `Chat::Message`                                                                | Conversational rooms, messages with roles (`user`, `assistant`), `ai_status` (`queued`, `processing`, `completed`, `failed`), system prompts, temperature, max tokens, metadata.                                 |
-| **Media**            | `Asset`                                                                                      | Uploaded media metadata (Cloudinary `public_id` or Local path, format, size, category, user/record ownership).                                                                                                   |
+| **Media**            | `Asset`                                                                                      | Unified media metadata (`storage_key` for Garage/S3/Cloudinary/Local, format, size_bytes, duration_secs, type, polymorphic resource model/id). |
 | **Telemetry**        | `Log::Client`                                                                                | Frontend error ingest (stack traces, device, OS, browser, URL, severity, occurrences, local/session storage keys, cookies, resolution status).                                                                   |
+| **Feedback**         | `Feedback`                                                                                   | Intelligent in-place feedback (1-10 rating, auto-inferred category: `bug`/`feature_request`/`improvement`/`general`, priority: `low`/`normal`/`high`/`urgent`, status, automated device/route telemetry).       |
 
 ### ⚙️ Services & Background Jobs (Solid Queue / Waka)
 
@@ -103,7 +107,37 @@ Heavy or external provider operations sit behind clean service interfaces and ex
 
 ### 🛡️ Active Platform Session Control
 
-`ApplicationController` inspects the `X-Platform` header (`web` or `mobile`) and validates against `CacheService.read("active_session:user:#{user_id}:#{platform}")`. This permits simultaneous web and mobile logins for the same user while invalidating duplicate sessions on the same platform type when a new sign-in occurs.
+`ApplicationController` inspects the `X-Platform` header (`web`, `android`, or `ios`) and validates against `CacheService.read("active_session:user:#{user_id}:#{platform}")`. This permits simultaneous logins across up to 3 concurrent active sessions (1 Web, 1 Android, 1 iOS) for the same user while invalidating duplicate sessions on the same platform type when a new sign-in occurs.
+
+### 🌟 The Revolutionary Smart Auth System (Zero Decision Fatigue)
+Unlike legacy systems that force users through frustrating decision trees ("Do you want to log in or sign up?", "Select SSO vs Email", "Enter password vs request magic link"), Rexone's authentication engine eliminates decision fatigue entirely:
+- **Unified Single-Field Entry**: The user simply enters their email or username. The system dynamically queries the account state (`/peek`) to infer whether to proceed with registration, prompt for their 6-digit passcode, route through email verification, or apply rate-limited security cooldowns.
+- **Frictionless Google SSO & Challenge Flows**: Seamlessly links OAuth accounts and requests password setup only when necessary, smoothly converting unconfirmed dropped registrations without jarring interruptions.
+- **Tri-Platform Concurrent Isolation**: Supports 3 distinct active sessions simultaneously (Web, Android, iOS) without logging users out across devices.
+
+### 💡 The Intelligent Frictionless Feedback System
+Inspired by our smart auth philosophy, the feedback system removes bureaucratic dropdowns, category selectors, and page redirects:
+- **In-Place Non-Intrusive Submission**: Users can share thoughts, report bugs, or give a 1-10 feeling rating from ANY page via a lightweight modal or bottom sheet without losing their place or facing page reloads.
+- **Automated Context & Telemetry Capture**: The client SDKs automatically attach active route/screen name, platform, browser, OS, viewport dimensions, and app version.
+- **Server-Side Smart Classification**: The backend automatically classifies the submission into `bug`, `feature_request`, `improvement`, or `general`, and calculates urgency/priority (`low`, `normal`, `high`, `urgent`) for streamlined admin triage.
+
+### 🔐 RBAC Architecture & Administrative Hierarchy
+The ecosystem employs a clean, unified Role-Based Access Control (RBAC) model across backend and frontend clients:
+
+1. **`super_admin` (Full Authority)**:
+   - Complete system-wide access to all resources, endpoints, and IAM management.
+   - Web client renders **ALL** navigation items in the admin sidebar.
+2. **`admin` (Standard Administrator)**:
+   - Full operational access across domain resources (`feedbacks`, `payments`, `ai`, `assets`, `logs`, `notifications`).
+   - **Strict Restriction**: Restricted from managing `users` and `iam`. The Web admin sidebar dynamically hides User Management and IAM navigation items.
+3. **Partial Admin (`*_admin` Suffix Naming Law)**:
+   - For scoped roles (e.g. `feedback_admin`, `payment_admin`, `ai_admin`), developers MUST name the role with the `_admin` suffix. Any role whose name contains `admin` is treated as an admin role.
+   - Partial admins possess the base `user` role plus their specific `*_admin` role.
+   - **Permission Provenance & Endpoint Scoping**:
+     - **Admin Endpoints (`/v1/admin/*`)**: Can ONLY be accessed if the user holds an admin role (with `admin` in the role name) that grants the needed CRUD permission. Permissions from non-admin roles (such as the base `user` role) cannot be used to access `/v1/admin/*`.
+     - **Non-Admin Endpoints (`/v1/*`)**: Permissions in admin roles (e.g. `read_users` in `user_admin`) grant access to both `/v1/users` and `/v1/admin/users`. Permissions in non-admin roles (e.g. `read_users` in `user`) only grant access to `/v1/users`.
+   - **Client-Side Sidebar Visibility Law**: The admin sidebar dynamically renders **ONLY** the specific navigation items corresponding to the `read_<resource>` permissions of their assigned `*_admin` role (e.g. a user with `feedback_admin` only sees the Feedback admin item).
+   - **Single-Request IAM Introspection**: `GET /v1/users/current/iam` returns explicit `is_admin`, `is_super_admin`, `roles`, `admin_roles`, `non_admin_roles`, `permissions`, `admin_permissions`, and `non_admin_permissions` so frontend clients can immediately evaluate UI controls and sidebar items without secondary API calls.
 
 ---
 
@@ -122,14 +156,14 @@ Defined under `src/design/`:
 
 - **Atoms & Tokens**: Kindness Gold (`#F8D57E`), Clarity Blue (`#9EC9FF`), Deep Navy (`#14202E`), semantic palettes, Inter / SF Pro typography scale, 8-based spacing, soft radius (`xs` to `full`).
 - **Molecules & Overlays**:
-  - Auth dialog suite (`AuthDialog`, `InitialDialog`, `SigninPasscodeDialog`, `SignupPasscodeCreateDialog`, `SignupPasscodeConfirmDialog`, `SignupInfoDialog`, `ConfirmEmailDialog`, `ForgotPasscodeDialog`).
-  - Inputs (`TextInput`, `TextArea`, `PasscodeInput`, `Dropdown`, `Toggle`).
+  - Auth dialog suite (`AuthDialog`, `InitialDialog`, `SigninPasswordDialog`, `SignupPasswordCreateDialog`, `SignupPasswordConfirmDialog`, `SignupInfoDialog`, `ConfirmEmailDialog`, `ForgotPasswordDialog`).
+  - Inputs (`TextInput`, `TextArea`, `PasswordInput`, `Dropdown`, `Toggle`).
   - Overlays: Base `Dialog` molecule, `ConfirmDialog` (powered by `Dialog` underneath for destructive confirmations), `LoadingOverlay`, `Toast`.
   - Buttons (`Button`, `GoogleButton`, `SignOutButton`).
 
 ### 🧩 Domain Modules & Flows
 
-- **Auth**: URL-driven dialog navigation (`?dialog=auth&step=...`). Passcodes are held purely in memory and never leaked into URL params or persistent storage.
+- **Auth**: URL-driven dialog navigation (`?dialog=auth&step=...`). Passwords are held purely in memory and never leaked into URL params or persistent storage.
 - **Commerce & Stripe**: Fetches products, triggers Checkout Session (`/v1/payment/session`), redirects to Stripe, handles success/cancel redirects, manages active subscriptions and transactions, and provides modal confirmation for cancellations.
 - **AI Workspace**: Non-blocking queued chat. Submits message, displays thinking state, receives completion or error event over WebSocket (`useAiSocket`), auto-refreshes room history. Includes utilities for translation, summarization, and sentiment analysis.
 - **Telemetry & Error Logging**: Unhandled client exceptions and React Error Boundary catches are posted directly to Core at `POST /v1/log/clients` with storage keys snapshot.
@@ -151,11 +185,11 @@ Rexone Mobile has a strictly governed design system accessible via `lib/design/d
 - **Elements**: `AppColors` (Kindness Gold, Clarity Blue, Deep Navy, surfaces, text), `AppTypography`, `AppSpacing`, `AppStyles`, `AppIcons`, `AppMedia`, `AppTimers`, `AppTheme` (Light/Dark mode Material 3).
 - **Theme Extensions**: `context.colors.*` and `context.typo.*` for theme-aware reactive styling.
 - **Static Tokens**: `Design.spacing.*`, `Design.timers.*`, `Design.icons.*`, `Design.media.*`.
-- **Reusable UI Components**: `AppButton`, `AppInputField`, `AppPasscodeField`, `AppLoading`, `AppSnackbar`, `AppDialog` (with `AppDialog.confirm()` for destructive actions), `AppPage`, `AppListTile`, `AppToggle`.
+- **Reusable UI Components**: `AppButton`, `AppInputField`, `AppPasswordField`, `AppLoading`, `AppSnackbar`, `AppDialog` (with `AppDialog.confirm()` for destructive actions), `AppPage`, `AppListTile`, `AppToggle`.
 
 ### 🧩 Mobile Domain Capabilities
 
-- **Auth Flow**: Complete parity with Web & Core (email check, 6-digit passcode, OTP verification, Google OAuth challenge, session replacement). Zero hardcoded string literals.
+- **Auth Flow**: Complete parity with Web & Core (email check, 6-digit password, OTP verification, Google OAuth challenge, session replacement). Zero hardcoded string literals.
 - **Push Notifications**: Powered by OneSignal (`PushNotiService`). Automatically syncs user IDs and tags on login/session restore and clears state on logout.
 - **Product Analytics**: Powered by Firebase Analytics (`AnalyticsService`). Integrates navigation observers for screen tracking and records authentication and application lifecycle events.
 - **In-App Upgrader**: Powered by `upgrader`. Wraps root app builder with `UpgradeAlert` to notify users of critical or optional Play Store / App Store updates.
@@ -173,7 +207,7 @@ All three pillars of the Rexone platform are fully aligned at **100% feature par
 
 | Capability Area                                          | `rexone-core` |     `rexone-web`     |     `rexone_mobile`      |
 | -------------------------------------------------------- | :-----------: | :------------------: | :----------------------: |
-| **Auth: Email & 6-digit Passcode**                       |      ✅       |          ✅          |            ✅            |
+| **Auth: Email & 6-digit Password**                       |      ✅       |          ✅          |            ✅            |
 | **Auth: Google Sign-In & Challenge Flow**                |      ✅       |          ✅          |            ✅            |
 | **Auth: Active Single-Platform Session Enforcement**     |      ✅       |          ✅          |            ✅            |
 | **Auth: Escalating Password Retry Cooldown (Redis)**     |      ✅       |          ✅          |            ✅            |
@@ -186,6 +220,7 @@ All three pillars of the Rexone platform are fully aligned at **100% feature par
 | **Stripe: Checkout Session Handoff**                     |      ✅       |    ✅ (Redirect)     |       ✅ (WebView)       |
 | **Stripe: Subscriptions & Cancellation/Resumption**      |      ✅       |          ✅          |            ✅            |
 | **Stripe: Transaction History**                          |      ✅       |          ✅          |            ✅            |
+| **Intelligent Frictionless Feedback System (1-10)**      |      ✅       |          ✅          |            ✅            |
 | **AI: Conversational Rooms & Message History**           |      ✅       |          ✅          |            ✅            |
 | **AI: Queued Background Execution (DeepSeek)**           |      ✅       |          ✅          |            ✅            |
 | **AI: Real-Time WebSocket Completion Alerts**            |      ✅       |          ✅          |            ✅            |
@@ -204,8 +239,8 @@ All three pillars of the Rexone platform are fully aligned at **100% feature par
 - **Standard Request Headers**:
   ```http
   Authorization: Bearer <JWT_TOKEN>
-  X-Platform: web | mobile
-  X-Locale: en | my
+  X-Platform: web | android | ios
+  X-Locale: en | my | es
   Accept-Language: en | my
   Content-Type: application/json
   ```

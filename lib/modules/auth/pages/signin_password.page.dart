@@ -1,4 +1,4 @@
-// lib/modules/auth/pages/signin_passcode_page.dart
+// lib/modules/auth/pages/signin_password_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rexone_mobile/constants/constants.dart';
@@ -7,13 +7,13 @@ import 'package:rexone_mobile/routes/routes.dart';
 
 import '../auth.dart';
 
-class SignInPasscodePage extends GetView<AuthController> {
-  const SignInPasscodePage({super.key});
+class SignInPasswordPage extends GetView<AuthController> {
+  const SignInPasswordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return AppPage(
-      title: Constants.locale.signinTitle.tr,
+      title: AppLocales.auth.signInPasscode.title.tr,
       child: Center(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: Design.spacing.lg),
@@ -22,14 +22,14 @@ class SignInPasscodePage extends GetView<AuthController> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                Constants.locale.signinHeading.tr,
+                AppLocales.auth.signInPasscode.heading.tr,
                 style: context.typo.headline1,
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: Design.spacing.sm),
               Obx(
                 () => Text(
-                  Constants.locale.signinSubtitle.trParams({
+                  AppLocales.auth.signInPasscode.subtitle.trParams({
                     'email': controller.email.value,
                   }),
                   style: context.typo.bodyMedium,
@@ -39,12 +39,12 @@ class SignInPasscodePage extends GetView<AuthController> {
               SizedBox(height: Design.spacing.xxxl),
 
               Obx(
-                () => AppPasscodeField(
+                () => AppPasswordField(
                   pinController: controller.signinPin,
                   enabled: controller.cooldownSecondsLeft.value == 0,
-                  onChanged: (value) => controller.passcode.value = value,
+                  onChanged: (value) => controller.password.value = value,
                   onCompleted: (pin) {
-                    controller.passcode.value = pin;
+                    controller.password.value = pin;
                     controller.signIn();
                   },
                 ),
@@ -56,7 +56,7 @@ class SignInPasscodePage extends GetView<AuthController> {
                   return Padding(
                     padding: EdgeInsets.only(top: Design.spacing.lg),
                     child: Text(
-                      Constants.locale.cooldownMessage.trParams({
+                      AppLocales.auth.signInPasscode.cooldownMessage.trParams({
                         'seconds': '${controller.cooldownSecondsLeft.value}',
                       }),
                       style: context.typo.caption.copyWith(
@@ -72,7 +72,7 @@ class SignInPasscodePage extends GetView<AuthController> {
                   return Padding(
                     padding: EdgeInsets.only(top: Design.spacing.lg),
                     child: Text(
-                      Constants.locale.attemptsRemaining.trParams({
+                      AppLocales.auth.signInPasscode.attemptsRemaining.trParams({
                         'left': '${controller.attemptsLeft.value}',
                         'total': '${AuthController.maxAttempts}',
                       }),
@@ -88,10 +88,10 @@ class SignInPasscodePage extends GetView<AuthController> {
               Obx(
                 () => AppButton(
                   text: controller.cooldownSecondsLeft.value > 0
-                      ? Constants.locale.tryAgainIn.trParams({
+                      ? AppLocales.auth.signInPasscode.tryAgainIn.trParams({
                           'seconds': '${controller.cooldownSecondsLeft.value}',
                         })
-                      : Constants.locale.signinTitle.tr,
+                      : AppLocales.auth.signInPasscode.title.tr,
                   onPressed: () => controller.signIn(),
                 ),
               ),
@@ -100,16 +100,16 @@ class SignInPasscodePage extends GetView<AuthController> {
               AppButton(
                 type: EButtonType.text,
                 onPressed: () {
-                  controller.passcode.value = '';
+                  controller.password.value = '';
                   controller.signinPin.clear();
                   Get.back();
                 },
-                text: Constants.locale.useDifferentEmail.tr,
+                text: AppLocales.auth.shared.useDifferentEmail.tr,
               ),
               AppButton(
                 type: EButtonType.text,
-                onPressed: () => AppRoutes.toForgotPasscode(),
-                text: Constants.locale.forgotPasscodeLink.tr,
+                onPressed: () => AppRoutes.toForgotPassword(),
+                text: AppLocales.auth.signInPasscode.forgotPasscodeLink.tr,
               ),
             ],
           ),

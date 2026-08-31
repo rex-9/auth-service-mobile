@@ -65,7 +65,7 @@ void main() {
       await tester.pumpAndSettle(const Duration(seconds: 2));
 
       // Scroll to and tap Sign Out tile
-      final signOutText = Constants.locale.signOutButton.tr;
+      final signOutText = AppLocales.common.signOut.tr;
       final signOutTile = find.text(signOutText).first;
       await tester.scrollUntilVisible(
         signOutTile,

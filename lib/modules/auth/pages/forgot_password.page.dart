@@ -1,4 +1,4 @@
-// lib/modules/auth/pages/forgot_passcode_page.dart
+// lib/modules/auth/pages/forgot_password_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rexone_mobile/constants/constants.dart';
@@ -6,15 +6,15 @@ import 'package:rexone_mobile/design/design.dart';
 
 import '../auth.dart';
 
-class ForgotPasscodePage extends GetView<AuthController> {
-  const ForgotPasscodePage({super.key});
+class ForgotPasswordPage extends GetView<AuthController> {
+  const ForgotPasswordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final emailController = TextEditingController(text: controller.email.value);
 
     return AppPage(
-      title: Constants.locale.forgotPasscodeTitle.tr,
+      title: AppLocales.auth.forgotPasscode.title.tr,
       child: Center(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: Design.spacing.lg),
@@ -23,7 +23,7 @@ class ForgotPasscodePage extends GetView<AuthController> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                Constants.locale.forgotPasscodeSubtitle.tr,
+                AppLocales.auth.forgotPasscode.subtitle.tr,
                 style: context.typo.bodyMedium,
                 textAlign: TextAlign.center,
               ),
@@ -31,8 +31,8 @@ class ForgotPasscodePage extends GetView<AuthController> {
 
               Obx(
                 () => AppInputField(
-                  label: Constants.locale.emailLabel.tr,
-                  hint: Constants.locale.emailHint.tr,
+                  label: AppLocales.auth.shared.emailLabel.tr,
+                  hint: AppLocales.auth.shared.emailHint.tr,
                   error: controller.emailError.value,
                   controller: emailController,
                   keyboardType: TextInputType.emailAddress,
@@ -45,10 +45,10 @@ class ForgotPasscodePage extends GetView<AuthController> {
                 final waiting = controller.resendSecondsLeft.value > 0;
                 return AppButton(
                   text: waiting
-                      ? Constants.locale.resendCodeIn.trParams({
+                      ? AppLocales.auth.confirmEmail.resendCodeIn.trParams({
                           'seconds': '${controller.resendSecondsLeft.value}',
                         })
-                      : Constants.locale.sendResetLink.tr,
+                      : AppLocales.auth.forgotPasscode.sendResetLink.tr,
                   onPressed: () {
                     if (waiting) return;
                     controller.forgotPassword();
@@ -60,7 +60,7 @@ class ForgotPasscodePage extends GetView<AuthController> {
               AppButton(
                 type: EButtonType.text,
                 onPressed: () => Get.back(),
-                text: Constants.locale.backToSignIn.tr,
+                text: AppLocales.auth.forgotPasscode.backToSignIn.tr,
               ),
             ],
           ),

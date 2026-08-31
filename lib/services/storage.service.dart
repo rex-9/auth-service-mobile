@@ -1,6 +1,7 @@
 // lib/services/storage.service.dart
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import '../constants/constants.dart';
 import '../models/user.model.dart';
 
 class StorageService extends GetxService {
@@ -16,51 +17,52 @@ class StorageService extends GetxService {
   // ============================================================
   // AUTH SESSION
   // ============================================================
-  void setToken(String token) => _box.write('auth_token', token);
-  String? getToken() => _box.read('auth_token');
+  void setToken(String token) => _box.write(StorageKeys.token, token);
+  String? getToken() => _box.read(StorageKeys.token);
 
-  void setUserEmail(String email) => _box.write('user_email', email);
-  String? getUserEmail() => _box.read('user_email');
+  void setUserEmail(String email) => _box.write(StorageKeys.userEmail, email);
+  String? getUserEmail() => _box.read(StorageKeys.userEmail);
 
-  void setUserData(UserModel user) => _box.write('user_data', user.toJson());
+  void setUserData(UserModel user) =>
+      _box.write(StorageKeys.user, user.toJson());
 
   UserModel? getUserData() {
-    final data = _box.read('user_data');
+    final data = _box.read(StorageKeys.user);
     if (data == null) return null;
     return UserModel.fromJson(Map<String, dynamic>.from(data));
   }
 
   /// Clears session data only (keeps theme/locale settings).
   void clearSession() {
-    _box.remove('auth_token');
-    _box.remove('user_email');
-    _box.remove('user_data');
+    _box.remove(StorageKeys.token);
+    _box.remove(StorageKeys.userEmail);
+    _box.remove(StorageKeys.user);
   }
 
   // ============================================================
   // ROUTE STACK
   // ============================================================
   void saveRouteStack(List<String> routes) {
-    _box.write('routes', routes);
+    _box.write(StorageKeys.routes, routes);
   }
 
   List<String> getRouteStack() {
-    final stack = _box.read('routes');
+    final stack = _box.read(StorageKeys.routes);
     return stack is List ? List<String>.from(stack) : [];
   }
 
   void clearRouteStack() {
-    _box.remove('routes');
+    _box.remove(StorageKeys.routes);
   }
 
   // ============================================================
   // SETTINGS (Theme & Locale)
   // ============================================================
-  void setThemeName(String name) => _box.write('theme', name);
-  String? getThemeName() => _box.read('theme');
+  void setThemeName(String name) => _box.write(StorageKeys.theme, name);
+  String? getThemeName() => _box.read(StorageKeys.theme);
 
-  void setLocaleCode(String code) => _box.write('locale', code);
-  String? getLocaleCode() => _box.read('locale');
+  void setLocaleCode(String code) => _box.write(StorageKeys.locale, code);
+  String? getLocaleCode() => _box.read(StorageKeys.locale);
 
   // ============================================================
   // UTILITY

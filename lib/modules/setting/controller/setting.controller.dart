@@ -82,8 +82,8 @@ class SettingController extends GetxController {
   void setLocale(String code) {
     localeCode.value = code;
     _storage.setLocaleCode(code);
-    Get.addTranslations(AppTranslations().keys);
     Get.updateLocale(locale);
+    update();
   }
 
   void changeLocale(String code) => setLocale(code);

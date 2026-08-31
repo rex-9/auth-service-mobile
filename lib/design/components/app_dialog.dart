@@ -110,7 +110,7 @@ class AppDialog {
     String? confirmLabel,
   }) async {
     Get.addTranslations(AppTranslations().keys);
-    final label = confirmLabel ?? Constants.locale.confirmDelete.tr;
+    final label = confirmLabel ?? AppLocales.setting.confirmDelete.tr;
     if (isIOS) {
       final result = await Get.dialog<bool>(
         CupertinoAlertDialog(
@@ -123,7 +123,7 @@ class AppDialog {
             CupertinoDialogAction(
               onPressed: () => Get.back(result: false),
               isDefaultAction: true,
-              child: Text(Constants.locale.cancel.tr),
+              child: Text(AppLocales.common.cancel.tr),
             ),
             CupertinoDialogAction(
               onPressed: () => Get.back(result: true),
@@ -157,7 +157,7 @@ class AppDialog {
           AppButton(
             type: EButtonType.text,
             onPressed: () => Get.back(result: false),
-            text: Constants.locale.cancel.tr,
+            text: AppLocales.common.cancel.tr,
           ),
           AppButton(
             type: EButtonType.text,
@@ -176,13 +176,13 @@ class AppDialog {
       final result = await Get.dialog<bool>(
         CupertinoAlertDialog(
           title: Text(
-            Constants.locale.exitTitle.tr,
+            AppLocales.common.exitTitle.tr,
             style: context.typo.headline4,
           ),
           content: Padding(
             padding: EdgeInsets.only(top: Design.spacing.xs),
             child: Text(
-              Constants.locale.exitConfirm.tr,
+              AppLocales.common.exitConfirm.tr,
               style: context.typo.bodyMedium,
             ),
           ),
@@ -190,12 +190,12 @@ class AppDialog {
             CupertinoDialogAction(
               onPressed: () => Get.back(result: false),
               isDefaultAction: true,
-              child: Text(Constants.locale.cancel.tr),
+              child: Text(AppLocales.common.cancel.tr),
             ),
             CupertinoDialogAction(
               onPressed: () => Get.back(result: true),
               isDestructiveAction: true,
-              child: Text(Constants.locale.exit.tr),
+              child: Text(AppLocales.common.exit.tr),
             ),
           ],
         ),
@@ -209,13 +209,13 @@ class AppDialog {
           borderRadius: BorderRadius.circular(Design.spacing.radiusLarge),
         ),
         title: Text(
-          Constants.locale.exitTitle.tr,
+          AppLocales.common.exitTitle.tr,
           style: context.typo.headline4.copyWith(
             color: Get.theme.colorScheme.onSurface,
           ),
         ),
         content: Text(
-          Constants.locale.exitConfirm.tr,
+          AppLocales.common.exitConfirm.tr,
           style: context.typo.bodyMedium.copyWith(
             color: Get.theme.colorScheme.onSurfaceVariant,
           ),
@@ -224,12 +224,12 @@ class AppDialog {
           AppButton(
             type: EButtonType.text,
             onPressed: () => Get.back(result: false),
-            text: Constants.locale.cancel.tr,
+            text: AppLocales.common.cancel.tr,
           ),
           AppButton(
             type: EButtonType.text,
             onPressed: () => Get.back(result: true),
-            text: Constants.locale.exit.tr,
+            text: AppLocales.common.exit.tr,
           ),
         ],
       ),

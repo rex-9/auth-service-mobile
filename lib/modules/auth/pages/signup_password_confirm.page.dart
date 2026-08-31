@@ -1,4 +1,4 @@
-// lib/modules/auth/pages/signup_passcode_confirm_page.dart
+// lib/modules/auth/pages/signup_password_confirm_page.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rexone_mobile/constants/constants.dart';
@@ -6,13 +6,13 @@ import 'package:rexone_mobile/design/design.dart';
 
 import '../auth.dart';
 
-class SignUpPasscodeConfirmPage extends GetView<AuthController> {
-  const SignUpPasscodeConfirmPage({super.key});
+class SignUpPasswordConfirmPage extends GetView<AuthController> {
+  const SignUpPasswordConfirmPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return AppPage(
-      title: Constants.locale.signupTitle.tr,
+      title: AppLocales.auth.signUpPasscodeConfirm.title.tr,
       child: Center(
         child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: Design.spacing.lg),
@@ -21,46 +21,46 @@ class SignUpPasscodeConfirmPage extends GetView<AuthController> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                Constants.locale.confirmPasscodeHeading.tr,
+                AppLocales.auth.signUpPasscodeConfirm.heading.tr,
                 style: context.typo.headline1,
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: Design.spacing.sm),
               Text(
-                Constants.locale.confirmPasscodeSubtitle.tr,
+                AppLocales.auth.signUpPasscodeConfirm.subtitle.tr,
                 style: context.typo.bodyMedium,
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: Design.spacing.xxxl),
 
               Text(
-                Constants.locale.confirmPasscodeHeading.tr,
+                AppLocales.auth.signUpPasscodeConfirm.heading.tr,
                 style: context.typo.labelMedium,
               ),
               SizedBox(height: Design.spacing.sm),
-              AppPasscodeField(
+              AppPasswordField(
                 pinController: controller.signupConfirmPin,
-                onChanged: (value) => controller.confirmPasscode.value = value,
-                onCompleted: (_) => controller.handleConfirmPasscode(),
+                onChanged: (value) => controller.confirmPassword.value = value,
+                onCompleted: (_) => controller.handleConfirmPassword(),
               ),
 
               SizedBox(height: Design.spacing.xxxl),
               AppButton(
-                text: Constants.locale.confirm.tr,
-                onPressed: controller.handleConfirmPasscode,
+                text: AppLocales.auth.signUpPasscodeConfirm.confirm.tr,
+                onPressed: controller.handleConfirmPassword,
               ),
 
               SizedBox(height: Design.spacing.lg),
               AppButton(
                 type: EButtonType.text,
                 onPressed: () {
-                  controller.confirmPasscode.value = '';
+                  controller.confirmPassword.value = '';
                   controller.signupConfirmPin.clear();
-                  controller.passcode.value = '';
+                  controller.password.value = '';
                   controller.signupPin.clear();
                   Get.back();
                 },
-                text: Constants.locale.changePasscode.tr,
+                text: AppLocales.auth.signUpPasscodeConfirm.changePasscode.tr,
               ),
             ],
           ),

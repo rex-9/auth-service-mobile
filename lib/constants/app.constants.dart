@@ -1,18 +1,19 @@
 // lib/constants/app.constants.dart
+import 'dart:io' show Platform;
 import 'package:package_info_plus/package_info_plus.dart';
 
 class AppConstants {
-  const AppConstants();
+  const AppConstants._();
 
   // ===== ENVIRONMENT KEYS =====
-  String get envKey => 'APP_ENV';
-  String get nameKey => 'APP_NAME';
-  String get versionKey => 'APP_VERSION';
-  String get apiBaseUrlKey => 'API_BASE_URL';
-  String get googleServerClientIdKey => 'GOOGLE_SERVER_CLIENT_ID';
-  String get oneSignalAppIdKey => 'ONE_SIGNAL_APP_ID';
-  String get androidAppIdKey => 'ANDROID_APP_ID';
-  String get iosAppIdKey => 'IOS_APP_ID';
+  static String get envKey => 'APP_ENV';
+  static String get nameKey => 'APP_NAME';
+  static String get versionKey => 'APP_VERSION';
+  static String get apiBaseUrlKey => 'API_BASE_URL';
+  static String get googleServerClientIdKey => 'GOOGLE_SERVER_CLIENT_ID';
+  static String get oneSignalAppIdKey => 'ONE_SIGNAL_APP_ID';
+  static String get androidAppIdKey => 'ANDROID_APP_ID';
+  static String get iosAppIdKey => 'IOS_APP_ID';
 
   // ===== VERSIONS from pubspec.yaml (Runtime) =====
   Future<String> getVersion() async {
@@ -31,17 +32,12 @@ class AppConstants {
   }
 
   // Validation Rules
-  int get minPasscodeLength => 6;
-  int get maxPasscodeLength => 6;
+  int get minPasswordLength => 6;
+  int get maxPasswordLength => 6;
   int get minUsernameLength => 3;
   int get maxUsernameLength => 20;
   int get minNameLength => 2;
   int get maxNameLength => 50;
-
-  // Storage Keys
-  String get storageKeyToken => 'auth_token';
-  String get storageKeyUserEmail => 'user_email';
-  String get storageKeyUserData => 'user_data';
 
   // HTTP Headers
   static const headerContentType = 'Content-Type';
@@ -51,6 +47,9 @@ class AppConstants {
   static const headerXLocale = 'X-Locale';
   static const headerAcceptLanguage = 'Accept-Language';
   static const contentTypeJson = 'application/json';
+  static const platformAndroid = 'android';
+  static const platformIos = 'ios';
+  static const platformWeb = 'web';
   static const platformMobile = 'mobile';
   static const bearerPrefix = 'Bearer ';
 
@@ -62,4 +61,15 @@ class AppConstants {
   static const speechNumChannels = 1;
   // 100ms of 16 kHz 16-bit mono PCM.
   static const speechChunkBytes = 3200;
+
+  /// Dynamic runtime platform identifier (android / ios / web)
+  static String get currentPlatform {
+    try {
+      if (Platform.isIOS) return platformIos;
+      if (Platform.isAndroid) return platformAndroid;
+    } catch (_) {
+      // In web or tests where Platform isn't supported
+    }
+    return platformAndroid;
+  }
 }

@@ -72,7 +72,10 @@ class ServerRoutes {
 
   // Speech service api
   static String get textToSpeech => api('/speech/tts');
+  // Feedback
+  static String get feedbacks => api('/feedbacks');
 
   // Admin API
   static String get adminUsers => adminApi('/users');
+  static String get adminFeedbacks => adminApi('/feedbacks');
 }

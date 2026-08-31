@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/main.dart' as app;
-import 'package:rexone_mobile/modules/auth/pages/forgot_passcode.page.dart';
+import 'package:rexone_mobile/modules/auth/pages/forgot_password.page.dart';
 import 'package:rexone_mobile/services/storage.service.dart';
 
 import '../data/users.dart';
@@ -45,8 +45,8 @@ void main() {
       }
       await tester.pumpAndSettle(const Duration(seconds: 2));
 
-      // Scroll and Tap Forgot Passcode link
-      final forgotText = Constants.locale.forgotPasscodeLink.tr;
+      // Scroll and Tap Forgot Password link
+      final forgotText = AppLocales.auth.signInPasscode.forgotPasscodeLink.tr;
       final forgotButton = find.text(forgotText);
       if (forgotButton.evaluate().isEmpty) {
         await tester.scrollUntilVisible(
@@ -60,11 +60,11 @@ void main() {
       await tester.tap(forgotButton);
       await tester.pumpAndSettle(const Duration(seconds: 2));
 
-      // Verify ForgotPasscodePage is visible
-      expect(find.byType(ForgotPasscodePage), findsOneWidget);
+      // Verify ForgotPasswordPage is visible
+      expect(find.byType(ForgotPasswordPage), findsOneWidget);
 
       // Tap Send Reset Link
-      final sendResetText = Constants.locale.sendResetLink.tr;
+      final sendResetText = AppLocales.auth.forgotPasscode.sendResetLink.tr;
       final sendButton = find.text(sendResetText);
       expect(sendButton, findsOneWidget);
       await tester.tap(sendButton);

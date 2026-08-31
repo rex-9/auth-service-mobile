@@ -1,11 +1,13 @@
 import 'package:rexone_mobile/constants/constants.dart';
 
-class ForgotPasscodeRequest {
+class ForgotPasswordRequest {
   final String email;
 
-  const ForgotPasscodeRequest({required this.email});
+  const ForgotPasswordRequest({required this.email});
 
   Map<String, dynamic> toJson() => {
     AuthKeys.email: email,
   };
 }
+
+

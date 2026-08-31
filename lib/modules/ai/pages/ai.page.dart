@@ -18,23 +18,23 @@ class AiPage extends GetView<AiController> {
         showBackButton: true,
         padding: EdgeInsets.zero,
         actions: [
-          IconButton(
-            icon: Icon(Design.icons.forum),
+          AppButton(
+            type: EButtonType.icon,
+            icon: Design.icons.forum,
             onPressed: () => _showRoomsBottomSheet(context),
-            tooltip: 'Rooms',
           ),
-          IconButton(
-            icon: Icon(Design.icons.deleteSweep),
+          AppButton(
+            type: EButtonType.icon,
+            icon: Design.icons.deleteSweep,
             onPressed: () async {
               final ok = await AppDialog.confirm(
                 context: context,
-                title: Constants.locale.clearHistoryTitle.tr,
-                message: Constants.locale.clearHistoryConfirmMsg.tr,
-                confirmLabel: Constants.locale.confirmClear.tr,
+                title: AppLocales.setting.clearHistoryTitle.tr,
+                message: AppLocales.setting.clearHistoryConfirmMsg.tr,
+                confirmLabel: AppLocales.setting.confirmClear.tr,
               );
               if (ok) controller.clearHistory();
             },
-            tooltip: 'Clear Chat',
           ),
         ],
         child: Column(
@@ -129,18 +129,16 @@ class AiPage extends GetView<AiController> {
                           '${room.messageCount} messages',
                           style: context.typo.caption,
                         ),
-                        trailing: IconButton(
-                          icon: Icon(
-                            Design.icons.delete,
-                            size: 20,
-                            color: context.colors.error,
-                          ),
+                        trailing: AppButton(
+                          type: EButtonType.icon,
+                          icon: Design.icons.delete,
+                          color: context.colors.error,
                           onPressed: () async {
                             final ok = await AppDialog.confirm(
                               context: context,
-                              title: Constants.locale.deleteRoomTitle.tr,
-                              message: Constants.locale.deleteRoomConfirmMsg.tr,
-                              confirmLabel: Constants.locale.confirmDelete.tr,
+                              title: AppLocales.setting.deleteRoomTitle.tr,
+                              message: AppLocales.setting.deleteRoomConfirmMsg.tr,
+                              confirmLabel: AppLocales.setting.confirmDelete.tr,
                             );
                             if (ok) {
                               controller.deleteRoom(room.id);
@@ -181,9 +179,14 @@ class AiPage extends GetView<AiController> {
         ),
         decoration: BoxDecoration(
           color: isUser ? colors.primary : colors.surface,
-          borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(Design.spacing.radiusMedium),
+            bottomLeft: Radius.circular(Design.spacing.radiusMedium),
+            bottomRight: Radius.circular(Design.spacing.radiusMedium),
+            topRight: Radius.circular(isUser ? 2 : Design.spacing.radiusMedium),
+          ),
           border: isUser ? null : Border.all(color: colors.border),
-          boxShadow: Design.colors.shadows.sm,
+          boxShadow: isUser ? Design.colors.shadows.neon : Design.colors.shadows.sm,
         ),
         child: Column(
           crossAxisAlignment: isUser
