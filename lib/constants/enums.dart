@@ -28,6 +28,8 @@ enum EWsEventType {
   welcome('welcome'),
   aiResponseReady('ai_response_ready'),
   aiResponseFailed('ai_response_failed'),
+  ttsReady('tts_ready'),
+  ttsFailed('tts_failed'),
 
   unknown('unknown');
 
@@ -38,6 +40,31 @@ enum EWsEventType {
     return EWsEventType.values.firstWhere(
       (e) => e.value == value,
       orElse: () => EWsEventType.unknown,
+    );
+  }
+}
+
+enum ESpeechListenResult {
+  started,
+  alreadyListening,
+  disconnected,
+  permissionDenied,
+  failed,
+}
+
+enum ESpeechEventType {
+  partial('partial'),
+  finalPhrase('final'),
+  error('error'),
+  unknown('unknown');
+
+  final String value;
+  const ESpeechEventType(this.value);
+
+  factory ESpeechEventType.fromString(String value) {
+    return ESpeechEventType.values.firstWhere(
+      (e) => e.value == value,
+      orElse: () => ESpeechEventType.unknown,
     );
   }
 }

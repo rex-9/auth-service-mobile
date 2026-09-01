@@ -43,9 +43,10 @@ class ServerRoutes {
   // Media
   static String get uploadAsset => api('/media/upload');
 
-  // Access
-  static String get access => api('/access');
-  static String get checkAccess => api('/access/check');
+  // Accesses
+  static String get accesses => api('/accesses');
+  static String get activeAccesses => api('/accesses/active');
+  static String get checkAccesses => api('/accesses/check');
 
   // Payments
   static String get paymentSession => api('/payment/session');
@@ -70,6 +71,9 @@ class ServerRoutes {
   static String get aiTranslate => api('/ai/translate');
   static String get aiAnalyze => api('/ai/analyze');
 
+  // Speech service api
+  static String get textToSpeech => api('/speech/tts');
+  static String get speechToText => api('/speech/stt');
   // Feedback
   static String get feedbacks => api('/feedbacks');
 

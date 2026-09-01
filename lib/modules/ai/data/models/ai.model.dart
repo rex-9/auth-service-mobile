@@ -1,12 +1,68 @@
 // lib/modules/ai/data/models/ai.model.dart
 import 'package:rexone_mobile/constants/constants.dart';
 
+class AiAssetModel {
+  final String id;
+  final String name;
+  final String url;
+  final String type;
+  final String format;
+  final String extension;
+  final int? sizeBytes;
+  final int? durationSecs;
+  final String source;
+  final String resourceModel;
+  final String resourceId;
+  final String createdAt;
+  final String updatedAt;
+
+  const AiAssetModel({
+    required this.id,
+    required this.name,
+    required this.url,
+    required this.type,
+    required this.format,
+    required this.extension,
+    this.sizeBytes,
+    this.durationSecs,
+    required this.source,
+    required this.resourceModel,
+    required this.resourceId,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  factory AiAssetModel.fromJson(Map<String, dynamic> json) {
+    return AiAssetModel(
+      id: json[ApiKeys.id]?.toString() ?? '',
+      name: json[AiKeys.name]?.toString() ?? '',
+      url: json[AiKeys.url]?.toString() ?? '',
+      type: json[AiKeys.type]?.toString() ?? '',
+      format: json[AiKeys.format]?.toString() ?? '',
+      extension: json[AiKeys.extension]?.toString() ?? '',
+      sizeBytes: json[AiKeys.sizeBytes] is int
+          ? json[AiKeys.sizeBytes] as int
+          : int.tryParse(json[AiKeys.sizeBytes]?.toString() ?? ''),
+      durationSecs: json[AiKeys.durationSecs] is int
+          ? json[AiKeys.durationSecs] as int
+          : int.tryParse(json[AiKeys.durationSecs]?.toString() ?? ''),
+      source: json[AiKeys.source]?.toString() ?? '',
+      resourceModel: json[AiKeys.resourceModel]?.toString() ?? '',
+      resourceId: json[AiKeys.resourceId]?.toString() ?? '',
+      createdAt: json[AiKeys.createdAt]?.toString() ?? '',
+      updatedAt: json[AiKeys.updatedAt]?.toString() ?? '',
+    );
+  }
+}
+
 class AiMessageModel {
   final String id;
   final String role; // EChatRole.name // "user" | "assistant"
   final String content;
   final String? roomId;
   final String? status; // EAiMessageStatus.name //"queued" | "processing" | "completed" | "failed"
+  final String? ttsStatus;
+  final List<AiAssetModel> assets;
   final String createdAt;
 
   AiMessageModel({
@@ -15,6 +71,8 @@ class AiMessageModel {
     required this.content,
     this.roomId,
     this.status,
+    this.ttsStatus,
+    this.assets = const [],
     required this.createdAt,
   });
 
@@ -22,6 +80,17 @@ class AiMessageModel {
     final metadata = json[AiKeys.metadata] is Map
         ? Map<String, dynamic>.from(json[AiKeys.metadata] as Map)
         : null;
+    final rawAssets = json[AiKeys.assets];
+    final assets = rawAssets is List
+        ? rawAssets
+            .whereType<Map>()
+            .map(
+              (item) => AiAssetModel.fromJson(
+                Map<String, dynamic>.from(item),
+              ),
+            )
+            .toList()
+        : const <AiAssetModel>[];
 
     return AiMessageModel(
       id: json[ApiKeys.id]?.toString() ?? '',
@@ -31,6 +100,8 @@ class AiMessageModel {
       status:
           metadata?[AiKeys.status]?.toString() ??
           json[AiKeys.status]?.toString(),
+      ttsStatus: metadata?[AiKeys.ttsStatus]?.toString(),
+      assets: assets,
       createdAt:
           json[AiKeys.createdAt]?.toString() ??
           DateTime.now().toIso8601String(),
@@ -50,6 +121,17 @@ class AiMessageModel {
   bool get isProcessing =>
       status == EAiMessageStatus.queued.name ||
       status == EAiMessageStatus.processing.name;
+
+  String? get audioUrl {
+    for (final asset in assets) {
+      if (asset.type == AiKeys.audio && asset.url.isNotEmpty) {
+        return asset.url;
+      }
+    }
+    return null;
+  }
+
+  bool get hasAudio => audioUrl != null;
 }
 
 class AiRoomModel {

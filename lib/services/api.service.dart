@@ -15,6 +15,7 @@ import '../modules/setting/setting.dart';
 
 class ApiService extends GetConnect {
   static const String sessionReplacedError = 'Active session not found';
+  static const String _multipartHeader = 'X-Multipart';
 
   @override
   void onInit() {
@@ -32,8 +33,13 @@ class ApiService extends GetConnect {
   void _setupInterceptors() {
     httpClient.addRequestModifier<dynamic>((request) async {
       request.headers[AppConstants.headerAccept] = AppConstants.contentTypeJson;
-      request.headers[AppConstants.headerContentType] =
-          AppConstants.contentTypeJson;
+      final isMultipart = request.headers[_multipartHeader] == 'true';
+      if (!isMultipart) {
+        request.headers[AppConstants.headerContentType] =
+            AppConstants.contentTypeJson;
+      } else {
+        request.headers.remove(AppConstants.headerContentType);
+      }
       request.headers[AppConstants.headerXPlatform] =
           AppConstants.currentPlatform;
       String apiLocale = 'en';
@@ -118,6 +124,23 @@ class ApiService extends GetConnect {
         decoder: decoder,
         headers: headers,
         query: query,
+        uploadProgress: uploadProgress,
+      ),
+      showLoading,
+    );
+  }
+
+  Future<Response<T>> postMultipart<T>(
+    String url,
+    FormData form, {
+    bool showLoading = false,
+    Progress? uploadProgress,
+  }) async {
+    return _withLoading(
+      () => super.post(
+        url,
+        form,
+        headers: {_multipartHeader: 'true'},
         uploadProgress: uploadProgress,
       ),
       showLoading,

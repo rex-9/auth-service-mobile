@@ -4,6 +4,8 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   firebase_core
+  permission_handler_windows
+  record_windows
   url_launcher_windows
 )
 

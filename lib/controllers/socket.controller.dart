@@ -14,7 +14,8 @@ import '../modules/payment/payment.dart';
 /// All snackbar display and per-controller data refresh go here.
 /// No other controller should call `socket.stream.listen`.
 ///
-/// To add a new event type: edit [_showSnackbar] and/or [_dispatch] — done.
+/// To add a new notification type: edit [_showSnackbar] and/or [_dispatch].
+/// SpeechLiveChannel events are forwarded to [SpeechService].
 class SocketController extends GetxController {
   late final SocketService _socket;
   StreamSubscription<SocketMessage>? _sub;
@@ -37,7 +38,14 @@ class SocketController extends GetxController {
   // ============================================================
 
   Future<void> _handleEvent(SocketMessage event) async {
-    if (event.type != 'notification') return;
+    if (event.channel == SpeechKeys.channel ||
+        ((event.channel == null || event.channel!.isEmpty) &&
+            _isSpeechPayload(event))) {
+      _handleSpeechEvent(event);
+      return;
+    }
+
+    if (event.type != SocketKeys.notification) return;
 
     final eventType = EWsEventType.fromString(
       event.data?[SocketKeys.type]?.toString() ?? '',
@@ -48,6 +56,33 @@ class SocketController extends GetxController {
 
     await _dispatch(event, eventType);
     _showSnackbar(eventType, message);
+  }
+
+  void _handleSpeechEvent(SocketMessage event) {
+    final eventType = ESpeechEventType.fromString(
+      event.data?[SocketKeys.type]?.toString() ?? '',
+    );
+    debugPrint(
+      '🎤 [SocketController] speech=$eventType | message="${event.message}"',
+    );
+
+    if (Get.isRegistered<SpeechService>()) {
+      Get.find<SpeechService>().onSpeechEvent(event, eventType);
+    }
+
+    if (eventType == ESpeechEventType.error) {
+      final message = event.message ?? '';
+      if (message.isNotEmpty) {
+        AppSnackbar.error(message);
+      }
+    }
+  }
+
+  bool _isSpeechPayload(SocketMessage event) {
+    final dataType = event.data?[SocketKeys.type]?.toString() ?? '';
+    return dataType == SpeechKeys.partial ||
+        dataType == SpeechKeys.finalPhrase ||
+        dataType == SpeechKeys.error;
   }
 
   // ============================================================
@@ -62,11 +97,13 @@ class SocketController extends GetxController {
       case EWsEventType.subscriptionCreated:
       case EWsEventType.welcome:
       case EWsEventType.aiResponseReady:
+      case EWsEventType.ttsReady:
         AppSnackbar.success(message);
         break;
 
       case EWsEventType.paymentFailed:
       case EWsEventType.aiResponseFailed:
+      case EWsEventType.ttsFailed:
         AppSnackbar.error(message);
         break;
 
@@ -97,7 +134,12 @@ class SocketController extends GetxController {
     // --- AI ---
     if (Get.isRegistered<AiController>()) {
       final roomId = event.data?[AiKeys.roomId]?.toString();
-      await Get.find<AiController>().onSocketEvent(eventType, roomId);
+      final messageId = event.data?[AiKeys.messageId]?.toString();
+      await Get.find<AiController>().onSocketEvent(
+        eventType,
+        roomId,
+        messageId: messageId,
+      );
     }
   }
 }

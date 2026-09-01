@@ -5,7 +5,6 @@ import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/design/design.dart';
 import '../ai.dart';
 
-
 /// AI chat page. Pure [GetView] \u2014 all state and UI controllers live in
 /// [AiController]. No StatefulWidget, no initState, no setState.
 class AiPage extends GetView<AiController> {
@@ -86,10 +85,10 @@ class AiPage extends GetView<AiController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Chat Rooms', style: context.typo.headline3),
+                  Text(AppLocales.ai.rooms.tr, style: context.typo.headline3),
                   AppButton(
                     type: EButtonType.text,
-                    text: '+ New Chat',
+                    text: '+ ${AppLocales.ai.newChat.tr}',
                     onPressed: () {
                       Get.back();
                       controller.createNewRoom();
@@ -127,7 +126,9 @@ class AiPage extends GetView<AiController> {
                           ),
                         ),
                         subtitle: Text(
-                          '${room.messageCount} messages',
+                          AppLocales.ai.messagesCount.trParams({
+                            'count': '${room.messageCount}',
+                          }),
                           style: context.typo.caption,
                         ),
                         trailing: AppButton(
@@ -138,7 +139,8 @@ class AiPage extends GetView<AiController> {
                             final ok = await AppDialog.confirm(
                               context: context,
                               title: AppLocales.setting.deleteRoomTitle.tr,
-                              message: AppLocales.setting.deleteRoomConfirmMsg.tr,
+                              message:
+                                  AppLocales.setting.deleteRoomConfirmMsg.tr,
                               confirmLabel: AppLocales.setting.confirmDelete.tr,
                             );
                             if (ok) {
@@ -184,10 +186,14 @@ class AiPage extends GetView<AiController> {
             topLeft: Radius.circular(Design.spacing.radiusMedium),
             bottomLeft: Radius.circular(Design.spacing.radiusMedium),
             bottomRight: Radius.circular(Design.spacing.radiusMedium),
-            topRight: Radius.circular(isUser ? 2 : Design.spacing.radiusMedium),
+            topRight: Radius.circular(
+              isUser ? Design.spacing.radiusSmall : Design.spacing.radiusMedium,
+            ),
           ),
           border: isUser ? null : Border.all(color: colors.border),
-          boxShadow: isUser ? Design.colors.shadows.neon : Design.colors.shadows.sm,
+          boxShadow: isUser
+              ? Design.colors.shadows.neon
+              : Design.colors.shadows.sm,
         ),
         child: Column(
           crossAxisAlignment: isUser
@@ -197,19 +203,72 @@ class AiPage extends GetView<AiController> {
             Text(
               msg.content,
               style: context.typo.bodyMedium.copyWith(
-                color: isUser ? Colors.white : colors.textPrimary,
+                color: isUser
+                    ? context.colors.colorScheme.onPrimary
+                    : colors.textPrimary,
               ),
             ),
             if (msg.isFailed) ...[
               SizedBox(height: Design.spacing.xs),
               Text(
-                'Failed to generate response',
+                AppLocales.ai.aiResponseFailed.tr,
                 style: context.typo.caption.copyWith(color: colors.error),
+              ),
+            ],
+            if (!isUser && msg.content.trim().isNotEmpty) ...[
+              SizedBox(height: Design.spacing.xs),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Obx(() => _buildTtsButton(context, msg)),
               ),
             ],
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildTtsButton(BuildContext context, AiMessageModel msg) {
+    final colors = context.colors;
+    final isActive = controller.activeTtsMessageId.value == msg.id;
+    final isDisabled =
+        controller.isRecording.value ||
+        (controller.activeTtsMessageId.value != null && !isActive);
+
+    if (isActive && controller.isTtsLoading.value) {
+      return Padding(
+        padding: EdgeInsets.all(Design.spacing.xs),
+        child: const AppLoading(
+          type: LoadingType.dots,
+          size: LoadingSize.small,
+        ),
+      );
+    }
+
+    final iconColor = isDisabled
+        ? colors.textMuted
+        : isActive
+        ? colors.primary
+        : colors.textSecondary;
+
+    final icon = isActive && !controller.isTtsLoading.value && msg.hasAudio
+        ? Design.icons.stop
+        : msg.hasAudio
+        ? Design.icons.play
+        : Design.icons.speaker;
+
+    return IconButton(
+      visualDensity: VisualDensity.compact,
+      padding: EdgeInsets.zero,
+      constraints: BoxConstraints(
+        minWidth: Design.spacing.xxxl,
+        minHeight: Design.spacing.xxxl,
+      ),
+      icon: Icon(icon, size: Design.spacing.iconSmall, color: iconColor),
+      onPressed: isDisabled && !isActive
+          ? null
+          : () => controller.speakMessage(msg),
+      tooltip: AppLocales.ai.listen.tr,
     );
   }
 
@@ -231,7 +290,7 @@ class AiPage extends GetView<AiController> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'AI is thinking',
+              AppLocales.ai.thinking.tr,
               style: context.typo.bodyMedium.copyWith(
                 color: context.colors.textSecondary,
               ),
@@ -252,24 +311,79 @@ class AiPage extends GetView<AiController> {
         border: Border(top: BorderSide(color: context.colors.divider)),
       ),
       child: SafeArea(
-        child: Row(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Expanded(
-              child: AppInputField.osTextField(
-                controller: controller.textController,
-                hint: 'Type your message...',
-                onSubmitted: (_) => controller.handleSend(),
-              ),
-            ),
-            SizedBox(width: Design.spacing.sm),
-            AppButton(
-              type: EButtonType.icon,
-              icon: Design.icons.send,
-              onPressed: controller.handleSend,
-            ),
+            Obx(() {
+              if (!controller.isRecording.value) {
+                return const SizedBox.shrink();
+              }
+              return Padding(
+                padding: EdgeInsets.only(bottom: Design.spacing.sm),
+                child: VoiceLevelBars(level: controller.voiceLevel.value),
+              );
+            }),
+            Obx(() => _buildTextInputBar(context)),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildTextInputBar(BuildContext context) {
+    final isListening = controller.isRecording.value;
+    final isDisabled = controller.isProcessing.value || isListening;
+    final mutedColor = context.colors.textMuted;
+    final activeColor = context.colors.primary;
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        if (isListening)
+          IconButton(
+            icon: Icon(Design.icons.close, color: context.colors.textSecondary),
+            onPressed: controller.cancelListening,
+            tooltip: AppLocales.ai.cancelListening.tr,
+          ),
+        Expanded(
+          child: TextField(
+            controller: controller.textController,
+            enabled: !controller.isProcessing.value,
+            readOnly: isListening,
+            minLines: 1,
+            maxLines: AppConstants.chatInputMaxLines,
+            keyboardType: TextInputType.multiline,
+            textInputAction: TextInputAction.newline,
+            textAlignVertical: TextAlignVertical.top,
+            onSubmitted: (_) => controller.handleSend(),
+            decoration: Design.styles.input(
+              hint: AppLocales.ai.typeMessage.tr,
+              suffixIcon: IconButton(
+                onPressed: controller.isProcessing.value
+                    ? null
+                    : controller.toggleListening,
+                icon: Icon(
+                  isListening ? Design.icons.stop : Design.icons.mic,
+                  color: controller.isProcessing.value
+                      ? mutedColor
+                      : isListening
+                      ? context.colors.error
+                      : activeColor,
+                  size: Design.spacing.iconMedium,
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(width: Design.spacing.sm),
+        IconButton(
+          icon: Icon(
+            Design.icons.send,
+            color: isDisabled ? mutedColor : activeColor,
+          ),
+          onPressed: isDisabled ? null : controller.handleSend,
+        ),
+      ],
     );
   }
 }

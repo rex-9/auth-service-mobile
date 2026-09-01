@@ -1,27 +1,50 @@
 // lib/modules/ai/controllers/ai.controller.dart
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/design/design.dart';
+import 'package:rexone_mobile/services/services.dart';
 
 import '../ai.dart';
 
 class AiController extends GetxController {
   final AiService _ai = Get.find<AiService>();
+  final SpeechService _speech = Get.find<SpeechService>();
 
   final RxList<AiMessageModel> messages = <AiMessageModel>[].obs;
   final RxList<AiRoomModel> rooms = <AiRoomModel>[].obs;
 
   final RxnString currentRoomId = RxnString();
-  final RxString currentRoomTitle = 'AI Assistant'.obs;
+  final RxString currentRoomTitle = AppLocales.ai.title.tr.obs;
 
   final RxBool isProcessing = false.obs;
+  final RxnString activeTtsMessageId = RxnString();
+  final RxBool isTtsLoading = false.obs;
+
   bool _isSubmitting = false;
+  String _textBeforeListen = '';
+  Worker? _liveTextWorker;
+  Worker? _playbackWorker;
+
+  RxBool get isRecording => _speech.isListening;
+  RxDouble get voiceLevel => _speech.voiceLevel;
 
   // UI controllers — owned here so no StatefulWidget is needed in AiPage.
   final textController = TextEditingController();
   final scrollController = ScrollController();
+
+  @override
+  void onInit() {
+    super.onInit();
+    _playbackWorker = ever(_speech.isPlaying, (playing) {
+      if (!playing && !isTtsLoading.value) {
+        activeTtsMessageId.value = null;
+      }
+    });
+  }
 
   @override
   void onReady() {
@@ -32,6 +55,10 @@ class AiController extends GetxController {
 
   @override
   void onClose() {
+    _liveTextWorker?.dispose();
+    _playbackWorker?.dispose();
+    unawaited(_speech.stopListening());
+    unawaited(_speech.stopPlayback());
     textController.dispose();
     scrollController.dispose();
     super.onClose();
@@ -43,13 +70,34 @@ class AiController extends GetxController {
 
   /// Called by [SocketController] when an AI-related notification arrives.
   /// Reloads history only if the event belongs to the current room.
-  Future<void> onSocketEvent(EWsEventType eventType, String? roomId) async {
-    if (eventType != EWsEventType.aiResponseReady &&
-        eventType != EWsEventType.aiResponseFailed) {
-      return;
+  Future<void> onSocketEvent(
+    EWsEventType eventType,
+    String? roomId, {
+    String? messageId,
+  }) async {
+    switch (eventType) {
+      case EWsEventType.ttsReady:
+        if (roomId == null || roomId.isEmpty || roomId == currentRoomId.value) {
+          await loadHistory(currentRoomId.value ?? roomId);
+        }
+        _clearTtsQueue(messageId);
+      case EWsEventType.ttsFailed:
+        _clearTtsQueue(messageId);
+      case EWsEventType.aiResponseReady:
+      case EWsEventType.aiResponseFailed:
+        if (roomId == null || roomId.isEmpty || roomId == currentRoomId.value) {
+          await loadHistory(currentRoomId.value);
+        }
+      default:
+        return;
     }
-    if (roomId == null || roomId.isEmpty || roomId == currentRoomId.value) {
-      await loadHistory(currentRoomId.value);
+  }
+
+  void _clearTtsQueue(String? messageId) {
+    if (messageId != null && activeTtsMessageId.value != messageId) return;
+    isTtsLoading.value = false;
+    if (!_speech.isPlaying.value) {
+      activeTtsMessageId.value = null;
     }
   }
 
@@ -65,8 +113,7 @@ class AiController extends GetxController {
             AiMessageModel(
               id: 'welcome',
               role: EChatRole.assistant.name,
-              content:
-                  "Hello! I'm your AI assistant. How can I help you today?",
+              content: AppLocales.ai.defaultGreeting.tr,
               createdAt: DateTime.now().toIso8601String(),
             ),
           ]);
@@ -114,11 +161,13 @@ class AiController extends GetxController {
           currentRoomId.value = rId;
         }
       } else {
-        AppSnackbar.error(response.error ?? 'Failed to send message');
+        AppSnackbar.error(
+          response.error ?? AppLocales.ai.aiSendMessageFailed.tr,
+        );
         isProcessing.value = false;
       }
     } catch (e) {
-      AppSnackbar.error('Failed to get AI response');
+      AppSnackbar.error(AppLocales.ai.aiResponseFailed.tr);
       isProcessing.value = false;
     } finally {
       _isSubmitting = false;
@@ -145,9 +194,12 @@ class AiController extends GetxController {
     loadHistory(room.id);
   }
 
-  Future<void> createNewRoom([String title = 'New Chat']) async {
+  Future<void> createNewRoom([String? title]) async {
     try {
-      final response = await _ai.createRoom(CreateRoomRequest(title: title));
+      final roomTitle = title ?? AppLocales.ai.newChat.tr;
+      final response = await _ai.createRoom(
+        CreateRoomRequest(title: roomTitle),
+      );
       if (response.success && response.data != null) {
         final newRoom = response.data!;
         rooms.insert(0, newRoom);
@@ -165,7 +217,7 @@ class AiController extends GetxController {
         rooms.removeWhere((r) => r.id == roomId);
         if (currentRoomId.value == roomId) {
           currentRoomId.value = null;
-          currentRoomTitle.value = 'AI Assistant';
+          currentRoomTitle.value = AppLocales.ai.title.tr;
           loadHistory();
         }
       }
@@ -179,10 +231,10 @@ class AiController extends GetxController {
       final response = await _ai.clearHistory(roomId: currentRoomId.value);
       if (response.success) {
         loadHistory(currentRoomId.value);
-        AppSnackbar.success('Chat history cleared');
+        AppSnackbar.success(AppLocales.ai.aiHistoryCleared.tr);
       }
     } catch (e) {
-      AppSnackbar.error('Failed to clear history');
+      AppSnackbar.error(AppLocales.ai.aiClearHistoryFailed.tr);
     }
   }
 
@@ -202,10 +254,145 @@ class AiController extends GetxController {
   }
 
   void handleSend() {
+    if (isRecording.value || activeTtsMessageId.value != null) return;
     final text = textController.text.trim();
     if (text.isEmpty) return;
     textController.clear();
     sendMessage(text);
     scrollToBottom();
+  }
+
+  // ============================================================
+  // LIVE SPEECH
+  // ============================================================
+  Future<void> toggleListening() async {
+    if (_speech.isListenSessionActive) {
+      await stopListening();
+    } else {
+      await startListening();
+    }
+  }
+
+  Future<void> startListening() async {
+    if (isProcessing.value || activeTtsMessageId.value != null) return;
+
+    _textBeforeListen = textController.text;
+    _liveTextWorker?.dispose();
+    _liveTextWorker = ever(_speech.liveText, _setInputText);
+
+    final result = await _speech.startListening(seed: textController.text);
+    if (result == ESpeechListenResult.started) return;
+
+    _liveTextWorker?.dispose();
+    _liveTextWorker = null;
+
+    switch (result) {
+      case ESpeechListenResult.disconnected:
+        AppSnackbar.error(AppLocales.ai.aiTranscriptionFailed.tr);
+      case ESpeechListenResult.permissionDenied:
+        await _promptMicPermission();
+      case ESpeechListenResult.failed:
+        AppSnackbar.error(AppLocales.ai.aiStartRecordingFailed.tr);
+      case ESpeechListenResult.alreadyListening:
+      case ESpeechListenResult.started:
+        break;
+    }
+  }
+
+  Future<void> stopListening() async {
+    _liveTextWorker?.dispose();
+    _liveTextWorker = null;
+    await _speech.stopListening();
+  }
+
+  Future<void> cancelListening() async {
+    await stopListening();
+    _setInputText(_textBeforeListen);
+  }
+
+  void _setInputText(String text) {
+    textController.value = TextEditingValue(
+      text: text,
+      selection: TextSelection.collapsed(offset: text.length),
+    );
+  }
+
+  Future<void> _promptMicPermission() async {
+    final context = Get.context;
+    if (context == null || !context.mounted) return;
+
+    final openSettings = await AppDialog.confirm(
+      context: context,
+      title: AppLocales.ai.micPermissionTitle.tr,
+      message: AppLocales.ai.micPermissionMessage.tr,
+      confirmLabel: AppLocales.ai.openSettings.tr,
+    );
+
+    if (openSettings) {
+      await openAppSettings();
+    }
+  }
+
+  // ============================================================
+  // TEXT-TO-SPEECH
+  // ============================================================
+  Future<void> speakMessage(AiMessageModel msg) async {
+    if (activeTtsMessageId.value == msg.id && _speech.isPlaying.value) {
+      await stopSpeaking();
+      return;
+    }
+
+    await stopSpeaking();
+
+    final audioUrl = msg.audioUrl;
+    if (audioUrl != null) {
+      activeTtsMessageId.value = msg.id;
+      try {
+        await _speech.playUrl(audioUrl);
+      } catch (e) {
+        debugPrint('🤖 [AiController] Error playing TTS: $e');
+        AppSnackbar.error(AppLocales.ai.aiTtsFailed.tr);
+        activeTtsMessageId.value = null;
+      }
+      return;
+    }
+
+    if (msg.content.trim().isEmpty) {
+      AppSnackbar.error(AppLocales.ai.aiTtsEmpty.tr);
+      return;
+    }
+
+    activeTtsMessageId.value = msg.id;
+    isTtsLoading.value = true;
+
+    try {
+      final response = await _speech.textToSpeech(msg.id);
+      if (!response.success) {
+        AppSnackbar.error(response.error ?? response.message);
+        activeTtsMessageId.value = null;
+        isTtsLoading.value = false;
+        return;
+      }
+
+      if (activeTtsMessageId.value != msg.id) {
+        isTtsLoading.value = false;
+        return;
+      }
+
+      if (response.message.isNotEmpty) {
+        AppSnackbar.info(response.message);
+      }
+    } catch (e) {
+      debugPrint('🤖 [AiController] Error queueing TTS: $e');
+      AppSnackbar.error(AppLocales.ai.aiTtsFailed.tr);
+      activeTtsMessageId.value = null;
+      isTtsLoading.value = false;
+    }
+  }
+
+  Future<void> stopSpeaking() async {
+    await _speech.stopPlayback();
+    isTtsLoading.value = false;
+    activeTtsMessageId.value = null;
   }
 }

@@ -1,3 +1,4 @@
+// lib/constants/json_keys/payment.keys.dart
 /// Request/response keys for payment, product, subscription, and transaction payloads.
 class PaymentKeys {
   const PaymentKeys._();
@@ -7,6 +8,8 @@ class PaymentKeys {
   static const productId = 'product_id';
   static const successUrl = 'success_url';
   static const cancelUrl = 'cancel_url';
+  static const freeAccessGranted = 'free_access_granted';
+  static const accessId = 'access_id';
 
   // ===== Product =====
   static const name = 'name';
@@ -18,6 +21,7 @@ class PaymentKeys {
   static const periodLabel = 'period_label';
   static const recurring = 'recurring';
   static const active = 'active';
+  static const free = 'free';
 
   // ===== Subscription =====
   static const status = 'status';
@@ -29,6 +33,13 @@ class PaymentKeys {
   static const canceled = 'canceled';
   static const scheduledForCancellation = 'scheduled_for_cancellation';
   static const productName = 'product_name';
+
+  // ===== Access =====
+  static const grantedAt = 'granted_at';
+  static const expiresAt = 'expires_at';
+  static const revokedAt = 'revoked_at';
+  static const expiredAt = 'expired_at';
+  static const daysRemaining = 'days_remaining';
 
   // ===== Transaction =====
   static const paid = 'paid';

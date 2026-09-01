@@ -53,6 +53,15 @@ class AppConstants {
   static const platformMobile = 'mobile';
   static const bearerPrefix = 'Bearer ';
 
+
+  // Chat voice
+  static const chatVoiceLevelBarCount = 12;
+  static const chatInputMaxLines = 5;
+  static const speechSampleRate = 16000;
+  static const speechNumChannels = 1;
+  // 100ms of 16 kHz 16-bit mono PCM.
+  static const speechChunkBytes = 3200;
+
   /// Dynamic runtime platform identifier (android / ios / web)
   static String get currentPlatform {
     try {

@@ -50,7 +50,7 @@ class FeedbackModel {
       content: json[FeedbackKeys.content] as String? ?? '',
       rating: json[FeedbackKeys.rating] as int?,
       category: json[FeedbackKeys.category] as String? ?? 'general',
-      priority: json[FeedbackKeys.priority] as String? ?? 'normal',
+      priority: json[FeedbackKeys.priority] as String? ?? 'medium',
       status: json[FeedbackKeys.status] as String? ?? 'new',
       platform: json[FeedbackKeys.platform] as String? ?? 'android',
       appVersion: json[FeedbackKeys.appVersion] as String?,

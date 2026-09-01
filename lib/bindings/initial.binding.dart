@@ -30,6 +30,9 @@ class InitialBinding extends Bindings {
     // WebSocket / Action Cable Socket Service
     Get.put(SocketService(), permanent: true);
 
+    // Shared live STT + TTS (depends on ApiService + SocketService)
+    Get.put(SpeechService(), permanent: true);
+
     // Payment Service (depends on ApiService)
     Get.put(PaymentService(), permanent: true);
 

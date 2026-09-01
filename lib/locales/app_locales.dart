@@ -90,7 +90,8 @@ class _AuthSignUpPasscodeConfirmLocales {
   final subtitle = 'auth.signup_passcode_confirm.description.signup';
   final confirm = 'auth.signup_passcode_confirm.actions.confirm';
   final changePasscode = 'auth.signup_passcode_confirm.actions.change_passcode';
-  final passcodesMismatch = 'auth.signup_passcode_confirm.validation.passcodes_mismatch';
+  final passcodesMismatch =
+      'auth.signup_passcode_confirm.validation.passcodes_mismatch';
   final sendingCode = 'auth.signup_passcode_confirm.actions.sending_code';
 }
 
@@ -197,10 +198,30 @@ class _AiLocales {
   final title = 'ai.title';
   final rooms = 'ai.rooms';
   final newChat = 'ai.new_chat';
+  final defaultGreeting = 'ai.default_greeting';
+  final messagesCount = 'ai.messages_count';
+  final listen = 'ai.listen';
+  final thinking = 'ai.thinking';
+  final cancelListening = 'ai.cancel_listening';
   final typeMessage = 'ai.type_message';
   final send = 'ai.send';
   final processing = 'ai.processing';
   final clearHistory = 'ai.clear_history';
+
+  // Voice / microphone
+  final micPermissionTitle = 'ai.mic_permission_title';
+  final micPermissionMessage = 'ai.mic_permission_message';
+  final openSettings = 'ai.open_settings';
+
+  // AI chat
+  String get aiSendMessageFailed => 'ai_send_message_failed';
+  final aiResponseFailed = 'ai.ai_response_failed';
+  final aiHistoryCleared = 'ai.ai_history_cleared';
+  final aiClearHistoryFailed = 'ai.ai_clear_history_failed';
+  final aiStartRecordingFailed = 'ai.ai_start_recording_failed';
+  final aiTranscriptionFailed = 'ai.ai_transcription_failed';
+  final aiTtsFailed = 'ai.ai_tts_failed';
+  final aiTtsEmpty = 'ai.ai_tts_empty';
 }
 
 class _PaymentLocales {

@@ -99,7 +99,7 @@ All tables use **UUID** primary keys (`gen_random_uuid()`), utilize **Discard** 
 
 Heavy or external provider operations sit behind clean service interfaces and execute in dedicated background queues (`config/queue.yml`):
 
-- **AI Queue (`ai`)**: `Ai::ProcessChatJob` communicates with DeepSeek (`AiService::Client`), runs asynchronously with room-level concurrency locks, commits assistant messages to Postgres, and alerts the user over WebSocket (`NotificationChannel`).
+- **AI & Speech Queue (`ai`)**: `Ai::ProcessChatJob` communicates with DeepSeek (`AiService::Client`) for chat completion. `Speech::ProcessTtsJob` communicates with Azure/Nova (`SpeechService::Client`) to synthesize audio for chat messages, saves MP3 assets via `StorageService::Client`, and alerts the user over WebSocket (`NotificationChannel`).
 - **Payments Queue (`payments`)**: `Payment::ProcessWebhookJob` asynchronously fulfills Stripe webhooks (checkout completed, invoice paid, subscription updated/deleted) with idempotency.
 - **Notifications Queue (`notifications`)**: `NotificationService` fans out work to `Notification::DeliverJob` for Action Cable broadcasts, OneSignal push notifications, and OneSignal transactional emails.
 - **Storage Queue (`storage`)**: `Storage::DeleteJob` handles remote deletion asynchronously after DB commits.
@@ -182,7 +182,7 @@ Defined under `src/design/`:
 
 Rexone Mobile has a strictly governed design system accessible via `lib/design/design.dart`:
 
-- **Elements**: `AppColors` (Kindness Gold, Clarity Blue, Deep Navy, surfaces, text), `AppTypography`, `AppSpacing`, `AppStyles`, `AppIcons`, `AppMedia`, `AppTimers`, `AppTheme` (Light/Dark mode Material 3).
+- **Elements**: `AppColors` (Neon Sunset Coral, Secondary Coral, Accent Crimson, Night/Day surfaces, text), `AppTypography`, `AppSpacing`, `AppStyles`, `AppIcons`, `AppMedia`, `AppTimers`, `AppTheme` (Light/Dark mode Material 3).
 - **Theme Extensions**: `context.colors.*` and `context.typo.*` for theme-aware reactive styling.
 - **Static Tokens**: `Design.spacing.*`, `Design.timers.*`, `Design.icons.*`, `Design.media.*`.
 - **Reusable UI Components**: `AppButton`, `AppInputField`, `AppPasswordField`, `AppLoading`, `AppSnackbar`, `AppDialog` (with `AppDialog.confirm()` for destructive actions), `AppPage`, `AppListTile`, `AppToggle`.
@@ -224,6 +224,9 @@ All three pillars of the Rexone platform are fully aligned at **100% feature par
 | **AI: Conversational Rooms & Message History**           |      ✅       |          ✅          |            ✅            |
 | **AI: Queued Background Execution (DeepSeek)**           |      ✅       |          ✅          |            ✅            |
 | **AI: Real-Time WebSocket Completion Alerts**            |      ✅       |          ✅          |            ✅            |
+| **Speech: Text-to-Speech (Sync & Async Binary Streaming)**|      ✅       |          ✅          |            ✅            |
+| **Speech: Speech-to-Text (Sync Upload / URL)**           |      ✅       |          ✅          |            ✅            |
+| **Speech: Live Audio STT Streaming (WebSocket)**         |      ✅       |          ✅          |            ✅            |
 | **Push Notifications (OneSignal)**                       |      ✅       |         N/A          |            ✅            |
 | **Product Analytics (Firebase)**                         |      N/A      |         N/A          |            ✅            |
 | **In-App Version Upgrader**                              |      N/A      |         N/A          |            ✅            |
@@ -314,6 +317,22 @@ Payload sent on uncaught errors in Web and Mobile:
   - 9 failures $\rightarrow$ 120s cooldown
   - 12+ failures $\rightarrow$ 300s cooldown
 - Clients only consume `data.remaining_attempts` and `data.cooldown_remaining` from the API response to drive UI timers.
+
+### 5. Dashboard Separation & Priority Protocol
+
+- **Rails Infrastructure Dashboards (Backend Engines)**:
+  - **Rails Pulse**: Server hardware, CPU load, memory usage, request latency, slow database queries.
+  - **RED (Rails Error Dashboard)**: Server-side Ruby exceptions, 500 errors, and Rails backtraces.
+  - **Solid UI / Solid Queue**: Background jobs, queue throughput, retry backoffs, cron schedules.
+  - **Rails Administrate**: Low-level database table CRUD for development and database inspection.
+- **Client Admin Panel (React SPA)**:
+  - Focuses exclusively on **Business Growth, Governance, and End-User Operations**:
+    - Operational Analytics & KPIs (Gross revenue, active subscriptions, user acquisition, AI chat usage).
+    - Governance & RBAC (User management, role assignment, permission matrix, lifecycle recovery).
+    - Commerce Catalogue (Product creation, Free vs. Premium rules, entitlements).
+    - User Feedback Inbox & Triage (Ratings, category taxonomy, priority levels, status workflows).
+    - Client Telemetry (`Log::Client` capturing browser/mobile JS crashes that never touch Rails RED).
+- **Strict Non-Duplication Rule**: Never duplicate server CPU/memory, queue depths, or database query telemetry inside the Client Admin Panel. Prioritize business domain operations and client-side observability.
 
 ---
 

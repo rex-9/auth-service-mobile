@@ -91,6 +91,43 @@ class PaymentService extends GetxService {
   }
 
   // ============================================================
+  // ACCESSES
+  // ============================================================
+  Future<PaginatedResponse<AccessModel>> getActiveAccesses({
+    int? page,
+    int? limit,
+  }) async {
+    final query = <String, dynamic>{};
+    if (page != null) query[ApiKeys.page] = page.toString();
+    if (limit != null) query[ApiKeys.limit] = limit.toString();
+    final response = await _api.get(
+      ServerRoutes.activeAccesses,
+      query: query,
+    );
+    return _api.parsePaginatedResponse<AccessModel>(
+      response,
+      (data) => AccessModel.fromJson(data),
+    );
+  }
+
+  Future<PaginatedResponse<AccessModel>> getAccesses({
+    int? page,
+    int? limit,
+  }) async {
+    final query = <String, dynamic>{};
+    if (page != null) query[ApiKeys.page] = page.toString();
+    if (limit != null) query[ApiKeys.limit] = limit.toString();
+    final response = await _api.get(
+      ServerRoutes.accesses,
+      query: query,
+    );
+    return _api.parsePaginatedResponse<AccessModel>(
+      response,
+      (data) => AccessModel.fromJson(data),
+    );
+  }
+
+  // ============================================================
   // CHECKOUT SESSION
   // ============================================================
   Future<ApiResponse<Map<String, dynamic>>> createCheckout(

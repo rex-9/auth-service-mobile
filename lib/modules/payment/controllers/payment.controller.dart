@@ -13,6 +13,7 @@ class PaymentController extends GetxController {
   final RxList<ProductModel> products = <ProductModel>[].obs;
   final RxList<SubscriptionModel> subscriptions = <SubscriptionModel>[].obs;
   final RxList<TransactionModel> transactions = <TransactionModel>[].obs;
+  final RxList<AccessModel> accesses = <AccessModel>[].obs;
 
   @override
   void onInit() {
@@ -38,8 +39,6 @@ class PaymentController extends GetxController {
   ///
   /// Subscription cancel/resume: just refresh data so the card updates.
   Future<void> onSocketEvent(EWsEventType eventType, String? message) async {
-
-
     switch (eventType) {
       case EWsEventType.paymentSuccess:
       case EWsEventType.subscriptionCreated:
@@ -47,12 +46,6 @@ class PaymentController extends GetxController {
       case EWsEventType.paymentIntentSucceeded:
       case EWsEventType.paymentFailed:
       case EWsEventType.paymentIntentPaymentFailed:
-
-
-
-
-
-
         // Pop the checkout WebView back to the payment page.
         if (Get.currentRoute == AppRoutes.checkout) {
           Get.back();
@@ -84,6 +77,11 @@ class PaymentController extends GetxController {
         _payment.getTransactions().then((res) {
           if (res.success) {
             transactions.assignAll(res.records);
+          }
+        }),
+        _payment.getActiveAccesses().then((res) {
+          if (res.success) {
+            accesses.assignAll(res.records);
           }
         }),
       ]);
@@ -121,6 +119,15 @@ class PaymentController extends GetxController {
         CreateCheckoutRequest(productId: productId),
       );
       if (response.success && response.data != null) {
+        final isFreeAccessGranted =
+            response.data![PaymentKeys.freeAccessGranted] == true;
+
+        if (isFreeAccessGranted) {
+          AppSnackbar.success('Free access claimed successfully! 🎉');
+          await fetchData();
+          return;
+        }
+
         final checkoutUrl = response.data![PaymentKeys.checkoutUrl]?.toString();
 
         if (checkoutUrl != null && checkoutUrl.isNotEmpty) {
@@ -169,6 +176,10 @@ class PaymentController extends GetxController {
   // ============================================================
   // HELPERS
   // ============================================================
+
+  bool hasActiveAccess(String productId) {
+    return accesses.any((a) => a.productId == productId && a.active);
+  }
 
   SubscriptionModel? getActiveSubscription(String productId) {
     try {

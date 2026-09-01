@@ -74,13 +74,13 @@ class HomePage extends GetView<AuthController> {
                   children: [
                     AppButton(
                       type: EButtonType.secondary,
-                      text: '💳 View Plans & Pricing',
+                      text: '💳 ${AppLocales.payment.upgradePlan.tr}',
                       onPressed: AppRoutes.toPayment,
                     ),
                     SizedBox(height: Design.spacing.md),
                     AppButton(
                       type: EButtonType.secondary,
-                      text: '🤖 AI Assistant',
+                      text: '🤖 ${AppLocales.ai.title.tr}',
                       onPressed: AppRoutes.toAi,
                     ),
                     SizedBox(height: Design.spacing.lg),

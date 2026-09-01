@@ -41,6 +41,10 @@ class AppIcons {
   // ── Chat / AI ─────────────────────────────────────────────────
   IconData get forum => Icons.forum_outlined;
   IconData get chat => Icons.chat_bubble_outline;
+  IconData get mic => Icons.mic_rounded;
+  IconData get stop => Icons.stop_rounded;
+  IconData get play => Icons.play_arrow_rounded;
+  IconData get speaker => Icons.volume_up_rounded;
 
   // ── Payment / Subscription ────────────────────────────────────
   IconData get activeSubscription => Icons.check_circle_outline;
