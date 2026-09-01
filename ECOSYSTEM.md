@@ -182,7 +182,7 @@ Defined under `src/design/`:
 
 Rexone Mobile has a strictly governed design system accessible via `lib/design/design.dart`:
 
-- **Elements**: `AppColors` (Kindness Gold, Clarity Blue, Deep Navy, surfaces, text), `AppTypography`, `AppSpacing`, `AppStyles`, `AppIcons`, `AppMedia`, `AppTimers`, `AppTheme` (Light/Dark mode Material 3).
+- **Elements**: `AppColors` (Neon Sunset Coral, Secondary Coral, Accent Crimson, Night/Day surfaces, text), `AppTypography`, `AppSpacing`, `AppStyles`, `AppIcons`, `AppMedia`, `AppTimers`, `AppTheme` (Light/Dark mode Material 3).
 - **Theme Extensions**: `context.colors.*` and `context.typo.*` for theme-aware reactive styling.
 - **Static Tokens**: `Design.spacing.*`, `Design.timers.*`, `Design.icons.*`, `Design.media.*`.
 - **Reusable UI Components**: `AppButton`, `AppInputField`, `AppPasswordField`, `AppLoading`, `AppSnackbar`, `AppDialog` (with `AppDialog.confirm()` for destructive actions), `AppPage`, `AppListTile`, `AppToggle`.
