@@ -203,7 +203,9 @@ class AiPage extends GetView<AiController> {
             Text(
               msg.content,
               style: context.typo.bodyMedium.copyWith(
-                color: isUser ? Colors.white : colors.textPrimary,
+                color: isUser
+                    ? context.colors.colorScheme.onPrimary
+                    : colors.textPrimary,
               ),
             ),
             if (msg.isFailed) ...[
@@ -367,7 +369,7 @@ class AiPage extends GetView<AiController> {
                       : isListening
                       ? context.colors.error
                       : activeColor,
-                  size: 20,
+                  size: Design.spacing.iconMedium,
                 ),
               ),
             ),

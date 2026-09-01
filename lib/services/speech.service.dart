@@ -79,17 +79,66 @@ class SpeechService extends GetxService with WidgetsBindingObserver {
   }
 
   // ============================================================
-  // TTS HTTP
+  // TTS (TEXT-TO-SPEECH) HTTP
   // ============================================================
-  Future<ApiResponse<Map<String, dynamic>>> textToSpeech(String messageId) async {
-    final response = await _api.post(
-      ServerRoutes.textToSpeech,
-      {AiKeys.messageId: messageId},
-      showLoading: false,
-    );
+
+  /// Queues background TTS synthesis for an existing chat message.
+  Future<ApiResponse<Map<String, dynamic>>> textToSpeech(
+    String messageId, {
+    bool showLoading = false,
+  }) async {
+    final response = await _api.post(ServerRoutes.textToSpeech, {
+      SpeechKeys.messageId: messageId,
+    }, showLoading: showLoading);
     return _api.parseResponse<Map<String, dynamic>>(
       response,
       (data) => data is Map ? Map<String, dynamic>.from(data) : {},
+    );
+  }
+
+  // ============================================================
+  // STT (SPEECH-TO-TEXT) HTTP
+  // ============================================================
+
+  /// Transcribes recorded audio bytes synchronously using `/v1/speech/stt`.
+  Future<ApiResponse<String>> speechToTextFromFile(
+    Uint8List audioBytes, {
+    String filename = 'audio.wav',
+    bool showLoading = true,
+  }) async {
+    final form = FormData({
+      SpeechKeys.audio: MultipartFile(
+        audioBytes,
+        filename: filename,
+        contentType: 'audio/wav',
+      ),
+    });
+    final response = await _api.postMultipart(
+      ServerRoutes.speechToText,
+      form,
+      showLoading: showLoading,
+    );
+    return _api.parseResponse<String>(
+      response,
+      (data) => data is Map
+          ? data[SpeechKeys.text]?.toString() ?? ''
+          : data?.toString() ?? '',
+    );
+  }
+
+  /// Transcribes remote audio from a URL synchronously using `/v1/speech/stt`.
+  Future<ApiResponse<String>> speechToTextFromUrl(
+    String audioUrl, {
+    bool showLoading = true,
+  }) async {
+    final response = await _api.post(ServerRoutes.speechToText, {
+      SpeechKeys.audioUrl: audioUrl,
+    }, showLoading: showLoading);
+    return _api.parseResponse<String>(
+      response,
+      (data) => data is Map
+          ? data[SpeechKeys.text]?.toString() ?? ''
+          : data?.toString() ?? '',
     );
   }
 
@@ -195,8 +244,8 @@ class SpeechService extends GetxService with WidgetsBindingObserver {
       _amplitudeSub = _recorder
           .onAmplitudeChanged(const Duration(milliseconds: 100))
           .listen((amplitude) {
-        voiceLevel.value = _normalizeAmplitude(amplitude.current);
-      });
+            voiceLevel.value = _normalizeAmplitude(amplitude.current);
+          });
 
       await _connSub?.cancel();
       _connSub = _socket.isConnected.listen((connected) {
