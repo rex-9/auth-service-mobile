@@ -76,6 +76,8 @@ class PaymentPage extends GetView<PaymentController> {
     PaymentController controller,
     ProductModel product,
   ) {
+    final isFree = product.isFree;
+    final hasAccess = controller.hasActiveAccess(product.id);
     final activeSub = controller.getActiveSubscription(product.id);
     final canceledSub = controller.getCanceledSubscription(product.id);
     final fullyCanceledSub = controller.getFullyCanceledSubscription(
@@ -94,7 +96,19 @@ class PaymentPage extends GetView<PaymentController> {
               Expanded(
                 child: Text(product.name, style: context.typo.headline3),
               ),
-              if (activeSub != null)
+              if (isFree && hasAccess)
+                AppBadge(
+                  text: 'Claimed',
+                  type: BadgeType.success,
+                  icon: Design.icons.activeSubscription,
+                )
+              else if (!product.recurring && hasAccess)
+                AppBadge(
+                  text: 'Active',
+                  type: BadgeType.success,
+                  icon: Design.icons.activeSubscription,
+                )
+              else if (activeSub != null)
                 AppBadge(
                   text: 'Active',
                   type: BadgeType.success,
@@ -144,6 +158,8 @@ class PaymentPage extends GetView<PaymentController> {
             context,
             controller,
             product,
+            isFree,
+            hasAccess,
             activeSub,
             canceledSub,
             fullyCanceledSub,
@@ -158,12 +174,30 @@ class PaymentPage extends GetView<PaymentController> {
     BuildContext context,
     PaymentController controller,
     ProductModel product,
+    bool isFree,
+    bool hasAccess,
     SubscriptionModel? activeSub,
     SubscriptionModel? canceledSub,
     SubscriptionModel? fullyCanceledSub,
     int purchaseCount,
   ) {
-    // 1. Active subscription -> Cancel button
+    // 1. Free Product Flow
+    if (isFree) {
+      if (hasAccess) {
+        return AppButton(
+          type: EButtonType.secondary,
+          text: 'Claimed',
+          onPressed: null,
+        );
+      }
+
+      return AppButton(
+        text: 'Claim Now',
+        onPressed: () => controller.startCheckout(product.id),
+      );
+    }
+
+    // 2. Active subscription -> Cancel button
     if (activeSub != null) {
       final periodEnd = activeSub.currentPeriodEnd != null
           ? activeSub.currentPeriodEnd!.split('T').first
@@ -195,7 +229,7 @@ class PaymentPage extends GetView<PaymentController> {
       );
     }
 
-    // 2. Canceled (pending end of cycle) -> Resume button
+    // 3. Canceled (pending end of cycle) -> Resume button
     if (canceledSub != null) {
       final periodEnd = canceledSub.currentPeriodEnd != null
           ? canceledSub.currentPeriodEnd!.split('T').first
@@ -221,7 +255,7 @@ class PaymentPage extends GetView<PaymentController> {
       );
     }
 
-    // 3. Fully canceled / ended -> Subscribe again
+    // 4. Fully canceled / ended -> Subscribe again
     if (fullyCanceledSub != null) {
       return AppButton(
         text: 'Subscribe Again',
@@ -229,7 +263,28 @@ class PaymentPage extends GetView<PaymentController> {
       );
     }
 
-    // 4. One-time purchase product
+    // 5. One-time purchase product with active access
+    if (!product.recurring && hasAccess) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          AppButton(
+            text: 'Buy Again',
+            onPressed: () => controller.startCheckout(product.id),
+          ),
+          if (purchaseCount > 0) ...[
+            SizedBox(height: Design.spacing.xs),
+            Text(
+              'Purchased $purchaseCount time${purchaseCount > 1 ? "s" : ""}',
+              style: context.typo.caption,
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ],
+      );
+    }
+
+    // 6. One-time purchase product previously purchased
     if (!product.recurring && purchaseCount > 0) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -248,7 +303,7 @@ class PaymentPage extends GetView<PaymentController> {
       );
     }
 
-    // 5. Default Subscribe / Buy button
+    // 7. Default Subscribe / Buy button
     return AppButton(
       text: product.recurring ? 'Subscribe Now' : 'Buy Now',
       onPressed: () => controller.startCheckout(product.id),

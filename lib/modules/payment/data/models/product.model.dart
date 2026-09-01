@@ -12,6 +12,7 @@ class ProductModel {
   final String periodLabel;
   final bool recurring;
   final bool active;
+  final bool free;
 
   ProductModel({
     required this.id,
@@ -24,25 +25,31 @@ class ProductModel {
     required this.periodLabel,
     required this.recurring,
     required this.active,
+    this.free = false,
   });
 
+  bool get isFree => free || priceUnitAmount == 0;
+
   factory ProductModel.fromJson(Map<String, dynamic> json) {
+    final amount = json[PaymentKeys.priceUnitAmount] is int
+        ? json[PaymentKeys.priceUnitAmount] as int
+        : int.tryParse(
+                json[PaymentKeys.priceUnitAmount]?.toString() ?? '0',
+              ) ??
+              0;
+
     return ProductModel(
       id: json[ApiKeys.id]?.toString() ?? '',
       name: json[PaymentKeys.name]?.toString() ?? '',
       description: json[PaymentKeys.description]?.toString() ?? '',
-      price: json[PaymentKeys.price]?.toString() ?? '\$0.00',
-      priceUnitAmount: json[PaymentKeys.priceUnitAmount] is int
-          ? json[PaymentKeys.priceUnitAmount] as int
-          : int.tryParse(
-                  json[PaymentKeys.priceUnitAmount]?.toString() ?? '0',
-                ) ??
-                0,
+      price: json[PaymentKeys.price]?.toString() ?? (amount == 0 ? 'Free' : '\$0.00'),
+      priceUnitAmount: amount,
       currency: json[PaymentKeys.currency]?.toString() ?? 'usd',
       cycle: json[PaymentKeys.cycle]?.toString(),
       periodLabel: json[PaymentKeys.periodLabel]?.toString() ?? '',
       recurring: json[PaymentKeys.recurring] == true,
       active: json[PaymentKeys.active] != false,
+      free: json[PaymentKeys.free] == true || amount == 0,
     );
   }
 
@@ -57,5 +64,6 @@ class ProductModel {
     PaymentKeys.periodLabel: periodLabel,
     PaymentKeys.recurring: recurring,
     PaymentKeys.active: active,
+    PaymentKeys.free: isFree,
   };
 }
