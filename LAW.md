@@ -4,184 +4,130 @@
 >
 > **"Clarity before cleverness. Precision before haste. Simplicity without weakness. Strength without spectacle."**
 >
-> This document defines the non-negotiable architectural laws and engineering standards for **Rexone Mobile** (`rexone_mobile`). Every developer, agent, and contributor must adhere strictly to these rules. Zero exceptions.
+> Non-negotiable architectural laws and engineering standards for **Rexone Mobile** (`rexone_mobile`). Zero exceptions.
 
 ---
 
 ## 🎨 1. Design System & Layout Doctrine
 
 ### 1.1 Zero Ad-Hoc Widgets Outside `lib/design/`
-
 - **Rule**: NEVER create arbitrary `SizedBox(width: 20)`, hardcoded `EdgeInsets.all(16)`, or inline raw styling.
 - Strictly use tokens and elements provided by `lib/design/`:
-  - `Design.space.xs`, `Design.space.s`, `Design.space.m`, `Design.space.l`, `Design.space.xl`
-  - `Design.radius.s`, `Design.radius.m`, `Design.radius.l`, `Design.radius.full`
+  - `Design.space.*` (`xs`, `s`, `m`, `l`, `xl`).
+  - `Design.radius.*` (`s`, `m`, `l`, `full`).
   - `Design.typography.*` and semantic text styles.
 - Reusable UI elements and components live in `lib/design/elements/` and `lib/design/components/`.
 
 ### 1.2 Theme-Aware Styling (Light & Dark Modes)
-
 - **Rule**: NEVER hardcode `Color(0xFF...)` or `Colors.white`/`Colors.black` directly in feature widgets.
-- ALWAYS access theme tokens through context extensions:
-  - `context.colors.primary`, `context.colors.surface`, `context.colors.background`, `context.colors.textPrimary`
-  - `context.typography.titleLarge`, `context.typography.bodyMedium`
-- Both **Light** and **Dark** themes adapt automatically.
+- ALWAYS access theme tokens through context extensions (`context.colors.primary`, `context.colors.surface`, `context.colors.background`, `context.colors.textPrimary`, `context.typography.titleLarge`, `context.typography.bodyMedium`).
+
+### 1.3 Mandatory Confirm Dialog for Destructive Actions
+- **Rule**: ALL destructive, irreversible, or state-mutating actions (`discard`, `destroy`, `revoke`, `signout`, `reset`, `clear`, `exit`) MUST be gated behind an explicit confirmation dialog before invoking Controller or Service methods.
+- **Strict Prohibition of `destroy` in Active Views**: Active views MUST strictly expose `discard` (soft delete). The `destroy` action is strictly confined to the Recycle Bin for destroyable resources.
+- **Mandatory Recycle Bin Interface**: Whenever `discard` is supported on a resource, that resource MUST provide an accessible Recycle Bin interface to view discarded records, restore them with `undiscard`, or purge destroyable records.
+- **Mandatory `AppDialog.confirm` Usage**: Always use `AppDialog.confirm(context: context, title: ..., message: ..., confirmLabel: ...)` (`lib/design/components/app_dialog.dart`), which adapts automatically to native Cupertino (iOS) and Material (Android) styling.
 
 ---
 
 ## 🖼️ 2. Distributed Centralized Assets Law
 
 - **Rule**: NEVER store raw media URL strings directly in model entities.
-- ALL media (avatars, attachments, covers, cards, audio, video, docs) is managed through the backend's distributed centralized `assets` system (`type`, `storage_key`, `resource_model`, `resource_id`).
-- When uploading assets (such as user avatars):
-  - Pass `{ type: "avatar", resource_model: "user", resource_id: currentUser?.id }`.
-  - Display avatars using the semantic design avatar widgets.
+- ALL media is managed through the backend distributed assets system (`type`, `storage_key`, `resource_model`, `resource_id`). Pass `{ type: "avatar", resource_model: "user", resource_id: currentUser?.id }` for avatar uploads and render using semantic avatar widgets.
 
 ---
 
-## 🏗️ 3. Architecture & Layering (GetX MVCS System Architecture)
+## 🏗️ 3. Architecture & Layering (Strict GetX MVCS)
 
 ### 3.1 Server-Business Logic Authority vs. Client-Business Logic
+- **Server Authority**: All domain rules, access lifecycles, pricing, rate limits, payment processing, AI pipelines, and database integrity live exclusively in `rexone-core`.
+- **Zero Logic Duplication**: Mobile client NEVER duplicates or recalculates server rules. It strictly manages frontend reactive state (`.obs`), device interactions, local form controllers, and UI presentation.
 
-- **Server-Business Logic in Core**: All primary application business logic (or **server-business logic**)—including authorization rules, access lifecycles, pricing, rate limits, payment processing, AI pipelines, and database integrity—is handled exclusively in `rexone-core`.
-- **Zero Server-Business Logic Duplication**: The mobile client MUST NEVER duplicate, re-implement, or re-calculate server-business rules. This prevents writing duplicate business logic across Mobile and Web.
-- **Client-Business Logic Focus**: The mobile client strictly limits its logic to **client-business logic** (frontend reactive state management (`.obs`), device interaction orchestration, local form controllers, and UI presentation).
+### 3.2 Strict GetX Ecosystem Adherence & Zero Redundant Packages
+- GetX is the system foundation (`State Management`, `Dependency Injection`, `Route Management`, `GetStorage`, `GetConnect`).
+- **Forbidden External Packages**: NEVER add external state managers (`provider`, `bloc`, `riverpod`), local storage packages (`shared_preferences`, `hive`, `sqflite`), or routing packages (`go_router`, `auto_route`).
+- Only introduce third-party packages if GetX cannot natively provide the capability (e.g. `google_sign_in`, `onesignal_flutter`, `webview_flutter`).
 
-### 3.2 Strict GetX Ecosystem Adherence & Zero Redundant Dependencies
-
-- **GetX as the System Foundation**: The entire mobile architecture is built upon the unified GetX ecosystem (`State Management`, `Dependency Injection`, `Route Management`, `GetStorage`, `GetConnect`).
-- **Zero Redundant State / Storage / Navigation Packages**:
-  - **NEVER** add or use external state managers (`provider`, `bloc`, `flutter_bloc`, `riverpod`, `mobx`, `redux`).
-  - **NEVER** add or use external local storage managers (`shared_preferences`, `hive`, `sqflite`) when `GetStorage` natively provides high-performance persistent key-value and JSON caching.
-  - **NEVER** add or use external routing managers (`go_router`, `auto_route`) when GetX navigation (`Get.toNamed`, `Get.offNamed`, `Get.offAllNamed`, `Get.back`) is the system standard.
-  - **Strict Dependency Rule**: ONLY introduce third-party packages if GetX is fundamentally incapable of providing the capability (e.g., `google_sign_in`, `onesignal_flutter`, `webview_flutter`, `firebase_core`, `package_info_plus`, `flutter_screenutil`).
-
-### 3.3 Strict 4-Tier MVCS Separation of Concerns
-
+### 3.3 4-Tier MVCS Separation of Concerns
 ```
-Model Layer (lib/models/ & lib/modules/*/data/)
-       │  (Typed models, JSON serialization toJson/fromJson, request/response envelopes)
-View Layer (lib/pages/ or lib/modules/*/pages/ & views/)
-       ↓  (Extends GetView<TController>, triggers actions, renders Obx reactive UI)
-Controller Layer (lib/modules/*/controllers/*.controller.dart)
-       ↓  (Extends GetxController, orchestrates client-business logic, manages .obs state)
-Service Layer (lib/services/ & lib/modules/*/services/*.service.dart)
-       ↓  (Extends GetxService, formats request payloads & backend API calls)
-Transport Layer (lib/services/api.service.dart)
-       ↓  (Extends GetConnect, auto JWT/Platform/Locale headers, _withLoading overlay)
+Model Layer       (lib/models/ & lib/modules/*/data/)
+  ↓ (Typed models, JSON serialization toJson/fromJson, request/response envelopes)
+View Layer        (lib/pages/ or lib/modules/*/pages/ & views/)
+  ↓ (Extends GetView<TController>, triggers actions, renders Obx reactive UI)
+Controller Layer  (lib/modules/*/controllers/*.controller.dart)
+  ↓ (Extends GetxController, orchestrates client logic, manages .obs state)
+Service Layer     (lib/services/ & lib/modules/*/services/*.service.dart)
+  ↓ (Extends GetxService, formats request payloads & backend API calls)
+Transport Layer   (lib/services/api.service.dart)
+    (Extends GetConnect, auto JWT/Platform/Locale headers, _withLoading overlay)
 ```
 
-- **Views / Pages / Modals (`GetView<TController>`)**:
-  - **Mandatory `GetView` Extension**: ALL feature pages, screens, modal dialogs, and bottom sheets MUST extend `GetView<TController>` (or `GetWidget<TController>`).
-  - **No `StatelessWidget` / `StatefulWidget` for Feature Screens**: Feature views must never use raw `StatelessWidget` or `StatefulWidget` when a `GetView` with `GetxController` and Get lifecycles (`onInit`, `onReady`, `onClose`) is the architectural standard.
-  - **Pure Presentation**: Zero direct API calls, zero server-business logic calculations.
-  - **Reactive Rendering**: Listen to observable properties strictly via `Obx(() => ...)` or `GetBuilder<TController>` and invoke controller methods.
+- **Views (`GetView<TController>`)**: Pure presentation. Mandatory `GetView` extension. Zero direct API calls.
+- **Controllers (`GetxController`)**: Lean client-business logic. Manages `.obs` state, GetX lifecycles (`onInit`, `onReady`, `onClose`), and UI feedback (`AppSnackbar`, `Get.dialog`).
+- **Services (`GetxService`)**: Permanent singleton network clients. Pure transport, zero UI state or dialogs.
+- **Transport (`api.service.dart`)**: Auto `Authorization: Bearer <token>`, `X-Platform`, `X-Locale`, and loading overlays.
 
-- **Controllers (`*.controller.dart`)**:
-  - **Mandatory `GetxController` Extension**: Manage observable state variables (`final count = 0.obs;`).
-  - **Lean Controller Logic Law**: Controller logic must remain lean and minimal — focused on client-business logic (state reactivity, local UI orchestration, and data mapping). Server-business rules stay in Core.
-  - **GetX Lifecycles**: Leverage `onInit()`, `onReady()`, and `onClose()` for initialization, subscriptions, worker listeners (`ever()`, `debounce()`), and resource cleanup (e.g. `TextEditingController.dispose()`).
-  - **Workflow & UI Coordination**: Coordinate business flows, trigger GetX UI feedback (`AppSnackbar`, `Get.dialog`, `Get.bottomSheet`), and execute GetX route transitions (`Get.toNamed`, `Get.back`).
-  - **Service Interaction**: Call Services (`GetxService`) for backend operations and persistence.
+### 3.4 Client-Business Logic Bifurcation Law
 
-- **Services (`*.service.dart`)**:
-  - **Mandatory `GetxService` Extension**: Permanent singleton services that remain in memory throughout the application lifecycle.
-  - **Shared Services (`lib/services/`)**: Application-wide infrastructure services used by any controller or background workflow (`api.service.dart`, `socket.service.dart`, `storage.service.dart`, `analytics.service.dart`, `log.service.dart`).
-  - **Module Services (`lib/modules/*/services/`)**: Domain-specific network clients (`auth.service.dart`, `ai.service.dart`, `payment.service.dart`, `feedback.service.dart`). Can be injected and utilized across controllers via `Get.find<TService>()` whenever cross-domain access is required.
-  - **Zero UI in Services**: NEVER trigger UI dialogs, snackbars, or route navigation inside Services.
-
-- **Transport (`api.service.dart`)**:
-  - Extends `GetConnect` with automatic `Authorization: Bearer <token>`, `X-Platform: android|ios`, `X-Locale`, and `Accept-Language` headers.
-  - Unified loading overlay via `_withLoading()`.
+- **Backend-Facing Logic (`Controller` + `Service`)**: API orchestration, remote state, payload formatting, and error mapping flow strictly through `<feature>.controller.dart` and `<feature>.service.dart`.
+- **UI-Only Logic (`Workers / UI Controllers / Helpers`)**: Purely clientside behavior (timers, scroll physics, keyboard dismissal, animations, audio playback) is handled by local GetX controllers, workers (`ever`, `debounce`), or UI helpers without network services.
 
 ---
 
 ## 🗂️ 4. Constants & Enums Law
 
 ### 4.1 Zero Loose String Literals or Magic Numbers
+- Every status string, API key, storage key, header, and route MUST be centralized in `lib/constants/` (`app_locales.dart`, `storage_keys.dart`, `app.constants.dart`, `json_keys.dart`, `log.constants.dart`, `enums.dart`, `server_routes.dart`, `app_routes.dart`, `asset_keys.dart`).
 
-- **Rule**: Every status string, API key, storage key, header, and route MUST be centralized in `lib/constants/`:
-  - `app_locales.dart` — Centralized namespaced translation keys (`AppLocales.*`) matching web `AppLocales`.
-  - `storage_keys.dart` — Centralized local storage keys (`StorageKeys.*`) matching web `StorageKeys` parity.
-  - `app.constants.dart` — Platform headers (`AppConstants.platformAndroid`, `AppConstants.platformIos`, `AppConstants.currentPlatform`).
-  - `json_keys.dart` — Centralized API request and response JSON envelope keys (`JsonKeys.*`).
-  - `log.constants.dart` — Client telemetry constants (`LogConstants.*`).
-  - `enums.dart` — Strongly-typed domain enums (`AuthProvider`, `ChatRole`, `ThemePreference`).
-  - `server_routes.dart` — Backend API endpoint paths (`ServerRoutes.*`).
-  - `app_routes.dart` — Client navigation route strings (`AppRoutes.*`).
-  - `asset_keys.dart` — Asset model constants (`AssetKeys.*`).
-- Exported cleanly from `lib/constants/constants.dart`.
-
-### 4.2 Cross-Platform Storage Keys Parity Law
-
-- **Rule**: All common local storage keys MUST match `rexone-web` `StorageKeys` exactly (`'token'`, `'user'`, `'locale'`, `'theme'`).
-- **Rule**: NEVER pass loose string literals to `GetStorage()` or secure storage. Always use `StorageKeys.*`.
+### 4.2 Cross-Platform Storage Keys Parity
+- All local storage keys MUST match `rexone-web` `StorageKeys` exactly (`'token'`, `'user'`, `'locale'`, `'theme'`). Always use `StorageKeys.*`.
 
 ---
 
-## 🔐 5. RBAC & Client-Side Authorization Law
+## 🔐 5. RBAC & Authorization Law
 
-The mobile RBAC system strictly synchronizes with the backend's three-tier administrative hierarchy:
-
-### 5.1 Three-Tier Administrative Hierarchy
-
-1. **`super_admin` (Full System Authority)**:
-   - Full access across all administration areas, features, and settings.
-2. **`admin` (Standard Administrator)**:
-   - Full operational access across domain resources (`feedbacks`, `payments`, `ai`, `assets`, `logs`, `notifications`).
-   - **Strict Restriction**: Restricted from `users` and `iam`.
-3. **Partial Admin (`*_admin` Suffix Naming Law)**:
-   - Users with base `user` role plus specific `*_admin` role (e.g. `feedback_admin`, `payment_admin`).
-   - Feature access and navigation are strictly restricted to the read/update actions matching their `*_admin` permissions.
+### 5.1 Three-Tier Hierarchy
+1. **`super_admin`**: Full system authority across all administration areas and settings.
+2. **`admin`**: Operational access across domain resources (`feedbacks`, `payments`, `ai`, `logs`, `notifications`). Restricted from `users` and `iam`.
+3. **Partial Admin (`*_admin`)**: Access strictly restricted to actions matching their specific `*_admin` permissions.
 
 ---
 
 ## 📄 6. Pagination & Response Handling Law
 
-### 6.1 Mandatory Pagination for All List Endpoints
+### 6.1 Mandatory Universal Pagy Pagination & Zero "All" Flags
+- **Universal Pagy Protocol**: ALL collection and list endpoints return a standard Pagy envelope (`data` array + `meta.pagination`). Parse all collection responses with `parsePaginatedResponse<T>` returning `PaginatedResponse<T>` with `PaginationMeta`. Never consume raw unpaginated arrays.
+- **Default Full Collection (Zero Query Params)**: When the mobile client requests a collection without `page` or `limit` parameters, the backend returns ALL records in a single page wrapped in standard Pagy metadata (`current_page: 1`, `total_pages: 1`, `total_count: N`).
+- **Prohibition of "all" Query Parameters**: Mobile client MUST NEVER send `limit: "all"` or arbitrary string flags. Omitting `page` and `limit` fetches the full collection cleanly and uniformly through Pagy.
 
-- **Rule**: ALL collection and list responses from the server MUST be parsed with `parsePaginatedResponse<T>` and return `PaginatedResponse<T>` with `PaginationMeta`.
-- Never consume raw unpaginated arrays for list screens.
-
-### 6.2 Mandatory Centralized Response Parsing
-
-- **Rule**: ALWAYS use `ApiService` parsing utilities:
-  - `parseResponse<T>(response, fromJson)` — Parses single entity response envelopes.
-  - `parsePaginatedResponse<T>(response, fromJson)` — Parses list records with `PaginationMeta`.
+### 6.2 Centralized Response Parsing
+- ALWAYS use `ApiService` parsing utilities (`parseResponse`, `parsePaginatedResponse`).
 
 ---
 
 ## 🌍 7. Localization Law
-
-- **Rule**: User-visible strings must NEVER be hardcoded in widgets.
-- Define keys in `lib/locales/` (`app_locales.dart` / translation maps).
-- Use `AppLocales.someKey.tr` for all UI text.
-- Active locale is sent automatically to `rexone-core` via `X-Locale` and `Accept-Language` HTTP headers.
+- User-visible strings must NEVER be hardcoded. Define keys in `lib/locales/` (`app_locales.dart`) and access via `AppLocales.someKey.tr`. Active locale is sent to `rexone-core` via `X-Locale` and `Accept-Language`.
 
 ---
 
-## 🧪 8. End-to-End (E2E) Testing Law (Flutter Driver / Integration Test)
-
-- **Rule**: Every core user flow (Authentication, Passcode verification, AI chat, Payment flows) MUST be accompanied by integration and E2E tests in `test/` or `integration_test/`.
-- Test suites must run reliably and verify complete end-to-end device journeys.
+## 🧪 8. End-to-End (E2E) Testing Law
+- Every core user journey (Auth, Passcode verification, AI chat, Payment) MUST have integration/E2E tests in `integration_test/` or `test/`.
 
 ---
 
+## 🧱 9. Module Boundary Law
+- Feature domains live inside `lib/modules/<feature_name>/` (`data/`, `controllers/`, `services/`, `pages/`, `widgets/`).
 - Shared foundation code lives in `lib/design/`, `lib/services/`, `lib/constants/`, `lib/models/`, `lib/helpers/`, `lib/locales/`, `lib/routes/`.
 
 ---
 
-## 📚 10. Documentation Synchronization Law
-
-- **Rule**: After EVERY feature creation, modification, or bugfix:
-  - **`README.md`** MUST be updated with newly added screens, user workflows, feature capabilities, or configuration variables.
-  - **`ECOSYSTEM.md`** MUST be updated if changes affect cross-platform feature parity, shared contracts, WebSocket events, or communication protocols between Mobile, Web, and Core.
-  - **`LAW.md`** represents the non-negotiable constitutional framework; it should ONLY be modified when establishing, refining, or expanding fundamental architectural laws and engineering standards.
+## ⏰ 10. UTC Transport & Client Local Timezone Law
+- Backend operates in UTC. Mobile client sends dates in UTC ISO 8601 strings and formats timestamps into the device's local timezone for display.
 
 ---
 
-## ⏰ 11. UTC Transport & Client-Side Local Timezone Law
-
-- **Rule**: The backend API operates exclusively in UTC.
-- **Rule**: Mobile client MUST convert user local dates and range boundaries to UTC ISO 8601 strings (`start_date`, `end_date`) before dispatching API requests.
-- **Rule**: Mobile client MUST parse and format all UTC timestamps received from the backend into the user's mobile device local timezone for presentation.
+## 📚 11. Documentation Synchronization Law
+- After every feature or bugfix, keep documentation synchronized:
+  - **`README.md`**: Updated with newly added screens, capabilities, or configuration.
+  - **`ECOSYSTEM.md`**: Updated for cross-platform contracts or shared protocols.
+  - **`LAW.md`**: Modified only when establishing or refining fundamental architectural laws.
