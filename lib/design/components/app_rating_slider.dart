@@ -51,23 +51,27 @@ class AppRatingSlider extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(
                 horizontal: Design.spacing.sm,
-                vertical: Design.spacing.xs / 2,
+                vertical: Design.spacing.xs,
               ),
               decoration: BoxDecoration(
                 color: context.colors.primary.withValues(alpha: 0.1),
-                borderRadius:
-                    BorderRadius.circular(Design.spacing.radiusMedium),
+                borderRadius: BorderRadius.circular(
+                  Design.spacing.radiusMedium,
+                ),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text(emoji, style: const TextStyle(fontSize: 14)),
+                  Text(
+                    emoji,
+                    style: const TextStyle(fontSize: AppFontSizes.bodyMedium),
+                  ),
                   SizedBox(width: Design.spacing.xs),
                   Text(
                     '$intRating / ${max.toInt()}',
                     style: context.typo.caption.copyWith(
                       color: context.colors.primary,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: AppFontWeights.bold,
                     ),
                   ),
                   SizedBox(width: Design.spacing.xs),
@@ -91,10 +95,10 @@ class AppRatingSlider extends StatelessWidget {
             overlayColor: context.colors.primary.withValues(alpha: 0.2),
             activeTickMarkColor: Colors.transparent,
             inactiveTickMarkColor: Colors.transparent,
-            trackHeight: 6.0,
-            thumbShape: const RoundSliderThumbShape(
-              enabledThumbRadius: 10.0,
-              elevation: 2.0,
+            trackHeight: Design.spacing.xs,
+            thumbShape: RoundSliderThumbShape(
+              enabledThumbRadius: Design.spacing.sm,
+              elevation: Design.spacing.xs,
             ),
           ),
           child: Slider(
@@ -117,21 +121,21 @@ class AppRatingSlider extends StatelessWidget {
                 '${min.toInt()} (Low)',
                 style: context.typo.caption.copyWith(
                   color: context.colors.textSecondary.withValues(alpha: 0.6),
-                  fontSize: 11,
+                  fontSize: AppFontSizes.labelSmall,
                 ),
               ),
               Text(
                 '${((min + max) / 2).toInt()}',
                 style: context.typo.caption.copyWith(
                   color: context.colors.textSecondary.withValues(alpha: 0.6),
-                  fontSize: 11,
+                  fontSize: AppFontSizes.labelSmall,
                 ),
               ),
               Text(
                 '${max.toInt()} (High)',
                 style: context.typo.caption.copyWith(
                   color: context.colors.textSecondary.withValues(alpha: 0.6),
-                  fontSize: 11,
+                  fontSize: AppFontSizes.labelSmall,
                 ),
               ),
             ],

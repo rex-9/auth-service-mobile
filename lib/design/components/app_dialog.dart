@@ -268,7 +268,9 @@ class AppDialog {
     return Get.dialog<T>(
       AlertDialog(
         backgroundColor: backgroundColor ?? Get.theme.colorScheme.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Design.spacing.radiusLarge),
+        ),
         title: title,
         content: content,
         actions: actions,

@@ -2,19 +2,17 @@
 import 'package:flutter/material.dart';
 import '../design.dart';
 
-enum BadgeType { success, warning, error, info, neon, primary, secondary }
-
 class AppBadge extends StatefulWidget {
   const AppBadge({
     super.key,
     required this.text,
-    this.type = BadgeType.info,
+    this.type = EBadgeVariant.info,
     this.icon,
     this.onTap,
   });
 
   final String text;
-  final BadgeType type;
+  final EBadgeVariant type;
   final IconData? icon;
   final VoidCallback? onTap;
 
@@ -34,7 +32,7 @@ class _AppBadgeState extends State<AppBadge> {
     List<BoxShadow>? shadows;
 
     switch (widget.type) {
-      case BadgeType.neon:
+      case EBadgeVariant.neon:
         bg = _isPressed ? Design.colors.primary : Design.colors.glass.tagBg;
         fg = _isPressed ? Colors.white : Design.colors.glowWhite;
         border = Border.all(
@@ -42,7 +40,7 @@ class _AppBadgeState extends State<AppBadge> {
         );
         shadows = _isPressed ? Design.colors.shadows.neon : null;
         break;
-      case BadgeType.primary:
+      case EBadgeVariant.primary:
         bg = _isPressed
             ? colors.primary
             : colors.primary.withValues(alpha: 0.15);
@@ -50,33 +48,34 @@ class _AppBadgeState extends State<AppBadge> {
         border = Border.all(color: colors.primary.withValues(alpha: 0.3));
         shadows = _isPressed ? Design.colors.shadows.neon : null;
         break;
-      case BadgeType.secondary:
+      case EBadgeVariant.secondary:
+      case EBadgeVariant.defaultVariant:
         bg = _isPressed
             ? colors.secondary
             : colors.secondary.withValues(alpha: 0.15);
         fg = _isPressed ? Colors.white : colors.secondary;
         border = Border.all(color: colors.secondary.withValues(alpha: 0.3));
         break;
-      case BadgeType.success:
+      case EBadgeVariant.success:
         bg = Design.colors.success.withValues(alpha: 0.15);
         fg = Design.colors.success;
         break;
-      case BadgeType.warning:
+      case EBadgeVariant.warning:
         bg = Design.colors.warning.withValues(alpha: 0.15);
         fg = Design.colors.warning;
         break;
-      case BadgeType.error:
+      case EBadgeVariant.error:
         bg = Design.colors.error.withValues(alpha: 0.15);
         fg = Design.colors.error;
         break;
-      case BadgeType.info:
+      case EBadgeVariant.info:
         bg = colors.primary.withValues(alpha: 0.15);
         fg = colors.primary;
         break;
     }
 
     final badgeContent = AnimatedContainer(
-      duration: const Duration(milliseconds: 150),
+      duration: Design.timers.short,
       curve: Curves.easeOut,
       padding: EdgeInsets.symmetric(
         horizontal: Design.spacing.md,
@@ -92,14 +91,14 @@ class _AppBadgeState extends State<AppBadge> {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (widget.icon != null) ...[
-            Icon(widget.icon, size: 14, color: fg),
+            Icon(widget.icon, size: AppFontSizes.bodyMedium, color: fg),
             SizedBox(width: Design.spacing.xs),
           ],
           Text(
             widget.text,
             style: Design.typo.caption.copyWith(
               color: fg,
-              fontWeight: FontWeight.w600,
+              fontWeight: AppFontWeights.semiBold,
             ),
           ),
         ],
@@ -112,7 +111,7 @@ class _AppBadgeState extends State<AppBadge> {
 
     return AnimatedScale(
       scale: _isPressed ? 0.95 : 1.0,
-      duration: const Duration(milliseconds: 120),
+      duration: Design.timers.short,
       curve: Curves.easeOut,
       child: InkWell(
         onTap: widget.onTap,
