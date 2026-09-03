@@ -11,8 +11,8 @@ class AiAssetModel {
   final int? sizeBytes;
   final int? durationSecs;
   final String source;
-  final String resourceModel;
-  final String resourceId;
+  final String assetableType;
+  final String assetableId;
   final String createdAt;
   final String updatedAt;
 
@@ -26,8 +26,8 @@ class AiAssetModel {
     this.sizeBytes,
     this.durationSecs,
     required this.source,
-    required this.resourceModel,
-    required this.resourceId,
+    required this.assetableType,
+    required this.assetableId,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -47,8 +47,8 @@ class AiAssetModel {
           ? json[AiKeys.durationSecs] as int
           : int.tryParse(json[AiKeys.durationSecs]?.toString() ?? ''),
       source: json[AiKeys.source]?.toString() ?? '',
-      resourceModel: json[AiKeys.resourceModel]?.toString() ?? '',
-      resourceId: json[AiKeys.resourceId]?.toString() ?? '',
+      assetableType: json[AiKeys.assetableType]?.toString() ?? '',
+      assetableId: json[AiKeys.assetableId]?.toString() ?? '',
       createdAt: json[AiKeys.createdAt]?.toString() ?? '',
       updatedAt: json[AiKeys.updatedAt]?.toString() ?? '',
     );

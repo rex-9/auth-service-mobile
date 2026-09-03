@@ -42,7 +42,7 @@
 ## 🖼️ 2. Distributed Centralized Assets Law
 
 - **Rule**: NEVER store raw media URL strings directly in model entities.
-- ALL media is managed through the backend distributed assets system (`type`, `storage_key`, `resource_model`, `resource_id`). Pass `{ type: "avatar", resource_model: "user", resource_id: currentUser?.id }` for avatar uploads and render using semantic avatar widgets.
+- ALL media is managed through the backend distributed assets system (`type`, `storage_key`, `assetable_type`, `assetable_id`). Pass `{ type: "avatar", assetable_type: "User", assetable_id: currentUser?.id }` for avatar uploads and render using semantic avatar widgets.
 
 ---
 
