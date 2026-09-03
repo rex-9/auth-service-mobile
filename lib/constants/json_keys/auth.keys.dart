@@ -23,6 +23,6 @@ class AuthKeys {
 
   // ===== User model =====
   static const provider = 'provider';
-  static const profilePicUrl = 'profile_pic_url';
+  static const avatarUrl = 'avatar_url';
   static const photo = 'photo';
 }

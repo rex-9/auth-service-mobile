@@ -71,7 +71,7 @@ class AppButton extends StatelessWidget {
       return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
+          AppImage.asset(
             Design.media.googleLogo,
             height: Design.spacing.iconMedium,
             width: Design.spacing.iconMedium,

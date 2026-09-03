@@ -11,3 +11,4 @@ export 'app_card.dart';
 export 'app_badge.dart';
 export 'app_handle_bar.dart';
 export 'app_rating_slider.dart';
+export 'app_image.dart';

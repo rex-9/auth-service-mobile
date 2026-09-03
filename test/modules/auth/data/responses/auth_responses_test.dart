@@ -15,7 +15,7 @@ void main() {
           'username': 'testuser',
           'name': 'Test User',
           'provider': 'email',
-          'profile_pic_url': 'https://example.com/pic.jpg',
+          'avatar_url': 'https://example.com/pic.jpg',
         };
 
         final user = UserModel.fromJson(json);

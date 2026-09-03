@@ -25,7 +25,7 @@ class UserModel {
       username: json[AuthKeys.username],
       name: json[AuthKeys.name],
       provider: json[AuthKeys.provider],
-      photo: json[AuthKeys.profilePicUrl] ?? json[AuthKeys.photo],
+      photo: json[AuthKeys.avatarUrl] ?? json[AuthKeys.photo],
     );
   }
 
@@ -36,7 +36,7 @@ class UserModel {
       AuthKeys.username: username,
       AuthKeys.name: name,
       AuthKeys.provider: provider,
-      AuthKeys.profilePicUrl: photo,
+      AuthKeys.avatarUrl: photo,
     };
   }
 }
