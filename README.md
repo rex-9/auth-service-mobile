@@ -137,6 +137,7 @@ flowchart LR
 ### IAM & RBAC Administrative Hierarchy
 
 The mobile client enforces a synchronized three-tier administrative hierarchy:
+
 - **`super_admin`**: Full authority across all features, screens, and administrative tools.
 - **`admin`**: Full authority across domain operations (`feedbacks`, `payments`, `ai`, `assets`, `logs`), strictly excluded from `users` and `iam`.
 - **Partial Admins (`*_admin` naming convention)**: Users holding the base `user` role plus a specific `*_admin` role (e.g. `feedback_admin`). Any role with `admin` in its name is an admin role. Permissions in admin roles grant access to both standard and admin endpoints, whereas permissions in non-admin roles (such as `user`) only grant access to non-admin features.
@@ -429,7 +430,12 @@ rexone_mobile/
 │   ├── routes/               # GetX route declarations and auth route guards
 │   └── services/             # Shared transport (API, Socket, Log, Analytics, Push, Storage)
 ├── scripts/
-│   └── test.sh            # E2E integration test CLI runner
+│   ├── rebrand.sh             # Unified mobile rebranding (Name + Package + Icon)
+│   ├── update_app_name.sh     # App display name updater (Android, iOS, .env)
+│   ├── update_package_name.sh # Package identifier / Bundle ID updater
+│   ├── update_app_icon.sh     # Launcher icons generator
+│   ├── update_app_version.sh  # Version and build number incrementer
+│   └── test.sh                # E2E integration test CLI runner
 ├── test/                     # Unit and localization tests
 ├── test_driver/
 │   └── integration_test.dart # Flutter Driver test bridge
@@ -438,12 +444,57 @@ rexone_mobile/
 
 ---
 
+## 🎨 Rebranding & Utility Scripts
+
+> [!TIP]
+> **Recommended**: For full, synchronized rebranding across all 3 platforms (Core Backend, Web SPA, and Mobile App), run the master rebrand engine from **`rexone-core`**:
+> ```bash
+> cd ../rexone-core && ./scripts/rebrand.sh
+> ```
+
+For standalone mobile development or isolated updates, you can use the local scripts below:
+
+```bash
+# 1. Standalone Mobile Rebrand (Name + Package ID + App Icon)
+./scripts/rebrand.sh "New App Name" "com.company.newapp" "path/to/icon.png"
+
+# 2. Update App Display Name only
+./scripts/update_app_name.sh "New App Name"
+
+# 3. Update Package Name / Bundle ID only
+./scripts/update_package_name.sh com.company.newapp
+
+# 4. Generate Launcher Icons from assets/brand/logo.png
+./scripts/update_app_icon.sh
+
+# 5. Bump Version and Build Number
+./scripts/update_app_version.sh 1.1.0
+```
+
+
+---
+
+## 🏛️ Ecosystem Lineage & Attribution
+
+This application is built on top of the **Rexone Ecosystem** (`rex-9`). When creating derivative products or white-label applications:
+
+- Developers and creators are warmly encouraged to preserve ecosystem credit in documentation to support the project.
+- All development must strictly adhere to the constitutional engineering standards in **[LAW.md](LAW.md)** and **[ECOSYSTEM.md](ECOSYSTEM.md)**.
+
+---
+
 ## Author
 
-**Rex (Rex9)**
+Built with Clarity & Simplicity Driven Development, by **Rex (Rex9)**.
+
+A software engineer, full-stack architect, and long-time practitioner of meditation.
+
+I build systems the same way I approach the path itself: **with a clear mind, deliberate steps, and no unnecessary weight.**
 
 - GitHub: [@rex-9](https://github.com/rex-9)
 - Portfolio: [rex9.vercel.app](https://rex9.vercel.app)
 - LinkedIn: [rex9](https://www.linkedin.com/in/rex9/)
 
-_Built with ❤️ by Rex9_
+_Built with ❤️ by Rex9 on Rexone Ecosystem_
+
+<p align="right"><a href="#readme-top">Back to top ↑</a></p>
