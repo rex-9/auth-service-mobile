@@ -240,139 +240,122 @@ class AppTranslations extends Translations {
     },
     'my_MM': {
       // Common
-      AppLocales.common.home: 'မူလစာမျက်နှာ',
+      AppLocales.common.home: 'ပင်မ',
       AppLocales.common.welcomeHome: 'Rexone မှ ကြိုဆိုပါတယ်!',
-      AppLocales.common.loading: 'ဖွင့်နေသည်...',
-      AppLocales.common.signOut: 'ထွက်ရန်',
-      AppLocales.common.goBack: 'ပြန်သွား',
-      AppLocales.common.submit: 'တင်သွင်းရန်',
-      AppLocales.common.save: 'သိမ်းဆည်းမည်',
-      AppLocales.common.cancel: 'မလုပ်တော့ပါ',
+      AppLocales.common.loading: 'လုပ်ဆောင်နေဆဲ...',
+      AppLocales.common.signOut: 'ထွက်မည်',
+      AppLocales.common.goBack: 'နောက်သို့',
+      AppLocales.common.submit: 'တင်မည်',
+      AppLocales.common.save: 'သိမ်းမည်',
+      AppLocales.common.cancel: 'ပယ်ဖျက်',
       AppLocales.common.delete: 'ဖျက်မည်',
-      AppLocales.common.confirm: 'အတည်ပြုပါ',
+      AppLocales.common.confirm: 'အတည်ပြု',
       AppLocales.common.error: 'အမှား',
       AppLocales.common.success: 'အောင်မြင်သည်',
       AppLocales.common.warning: 'သတိပေးချက်',
-      AppLocales.common.info: 'သတင်းအချက်အလက်',
-      AppLocales.common.exit: 'ထွက်ရန်',
-      AppLocales.common.exitTitle: 'အက်ပ်မှ ထွက်ရန်',
+      AppLocales.common.info: 'အချက်အလက်',
+      AppLocales.common.exit: 'ထွက်မည်',
+      AppLocales.common.exitTitle: 'အက်ပ်မှ ထွက်မည်',
       AppLocales.common.exitConfirm: 'ထွက်ရန် သေချာပါသလား?',
 
       // Auth Shared
       AppLocales.auth.shared.emailLabel: 'အီးမေးလ်',
       AppLocales.auth.shared.emailHint: 'your@email.com',
-      AppLocales.auth.shared.continueButton: 'ဆက်လုပ်ရန်',
-      AppLocales.auth.shared.useDifferentEmail: 'အခြားအီးမေးလ် သုံးရန်',
-      AppLocales.auth.shared.passcodeLength:
-          'ဂဏန်း ၆ လုံး လျှို့ဝှက်ကုဒ် ထည့်ပါ',
-      AppLocales.auth.shared.sessionExpired:
-          'သင့် Session သက်တမ်းကုန်သွားပါပြီ။ ကျေးဇူးပြု၍ ပြန်လည်ဝင်ရောက်ပါ။',
+      AppLocales.auth.shared.continueButton: 'ဆက်လုပ်မည်',
+      AppLocales.auth.shared.useDifferentEmail: 'အခြားအီးမေးလ် သုံးမည်',
+      AppLocales.auth.shared.passcodeLength: 'စကားဝှက်သည် ဂဏန်း ၆ လုံး ဖြစ်ရမည်',
+      AppLocales.auth.shared.sessionExpired: 'အသုံးပြုချိန် ကုန်ဆုံးသွားပါပြီ။ ပြန်ဝင်ပါ။',
       AppLocales.auth.shared.sessionReplaced:
-          'ဤစက်ပေါ်တွင် နောက်ဆုံးလော့ဂ်အင်ဝင်မှုကြောင့် သင့် session အသစ်ဖြင့် အစားထိုးခံရပါသည်။',
+          'ဤစက်ပေါ်တွင် အသစ်ဝင်ရောက်မှုကြောင့် session အစားထိုးခံရပါသည်။',
 
       // Auth Initial
-      AppLocales.auth.initial.title: '✨ Rexone မှ ကြိုဆိုပါတယ် ✨',
+      AppLocales.auth.initial.title: '✨ Rexone မှ ကြိုဆိုပါသည် ✨',
       AppLocales.auth.initial.subtitle:
-          'အိပ်မက်များကို ပံ့ပိုးပါ သို့မဟုတ် သင့်အိပ်မက်ကို အကောင်အထည်ဖော်ပါ',
-      AppLocales.auth.initial.continueWithGoogle:
-          'Google ဖြင့် ဆက်လက်လုပ်ဆောင်ရန်',
+          'အိပ်မက်များကို အကောင်အထည်ဖော်လိုက်ပါ',
+      AppLocales.auth.initial.continueWithGoogle: 'Google ဖြင့် ဆက်ရန်',
       AppLocales.auth.initial.or: 'သို့မဟုတ်',
       AppLocales.auth.initial.emailHelper:
-          'လော့ဂ်အင်ဝင်ရန် သို့မဟုတ် အကောင့်ဖွင့်ရန် အီးမေးလ်ထည့်ပါ',
+          'အကောင့်ဝင်ရန် သို့မဟုတ် အသစ်ဖွင့်ရန် အီးမေးလ် ထည့်ပါ',
       AppLocales.auth.initial.invalidEmail:
-          'မှန်ကန်သော အီးမေးလ်လိပ်စာ ထည့်ပါ။ (ဥပမာ example@domain.com)',
-      AppLocales.auth.initial.checking: 'စစ်ဆေးနေသည်...',
-      AppLocales.auth.initial.googleFailure: 'Google အတည်ပြုမှု မအောင်မြင်ပါ!',
+          'မှန်ကန်သော အီးမေးလ် ထည့်ပါ (ဥပမာ example@domain.com)',
+      AppLocales.auth.initial.checking: 'စစ်ဆေးနေဆဲ...',
+      AppLocales.auth.initial.googleFailure: 'Google ဖြင့် အတည်ပြု၍ မရပါ!',
       AppLocales.auth.initial.googleTooManyAttempts:
-          'ကြိုးစားမှုများလွန်းပါသည်။ @seconds စက္ကန့် စောင့်ပြီး ထပ်စမ်းပါ။',
-      AppLocales.auth.initial.connectionFailed:
-          'ချိတ်ဆက်မှု မအောင်မြင်ပါ။ ထပ်စမ်းကြည့်ပါ။',
-      AppLocales.auth.initial.goBack: 'ပြန်သွား',
+          'အကြိမ်များလွန်းပါသည်။ @seconds စက္ကန့် စောင့်ပြီး ထပ်စမ်းပါ။',
+      AppLocales.auth.initial.connectionFailed: 'ချိတ်ဆက်မှု မရပါ။ ထပ်စမ်းပါ။',
+      AppLocales.auth.initial.goBack: 'နောက်သို့',
 
       // Auth SignIn Passcode
       AppLocales.auth.signInPasscode.title: 'လော့ဂ်အင်',
-      AppLocales.auth.signInPasscode.heading: 'သင့်လျှို့ဝှက်ကုဒ်ကို ထည့်ပါ',
+      AppLocales.auth.signInPasscode.heading: 'စကားဝှက် ထည့်ပါ',
       AppLocales.auth.signInPasscode.subtitle:
-          '@email အတွက် ဂဏန်း ၆ လုံး လျှို့ဝှက်ကုဒ်ထည့်ပါ',
-      AppLocales.auth.signInPasscode.passcodeLabel: 'လျှို့ဝှက်ကုဒ်',
-      AppLocales.auth.signInPasscode.signingIn: 'လော့ဂ်အင်ဝင်နေသည်...',
-      AppLocales.auth.signInPasscode.forgotPasscodeLink:
-          'လျှို့ဝှက်ကုဒ် မေ့သွားပြီလား?',
-      AppLocales.auth.signInPasscode.passcode6Digits:
-          'ဂဏန်း ၆ လုံး လျှို့ဝှက်ကုဒ် ထည့်ပါ',
+          '@email အတွက် ဂဏန်း ၆ လုံး စကားဝှက် ထည့်ပါ',
+      AppLocales.auth.signInPasscode.passcodeLabel: 'စကားဝှက်',
+      AppLocales.auth.signInPasscode.signingIn: 'ဝင်နေဆဲ...',
+      AppLocales.auth.signInPasscode.forgotPasscodeLink: 'စကားဝှက် မေ့နေပါသလား?',
+      AppLocales.auth.signInPasscode.passcode6Digits: 'ဂဏန်း ၆ လုံး စကားဝှက် ထည့်ပါ',
       AppLocales.auth.signInPasscode.attemptsRemaining:
-          'ခဏရပ်နားချိန်မတိုင်မီ ကျန်ကြိုးစားခွင့်: @left/@total',
+          'ကျန်ကြိုးစားခွင့်: @left/@total',
       AppLocales.auth.signInPasscode.cooldownMessage:
-          'လျှို့ဝှက်ကုဒ် အမှားများလွန်းပါသည်။ @seconds စက္ကန့် စောင့်ပါ။',
-      AppLocales.auth.signInPasscode.tryAgainIn: '@seconds⁠s အတွင်း ပြန်စမ်းပါ',
-      AppLocales.auth.signInPasscode.signInFailed:
-          'လော့ဂ်အင် မအောင်မြင်ပါ။ ထပ်စမ်းကြည့်ပါ။',
+          'စကားဝှက် မှားလွန်းပါသည်။ @seconds စက္ကန့် စောင့်ပါ။',
+      AppLocales.auth.signInPasscode.tryAgainIn: '@seconds⁠s အကြာတွင် ထပ်စမ်းပါ',
+      AppLocales.auth.signInPasscode.signInFailed: 'လော့ဂ်အင် မအောင်မြင်ပါ။ ထပ်စမ်းပါ။',
 
       // Auth SignUp Passcode Create
-      AppLocales.auth.signUpPasscodeCreate.title: 'အကောင့်ဖွင့်ရန်',
-      AppLocales.auth.signUpPasscodeCreate.heading: 'လျှို့ဝှက်ကုဒ် သတ်မှတ်ပါ',
+      AppLocales.auth.signUpPasscodeCreate.title: 'အကောင့်ဖွင့်မည်',
+      AppLocales.auth.signUpPasscodeCreate.heading: 'စကားဝှက် သတ်မှတ်ပါ',
       AppLocales.auth.signUpPasscodeCreate.subtitle:
-          'လော့ဂ်အင်ဝင်ရန် ဤဂဏန်း ၆ လုံး လျှို့ဝှက်ကုဒ်ကို သုံးပါမည်',
+          'လော့ဂ်အင်ဝင်ရန် ဤဂဏန်း ၆ လုံး စကားဝှက်ကို သုံးပါမည်',
       AppLocales.auth.signUpPasscodeCreate.googleHeading: 'နောက်ဆုံးအဆင့်',
       AppLocales.auth.signUpPasscodeCreate.googleSubtitle:
-          'Google အကောင့်ဖွင့်ခြင်း ပြီးမြောက်ရန် လျှို့ဝှက်ကုဒ် သတ်မှတ်ပြီး အတည်ပြုပါ',
+          'Google အကောင့်ဖွင့်ရန် စကားဝှက် သတ်မှတ်အတည်ပြုပါ',
       AppLocales.auth.signUpPasscodeCreate.instruction:
-          'အကောင့်သို့ အမြန်လော့ဂ်အင်ဝင်ရန် ဤကုဒ်ကို သုံးပါမည်။',
+          'အကောင့်သို့ အမြန်ဝင်ရန် ဤကုဒ်ကို သုံးပါမည်။',
 
       // Auth SignUp Passcode Confirm
-      AppLocales.auth.signUpPasscodeConfirm.title: 'လျှို့ဝှက်ကုဒ် အတည်ပြုရန်',
-      AppLocales.auth.signUpPasscodeConfirm.heading:
-          'လျှို့ဝှက်ကုဒ် အတည်ပြုရန်',
-      AppLocales.auth.signUpPasscodeConfirm.subtitle:
-          'ကျေးဇူးပြု၍ သင့်ကုဒ်ကို အတည်ပြုပါ။',
-      AppLocales.auth.signUpPasscodeConfirm.confirm: 'အတည်ပြုပါ',
-      AppLocales.auth.signUpPasscodeConfirm.changePasscode: 'ကုဒ်ပြောင်းမည်',
-      AppLocales.auth.signUpPasscodeConfirm.passcodesMismatch:
-          'လျှို့ဝှက်ကုဒ်များ မကိုက်ညီပါ',
-      AppLocales.auth.signUpPasscodeConfirm.sendingCode: 'ကုဒ် ပို့နေသည်...',
+      AppLocales.auth.signUpPasscodeConfirm.title: 'စကားဝှက် အတည်ပြုပါ',
+      AppLocales.auth.signUpPasscodeConfirm.heading: 'စကားဝှက် အတည်ပြုပါ',
+      AppLocales.auth.signUpPasscodeConfirm.subtitle: 'စကားဝှက်ကို အတည်ပြုပါ။',
+      AppLocales.auth.signUpPasscodeConfirm.confirm: 'အတည်ပြု',
+      AppLocales.auth.signUpPasscodeConfirm.changePasscode: 'စကားဝှက် ပြောင်းမည်',
+      AppLocales.auth.signUpPasscodeConfirm.passcodesMismatch: 'စကားဝှက်များ မကိုက်ညီပါ',
+      AppLocales.auth.signUpPasscodeConfirm.sendingCode: 'ကုဒ် ပို့နေဆဲ...',
 
       // Auth SignUp Info
-      AppLocales.auth.signUpInfo.title: 'ပရိုဖိုင် ဖြည့်ရန်',
+      AppLocales.auth.signUpInfo.title: 'ပရိုဖိုင် ဖြည့်ပါ',
       AppLocales.auth.signUpInfo.heading: 'သင့်အကြောင်း ပြောပြပါ',
-      AppLocales.auth.signUpInfo.fullNameLabel: 'အမည်အပြည့်အစုံ',
+      AppLocales.auth.signUpInfo.fullNameLabel: 'အမည်',
       AppLocales.auth.signUpInfo.fullNameHint: 'မောင်မောင်',
       AppLocales.auth.signUpInfo.usernameLabel: 'အသုံးပြုသူအမည်',
       AppLocales.auth.signUpInfo.usernameHint: 'maung_maung',
-      AppLocales.auth.signUpInfo.createAccountButton: 'အကောင့်ဖွင့်ရန်',
-      AppLocales.auth.signUpInfo.creatingAccount: 'အကောင့်ဖွင့်နေသည်...',
-      AppLocales.auth.signUpInfo.enterFullName: 'အမည်အပြည့်အစုံ ထည့်ပါ',
-      AppLocales.auth.signUpInfo.usernameMinLength:
-          'အသုံးပြုသူအမည်သည် အနည်းဆုံး စာလုံး ၃ လုံး ရှိရမည်',
+      AppLocales.auth.signUpInfo.createAccountButton: 'အကောင့်ဖွင့်မည်',
+      AppLocales.auth.signUpInfo.creatingAccount: 'အကောင့် ဖွင့်နေဆဲ...',
+      AppLocales.auth.signUpInfo.enterFullName: 'အမည် ထည့်ပါ',
+      AppLocales.auth.signUpInfo.usernameMinLength: 'Username အနည်းဆုံး ၃ လုံး ရှိရမည်',
       AppLocales.auth.signUpInfo.usernameCharset:
-          'အသုံးပြုသူအမည်တွင် စာလုံး၊ ဂဏန်းနှင့် underscore များသာ ပါဝင်နိုင်သည်',
-      AppLocales.auth.signUpInfo.registrationFailed:
-          'အကောင့်ဖွင့်ခြင်း မအောင်မြင်ပါ',
+          'Username တွင် စာလုံး၊ ဂဏန်းနှင့် _ သာ ရပါမည်',
+      AppLocales.auth.signUpInfo.registrationFailed: 'အကောင့်ဖွင့်၍ မရပါ',
 
       // Auth Confirm Email
-      AppLocales.auth.confirmEmail.title: 'အီးမေးလ် အတည်ပြုရန်',
-      AppLocales.auth.confirmEmail.heading: 'သင့်အီးမေးလ်ကို အတည်ပြုပါ',
-      AppLocales.auth.confirmEmail.subtitle:
-          '@email သို့ ဂဏန်း ၆ လုံး ကုဒ် ပို့ထားပါသည်',
-      AppLocales.auth.confirmEmail.confirmCodeButton: 'ကုဒ် အတည်ပြုရန်',
-      AppLocales.auth.confirmEmail.verifying: 'အတည်ပြုနေသည်...',
-      AppLocales.auth.confirmEmail.resendCode: 'ကုဒ် ပြန်ပို့ရန်',
-      AppLocales.auth.confirmEmail.resendCodeIn:
-          '@seconds⁠s အတွင်း ကုဒ်ပြန်ပို့နိုင်သည်',
+      AppLocales.auth.confirmEmail.title: 'အီးမေးလ် အတည်ပြုပါ',
+      AppLocales.auth.confirmEmail.heading: 'အီးမေးလ်ကို အတည်ပြုပါ',
+      AppLocales.auth.confirmEmail.subtitle: '@email သို့ ဂဏန်း ၆ လုံး ကုဒ် ပို့ထားပါသည်',
+      AppLocales.auth.confirmEmail.confirmCodeButton: 'ကုဒ် အတည်ပြုမည်',
+      AppLocales.auth.confirmEmail.verifying: 'အတည်ပြုနေဆဲ...',
+      AppLocales.auth.confirmEmail.resendCode: 'ကုဒ် ပြန်ပို့မည်',
+      AppLocales.auth.confirmEmail.resendCodeIn: '@seconds⁠s အတွင်း ပြန်ပို့နိုင်သည်',
       AppLocales.auth.confirmEmail.enter6DigitCode: 'ဂဏန်း ၆ လုံး ကုဒ် ထည့်ပါ',
-      AppLocales.auth.confirmEmail.verificationFailed:
-          'အတည်ပြုမှု မအောင်မြင်ပါ',
+      AppLocales.auth.confirmEmail.verificationFailed: 'အတည်ပြုမှု မအောင်မြင်ပါ',
       AppLocales.auth.confirmEmail.sendCodeFailed: 'အတည်ပြုကုဒ် ပို့၍မရပါ',
 
       // Auth Forgot Passcode
-      AppLocales.auth.forgotPasscode.title: 'လျှို့ဝှက်ကုဒ် မေ့နေပါသလား',
+      AppLocales.auth.forgotPasscode.title: 'စကားဝှက် မေ့နေပါသလား',
       AppLocales.auth.forgotPasscode.subtitle:
-          'အီးမေးလ်ထည့်ပါ။ လျှို့ဝှက်ကုဒ် ပြန်သတ်မှတ်ရန် လင့်ခ် ပို့ပေးပါမည်။',
-      AppLocales.auth.forgotPasscode.sendResetLink:
-          'ပြန်သတ်မှတ်ရန် လင့်ခ် ပို့ရန်',
-      AppLocales.auth.forgotPasscode.sending: 'ပို့နေသည်...',
-      AppLocales.auth.forgotPasscode.backToSignIn: 'လော့ဂ်အင်သို့ ပြန်သွားရန်',
-      AppLocales.auth.forgotPasscode.resetFailed:
-          'ပြန်သတ်မှတ်ရန် ညွှန်ကြားချက် ပို့၍မရပါ',
+          'အီးမေးလ်ထည့်ပါ။ စကားဝှက် လင့်ခ် ပို့ပေးပါမည်။',
+      AppLocales.auth.forgotPasscode.sendResetLink: 'လင့်ခ် ပို့မည်',
+      AppLocales.auth.forgotPasscode.sending: 'ပို့နေဆဲ...',
+      AppLocales.auth.forgotPasscode.backToSignIn: 'လော့ဂ်အင်သို့ ပြန်သွားမည်',
+      AppLocales.auth.forgotPasscode.resetFailed: 'လမ်းညွှန်ချက် ပို့၍မရပါ',
 
       // Settings
       AppLocales.setting.settings: 'ဆက်တင်များ',
@@ -380,85 +363,83 @@ class AppTranslations extends Translations {
       AppLocales.setting.language: 'ဘာသာစကား',
       AppLocales.setting.account: 'အကောင့်',
       AppLocales.setting.logoutConfirmation: 'ထွက်ရန် သေချာပါသလား?',
-      AppLocales.setting.appInfo: 'အက်ပ်အချက်အလက်',
+      AppLocales.setting.appInfo: 'အက်ပ် အချက်အလက်',
       AppLocales.setting.confirmDelete: 'ဖျက်မည်',
-      AppLocales.setting.confirmClear: 'ရှင်းလင်းမည်',
-      AppLocales.setting.clearHistoryTitle: 'မှတ်တမ်းရှင်းလင်းရန်',
+      AppLocales.setting.confirmClear: 'ရှင်းမည်',
+      AppLocales.setting.clearHistoryTitle: 'မှတ်တမ်းရှင်းမည်',
       AppLocales.setting.clearHistoryConfirmMsg:
-          'ဤစကားဝိုင်းရှိ မက်ဆေ့ဂျ်များ အားလုံး အပြီးအပိုင် ဖျက်မည်။',
-      AppLocales.setting.deleteRoomTitle: 'အခန်းဖျက်ရန်',
+          'ဤစကားဝိုင်းရှိ မက်ဆေ့ဂျ်များ အားလုံး အပြီးဖျက်ပါမည်။',
+      AppLocales.setting.deleteRoomTitle: 'အခန်းဖျက်မည်',
       AppLocales.setting.deleteRoomConfirmMsg:
-          'ဤအခန်းနှင့် မက်ဆေ့ဂျ်များ အားလုံး အပြီးအပိုင် ဖျက်မည်။',
-      AppLocales.setting.cancelSubTitle: 'စာရင်းသွင်းမှု ပယ်ဖျက်ရန်',
+          'ဤအခန်းနှင့် မက်ဆေ့ဂျ်များ အားလုံး အပြီးဖျက်ပါမည်။',
+      AppLocales.setting.cancelSubTitle: 'စာရင်းသွင်းမှု ပယ်ဖျက်မည်',
       AppLocales.setting.cancelSubConfirmMsg:
-          'ငွေပေးချေမှု ကာလကုန်သည်အထိ သင့်စာရင်းသွင်းမှု ဆက်လက် အသုံးပြုနိုင်မည်။',
+          'ကာလကုန်သည်အထိ စာရင်းသွင်းမှု ဆက်လက်သုံးနိုင်ပါမည်။',
 
       // AI
       AppLocales.ai.title: 'AI လက်ထောက်',
       AppLocales.ai.rooms: 'စကားပြောခန်းများ',
-      AppLocales.ai.newChat: 'စကားဝိုင်းအသစ်',
+      AppLocales.ai.newChat: 'စကားဝိုင်းသစ်',
       AppLocales.ai.defaultGreeting:
-          'မင်္ဂလာပါ! ကျွန်တော်သည် သင်၏ AI လက်ထောက် ဖြစ်ပါသည်။ ဘာများ ကူညီပေးရမလဲ?',
+          'မင်္ဂလာပါ! ကျွန်တော်သည် AI လက်ထောက် ဖြစ်ပါသည်။ ဘာများ ကူညီပေးရမလဲ?',
       AppLocales.ai.messagesCount: 'မက်ဆေ့ဂျ် @count စောင်',
       AppLocales.ai.listen: 'နားထောင်မည်',
       AppLocales.ai.thinking: 'AI စဉ်းစားနေသည်',
-      AppLocales.ai.cancelListening: 'နားထောင်ခြင်း ရပ်တန့်မည်',
+      AppLocales.ai.cancelListening: 'နားထောင်ခြင်း ရပ်မည်',
       AppLocales.ai.typeMessage: 'မက်ဆေ့ဂျ် ရေးပါ...',
       AppLocales.ai.send: 'ပို့မည်',
-      AppLocales.ai.processing: 'AI စဉ်းစားနေသည်...',
-      AppLocales.ai.clearHistory: 'မှတ်တမ်းရှင်းရန်',
+      AppLocales.ai.processing: 'AI စဉ်းစားနေဆဲ...',
+      AppLocales.ai.clearHistory: 'မှတ်တမ်းရှင်းမည်',
       AppLocales.ai.micPermissionTitle: 'မိုက်ခရိုဖုန်း ခွင့်ပြုချက် လိုအပ်သည်',
       AppLocales.ai.micPermissionMessage:
           'အသံဖြင့် ရိုက်ထည့်ရန် မိုက်ခရိုဖုန်း ခွင့်ပြုချက် လိုအပ်ပါသည်။ Settings မှ ဖွင့်ပေးပါ။',
-      AppLocales.ai.openSettings: 'Settings ဖွင့်ရန်',
-      AppLocales.ai.aiSendMessageFailed: 'မက်ဆေ့ဂျ် ပို့၍ မရပါ',
-      AppLocales.ai.aiResponseFailed: 'AI အဖြေကို ရယူ၍ မရပါ',
-      AppLocales.ai.aiHistoryCleared: 'စကားဝိုင်းမှတ်တမ်း ရှင်းလင်းပြီးပါပြီ',
-      AppLocales.ai.aiClearHistoryFailed: 'မှတ်တမ်း ရှင်းလင်း၍ မရပါ',
-      AppLocales.ai.aiStartRecordingFailed: 'အသံဖမ်းခြင်း စတင်၍ မရပါ',
-      AppLocales.ai.aiTranscriptionFailed: 'အသံကို စာသားမပြောင်း၍ ရပါ',
+      AppLocales.ai.openSettings: 'Settings ဖွင့်မည်',
+      AppLocales.ai.aiSendMessageFailed: 'မက်ဆေ့ဂျ် ပို့၍မရပါ',
+      AppLocales.ai.aiResponseFailed: 'AI အဖြေ မရပါ',
+      AppLocales.ai.aiHistoryCleared: 'မှတ်တမ်း ရှင်းပြီးပါပြီ',
+      AppLocales.ai.aiClearHistoryFailed: 'မှတ်တမ်း ရှင်း၍မရပါ',
+      AppLocales.ai.aiStartRecordingFailed: 'အသံဖမ်း၍ မရပါ',
+      AppLocales.ai.aiTranscriptionFailed: 'အသံကို စာသားပြောင်း၍ မရပါ',
       AppLocales.ai.aiTtsFailed: 'အသံဖွင့်၍ မရပါ',
       AppLocales.ai.aiTtsEmpty: 'ဖွင့်ရန် စာသားမရှိပါ',
 
       // Feedback
-      AppLocales.feedback.title: 'အကြံပြုချက် ပေးပို့ရန်',
+      AppLocales.feedback.title: 'အကြံပြုချက်',
       AppLocales.feedback.description:
-          'Rexone ပိုမိုကောင်းမွန်စေရန် သင့်အကြံပြုချက်များကို တန်ဖိုးထားပါသည်။',
-      AppLocales.feedback.rateExperience:
-          'သင့်အတွေ့အကြုံကို အဆင့်သတ်မှတ်ပါ (၁ - ၁၀)',
-      AppLocales.feedback.tellUsMore: 'သင့်စိတ်ထဲမှာ ဘာရှိပါသလဲ?',
+          'Rexone ပိုမိုကောင်းမွန်စေရန် သင့်အကြံပြုချက်ကို ကြိုဆိုပါသည်။',
+      AppLocales.feedback.rateExperience: 'အဆင့်သတ်မှတ်ပါ (၁ - ၁၀)',
+      AppLocales.feedback.tellUsMore: 'သင့်အကြံပြုချက် ရေးပါ',
       AppLocales.feedback.placeholder:
-          'ချို့ယွင်းချက်၊ အကြံပြုချက်၊ မေးခွန်း သို့မဟုတ် အကြံဥာဏ်များကို ရေးသားနိုင်ပါသည်။',
+          'ချို့ယွင်းချက်၊ အကြံပြုချက် သို့မဟုတ် စိတ်ကူးသစ်များ ရေးသားနိုင်ပါသည်။',
       AppLocales.feedback.submit: 'အကြံပြုချက် ပို့မည်',
-      AppLocales.feedback.submitting: 'ပို့နေသည်...',
-      AppLocales.feedback.successMessage:
-          'သင့်အကြံပြုချက်အတွက် ကျေးဇူးတင်ပါသည်!',
+      AppLocales.feedback.submitting: 'ပို့နေဆဲ...',
+      AppLocales.feedback.successMessage: 'အကြံပြုချက်အတွက် ကျေးဇူးတင်ပါသည်!',
 
       // Payment
-      AppLocales.payment.title: 'ငွေပေးချေမှုနှင့် စာရင်းသွင်းမှုများ',
+      AppLocales.payment.title: 'ငွေပေးချေမှုနှင့် စာရင်းသွင်းမှု',
       AppLocales.payment.subscriptions: 'စာရင်းသွင်းမှုများ',
-      AppLocales.payment.transactions: 'ငွေပေးငွေယူ မှတ်တမ်း',
-      AppLocales.payment.upgradePlan: 'အစီအစဉ် အဆင့်မြှင့်ရန်',
-      AppLocales.payment.active: 'အသုံးပြုနေသည်',
+      AppLocales.payment.transactions: 'ငွေလွှဲမှတ်တမ်း',
+      AppLocales.payment.upgradePlan: 'အဆင့်မြှင့်မည်',
+      AppLocales.payment.active: 'အသုံးပြုဆဲ',
       AppLocales.payment.canceled: 'ပယ်ဖျက်ပြီး',
-      AppLocales.payment.cancelSubscription: 'စာရင်းသွင်းမှု ပယ်ဖျက်ရန်',
-      AppLocales.payment.resumeSubscription: 'စာရင်းသွင်းမှု ပြန်လည်စတင်ရန်',
+      AppLocales.payment.cancelSubscription: 'စာရင်းသွင်းမှု ပယ်ဖျက်မည်',
+      AppLocales.payment.resumeSubscription: 'စာရင်းသွင်းမှု ပြန်စမည်',
       AppLocales.payment.subscribeNow: 'ယခု စာရင်းသွင်းမည်',
-      AppLocales.payment.successTitle: 'ငွေပေးချေမှု အောင်မြင်ပါသည်!',
+      AppLocales.payment.successTitle: 'ငွေပေးချေမှု အောင်မြင်သည်!',
       AppLocales.payment.successDesc:
-          'သင့်ငွေပေးချေမှု ပြီးမြောက်ပြီး ဝန်ဆောင်မှုများ စတင်အသုံးပြုနိုင်ပါပြီ။',
-      AppLocales.payment.cancelTitle: 'ငွေပေးချေမှု ပယ်ဖျက်ထားသည်',
+          'ငွေပေးချေမှု ပြီးမြောက်ပြီး ဝန်ဆောင်မှု စတင်သုံးနိုင်ပါပြီ။',
+      AppLocales.payment.cancelTitle: 'ငွေပေးချေမှု ပယ်ဖျက်ပြီး',
       AppLocales.payment.cancelDesc:
-          'သင့်ငွေပေးချေမှုကို ပယ်ဖျက်လိုက်ပါသည်။ မည်သည့်ငွေမှ ကောက်ခံထားခြင်းမရှိပါ။',
+          'ငွေပေးချေမှု ပယ်ဖျက်လိုက်ပြီး မည်သည့်ငွေမှ မဖြတ်တောက်ပါ။',
 
       // User
-      AppLocales.user.profile: 'အသုံးပြုသူ ပရိုဖိုင်',
-      AppLocales.user.changeAvatar: 'ပရိုဖိုင်ပုံ ပြောင်းရန်',
+      AppLocales.user.profile: 'ပရိုဖိုင်',
+      AppLocales.user.changeAvatar: 'ပုံပြောင်းမည်',
       AppLocales.user.avatarHint: 'ပရိုဖိုင်ပုံ အသစ်တင်ပါ (PNG, JPG, WebP)',
-      AppLocales.user.selectImage: 'ပုံရွေးချယ်ပါ',
-      AppLocales.user.uploadAvatar: 'ပရိုဖိုင်ပုံ တင်မည်',
+      AppLocales.user.selectImage: 'ပုံရွေးပါ',
+      AppLocales.user.uploadAvatar: 'ပုံတင်မည်',
       AppLocales.user.accountInfo: 'အကောင့် အချက်အလက်',
-      AppLocales.user.roles: 'အခန်းကဏ္ဍများ',
+      AppLocales.user.roles: 'ရာထူးများ',
       AppLocales.user.permissions: 'ခွင့်ပြုချက်များ',
     },
   };
