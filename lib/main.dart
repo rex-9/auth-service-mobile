@@ -76,6 +76,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           initialRoute: AppRoutes.splash,
           getPages: AppRoutes.pages,
+          unknownRoute: AppRoutes.notFound,
           navigatorObservers: [analytics.observer],
           builder: (context, child) {
             return UpgradeAlert(

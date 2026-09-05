@@ -58,24 +58,7 @@ class _NotificationPageState extends State<NotificationPage> {
     _controller.markAsRead(item);
 
     if (item.link != null && item.link!.isNotEmpty) {
-      final link = item.link!.trim();
-      if (link.startsWith('/')) {
-        // Internal route
-        if (link == AppRoutes.payment) {
-          AppRoutes.toPayment();
-        } else if (link == AppRoutes.ai) {
-          AppRoutes.toAi();
-        } else if (link == AppRoutes.settings) {
-          AppRoutes.toSettings();
-        } else if (link == AppRoutes.home) {
-          AppRoutes.toHome();
-        } else {
-          Get.toNamed(link);
-        }
-      } else if (link.startsWith('http')) {
-        // External link
-        AppRoutes.toCheckout(url: link);
-      }
+      AppRoutes.handleNotificationLink(item.link);
     }
   }
 

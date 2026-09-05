@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:rexone_mobile/config/config.dart';
 import 'package:rexone_mobile/models/models.dart';
+import 'package:rexone_mobile/routes/routes.dart';
 import 'package:rexone_mobile/services/analytics.service.dart';
 
 class PushNotiService extends GetxService {
@@ -39,6 +40,14 @@ class PushNotiService extends GetxService {
       OneSignal.Notifications.addClickListener((event) {
         final data = event.notification.additionalData;
         _analytics.logPushOpened(data ?? {});
+
+        final link = data?['link']?.toString() ??
+            data?['url']?.toString() ??
+            event.notification.launchUrl;
+
+        if (link != null && link.isNotEmpty) {
+          AppRoutes.handleNotificationLink(link);
+        }
       });
     } catch (e) {
       debugPrint('❌ OneSignal listener setup failed: $e');
