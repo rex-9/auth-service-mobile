@@ -1,4 +1,5 @@
 // lib/services/api.service.dart
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
 import 'package:rexone_mobile/config/config.dart';
@@ -210,6 +211,7 @@ class ApiService extends GetConnect {
     final statusCode =
         status[ApiKeys.code] as int? ?? response.statusCode ?? 500;
     final data = body[ApiKeys.data];
+    debugPrint("user==>${data.toString()}");
 
     if (response.hasError || !(status[ApiKeys.success] as bool? ?? false)) {
       // Optional: Log API errors to analytics

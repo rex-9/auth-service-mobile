@@ -10,8 +10,8 @@ class AssetModel {
   final int? sizeBytes;
   final int? durationSecs;
   final String source;
-  final String? assetableType;
-  final String? assetableId;
+  final String? resourceModel;
+  final String? resourceId;
   final String? createdById;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -26,8 +26,8 @@ class AssetModel {
     this.sizeBytes,
     this.durationSecs,
     required this.source,
-    this.assetableType,
-    this.assetableId,
+    this.resourceModel,
+    this.resourceId,
     this.createdById,
     this.createdAt,
     this.updatedAt,
@@ -38,17 +38,21 @@ class AssetModel {
       id: json[ApiKeys.id]?.toString() ?? '',
       name: json[AssetKeys.name] ?? '',
       url: json[AssetKeys.url] ?? '',
-      type: json[AssetKeys.type] ?? 'general',
+      type: json[AssetKeys.type] ?? '',
       format: json[AssetKeys.format],
       extension: json[AssetKeys.extension],
-      sizeBytes: json[AssetKeys.sizeBytes] as int?,
-      durationSecs: json[AssetKeys.durationSecs] as int?,
-      source: json[AssetKeys.source] ?? 'upload',
-      assetableType: json[AssetKeys.assetableType],
-      assetableId: json[AssetKeys.assetableId],
+      sizeBytes: (json[AssetKeys.sizeBytes] as num?)?.toInt(),
+      durationSecs: (json[AssetKeys.durationSecs] as num?)?.toInt(),
+      source: json[AssetKeys.source] ?? AssetKeys.sourceUpload,
+      resourceModel: json[AssetKeys.resourceModel],
+      resourceId: json[AssetKeys.resourceId],
       createdById: json[AssetKeys.createdById],
-      createdAt: json['created_at'] != null ? DateTime.tryParse(json['created_at'].toString()) : null,
-      updatedAt: json['updated_at'] != null ? DateTime.tryParse(json['updated_at'].toString()) : null,
+      createdAt: json[AssetKeys.createdAt] != null
+          ? DateTime.tryParse(json[AssetKeys.createdAt].toString())
+          : null,
+      updatedAt: json[AssetKeys.updatedAt] != null
+          ? DateTime.tryParse(json[AssetKeys.updatedAt].toString())
+          : null,
     );
   }
 
@@ -63,8 +67,8 @@ class AssetModel {
       if (sizeBytes != null) AssetKeys.sizeBytes: sizeBytes,
       if (durationSecs != null) AssetKeys.durationSecs: durationSecs,
       AssetKeys.source: source,
-      if (assetableType != null) AssetKeys.assetableType: assetableType,
-      if (assetableId != null) AssetKeys.assetableId: assetableId,
+      if (resourceModel != null) AssetKeys.resourceModel: resourceModel,
+      if (resourceId != null) AssetKeys.resourceId: resourceId,
       if (createdById != null) AssetKeys.createdById: createdById,
     };
   }
