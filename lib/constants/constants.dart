@@ -5,5 +5,6 @@ export 'log.constants.dart';
 export 'analytics.constants.dart';
 export 'socket_constants.dart';
 export 'storage_keys.dart';
+export 'notification.constants.dart';
 export 'app.constants.dart';
 export '../locales/app_locales.dart';

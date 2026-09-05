@@ -12,6 +12,7 @@ class AppLocales {
   static const ai = _AiLocales();
   static const payment = _PaymentLocales();
   static const user = _UserLocales();
+  static const notification = _NotificationLocales();
 }
 
 class _AuthLocales {
@@ -158,6 +159,9 @@ class _CommonLocales {
   final exit = 'common.exit';
   final exitTitle = 'common.exit_title';
   final exitConfirm = 'common.exit_confirm';
+  final connectionLost = 'common.connection_lost';
+  final connectionRestored = 'common.connection_restored';
+  final noInternet = 'common.no_internet';
 }
 
 class _SettingLocales {
@@ -253,4 +257,19 @@ class _UserLocales {
   final accountInfo = 'user.account_info';
   final roles = 'user.roles';
   final permissions = 'user.permissions';
+}
+
+class _NotificationLocales {
+  const _NotificationLocales();
+
+  final title = 'notification.title';
+  final all = 'notification.all';
+  final unread = 'notification.unread';
+  final read = 'notification.read';
+  final markAllAsRead = 'notification.mark_all_as_read';
+  final markAsRead = 'notification.mark_as_read';
+  final empty = 'notification.empty';
+  final loadMore = 'notification.load_more';
+  final deleted = 'notification.deleted';
+  final failedToLoad = 'notification.failed_to_load';
 }

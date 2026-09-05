@@ -7,6 +7,7 @@ import 'package:rexone_mobile/design/components/components.dart';
 import 'package:rexone_mobile/services/services.dart';
 import '../modules/ai/ai.dart';
 import '../modules/payment/payment.dart';
+import '../modules/notification/notification.dart';
 
 /// Single, permanent socket event router.
 ///
@@ -95,26 +96,27 @@ class SocketController extends GetxController {
     switch (eventType) {
       case EWsEventType.paymentSuccess:
       case EWsEventType.subscriptionCreated:
+      case EWsEventType.subscriptionResumed:
       case EWsEventType.welcome:
       case EWsEventType.aiResponseReady:
+      case EWsEventType.assetCompressed:
       case EWsEventType.ttsReady:
         AppSnackbar.success(message);
         break;
 
       case EWsEventType.paymentFailed:
+      case EWsEventType.subscriptionCanceled:
       case EWsEventType.aiResponseFailed:
+      case EWsEventType.assetCompressionFailed:
       case EWsEventType.ttsFailed:
         AppSnackbar.error(message);
         break;
 
-      // subscription_canceled / subscription_resumed:
-      // PaymentController's HTTP response already shows the right snackbar
-      // immediately on user action — skip here to avoid a duplicate.
-      case EWsEventType.subscriptionCanceled:
-      case EWsEventType.subscriptionResumed:
-        break;
+      case EWsEventType.assetCompressing:
+      case EWsEventType.signInAlert:
       default:
         AppSnackbar.info(message);
+        break;
     }
   }
 
@@ -140,6 +142,11 @@ class SocketController extends GetxController {
         roomId,
         messageId: messageId,
       );
+    }
+
+    // --- Notification ---
+    if (Get.isRegistered<NotificationController>()) {
+      Get.find<NotificationController>().onSocketNotification(event);
     }
   }
 }

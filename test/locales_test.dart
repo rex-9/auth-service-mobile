@@ -28,6 +28,7 @@ void main() {
       expect(AppLocales.feedback.title, 'feedback.title');
       expect(AppLocales.ai.title, 'ai.title');
       expect(AppLocales.payment.title, 'payment.title');
+      expect(AppLocales.notification.title, 'notification.title');
     });
   });
 }

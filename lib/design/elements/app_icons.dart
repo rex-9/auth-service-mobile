@@ -37,6 +37,11 @@ class AppIcons {
   // ── Settings / UI ─────────────────────────────────────────────
   IconData get settings => Icons.settings_outlined;
   IconData get language => Icons.language_rounded;
+  IconData get bell => Icons.notifications_outlined;
+  IconData get bellActive => Icons.notifications_rounded;
+  IconData get checkAll => Icons.done_all_rounded;
+  IconData get filter => Icons.filter_list_rounded;
+  IconData get openLink => Icons.open_in_new_rounded;
 
   // ── Chat / AI ─────────────────────────────────────────────────
   IconData get forum => Icons.forum_outlined;
@@ -50,6 +55,10 @@ class AppIcons {
   IconData get activeSubscription => Icons.check_circle_outline;
   IconData get scheduledCancel => Icons.access_time;
   IconData get canceledSubscription => Icons.cancel_outlined;
+
+  // ── Network / Connectivity ─────────────────────────────────────
+  IconData get wifi => Icons.wifi_rounded;
+  IconData get wifiOff => Icons.wifi_off_rounded;
 
   // ── Dev / Debug ───────────────────────────────────────────────
   IconData get bug => Icons.bug_report_outlined;

@@ -28,6 +28,9 @@ class AppTranslations extends Translations {
       AppLocales.common.exit: 'Exit',
       AppLocales.common.exitTitle: 'Exit App',
       AppLocales.common.exitConfirm: 'Are you sure you want to exit the app?',
+      AppLocales.common.connectionLost: 'Connection lost',
+      AppLocales.common.connectionRestored: 'Connection is safe and sound',
+      AppLocales.common.noInternet: 'No internet connection',
 
       // Auth Shared
       AppLocales.auth.shared.emailLabel: 'Email',
@@ -237,6 +240,18 @@ class AppTranslations extends Translations {
       AppLocales.ai.aiTranscriptionFailed: 'No se pudo transcribir el audio',
       AppLocales.ai.aiTtsFailed: 'No se pudo reproducir el audio',
       AppLocales.ai.aiTtsEmpty: 'Nada que reproducir',
+
+      // Notification
+      AppLocales.notification.title: 'Notifications',
+      AppLocales.notification.all: 'All',
+      AppLocales.notification.unread: 'Unread',
+      AppLocales.notification.read: 'Read',
+      AppLocales.notification.markAllAsRead: 'Mark all as read',
+      AppLocales.notification.markAsRead: 'Mark as read',
+      AppLocales.notification.empty: 'No notifications yet',
+      AppLocales.notification.loadMore: 'Load more',
+      AppLocales.notification.deleted: 'Notification deleted',
+      AppLocales.notification.failedToLoad: 'Failed to load notifications',
     },
     'my_MM': {
       // Common
@@ -257,6 +272,9 @@ class AppTranslations extends Translations {
       AppLocales.common.exit: 'ထွက်မည်',
       AppLocales.common.exitTitle: 'အက်ပ်မှ ထွက်မည်',
       AppLocales.common.exitConfirm: 'ထွက်ရန် သေချာပါသလား?',
+      AppLocales.common.connectionLost: 'အင်တာနက်လိုင်း ပြတ်တောက်သွားပါသည်',
+      AppLocales.common.connectionRestored: 'အင်တာနက်လိုင်း ပြန်လည်ကောင်းမွန်သွားပါပြီ',
+      AppLocales.common.noInternet: 'အင်တာနက်လိုင်း မရှိပါ',
 
       // Auth Shared
       AppLocales.auth.shared.emailLabel: 'အီးမေးလ်',
@@ -441,6 +459,18 @@ class AppTranslations extends Translations {
       AppLocales.user.accountInfo: 'အကောင့် အချက်အလက်',
       AppLocales.user.roles: 'ရာထူးများ',
       AppLocales.user.permissions: 'ခွင့်ပြုချက်များ',
+
+      // Notification
+      AppLocales.notification.title: 'အသိပေးချက်များ',
+      AppLocales.notification.all: 'အားလုံး',
+      AppLocales.notification.unread: 'မဖတ်ရသေးသော',
+      AppLocales.notification.read: 'ဖတ်ပြီးသော',
+      AppLocales.notification.markAllAsRead: 'အားလုံးဖတ်ပြီးမှတ်သားရန်',
+      AppLocales.notification.markAsRead: 'ဖတ်ပြီးမှတ်သားရန်',
+      AppLocales.notification.empty: 'အသိပေးချက် မရှိသေးပါ',
+      AppLocales.notification.loadMore: 'ထပ်မံကြည့်ရှုရန်',
+      AppLocales.notification.deleted: 'အသိပေးချက် ဖျက်ပြီးပါပြီ',
+      AppLocales.notification.failedToLoad: 'အသိပေးချက်များ ရယူ၍မရပါ',
     },
   };
 }

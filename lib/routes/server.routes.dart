@@ -77,7 +77,17 @@ class ServerRoutes {
   // Feedback
   static String get feedbacks => api('/feedbacks');
 
+  // Notifications
+  static String get notifications => api('/notifications');
+  static String get unreadNotificationsCount => api('/notifications/unread_count');
+  static String readNotification(String id) => api('/notifications/$id/read');
+  static String get readAllNotifications => api('/notifications/read_all');
+  static String deleteNotification(String id) => api('/notifications/$id');
+
   // Admin API
   static String get adminUsers => adminApi('/users');
   static String get adminFeedbacks => adminApi('/feedbacks');
+  static String get adminNotifications => adminApi('/notifications');
+  static String get adminNotificationsDispatch =>
+      adminApi('/notifications/dispatch');
 }

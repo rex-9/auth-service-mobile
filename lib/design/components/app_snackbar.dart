@@ -68,6 +68,8 @@ class AppSnackbar {
 
   // ===== PRIVATE LOGGING =====
   static void _logError(String message, dynamic e, StackTrace? stk) {
+    if (Get.testMode) return;
+
     final buffer = StringBuffer();
     buffer.writeln(
       '═══════════════════════════════════════════════════════════',

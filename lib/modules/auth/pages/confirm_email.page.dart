@@ -38,6 +38,7 @@ class ConfirmEmailPage extends GetView<AuthController> {
 
           AppPasswordField(
             pinController: controller.confirmPin,
+            obscureText: false,
             onCompleted: (pin) {
               controller.confirmOTPCode(pin);
             },

@@ -85,7 +85,9 @@ class MyApp extends StatelessWidget {
                 durationUntilAlertAgain: const Duration(days: 3),
               ),
               dialogStyle: UpgradeDialogStyle.material,
-              child: AppLoading.builder(context, child),
+              child: AppNetworkBanner(
+                child: AppLoading.builder(context, child),
+              ),
             );
           },
         ),
