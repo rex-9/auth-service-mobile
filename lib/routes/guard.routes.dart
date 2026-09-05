@@ -23,6 +23,7 @@ class GuardRoutes extends GetMiddleware {
       AppRoutes.checkout,
       AppRoutes.ai,
       AppRoutes.profile,
+      AppRoutes.notifications,
     ];
 
     // ===== STACK-TRACKED ROUTES =====
@@ -33,6 +34,7 @@ class GuardRoutes extends GetMiddleware {
       AppRoutes.settings,
       AppRoutes.payment,
       AppRoutes.ai,
+      AppRoutes.notifications,
     ];
 
     // Redirect unauthenticated access to auth

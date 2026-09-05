@@ -42,6 +42,7 @@ dependencies:
   package_info_plus: ^10.2.0
   flutter_dotenv: ^6.0.1
   webview_flutter: ^4.14.1
+  url_launcher: ^6.3.2
   onesignal_flutter: ^5.6.5
   upgrader: ^13.5.0
   firebase_core: ^4.12.1
@@ -51,6 +52,7 @@ dependencies:
   image_picker: ^1.2.1
   path_provider: ^2.1.5
   just_audio: ^0.9.46
+  connectivity_plus: ^7.3.1
 
 dev_dependencies:
   flutter_test:

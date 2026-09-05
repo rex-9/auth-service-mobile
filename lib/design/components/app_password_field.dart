@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:rexone_mobile/design/design.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-/// A 6-digit password field with consistent styling across the app
+/// A 6-digit password field with consistent styling across the app.
+/// Strictly masked with asterisks (*) for enhanced security.
 class AppPasswordField extends StatelessWidget {
   const AppPasswordField({
     super.key,
@@ -11,6 +12,7 @@ class AppPasswordField extends StatelessWidget {
     this.onChanged,
     this.onCompleted,
     this.enabled = true,
+    this.obscureText = true,
     this.error,
   });
 
@@ -18,6 +20,7 @@ class AppPasswordField extends StatelessWidget {
   final Function(String)? onChanged;
   final Function(String)? onCompleted;
   final bool enabled;
+  final bool obscureText;
   final String? error;
 
   @override
@@ -29,21 +32,34 @@ class AppPasswordField extends StatelessWidget {
           length: 6,
           pinController: pinController,
           enabled: enabled,
+          obscureText: obscureText,
+          blinkWhenObscuring: false,
           onChanged: onChanged,
           onCompleted: onCompleted,
           theme: MaterialPinTheme(
+            obscuringCharacter: '*',
             shape: MaterialPinShape.outlined,
             cellSize: const Size(48, 56),
             spacing: Design.spacing.sm,
             borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
             borderWidth: 1.5,
             focusedBorderWidth: 2.0,
-            borderColor: Design.theme.colors.border,
-            focusedBorderColor: Design.theme.colors.primary,
-            errorColor: Design.theme.colors.error,
-            fillColor: Design.theme.colors.surface,
+            borderColor: context.colors.border,
+            focusedBorderColor: context.colors.primary,
+            fillColor: context.colors.surface,
+            focusedFillColor: context.colors.surface,
+            filledFillColor: context.colors.surface,
+            cursorColor: context.colors.primary,
+            errorColor: context.colors.error,
             textStyle: context.typo.headline3.copyWith(
+              fontSize: 26.0,
               fontWeight: FontWeight.bold,
+              color: context.colors.textPrimary,
+            ),
+            completeTextStyle: context.typo.headline3.copyWith(
+              fontSize: 26.0,
+              fontWeight: FontWeight.bold,
+              color: context.colors.textPrimary,
             ),
             entryAnimation: MaterialPinAnimation.scale,
             animationDuration: Design.timers.short,
@@ -56,7 +72,7 @@ class AppPasswordField extends StatelessWidget {
           Text(
             error!,
             style: context.typo.caption.copyWith(
-              color: Design.theme.colors.error,
+              color: context.colors.error,
             ),
           ),
         ],
@@ -64,4 +80,3 @@ class AppPasswordField extends StatelessWidget {
     );
   }
 }
-

@@ -30,6 +30,12 @@ enum EWsEventType {
   aiResponseFailed('ai_response_failed'),
   ttsReady('tts_ready'),
   ttsFailed('tts_failed'),
+  inAppNotification('in_app_notification'),
+
+  assetCompressing('asset_compressing'),
+  assetCompressed('asset_compressed'),
+  assetCompressionFailed('asset_compression_failed'),
+  signInAlert('sign_in_alert'),
 
   unknown('unknown');
 

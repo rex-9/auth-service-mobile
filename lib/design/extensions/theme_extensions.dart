@@ -30,6 +30,15 @@ class AppThemeContextColors {
   Color get textMuted =>
       _context.theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.6);
   Color get textTertiary => textMuted;
+  Color get onPrimary => _context.theme.colorScheme.onPrimary;
+  Color get onError => _context.theme.colorScheme.onError;
+  Color get onSecondary => _context.theme.colorScheme.onSecondary;
+  Color get success => Design.colors.success;
+  Color get onSuccess => Colors.white;
+  Color get warning => Design.colors.warning;
+  Color get onWarning => Colors.white;
+  Color get info => Design.colors.info;
+  Color get onInfo => Colors.white;
 }
 
 extension ThemeTypography on BuildContext {

@@ -254,27 +254,36 @@ rexone_mobile/
 ├── test_driver/
 │   └── integration_test.dart        # Flutter Driver bridge entrypoint
 └── scripts/
-    └── test.sh                   # Mobile E2E runner CLI
+    ├── test.sh                   # Full test suite runner (Unit + E2E)
+    ├── test_unit.sh              # Flutter unit test runner
+    └── test_e2e.sh               # Mobile E2E runner CLI
 ```
 
-### Running Mobile E2E Tests
+### Running Tests
 
-Use the unified runner script:
+Rexone Mobile provides specialized and unified test runner scripts in [`scripts/`](scripts/):
 
 ```bash
-# Run all mobile flows on a specific device/emulator:
+# 1. Run FULL test suite (Unit + E2E)
 ./scripts/test.sh all -d emulator-5554
 
-# Run an individual flow:
-./scripts/test.sh sign-in -d emulator-5554
-./scripts/test.sh sign-up -d emulator-5554
-./scripts/test.sh password -d emulator-5554
-./scripts/test.sh password-reset -d emulator-5554
-./scripts/test.sh sign-out -d emulator-5554
-./scripts/test.sh sso -d emulator-5554
+# 2. Run ONLY Unit tests (Flutter Test) - fast feedback loop
+./scripts/test_unit.sh
+# or: flutter test
 
-# Or run on iOS Simulator:
-./scripts/test.sh sign-in -d "iPhone 16 Pro"
+# 3. Run ONLY E2E tests (Flutter Drive / Integration Test)
+./scripts/test_e2e.sh all -d emulator-5554
+
+# Run specific E2E flows
+./scripts/test_e2e.sh sign-in -d emulator-5554
+./scripts/test_e2e.sh sign-up -d emulator-5554
+./scripts/test_e2e.sh password -d emulator-5554
+./scripts/test_e2e.sh password-reset -d emulator-5554
+./scripts/test_e2e.sh sign-out -d emulator-5554
+./scripts/test_e2e.sh sso -d emulator-5554
+
+# Or run on iOS Simulator
+./scripts/test_e2e.sh sign-in -d "iPhone 16 Pro"
 ```
 
 Or run via Flutter Driver directly:
@@ -443,10 +452,16 @@ rexone_mobile/
 │   ├── update_package_name.sh # Package identifier / Bundle ID updater
 │   ├── update_app_icon.sh     # Launcher icons generator
 │   ├── update_app_version.sh  # Version and build number incrementer
-│   └── test.sh                # E2E integration test CLI runner
-├── test/                     # Unit and localization tests
+│   ├── test.sh                # Full test suite runner (Unit + E2E)
+│   ├── test_unit.sh           # Flutter unit test runner
+│   └── test_e2e.sh            # E2E integration test CLI runner
+├── test/                      # Unit, controller, and localization tests (88 tests)
+│   ├── controllers/           # Socket controller tests
+│   ├── mocks/                 # In-memory test service doubles
+│   ├── modules/               # Auth, Notification, Feedback, Setting, Payment, AI controller tests
+│   └── services/              # Speech and core service tests
 ├── test_driver/
-│   └── integration_test.dart # Flutter Driver test bridge
+│   └── integration_test.dart  # Flutter Driver test bridge
 └── pubspec.yaml
 ```
 

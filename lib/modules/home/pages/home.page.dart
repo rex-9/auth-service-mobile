@@ -8,6 +8,7 @@ import 'package:rexone_mobile/routes/app.routes.dart';
 import 'package:rexone_mobile/services/services.dart';
 
 import '../../auth/auth.dart';
+import '../../notification/notification.dart';
 
 class HomePage extends GetView<AuthController> {
   const HomePage({super.key});
@@ -17,6 +18,52 @@ class HomePage extends GetView<AuthController> {
     return AppPage(
       title: AppLocales.common.home.tr,
       actions: [
+        Obx(() {
+          final count = Get.isRegistered<NotificationController>()
+              ? Get.find<NotificationController>().unreadCount.value
+              : 0;
+          return Stack(
+            clipBehavior: Clip.none,
+            children: [
+              AppButton(
+                type: EButtonType.icon,
+                icon: count > 0 ? Design.icons.bellActive : Design.icons.bell,
+                onPressed: AppRoutes.toNotifications,
+                tooltip: AppLocales.notification.title.tr,
+                color: count > 0 ? context.colors.primary : null,
+              ),
+              if (count > 0)
+                Positioned(
+                  right: Design.spacing.xs,
+                  top: Design.spacing.xs,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: Design.spacing.xs,
+                      vertical: 1,
+                    ),
+                    decoration: BoxDecoration(
+                      color: context.colors.error,
+                      borderRadius: BorderRadius.circular(Design.spacing.radiusMedium),
+                    ),
+                    constraints: BoxConstraints(
+                      minWidth: Design.spacing.lg,
+                      minHeight: Design.spacing.lg,
+                    ),
+                    child: Text(
+                      count > 99 ? '99+' : '$count',
+                      style: context.typo.caption.copyWith(
+                        color: context.colors.onError,
+                        fontSize: 9,
+                        fontWeight: FontWeight.bold,
+                        height: 1.1,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+            ],
+          );
+        }),
         AppButton(
           type: EButtonType.icon,
           icon: Design.icons.settings,

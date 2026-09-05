@@ -76,6 +76,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           initialRoute: AppRoutes.splash,
           getPages: AppRoutes.pages,
+          unknownRoute: AppRoutes.notFound,
           navigatorObservers: [analytics.observer],
           builder: (context, child) {
             return UpgradeAlert(
@@ -85,7 +86,9 @@ class MyApp extends StatelessWidget {
                 durationUntilAlertAgain: const Duration(days: 3),
               ),
               dialogStyle: UpgradeDialogStyle.material,
-              child: AppLoading.builder(context, child),
+              child: AppNetworkBanner(
+                child: AppLoading.builder(context, child),
+              ),
             );
           },
         ),
