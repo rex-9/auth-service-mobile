@@ -15,8 +15,8 @@ class AssetKeys {
   static const sizeBytes = 'size_bytes';
   static const durationSecs = 'duration_secs';
   static const source = 'source';
-  static const resourceModel = 'resource_model';
-  static const resourceId = 'resource_id';
+  static const assetableType = 'assetable_type';
+  static const assetableId = 'assetable_id';
   static const createdById = 'created_by_id';
   static const bytes = 'bytes';
   static const createdAt = 'created_at';
@@ -24,6 +24,6 @@ class AssetKeys {
 
   // ===== Upload constants (FormData values) =====
   static const typeAvatar = 'avatar';
-  static const resourceUser = 'user';
+  static const assetableUser = 'User';
   static const sourceUpload = 'upload';
 }

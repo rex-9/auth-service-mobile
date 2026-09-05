@@ -22,8 +22,8 @@ class MediaService extends GetxService {
     required String filePath,
     String? filename,
     String? type,
-    String? resourceModel,
-    String? resourceId,
+    String? assetableType,
+    String? assetableId,
     int? durationSecs,
     String? folder,
   }) async {
@@ -34,8 +34,8 @@ class MediaService extends GetxService {
     final form = FormData({
       AssetKeys.file: MultipartFile(bytes, filename: name),
       AssetKeys.type: ?type,
-      AssetKeys.resourceModel: ?resourceModel,
-      AssetKeys.resourceId: ?resourceId,
+      AssetKeys.assetableType: ?assetableType,
+      AssetKeys.assetableId: ?assetableId,
       if (durationSecs != null) AssetKeys.durationSecs: durationSecs.toString(),
       AssetKeys.folder: ?folder,
     });

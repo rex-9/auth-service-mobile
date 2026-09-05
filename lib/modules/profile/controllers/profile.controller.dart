@@ -70,8 +70,8 @@ class ProfileController extends GetxController {
         final upload = await _media.uploadImage(
           filePath: path,
           type: AssetKeys.typeAvatar,
-          resourceModel: AssetKeys.resourceUser,
-          resourceId: userId,
+          assetableType: AssetKeys.assetableUser,
+          assetableId: userId,
         );
         if (!upload.success) {
           AppSnackbar.error(upload.error ?? upload.message);

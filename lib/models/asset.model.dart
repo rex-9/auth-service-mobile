@@ -10,8 +10,8 @@ class AssetModel {
   final int? sizeBytes;
   final int? durationSecs;
   final String source;
-  final String? resourceModel;
-  final String? resourceId;
+  final String? assetableType;
+  final String? assetableId;
   final String? createdById;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -26,8 +26,8 @@ class AssetModel {
     this.sizeBytes,
     this.durationSecs,
     required this.source,
-    this.resourceModel,
-    this.resourceId,
+    this.assetableType,
+    this.assetableId,
     this.createdById,
     this.createdAt,
     this.updatedAt,
@@ -44,8 +44,8 @@ class AssetModel {
       sizeBytes: (json[AssetKeys.sizeBytes] as num?)?.toInt(),
       durationSecs: (json[AssetKeys.durationSecs] as num?)?.toInt(),
       source: json[AssetKeys.source] ?? AssetKeys.sourceUpload,
-      resourceModel: json[AssetKeys.resourceModel],
-      resourceId: json[AssetKeys.resourceId],
+      assetableType: json[AssetKeys.assetableType],
+      assetableId: json[AssetKeys.assetableId],
       createdById: json[AssetKeys.createdById],
       createdAt: json[AssetKeys.createdAt] != null
           ? DateTime.tryParse(json[AssetKeys.createdAt].toString())
@@ -67,8 +67,8 @@ class AssetModel {
       if (sizeBytes != null) AssetKeys.sizeBytes: sizeBytes,
       if (durationSecs != null) AssetKeys.durationSecs: durationSecs,
       AssetKeys.source: source,
-      if (resourceModel != null) AssetKeys.resourceModel: resourceModel,
-      if (resourceId != null) AssetKeys.resourceId: resourceId,
+      if (assetableType != null) AssetKeys.assetableType: assetableType,
+      if (assetableId != null) AssetKeys.assetableId: assetableId,
       if (createdById != null) AssetKeys.createdById: createdById,
     };
   }
