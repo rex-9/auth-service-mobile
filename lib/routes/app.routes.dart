@@ -4,7 +4,6 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:rexone_mobile/config/config.dart';
-import 'package:rexone_mobile/pages/pages.dart';
 import 'package:rexone_mobile/routes/guard.routes.dart';
 import 'package:rexone_mobile/routes/server.routes.dart';
 
@@ -15,6 +14,7 @@ import '../modules/payment/payment.dart';
 import '../modules/profile/profile.dart';
 import '../modules/setting/setting.dart';
 import '../modules/notification/notification.dart';
+import '../modules/splash/splash.dart';
 
 class AppRoutes {
   // ===== SERVER ROUTES =====
@@ -201,7 +201,13 @@ class AppRoutes {
 
   static final pages = [
     // Public Pages
-    GetPage(name: splash, page: () => const SplashPage()),
+    GetPage(
+      name: splash,
+      page: () => const SplashPage(),
+      binding: BindingsBuilder(() {
+        Get.put(SplashController());
+      }),
+    ),
     GetPage(name: auth, page: () => AuthPage()),
     GetPage(name: signinPassword, page: () => const SignInPasswordPage()),
     GetPage(

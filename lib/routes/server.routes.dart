@@ -36,6 +36,9 @@ class ServerRoutes {
   // Telemetry & Logs
   static String get clientLogs => api('/log/clients');
 
+  // App versions
+  static String get currentAppVersion => api('/app_versions/current');
+
   // Users
   static String get currentUser => api('/users/current');
   static String get currentUserIam => api('/users/current/iam');

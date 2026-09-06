@@ -207,7 +207,7 @@ Defined under `src/design/`:
 
 - **Framework**: Flutter `3.x`, Dart `3.x`.
 - **Architecture**: GetX MVC (Pages $\rightarrow$ Controllers $\rightarrow$ Services $\rightarrow$ Models), Centralized Dependency Injection via `InitialBinding`.
-- **Storage & Helpers**: `GetStorage` (local persistence), `Flutter ScreenUtil` (responsive UI scaling: `375x812` baseline), `Flutter Dotenv` (multi-environment: `.env.dev`, `.env.uat`, `.env.prod`), `Google Sign In`, `Pin Code Fields`, `WebView Flutter`, `Firebase Analytics`, `OneSignal Flutter`, `Upgrader`.
+- **Storage & Helpers**: `GetStorage` (local persistence), `Flutter ScreenUtil` (responsive UI scaling: `375x812` baseline), `Flutter Dotenv` (multi-environment: `.env.dev`, `.env.uat`, `.env.prod`), `Google Sign In`, `Pin Code Fields`, `WebView Flutter`, `Firebase Analytics`, `OneSignal Flutter`.
 
 ### 🎨 Mobile Design System (`lib/design/`)
 
@@ -224,7 +224,7 @@ Rexone Mobile has a strictly governed design system accessible via `lib/design/d
 - **Profile**: Own Flutter module (`lib/modules/profile/`). Settings account row opens a Profile screen (name, username, disabled email). Save PUTs name/username and uploads a picked avatar.
 - **Push Notifications**: Powered by OneSignal (`PushNotiService`). Automatically syncs user IDs and tags on login/session restore and clears state on logout.
 - **Product Analytics**: Powered by Firebase Analytics (`AnalyticsService`). Integrates navigation observers for screen tracking and records authentication and application lifecycle events.
-- **In-App Upgrader**: Powered by `upgrader`. Wraps root app builder with `UpgradeAlert` to notify users of critical or optional Play Store / App Store updates.
+- **In-App Upgrader**: Splash calls `GET /v1/app_versions/current` and shows `AppDialog.update` when Core sets `update_required` (force when `must_update`).
 - **Stripe & Billing**: In-app Stripe Checkout WebView (`CheckoutPage`), subscription state cards, billing history, and confirmation-guarded cancellation/resumption.
 - **AI Assistant**: Persistent multi-room chat, background processing indicator, real-time completion toasts via WebSocket, and chat history management.
 - **Real-Time WebSockets**: Action Cable client (`SocketService`) paired with `SocketController` for global notification dispatching and deduplication.

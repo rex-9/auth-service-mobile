@@ -29,6 +29,7 @@ void main() {
       expect(AppLocales.ai.title, 'ai.title');
       expect(AppLocales.payment.title, 'payment.title');
       expect(AppLocales.notification.title, 'notification.title');
+      expect(AppLocales.update.title, 'update.title');
     });
   });
 }

@@ -68,7 +68,7 @@ It was to build a **clear mobile foundation**—strong enough to carry ambitious
 | **Profile**            | Settings account row opens Profile; camera/gallery photo pick (local preview only)       | [Profile](#profile)                                                  |
 | **Push Notifications** | OneSignal push messaging, permission management, user tag syncing, and click routing     | [Push notifications](#push-notifications)                            |
 | **Product Analytics**  | Firebase Analytics screen tracking, auth lifecycle events, and telemetry                 | [Product analytics](#product-analytics)                              |
-| **In-App Upgrades**    | Upgrader alert system supporting soft and hard store version prompts                     | [In-app version upgrader](#in-app-version-upgrader)                  |
+| **In-App Upgrades**    | Splash checks `/v1/app_versions/current` and shows force or skippable update dialogs     | [In-app version upgrader](#in-app-version-upgrader)                  |
 | **Commerce**           | Products, Stripe Checkout WebView, subscriptions, and cancel/resume workflows            | [Payments & entitlements](#payments--entitlements)                   |
 | **AI Assistant**       | Non-blocking queued chat, persistent room history, and Action Cable notifications        | [AI capabilities](#ai-capabilities)                                  |
 | **Real Time**          | Action Cable WebSocket client, subscription channels, and global toast dispatching       | [Real-time delivery](#real-time-delivery)                            |
@@ -165,9 +165,9 @@ The mobile client enforces a synchronized three-tier administrative hierarchy:
 
 ### In-app version upgrader
 
-- Powered by **Upgrader** (`upgrader`).
-- Configured in `main.dart` wrapping the root application builder.
-- Checks App Store and Play Store releases to display customizable update dialogs for outdated installations.
+- Checked on splash via `AppVersionService` (`GET /v1/app_versions/current?app_version=`).
+- `update_required` shows `AppDialog.update`; `must_update` blocks Later and keeps the user on splash.
+- Update opens the API `store_url` in the system store.
 
 ### Payments & entitlements
 

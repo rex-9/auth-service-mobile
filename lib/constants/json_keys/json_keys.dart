@@ -8,3 +8,4 @@ export 'socket.keys.dart';
 export 'speech.keys.dart';
 export 'feedback.keys.dart';
 export 'notification.keys.dart';
+export 'app_version.keys.dart';

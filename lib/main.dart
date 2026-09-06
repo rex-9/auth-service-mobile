@@ -10,7 +10,6 @@ import 'package:rexone_mobile/config/config.dart';
 import 'package:rexone_mobile/design/design.dart';
 import 'package:rexone_mobile/routes/routes.dart';
 import 'package:rexone_mobile/services/services.dart';
-import 'package:upgrader/upgrader.dart';
 import 'bindings/initial.binding.dart';
 import 'locales/app_translations.dart';
 import 'modules/setting/setting.dart';
@@ -79,16 +78,8 @@ class MyApp extends StatelessWidget {
           unknownRoute: AppRoutes.notFound,
           navigatorObservers: [analytics.observer],
           builder: (context, child) {
-            return UpgradeAlert(
-              upgrader: Upgrader(
-                debugLogging: AppConfig.appEnv == '.env.dev',
-                debugDisplayAlways: false,
-                durationUntilAlertAgain: const Duration(days: 3),
-              ),
-              dialogStyle: UpgradeDialogStyle.material,
-              child: AppNetworkBanner(
-                child: AppLoading.builder(context, child),
-              ),
+            return AppNetworkBanner(
+              child: AppLoading.builder(context, child),
             );
           },
         ),
