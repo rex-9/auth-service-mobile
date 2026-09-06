@@ -89,6 +89,7 @@ class ProfileController extends GetxController {
 
 
       if (profile.data != null) {
+        photoUrl.value = profile.data?.photo;
         _cacheUser(profile.data!);
       }
 

@@ -35,7 +35,7 @@ class AppConstants {
   static const minPasswordLength = 6;
   static const maxPasswordLength = 6;
   static const minUsernameLength = 3;
-  static const maxUsernameLength = 20;
+  static const maxUsernameLength = 30;
   static const minNameLength = 2;
   static const maxNameLength = 50;
 

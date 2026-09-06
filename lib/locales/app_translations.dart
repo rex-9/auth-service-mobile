@@ -112,8 +112,14 @@ class AppTranslations extends Translations {
       AppLocales.auth.signUpInfo.createAccountButton: 'Create Account',
       AppLocales.auth.signUpInfo.creatingAccount: 'Creating account...',
       AppLocales.auth.signUpInfo.enterFullName: 'Please enter your full name',
+      AppLocales.auth.signUpInfo.fullNameMaxLength:
+          'Full name cannot exceed 50 characters',
+      AppLocales.auth.signUpInfo.fullNameForbiddenChars:
+          'Full name cannot contain special characters (<, >, :, ;, ?)',
       AppLocales.auth.signUpInfo.usernameMinLength:
           'Username must be at least 3 characters',
+      AppLocales.auth.signUpInfo.usernameMaxLength:
+          'Username cannot exceed 30 characters',
       AppLocales.auth.signUpInfo.usernameCharset:
           'Username can only contain letters, numbers, and underscores',
       AppLocales.auth.signUpInfo.registrationFailed: 'Registration failed',
@@ -360,7 +366,13 @@ class AppTranslations extends Translations {
       AppLocales.auth.signUpInfo.createAccountButton: 'အကောင့်ဖွင့်မည်',
       AppLocales.auth.signUpInfo.creatingAccount: 'အကောင့် ဖွင့်နေဆဲ...',
       AppLocales.auth.signUpInfo.enterFullName: 'အမည် ထည့်ပါ',
+      AppLocales.auth.signUpInfo.fullNameMaxLength:
+          'နာမည် အများဆုံး အလုံး ၅၀ သာ ဖြစ်ရပါမည်',
+      AppLocales.auth.signUpInfo.fullNameForbiddenChars:
+          'နာမည်တွင် ခွင့်မပြုသော စာလုံးများ (<, >, :, ;, ?) မပါဝင်ရပါ',
       AppLocales.auth.signUpInfo.usernameMinLength: 'Username အနည်းဆုံး ၃ လုံး ရှိရမည်',
+      AppLocales.auth.signUpInfo.usernameMaxLength:
+          'Username အများဆုံး အလုံး ၃၀ သာ ဖြစ်ရမည်',
       AppLocales.auth.signUpInfo.usernameCharset:
           'Username တွင် စာလုံး၊ ဂဏန်းနှင့် _ သာ ရပါမည်',
       AppLocales.auth.signUpInfo.registrationFailed: 'အကောင့်ဖွင့်၍ မရပါ',
