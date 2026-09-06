@@ -6,16 +6,16 @@ import 'package:flutter/material.dart';
 class AppColors {
   const AppColors();
 
-  // ===== BRAND (Rex9 Neon Sunset Coral Palette) =====
-  Color get primary => const Color(0xFFFF5E62);
-  Color get primaryLight => const Color(0xFFFF8A8D);
-  Color get primaryDark => const Color(0xFFE8334A);
-  Color get secondary => const Color(0xFFFF7556);
-  Color get accent => const Color(0xFFFF2A4B);
+  // ===== BRAND (Rex9 Neon Scarlet Red Palette - More Red, Less Pink) =====
+  Color get primary => const Color(0xFFFF2238);
+  Color get primaryLight => const Color(0xFFFF5263);
+  Color get primaryDark => const Color(0xFFCC1125);
+  Color get secondary => const Color(0xFFFF4D2E);
+  Color get accent => const Color(0xFFFF0D2D);
 
   // ===== NEON GLOW COLORS =====
   Color get glowWhite => const Color(0xFFFFF2F4);
-  Color get glowRuby => const Color(0xFF6B1426);
+  Color get glowRuby => const Color(0xFF5C0916);
 
   // ===== SEMANTIC (Unified across Light & Dark) =====
   Color get success => const Color(0xFF10B981);
@@ -71,10 +71,10 @@ class AppGlassColors {
   Color get cardHover => const Color(0x8C32101C);
   Color get form => const Color(0xA61C0810);
   Color get project => const Color(0x8C12060C);
-  Color get border => const Color(0x38FF5E62);
-  Color get borderHover => const Color(0x8CFF5E62);
-  Color get tag => const Color(0xA6FF5E62);
-  Color get tagBg => const Color(0x14FF5E62);
+  Color get border => const Color(0x38FF2238);
+  Color get borderHover => const Color(0x8CFF2238);
+  Color get tag => const Color(0xA6FF2238);
+  Color get tagBg => const Color(0x14FF2238);
 }
 
 class GradientColors {
@@ -129,33 +129,33 @@ class Shadows {
 
   List<BoxShadow> get neon => const [
     BoxShadow(
-      color: Color(0xFFFF5E62),
+      color: Color(0xFFFF2238),
       blurRadius: 8,
     ),
     BoxShadow(
-      color: Color(0xFFE8334A),
+      color: Color(0xFFCC1125),
       blurRadius: 25,
     ),
   ];
 
   List<BoxShadow> get neonLg => const [
     BoxShadow(
-      color: Color(0xFFFF5E62),
+      color: Color(0xFFFF2238),
       blurRadius: 8,
     ),
     BoxShadow(
-      color: Color(0xFFE8334A),
+      color: Color(0xFFCC1125),
       blurRadius: 25,
     ),
     BoxShadow(
-      color: Color(0xFF6B1426),
+      color: Color(0xFF5C0916),
       blurRadius: 50,
     ),
   ];
 
   List<BoxShadow> get glassCard => const [
     BoxShadow(
-      color: Color(0x59FF5E62),
+      color: Color(0x59FF2238),
       blurRadius: 30,
       offset: Offset(0, 6),
     ),
@@ -163,7 +163,7 @@ class Shadows {
 
   List<BoxShadow> get glassHover => const [
     BoxShadow(
-      color: Color(0x73FF5E62),
+      color: Color(0x73FF2238),
       blurRadius: 32,
       offset: Offset(0, 8),
     ),
