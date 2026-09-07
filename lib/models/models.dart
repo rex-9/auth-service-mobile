@@ -1,7 +1,8 @@
 export 'user.model.dart';
 export 'asset.model.dart';
 export 'log.model.dart';
-export 'app_version.model.dart';
+export 'version.model.dart';
+export 'user_version.model.dart';
 export 'responses/responses.dart';
 export 'pagination.model.dart';
 export '../modules/notification/data/models/notification.model.dart';

@@ -11,11 +11,11 @@ import 'package:rexone_mobile/routes/routes.dart';
 import 'package:rexone_mobile/services/services.dart';
 
 class SplashController extends GetxController {
-  final AppVersionService _appVersion = Get.find<AppVersionService>();
+  final VersionService _version = Get.find<VersionService>();
   final StorageService _storage = Get.find<StorageService>();
   final AuthController _auth = Get.find<AuthController>();
 
-  final latestVersion = Rxn<AppVersionModel>();
+  final latestVersion = Rxn<VersionModel>();
 
   @override
   void onInit() {
@@ -36,7 +36,7 @@ class SplashController extends GetxController {
       final version = info.version.isNotEmpty
           ? info.version
           : AppConfig.appVersion;
-      final result = await _appVersion.getCurrent(version);
+      final result = await _version.getCurrent(version);
       if (result.success && result.data != null) {
         latestVersion.value = result.data;
         _storage.setSkipPremium(result.data!.skipPremium);

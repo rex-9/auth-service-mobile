@@ -164,7 +164,7 @@ The mobile client enforces a synchronized three-tier administrative hierarchy:
 
 ### In-app version upgrader
 
-- Checked on splash via `AppVersionService` (`GET /v1/app_versions/current?app_version=`).
+- Checked on splash via `VersionService` (`GET /v1/app_versions/current?app_version=`).
 - `update_required` shows `AppDialog.update`; `must_update` blocks Later and keeps the user on splash.
 - Update opens the API `store_url` in the system store.
 

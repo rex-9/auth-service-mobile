@@ -7,7 +7,7 @@ import 'package:rexone_mobile/modules/auth/auth.dart';
 import 'package:rexone_mobile/modules/splash/splash.dart';
 import 'package:rexone_mobile/routes/app.routes.dart';
 import 'package:rexone_mobile/services/analytics.service.dart';
-import 'package:rexone_mobile/services/app_version.service.dart';
+import 'package:rexone_mobile/services/version.service.dart';
 import 'package:rexone_mobile/services/push_noti.service.dart';
 import 'package:rexone_mobile/services/socket.service.dart';
 import 'package:rexone_mobile/services/storage.service.dart';
@@ -16,7 +16,7 @@ import '../../../mocks/test_services.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  late FakeAppVersionService fakeAppVersion;
+  late FakeVersionService fakeVersion;
   late FakeStorageService fakeStorage;
   late SplashController controller;
 
@@ -32,10 +32,10 @@ void main() {
 
   setUp(() {
     Get.testMode = true;
-    fakeAppVersion = FakeAppVersionService();
+    fakeVersion = FakeVersionService();
     fakeStorage = FakeStorageService();
 
-    Get.put<AppVersionService>(fakeAppVersion);
+    Get.put<VersionService>(fakeVersion);
     Get.put<StorageService>(fakeStorage);
     Get.put<AuthService>(FakeAuthService());
     Get.put<AnalyticsService>(FakeAnalyticsService());
@@ -50,12 +50,12 @@ void main() {
     Get.reset();
   });
 
-  AppVersionModel version({
+  VersionModel version({
     bool updateRequired = false,
     bool mustUpdate = false,
     bool skipPremium = false,
   }) {
-    return AppVersionModel(
+    return VersionModel(
       id: 'av1',
       number: '2.0.0',
       updateRequired: updateRequired,
@@ -66,7 +66,7 @@ void main() {
 
   group('SplashController', () {
     test('checkAppVersion stores latest version and skip_premium', () async {
-      fakeAppVersion.currentResponse = ApiResponse.success(
+      fakeVersion.currentResponse = ApiResponse.success(
         message: 'OK',
         statusCode: 200,
         data: version(skipPremium: true),
@@ -74,14 +74,14 @@ void main() {
 
       await controller.checkAppVersion();
 
-      expect(fakeAppVersion.lastRequestedVersion, equals('1.0.0'));
+      expect(fakeVersion.lastRequestedVersion, equals('1.0.0'));
       expect(controller.latestVersion.value?.number, equals('2.0.0'));
       expect(fakeStorage.getSkipPremium(), isTrue);
     });
 
     test('checkAppVersion writes skip_premium false when Core returns false', () async {
       fakeStorage.setSkipPremium(true);
-      fakeAppVersion.currentResponse = ApiResponse.success(
+      fakeVersion.currentResponse = ApiResponse.success(
         message: 'OK',
         statusCode: 200,
         data: version(skipPremium: false),
@@ -94,7 +94,7 @@ void main() {
 
     test('checkAppVersion keeps stored skip_premium when the request fails', () async {
       fakeStorage.setSkipPremium(true);
-      fakeAppVersion.throwOnGet = true;
+      fakeVersion.throwOnGet = true;
 
       await controller.checkAppVersion();
 
@@ -103,7 +103,7 @@ void main() {
     });
 
     test('checkAppVersion does not store version when the API has no data', () async {
-      fakeAppVersion.currentResponse = ApiResponse.error(
+      fakeVersion.currentResponse = ApiResponse.error(
         message: 'Unavailable',
         statusCode: 500,
       );

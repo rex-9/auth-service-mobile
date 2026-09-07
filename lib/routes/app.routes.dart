@@ -226,6 +226,9 @@ class AppRoutes {
     GetPage(
       name: home,
       page: () => const HomePage(),
+      binding: BindingsBuilder(() {
+        Get.put(HomeController());
+      }),
       middlewares: [GuardRoutes()],
     ),
     GetPage(

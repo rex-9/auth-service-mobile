@@ -33,7 +33,7 @@ class InitialBinding extends Bindings {
     Get.put(LogService(), permanent: true);
 
     // App version check (depends on ApiService)
-    Get.put(AppVersionService(), permanent: true);
+    Get.put(VersionService(), permanent: true);
 
     // Media upload (depends on ApiService)
     Get.put(MediaService(), permanent: true);
