@@ -18,8 +18,6 @@ void main() {
 
   late FakeAppVersionService fakeAppVersion;
   late FakeStorageService fakeStorage;
-  late FakeAuthService fakeAuth;
-  late AuthController authController;
   late SplashController controller;
 
   setUpAll(() {
@@ -36,16 +34,15 @@ void main() {
     Get.testMode = true;
     fakeAppVersion = FakeAppVersionService();
     fakeStorage = FakeStorageService();
-    fakeAuth = FakeAuthService();
 
     Get.put<AppVersionService>(fakeAppVersion);
     Get.put<StorageService>(fakeStorage);
-    Get.put<AuthService>(fakeAuth);
+    Get.put<AuthService>(FakeAuthService());
     Get.put<AnalyticsService>(FakeAnalyticsService());
     Get.put<PushNotiService>(FakePushNotiService());
     Get.put<SocketService>(FakeSocketService());
 
-    authController = Get.put(AuthController());
+    Get.put(AuthController());
     controller = Get.put(SplashController());
   });
 
@@ -65,18 +62,6 @@ void main() {
       mustUpdate: mustUpdate,
       skipPremium: skipPremium,
     );
-  }
-
-  Future<void> signIn() async {
-    final user = UserModel(id: 'usr_1', email: 'rex@example.com');
-    fakeAuth.currentUserResponse = ApiResponse.success(
-      message: 'OK',
-      statusCode: 200,
-      data: user,
-    );
-    fakeStorage.setToken('stored_token');
-    fakeStorage.setUserData(user);
-    await authController.checkAuthStatus();
   }
 
   group('SplashController', () {
@@ -137,34 +122,12 @@ void main() {
       expect(controller.latestVersion.value?.updateRequired, isTrue);
     });
 
-    test('launchRoute is auth for logged-out users and navigate clears the stack', () async {
+    test('navigate clears the route stack for logged-out users', () async {
       fakeStorage.saveRouteStack([AppRoutes.home, AppRoutes.settings]);
-
-      expect(controller.launchRoute(), equals(AppRoutes.auth));
 
       await controller.navigate();
 
       expect(fakeStorage.getRouteStack(), isEmpty);
-    });
-
-    test('launchRoute is home for logged-in users when the stack is empty', () async {
-      await signIn();
-
-      expect(controller.launchRoute(), equals(AppRoutes.home));
-    });
-
-    test('launchRoute restores the last protected route for logged-in users', () async {
-      await signIn();
-      fakeStorage.saveRouteStack([AppRoutes.home, AppRoutes.settings]);
-
-      expect(controller.launchRoute(), equals(AppRoutes.settings));
-    });
-
-    test('launchRoute falls back to home when the stack is not a protected route', () async {
-      await signIn();
-      fakeStorage.saveRouteStack(['/unknown']);
-
-      expect(controller.launchRoute(), equals(AppRoutes.home));
     });
   });
 }

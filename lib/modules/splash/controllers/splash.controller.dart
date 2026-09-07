@@ -76,30 +76,21 @@ class SplashController extends GetxController {
     await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
-  static const protectedRoutes = [
-    AppRoutes.home,
-    AppRoutes.settings,
-    AppRoutes.payment,
-    AppRoutes.ai,
-  ];
-
-  String launchRoute() {
-    if (!_auth.isLoggedIn.value) return AppRoutes.auth;
-    final stack = _storage.getRouteStack();
-    if (stack.isNotEmpty && protectedRoutes.contains(stack.last)) {
-      return stack.last;
-    }
-    return AppRoutes.home;
-  }
-
   Future<void> navigate() async {
     // Give AuthController.checkAuthStatus() a tick to finish if it was
     // triggered in onInit before the widget tree was ready.
     await Future.delayed(const Duration(milliseconds: 10));
 
-    if (!_auth.isLoggedIn.value) {
+    if (_auth.isLoggedIn.value) {
+      final stack = _storage.getRouteStack();
+      if (stack.isNotEmpty) {
+        Get.offAllNamed(stack.last);
+      } else {
+        AppRoutes.toHome();
+      }
+    } else {
       _storage.clearRouteStack();
+      AppRoutes.toAuth();
     }
-    Get.offAllNamed(launchRoute());
   }
 }
