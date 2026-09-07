@@ -112,8 +112,14 @@ class AppTranslations extends Translations {
       AppLocales.auth.signUpInfo.createAccountButton: 'Create Account',
       AppLocales.auth.signUpInfo.creatingAccount: 'Creating account...',
       AppLocales.auth.signUpInfo.enterFullName: 'Please enter your full name',
+      AppLocales.auth.signUpInfo.fullNameMaxLength:
+          'Full name cannot exceed 50 characters',
+      AppLocales.auth.signUpInfo.fullNameForbiddenChars:
+          'Full name cannot contain special characters (<, >, :, ;, ?)',
       AppLocales.auth.signUpInfo.usernameMinLength:
           'Username must be at least 3 characters',
+      AppLocales.auth.signUpInfo.usernameMaxLength:
+          'Username cannot exceed 30 characters',
       AppLocales.auth.signUpInfo.usernameCharset:
           'Username can only contain letters, numbers, and underscores',
       AppLocales.auth.signUpInfo.registrationFailed: 'Registration failed',
@@ -224,6 +230,17 @@ class AppTranslations extends Translations {
           'Upload a new profile picture (PNG, JPG, WebP supported)',
       AppLocales.user.selectImage: 'Choose Image',
       AppLocales.user.uploadAvatar: 'Upload Avatar',
+      AppLocales.user.takePhoto: 'Take photo',
+      AppLocales.user.chooseFromGallery: 'Choose from gallery',
+      AppLocales.user.cameraPermissionTitle: 'Camera access required',
+      AppLocales.user.cameraPermissionMessage:
+          'Taking a profile photo needs camera access. Open Settings to enable it for this app.',
+      AppLocales.user.photosPermissionTitle: 'Photo library access required',
+      AppLocales.user.photosPermissionMessage:
+          'Choosing a profile photo needs photo library access. Open Settings to enable it for this app.',
+      AppLocales.user.uploadAvatarFailed: 'Could not upload profile photo',
+      AppLocales.user.updateSuccess: 'Profile saved successfully',
+      AppLocales.user.updateFailed: 'Could not update profile',
       AppLocales.user.accountInfo: 'Account Information',
       AppLocales.user.roles: 'Roles',
       AppLocales.user.permissions: 'Permissions',
@@ -349,7 +366,13 @@ class AppTranslations extends Translations {
       AppLocales.auth.signUpInfo.createAccountButton: 'အကောင့်ဖွင့်မည်',
       AppLocales.auth.signUpInfo.creatingAccount: 'အကောင့် ဖွင့်နေဆဲ...',
       AppLocales.auth.signUpInfo.enterFullName: 'အမည် ထည့်ပါ',
+      AppLocales.auth.signUpInfo.fullNameMaxLength:
+          'နာမည် အများဆုံး အလုံး ၅၀ သာ ဖြစ်ရပါမည်',
+      AppLocales.auth.signUpInfo.fullNameForbiddenChars:
+          'နာမည်တွင် ခွင့်မပြုသော စာလုံးများ (<, >, :, ;, ?) မပါဝင်ရပါ',
       AppLocales.auth.signUpInfo.usernameMinLength: 'Username အနည်းဆုံး ၃ လုံး ရှိရမည်',
+      AppLocales.auth.signUpInfo.usernameMaxLength:
+          'Username အများဆုံး အလုံး ၃၀ သာ ဖြစ်ရမည်',
       AppLocales.auth.signUpInfo.usernameCharset:
           'Username တွင် စာလုံး၊ ဂဏန်းနှင့် _ သာ ရပါမည်',
       AppLocales.auth.signUpInfo.registrationFailed: 'အကောင့်ဖွင့်၍ မရပါ',
@@ -456,6 +479,17 @@ class AppTranslations extends Translations {
       AppLocales.user.avatarHint: 'ပရိုဖိုင်ပုံ အသစ်တင်ပါ (PNG, JPG, WebP)',
       AppLocales.user.selectImage: 'ပုံရွေးပါ',
       AppLocales.user.uploadAvatar: 'ပုံတင်မည်',
+      AppLocales.user.takePhoto: 'ကင်မရာ',
+      AppLocales.user.chooseFromGallery: 'ပြခန်းမှ ရွေးရန်',
+      AppLocales.user.cameraPermissionTitle: 'ကင်မရာ ခွင့်ပြုချက် လိုအပ်သည်',
+      AppLocales.user.cameraPermissionMessage:
+          'ပရိုဖိုင်ပုံ ရိုက်ရန် ကင်မရာ ခွင့်ပြုချက် လိုအပ်သည်။ Settings တွင် ဤအက်ပ်အတွက် ဖွင့်ပါ။',
+      AppLocales.user.photosPermissionTitle: 'ဓာတ်ပုံပြခန်း ခွင့်ပြုချက် လိုအပ်သည်',
+      AppLocales.user.photosPermissionMessage:
+          'ပရိုဖိုင်ပုံ ရွေးရန် ဓာတ်ပုံပြခန်း ခွင့်ပြုချက် လိုအပ်သည်။ Settings တွင် ဤအက်ပ်အတွက် ဖွင့်ပါ။',
+      AppLocales.user.uploadAvatarFailed: 'ပရိုဖိုင်ပုံ တင်၍ မရပါ',
+      AppLocales.user.updateSuccess: 'ပရိုဖိုင် သိမ်းပြီးပါပြီ',
+      AppLocales.user.updateFailed: 'ပရိုဖိုင် ပြင်၍ မရပါ',
       AppLocales.user.accountInfo: 'အကောင့် အချက်အလက်',
       AppLocales.user.roles: 'ရာထူးများ',
       AppLocales.user.permissions: 'ခွင့်ပြုချက်များ',

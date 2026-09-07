@@ -108,7 +108,10 @@ class _AuthSignUpInfoLocales {
   final createAccountButton = 'auth.signup_info.actions.create_account';
   final creatingAccount = 'auth.signup_info.actions.creating_account';
   final enterFullName = 'auth.signup_info.validation.full_name_required';
+  final fullNameMaxLength = 'auth.signup_info.validation.full_name_max_length';
+  final fullNameForbiddenChars = 'auth.signup_info.validation.full_name_forbidden';
   final usernameMinLength = 'auth.signup_info.validation.username_length';
+  final usernameMaxLength = 'auth.signup_info.validation.username_max_length';
   final usernameCharset = 'auth.signup_info.validation.username_format';
   final registrationFailed = 'auth.signup_info.errors.registration_failed';
 }
@@ -254,6 +257,15 @@ class _UserLocales {
   final avatarHint = 'user.avatar_hint';
   final selectImage = 'user.select_image';
   final uploadAvatar = 'user.upload_avatar';
+  final takePhoto = 'user.take_photo';
+  final chooseFromGallery = 'user.choose_from_gallery';
+  final cameraPermissionTitle = 'user.camera_permission_title';
+  final cameraPermissionMessage = 'user.camera_permission_message';
+  final photosPermissionTitle = 'user.photos_permission_title';
+  final photosPermissionMessage = 'user.photos_permission_message';
+  final uploadAvatarFailed = 'user.upload_avatar_failed';
+  final updateSuccess = 'user.update_success';
+  final updateFailed = 'user.update_failed';
   final accountInfo = 'user.account_info';
   final roles = 'user.roles';
   final permissions = 'user.permissions';

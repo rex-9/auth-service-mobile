@@ -23,7 +23,9 @@ jobs:
           cache: true
 
       - name: Install dependencies
-        run: flutter pub get
+        run: |
+          touch .env.dev .env.uat .env.prod
+          flutter pub get
 
       - name: Static Analysis & Syntax Check
         run: flutter analyze

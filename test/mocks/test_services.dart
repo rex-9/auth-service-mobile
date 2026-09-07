@@ -11,12 +11,16 @@ import 'package:rexone_mobile/modules/feedback/data/models/feedback.model.dart';
 import 'package:rexone_mobile/modules/feedback/services/feedback.service.dart';
 import 'package:rexone_mobile/modules/notification/notification.dart';
 import 'package:rexone_mobile/modules/payment/payment.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:rexone_mobile/modules/profile/profile.dart';
 import 'package:rexone_mobile/services/analytics.service.dart';
+import 'package:rexone_mobile/services/media.service.dart';
+import 'package:rexone_mobile/services/network.service.dart';
+import 'package:rexone_mobile/services/permission.service.dart';
 import 'package:rexone_mobile/services/push_noti.service.dart';
 import 'package:rexone_mobile/services/socket.service.dart';
 import 'package:rexone_mobile/services/speech.service.dart';
 import 'package:rexone_mobile/services/storage.service.dart';
-import 'package:rexone_mobile/services/network.service.dart';
 
 /// In-memory storage service that replaces GetStorage box for unit tests.
 class FakeStorageService extends StorageService {
@@ -704,6 +708,142 @@ class FakeNetworkService extends GetxService implements NetworkService {
     isOnline.value = true;
     isBannerVisible.value = false;
     isRestored.value = false;
+  }
+}
+
+/// Fake Permission Service.
+class FakePermissionService extends PermissionService {
+  bool allowedResult = true;
+  bool ensureCameraResult = true;
+  bool requestMicResult = true;
+  bool promptSettingsCalled = false;
+  bool promptPhotosCalled = false;
+
+  @override
+  void onInit() {}
+
+  @override
+  Future<bool> isAllowed(Permission permission) async => allowedResult;
+
+  @override
+  Future<bool> request(Permission permission) async => allowedResult;
+
+  @override
+  Future<bool> ensure(
+    Permission permission, {
+    required String title,
+    required String message,
+  }) async => allowedResult;
+
+  @override
+  Future<void> promptSettings({
+    required String title,
+    required String message,
+  }) async {
+    promptSettingsCalled = true;
+  }
+
+  @override
+  Future<bool> requestMicrophone() async => requestMicResult;
+
+  @override
+  Future<void> promptMicrophoneSettings() async {
+    promptSettingsCalled = true;
+  }
+
+  @override
+  Future<bool> ensureCamera() async => ensureCameraResult;
+
+  @override
+  Future<void> promptPhotosSettings() async {
+    promptPhotosCalled = true;
+  }
+
+  @override
+  Future<void> promptPhotosIfDenied() async {
+    if (!allowedResult) {
+      promptPhotosCalled = true;
+    }
+  }
+}
+
+/// Fake Media Service.
+class FakeMediaService extends MediaService {
+  ApiResponse<AssetUploadResponse>? uploadResponse;
+  String? lastUploadedFilePath;
+  String? lastUploadedType;
+  String? lastUploadedAssetableType;
+  String? lastUploadedAssetableId;
+
+  @override
+  void onInit() {}
+
+  @override
+  Future<ApiResponse<AssetUploadResponse>> uploadImage({
+    required String filePath,
+    String? filename,
+    String? type,
+    String? assetableType,
+    String? assetableId,
+    int? durationSecs,
+    String? folder,
+  }) async {
+    lastUploadedFilePath = filePath;
+    lastUploadedType = type;
+    lastUploadedAssetableType = assetableType;
+    lastUploadedAssetableId = assetableId;
+
+    return uploadResponse ??
+        ApiResponse.success(
+          message: 'Uploaded',
+          statusCode: 200,
+          data: AssetUploadResponse(
+            asset: AssetModel(
+              id: 'a1',
+              name: 'avatar.png',
+              url: 'https://example.com/avatar.png',
+              type: type ?? 'avatar',
+              source: AssetKeys.sourceUpload,
+              sizeBytes: 1024,
+              format: 'png',
+              assetableType: assetableType ?? 'User',
+              assetableId: assetableId ?? 'u1',
+            ),
+            storageDetails: StorageDetails(
+              storageKey: 'avatars/a1.png',
+              bytes: 1024,
+              format: 'png',
+            ),
+          ),
+        );
+  }
+}
+
+/// Fake Profile Service.
+class FakeProfileService extends ProfileService {
+  ApiResponse<UserModel>? updateResponse;
+  UpdateUserRequest? lastUpdateRequest;
+
+  @override
+  void onInit() {}
+
+  @override
+  Future<ApiResponse<UserModel>> updateCurrentUser(
+    UpdateUserRequest request,
+  ) async {
+    lastUpdateRequest = request;
+    return updateResponse ??
+        ApiResponse.success(
+          message: 'Profile updated',
+          statusCode: 200,
+          data: UserModel(
+            id: 'u1',
+            name: request.name,
+            username: request.username,
+            email: 'test@example.com',
+            photo: 'https://example.com/new_avatar.png',
+          ),
+        );
   }
 }
 
