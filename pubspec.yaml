@@ -44,7 +44,6 @@ dependencies:
   webview_flutter: ^4.14.1
   url_launcher: ^6.3.2
   onesignal_flutter: ^5.6.8
-  upgrader: ^13.7.0
   firebase_core: ^4.14.0
   firebase_analytics: ^12.5.0
   record: ^7.1.1

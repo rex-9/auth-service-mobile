@@ -20,6 +20,7 @@ import 'package:rexone_mobile/services/permission.service.dart';
 import 'package:rexone_mobile/services/push_noti.service.dart';
 import 'package:rexone_mobile/services/socket.service.dart';
 import 'package:rexone_mobile/services/speech.service.dart';
+import 'package:rexone_mobile/services/version.service.dart';
 import 'package:rexone_mobile/services/storage.service.dart';
 
 /// In-memory storage service that replaces GetStorage box for unit tests.
@@ -85,6 +86,12 @@ class FakeStorageService extends StorageService {
 
   @override
   String? getLocaleCode() => memory[StorageKeys.locale] as String?;
+
+  @override
+  void setSkipPremium(bool skip) => memory[StorageKeys.skipPremium] = skip;
+
+  @override
+  bool getSkipPremium() => memory[StorageKeys.skipPremium] == true;
 
   @override
   void clearAll() => memory.clear();
@@ -764,6 +771,57 @@ class FakePermissionService extends PermissionService {
     if (!allowedResult) {
       promptPhotosCalled = true;
     }
+  }
+}
+
+/// Fake Version Service.
+class FakeVersionService extends VersionService {
+  ApiResponse<VersionModel>? currentResponse;
+  String? lastRequestedVersion;
+  bool throwOnGet = false;
+
+  @override
+  void onInit() {}
+
+  @override
+  Future<ApiResponse<VersionModel>> getCurrent(String version) async {
+    lastRequestedVersion = version;
+    if (throwOnGet) throw Exception('offline');
+    return currentResponse ??
+        ApiResponse.success(
+          message: 'OK',
+          statusCode: 200,
+          data: VersionModel(
+            id: 'av1',
+            number: '1.0.0',
+          ),
+        );
+  }
+
+  ApiResponse<UserVersionModel>? userVersionResponse;
+  String? lastReportedVersion;
+  int? lastReportedVersionCode;
+  bool throwOnReport = false;
+
+  @override
+  Future<ApiResponse<UserVersionModel>> reportUserVersion({
+    required String version,
+    required int versionCode,
+  }) async {
+    lastReportedVersion = version;
+    lastReportedVersionCode = versionCode;
+    if (throwOnReport) throw Exception('offline');
+    return userVersionResponse ??
+        ApiResponse.success(
+          message: 'OK',
+          statusCode: 200,
+          data: UserVersionModel(
+            id: 'install_1',
+            number: version,
+            buildNumber: versionCode,
+            platform: 'android',
+          ),
+        );
   }
 }
 

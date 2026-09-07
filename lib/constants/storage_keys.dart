@@ -16,4 +16,5 @@ class StorageKeys {
   static const userEmail = 'user_email';
   static const remainingAttempts = 'remainingAttempts';
   static const hasFailureHistory = 'hasFailureHistory';
+  static const skipPremium = 'skip_premium';
 }

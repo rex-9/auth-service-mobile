@@ -269,6 +269,13 @@ class AppTranslations extends Translations {
       AppLocales.notification.loadMore: 'Load more',
       AppLocales.notification.deleted: 'Notification deleted',
       AppLocales.notification.failedToLoad: 'Failed to load notifications',
+
+      // Update
+      AppLocales.update.title: 'Update App?',
+      AppLocales.update.message: 'A new version of the app is available.',
+      AppLocales.update.prompt: 'Would you like to update it now?',
+      AppLocales.update.update: 'UPDATE NOW',
+      AppLocales.update.later: 'LATER',
     },
     'my_MM': {
       // Common
@@ -505,6 +512,13 @@ class AppTranslations extends Translations {
       AppLocales.notification.loadMore: 'ထပ်မံကြည့်ရှုရန်',
       AppLocales.notification.deleted: 'အသိပေးချက် ဖျက်ပြီးပါပြီ',
       AppLocales.notification.failedToLoad: 'အသိပေးချက်များ ရယူ၍မရပါ',
+
+      // Update
+      AppLocales.update.title: 'အက်ပ်ကို အပ်ဒိတ်လုပ်မလား?',
+      AppLocales.update.message: 'အက်ပ်ဗားရှင်း အသစ် ရရှိပါသည်။',
+      AppLocales.update.prompt: 'ယခု အပ်ဒိတ်လုပ်လိုပါသလား?',
+      AppLocales.update.update: 'ယခု အပ်ဒိတ်',
+      AppLocales.update.later: 'နောက်မှ',
     },
   };
 }

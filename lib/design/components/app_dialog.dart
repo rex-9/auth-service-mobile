@@ -103,6 +103,88 @@ class AppDialog {
     );
   }
 
+  /// Update prompt. When [mustUpdate] is true the dialog cannot be dismissed;
+  /// [onUpdate] should open the store and leave the dialog open.
+  static Future<void> update({
+    required BuildContext context,
+    required String title,
+    required String message,
+    required bool mustUpdate,
+    required VoidCallback onUpdate,
+  }) {
+    Get.addTranslations(AppTranslations().keys);
+    final laterLabel = AppLocales.update.later.tr;
+    final updateLabel = AppLocales.update.update.tr;
+    final prompt = AppLocales.update.prompt.tr;
+    final contentAlign = isIOS ? CrossAxisAlignment.center : CrossAxisAlignment.start;
+    final content = Padding(
+      padding: Design.spacing.paddingOnly(t: Design.spacing.xs),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: contentAlign,
+        children: [
+          Text(message, style: context.typo.bodyMedium),
+          Padding(
+            padding: Design.spacing.paddingOnly(t: Design.spacing.lg),
+            child: Text(prompt, style: context.typo.bodyMedium),
+          ),
+        ],
+      ),
+    );
+
+    final Widget dialog;
+    if (isIOS) {
+      dialog = CupertinoAlertDialog(
+        title: Text(title, style: context.typo.headline4),
+        content: content,
+        actions: [
+          if (!mustUpdate)
+            CupertinoDialogAction(
+              onPressed: Get.back,
+              child: Text(laterLabel),
+            ),
+          CupertinoDialogAction(
+            onPressed: onUpdate,
+            isDefaultAction: true,
+            child: Text(updateLabel),
+          ),
+        ],
+      );
+    } else {
+      dialog = AlertDialog(
+        backgroundColor: Get.theme.colorScheme.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Design.spacing.radiusLarge),
+        ),
+        title: Text(
+          title,
+          style: context.typo.headline4.copyWith(
+            color: Get.theme.colorScheme.onSurface,
+          ),
+        ),
+        content: content,
+        actions: [
+          if (!mustUpdate)
+            AppButton(
+              type: EButtonType.text,
+              onPressed: Get.back,
+              text: laterLabel,
+            ),
+          AppButton(
+            type: EButtonType.text,
+            onPressed: onUpdate,
+            text: updateLabel,
+          ),
+        ],
+      );
+    }
+
+    return Get.dialog<void>(
+      PopScope(canPop: !mustUpdate, child: dialog),
+      barrierDismissible: !mustUpdate,
+    );
+  }
+
   static Future<bool> confirm({
     required BuildContext context,
     required String title,

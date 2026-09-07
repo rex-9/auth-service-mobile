@@ -13,6 +13,7 @@ class AppLocales {
   static const payment = _PaymentLocales();
   static const user = _UserLocales();
   static const notification = _NotificationLocales();
+  static const update = _UpdateLocales();
 }
 
 class _AuthLocales {
@@ -269,6 +270,16 @@ class _UserLocales {
   final accountInfo = 'user.account_info';
   final roles = 'user.roles';
   final permissions = 'user.permissions';
+}
+
+class _UpdateLocales {
+  const _UpdateLocales();
+
+  final title = 'update.title';
+  final message = 'update.message';
+  final prompt = 'update.prompt';
+  final update = 'update.update';
+  final later = 'update.later';
 }
 
 class _NotificationLocales {

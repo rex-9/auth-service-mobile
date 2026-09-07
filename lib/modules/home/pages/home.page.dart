@@ -119,12 +119,14 @@ class HomePage extends GetView<AuthController> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    AppButton(
-                      type: EButtonType.secondary,
-                      text: '💳 ${AppLocales.payment.upgradePlan.tr}',
-                      onPressed: AppRoutes.toPayment,
-                    ),
-                    SizedBox(height: Design.spacing.md),
+                    if (!controller.skipPremium) ...[
+                      AppButton(
+                        type: EButtonType.secondary,
+                        text: '💳 ${AppLocales.payment.upgradePlan.tr}',
+                        onPressed: AppRoutes.toPayment,
+                      ),
+                      SizedBox(height: Design.spacing.md),
+                    ],
                     AppButton(
                       type: EButtonType.secondary,
                       text: '🤖 ${AppLocales.ai.title.tr}',

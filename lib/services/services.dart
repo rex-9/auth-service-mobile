@@ -8,3 +8,4 @@ export 'speech.service.dart';
 export 'analytics.service.dart';
 export 'push_noti.service.dart';
 export 'network.service.dart';
+export 'version.service.dart';

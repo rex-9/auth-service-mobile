@@ -32,6 +32,9 @@ class InitialBinding extends Bindings {
     // Telemetry & Error Logging (depends on ApiService)
     Get.put(LogService(), permanent: true);
 
+    // App version check (depends on ApiService)
+    Get.put(VersionService(), permanent: true);
+
     // Media upload (depends on ApiService)
     Get.put(MediaService(), permanent: true);
 
