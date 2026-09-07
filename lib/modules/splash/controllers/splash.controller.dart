@@ -36,8 +36,9 @@ class SplashController extends GetxController {
           ? info.version
           : AppConfig.appVersion;
       final result = await _appVersion.getCurrent(version);
-     if (result.success && result.data != null) {
+      if (result.success && result.data != null) {
         latestVersion.value = result.data;
+        _storage.setSkipPremium(result.data!.skipPremium);
       }
     } catch (error) {
       debugPrint("Error: $error");

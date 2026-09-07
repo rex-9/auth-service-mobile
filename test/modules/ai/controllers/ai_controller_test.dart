@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:rexone_mobile/constants/constants.dart';
 import 'package:rexone_mobile/models/models.dart';
 import 'package:rexone_mobile/modules/ai/ai.dart';
-import 'package:rexone_mobile/services/speech.service.dart';
+import 'package:rexone_mobile/services/services.dart';
 import '../../../mocks/test_services.dart';
 
 void main() {
@@ -12,15 +12,18 @@ void main() {
 
   late FakeAiService fakeAi;
   late FakeSpeechService fakeSpeech;
+  late FakePermissionService fakePermissions;
   late AiController controller;
 
   setUp(() {
     Get.testMode = true;
     fakeAi = FakeAiService();
     fakeSpeech = FakeSpeechService();
+    fakePermissions = FakePermissionService();
 
     Get.put<AiService>(fakeAi);
     Get.put<SpeechService>(fakeSpeech);
+    Get.put<PermissionService>(fakePermissions);
 
     controller = Get.put(AiController());
   });

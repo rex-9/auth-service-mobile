@@ -26,6 +26,7 @@ class AuthController extends GetxController {
   var isLoggedIn = false.obs;
   var authToken = ''.obs;
   var currentUser = Rxn<UserModel>();
+  bool get skipPremium => _storage.getSkipPremium();
 
   // Form data
   var email = ''.obs;

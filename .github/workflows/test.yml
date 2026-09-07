@@ -1,0 +1,34 @@
+name: Mobile CI
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Build & Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+          cache: true
+
+      - name: Install dependencies
+        run: |
+          touch .env.dev .env.uat .env.prod
+          flutter pub get
+
+      - name: Static Analysis & Syntax Check
+        run: flutter analyze
+
+      - name: Run unit & widget tests
+        run: flutter test test/

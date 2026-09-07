@@ -65,6 +65,14 @@ class StorageService extends GetxService {
   String? getLocaleCode() => _box.read(StorageKeys.locale);
 
   // ============================================================
+  // APP VERSION FLAGS
+  // ============================================================
+  void setSkipPremium(bool skip) =>
+      _box.write(StorageKeys.skipPremium, skip);
+
+  bool getSkipPremium() => _box.read(StorageKeys.skipPremium) == true;
+
+  // ============================================================
   // UTILITY
   // ============================================================
   void clearAll() => _box.erase();

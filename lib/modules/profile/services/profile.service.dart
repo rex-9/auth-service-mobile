@@ -7,7 +7,13 @@ import 'package:rexone_mobile/services/services.dart';
 import '../data/requests/requests.dart';
 
 class ProfileService extends GetxService {
-  final ApiService _api = Get.find<ApiService>();
+  late final ApiService _api;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _api = Get.find<ApiService>();
+  }
 
   Future<ApiResponse<UserModel>> updateCurrentUser(
     UpdateUserRequest request,

@@ -109,7 +109,10 @@ class _AuthSignUpInfoLocales {
   final createAccountButton = 'auth.signup_info.actions.create_account';
   final creatingAccount = 'auth.signup_info.actions.creating_account';
   final enterFullName = 'auth.signup_info.validation.full_name_required';
+  final fullNameMaxLength = 'auth.signup_info.validation.full_name_max_length';
+  final fullNameForbiddenChars = 'auth.signup_info.validation.full_name_forbidden';
   final usernameMinLength = 'auth.signup_info.validation.username_length';
+  final usernameMaxLength = 'auth.signup_info.validation.username_max_length';
   final usernameCharset = 'auth.signup_info.validation.username_format';
   final registrationFailed = 'auth.signup_info.errors.registration_failed';
 }

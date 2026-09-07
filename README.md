@@ -13,8 +13,7 @@ Built under the same creed as Rexone Core and Rexone Web: **clear in thought, ex
 [![Flutter](https://img.shields.io/badge/Flutter-3.x-02569B?logo=flutter&logoColor=white)](https://flutter.dev/)
 [![Dart](https://img.shields.io/badge/Dart-3.x-0175C2?logo=dart&logoColor=white)](https://dart.dev/)
 [![GetX](https://img.shields.io/badge/GetX-4.7-8A2BE2)](https://pub.dev/packages/get)
-[![Firebase](https://img.shields.io/badge/Firebase_Analytics-12.4-FFCA28?logo=firebase&logoColor=black)](https://firebase.google.com/)
-[![OneSignal](https://img.shields.io/badge/OneSignal-5.6-E54B4D?logo=onesignal&logoColor=white)](https://onesignal.com/)
+[![CI](https://github.com/rex-9/rexone_mobile/actions/workflows/test.yml/badge.svg)](https://github.com/rex-9/rexone_mobile/actions/workflows/test.yml)
 
 **Typed · Modular · Localized · Observable · Push-ready · Analytics-enabled · API-driven · Fully Tested**
 
@@ -471,6 +470,7 @@ rexone_mobile/
 
 > [!TIP]
 > **Recommended**: For full, synchronized rebranding across all 3 platforms (Core Backend, Web SPA, and Mobile App), run the master rebrand engine from **`rexone-core`**:
+>
 > ```bash
 > cd ../rexone-core && ./scripts/rebrand.sh
 > ```
@@ -493,7 +493,6 @@ For standalone mobile development or isolated updates, you can use the local scr
 # 5. Bump Version and Build Number
 ./scripts/update_app_version.sh 1.1.0
 ```
-
 
 ---
 
