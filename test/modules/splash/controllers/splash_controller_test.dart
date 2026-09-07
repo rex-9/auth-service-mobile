@@ -1,0 +1,171 @@
+// test/modules/splash/controllers/splash_controller_test.dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:rexone_mobile/constants/constants.dart';
+import 'package:rexone_mobile/models/models.dart';
+import 'package:rexone_mobile/modules/auth/auth.dart';
+import 'package:rexone_mobile/modules/splash/splash.dart';
+import 'package:rexone_mobile/routes/app.routes.dart';
+import 'package:rexone_mobile/services/analytics.service.dart';
+import 'package:rexone_mobile/services/app_version.service.dart';
+import 'package:rexone_mobile/services/push_noti.service.dart';
+import 'package:rexone_mobile/services/socket.service.dart';
+import 'package:rexone_mobile/services/storage.service.dart';
+import '../../../mocks/test_services.dart';
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+
+  late FakeAppVersionService fakeAppVersion;
+  late FakeStorageService fakeStorage;
+  late FakeAuthService fakeAuth;
+  late AuthController authController;
+  late SplashController controller;
+
+  setUpAll(() {
+    PackageInfo.setMockInitialValues(
+      appName: 'Rexone',
+      packageName: 'com.rexone.mobile',
+      version: '1.0.0',
+      buildNumber: '1',
+      buildSignature: '',
+    );
+  });
+
+  setUp(() {
+    Get.testMode = true;
+    fakeAppVersion = FakeAppVersionService();
+    fakeStorage = FakeStorageService();
+    fakeAuth = FakeAuthService();
+
+    Get.put<AppVersionService>(fakeAppVersion);
+    Get.put<StorageService>(fakeStorage);
+    Get.put<AuthService>(fakeAuth);
+    Get.put<AnalyticsService>(FakeAnalyticsService());
+    Get.put<PushNotiService>(FakePushNotiService());
+    Get.put<SocketService>(FakeSocketService());
+
+    authController = Get.put(AuthController());
+    controller = Get.put(SplashController());
+  });
+
+  tearDown(() {
+    Get.reset();
+  });
+
+  AppVersionModel version({
+    bool updateRequired = false,
+    bool mustUpdate = false,
+    bool skipPremium = false,
+  }) {
+    return AppVersionModel(
+      id: 'av1',
+      number: '2.0.0',
+      updateRequired: updateRequired,
+      mustUpdate: mustUpdate,
+      skipPremium: skipPremium,
+    );
+  }
+
+  Future<void> signIn() async {
+    final user = UserModel(id: 'usr_1', email: 'rex@example.com');
+    fakeAuth.currentUserResponse = ApiResponse.success(
+      message: 'OK',
+      statusCode: 200,
+      data: user,
+    );
+    fakeStorage.setToken('stored_token');
+    fakeStorage.setUserData(user);
+    await authController.checkAuthStatus();
+  }
+
+  group('SplashController', () {
+    test('checkAppVersion stores latest version and skip_premium', () async {
+      fakeAppVersion.currentResponse = ApiResponse.success(
+        message: 'OK',
+        statusCode: 200,
+        data: version(skipPremium: true),
+      );
+
+      await controller.checkAppVersion();
+
+      expect(fakeAppVersion.lastRequestedVersion, equals('1.0.0'));
+      expect(controller.latestVersion.value?.number, equals('2.0.0'));
+      expect(fakeStorage.getSkipPremium(), isTrue);
+    });
+
+    test('checkAppVersion writes skip_premium false when Core returns false', () async {
+      fakeStorage.setSkipPremium(true);
+      fakeAppVersion.currentResponse = ApiResponse.success(
+        message: 'OK',
+        statusCode: 200,
+        data: version(skipPremium: false),
+      );
+
+      await controller.checkAppVersion();
+
+      expect(fakeStorage.getSkipPremium(), isFalse);
+    });
+
+    test('checkAppVersion keeps stored skip_premium when the request fails', () async {
+      fakeStorage.setSkipPremium(true);
+      fakeAppVersion.throwOnGet = true;
+
+      await controller.checkAppVersion();
+
+      expect(controller.latestVersion.value, isNull);
+      expect(fakeStorage.getSkipPremium(), isTrue);
+    });
+
+    test('checkAppVersion does not store version when the API has no data', () async {
+      fakeAppVersion.currentResponse = ApiResponse.error(
+        message: 'Unavailable',
+        statusCode: 500,
+      );
+
+      await controller.checkAppVersion();
+
+      expect(controller.latestVersion.value, isNull);
+      expect(fakeStorage.getSkipPremium(), isFalse);
+    });
+
+    test('promptUpdateIfNeeded is a no-op without a widget context', () async {
+      controller.latestVersion.value = version(updateRequired: true, mustUpdate: true);
+
+      await controller.promptUpdateIfNeeded();
+
+      expect(controller.latestVersion.value?.updateRequired, isTrue);
+    });
+
+    test('launchRoute is auth for logged-out users and navigate clears the stack', () async {
+      fakeStorage.saveRouteStack([AppRoutes.home, AppRoutes.settings]);
+
+      expect(controller.launchRoute(), equals(AppRoutes.auth));
+
+      await controller.navigate();
+
+      expect(fakeStorage.getRouteStack(), isEmpty);
+    });
+
+    test('launchRoute is home for logged-in users when the stack is empty', () async {
+      await signIn();
+
+      expect(controller.launchRoute(), equals(AppRoutes.home));
+    });
+
+    test('launchRoute restores the last protected route for logged-in users', () async {
+      await signIn();
+      fakeStorage.saveRouteStack([AppRoutes.home, AppRoutes.settings]);
+
+      expect(controller.launchRoute(), equals(AppRoutes.settings));
+    });
+
+    test('launchRoute falls back to home when the stack is not a protected route', () async {
+      await signIn();
+      fakeStorage.saveRouteStack(['/unknown']);
+
+      expect(controller.launchRoute(), equals(AppRoutes.home));
+    });
+  });
+}

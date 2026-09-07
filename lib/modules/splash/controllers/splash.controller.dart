@@ -20,16 +20,17 @@ class SplashController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    if (Get.testMode) return;
     _bootstrap();
   }
 
   Future<void> _bootstrap() async {
-    await _checkAppVersion();
-    await _promptUpdateIfNeeded();
-    await _navigate();
+    await checkAppVersion();
+    await promptUpdateIfNeeded();
+    await navigate();
   }
 
-  Future<void> _checkAppVersion() async {
+  Future<void> checkAppVersion() async {
     try {
       final info = await PackageInfo.fromPlatform();
       final version = info.version.isNotEmpty
@@ -47,7 +48,7 @@ class SplashController extends GetxController {
 
   }
 
-  Future<void> _promptUpdateIfNeeded() async {
+  Future<void> promptUpdateIfNeeded() async {
     final version = latestVersion.value;
     final context = Get.context;
     if (version == null || !version.updateRequired || context == null) return;
@@ -75,28 +76,30 @@ class SplashController extends GetxController {
     await launchUrl(uri, mode: LaunchMode.externalApplication);
   }
 
-  Future<void> _navigate() async {
+  static const protectedRoutes = [
+    AppRoutes.home,
+    AppRoutes.settings,
+    AppRoutes.payment,
+    AppRoutes.ai,
+  ];
+
+  String launchRoute() {
+    if (!_auth.isLoggedIn.value) return AppRoutes.auth;
+    final stack = _storage.getRouteStack();
+    if (stack.isNotEmpty && protectedRoutes.contains(stack.last)) {
+      return stack.last;
+    }
+    return AppRoutes.home;
+  }
+
+  Future<void> navigate() async {
     // Give AuthController.checkAuthStatus() a tick to finish if it was
     // triggered in onInit before the widget tree was ready.
     await Future.delayed(const Duration(milliseconds: 10));
 
-    if (_auth.isLoggedIn.value) {
-      final stack = _storage.getRouteStack();
-      const protectedRoutes = [
-        AppRoutes.home,
-        AppRoutes.settings,
-        AppRoutes.payment,
-        AppRoutes.ai,
-      ];
-
-      if (stack.isNotEmpty && protectedRoutes.contains(stack.last)) {
-        Get.offAllNamed(stack.last);
-      } else {
-        AppRoutes.toHome();
-      }
-    } else {
+    if (!_auth.isLoggedIn.value) {
       _storage.clearRouteStack();
-      AppRoutes.toAuth();
     }
+    Get.offAllNamed(launchRoute());
   }
 }

@@ -7,7 +7,13 @@ import 'package:rexone_mobile/routes/routes.dart';
 import 'package:rexone_mobile/services/api.service.dart';
 
 class AppVersionService extends GetxService {
-  final ApiService _api = Get.find<ApiService>();
+  late final ApiService _api;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _api = Get.find<ApiService>();
+  }
 
   Future<ApiResponse<AppVersionModel>> getCurrent(String appVersion) async {
     final response = await _api.get(
